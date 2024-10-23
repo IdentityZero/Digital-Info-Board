@@ -1,0 +1,21 @@
+# Media Files (Not static)
+media/
+
+# Environment Variables
+.env
+
+# Virtual Environment names
+virt/
+.venv
+env/
+venv/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+
+
+# Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
