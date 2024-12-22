@@ -15,9 +15,9 @@
   1. ### If you are already inside the folder where you can see the 3 files, cd to server
           cd server
   2. ### Create a python virtual environment
-         python -m -venv .venv
+         python -m venv .venv
   3. ### Use that virtual environment
-          .venv\Scripts\active
+          .venv\Scripts\activate
   4. ### Install the dependencies
            pip install -r requirements.txt
   5. ### Inside the 'server' folder create a '.env' file
