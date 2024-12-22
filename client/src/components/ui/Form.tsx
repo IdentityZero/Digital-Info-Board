@@ -1,9 +1,9 @@
 import { forwardRef } from "react";
 
 type FormProps = {
-  error?: string | null;
   onSubmitFunc: (e: React.FormEvent<HTMLFormElement>) => void;
   children: React.ReactNode;
+  error?: string | null;
   hasFiles?: boolean;
 };
 

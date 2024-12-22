@@ -1,3 +1,52 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.custom-scrollbar::-webkit-scrollbar {
+  @apply w-2;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  @apply bg-darkTeal;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  @apply bg-cyanBlue-dark rounded-md;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  @apply bg-cyanBlue-darker;
+}
+
+.custom-quill .ql-editor {
+  min-height: 16rem;
+}
+
+.quill.ql-display {
+
+  .ql-container {
+    border: none !important;
+  }
+}
+
+.quill.ql-editor-title {
+  .ql-container {
+    min-height: 100px;
+}
+}
+.quill.ql-editor-title-wbg {
+  .ql-container {
+    background-color: #2A6AAA;
+    min-height: 100px;
+}
+}
+
+.quill.ql-display-title {
+
+
+  .ql-container {
+    border: none !important;
+    background-color: #2A6AAA;
+}
+
+}

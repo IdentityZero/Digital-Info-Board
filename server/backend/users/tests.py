@@ -115,7 +115,7 @@ class ProfileModelTest(TestCase):
                 profile.full_clean()
 
             self.assertIn(
-                f"{profile.id_number} is an invalid ID number pattern. Must be xx-xxxxxx (Number values only). (e.g. 12-123456)",
+                f"{profile.id_number} is an invalid ID number pattern. Must be xx-xxxxxx (Numerical values only). (e.g. 12-123456)",
                 err.exception.message_dict["id_number"],
             )
 

@@ -13,7 +13,7 @@ def id_number_validator(value: str) -> None:
 
     if not re.match(id_pattern, id):
         raise ValidationError(
-            f"{value} is an invalid ID number pattern. Must be xx-xxxxxx (Number values only). (e.g. 12-123456)"
+            f"{value} is an invalid ID number pattern. Must be xx-xxxxxx (Numerical values only). (e.g. 12-123456)"
         )
 
 

@@ -1,3 +1,5 @@
-import { selectOptionFormatString } from "./formatters";
+// Do not continue using this
+import { selectOptionFormatString, formatTimestamp } from "./formatters";
+import { isJwtExpired } from "./jwt";
 
-export { selectOptionFormatString };
+export { selectOptionFormatString, formatTimestamp, isJwtExpired };

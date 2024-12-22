@@ -12,7 +12,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Profile
-        fields = ["id_number", "role", "position", "birthdate", "image"]
+        fields = ["id", "id_number", "role", "position", "birthdate", "image"]
 
     def validate(self, attrs):
         profile = Profile(**attrs)
@@ -50,3 +50,31 @@ class UserSerializer(serializers.ModelSerializer):
 
         Profile.objects.create(user=user, **profile_data)
         return user
+
+    def update(self, instance, validated_data):
+
+        profile_data = None
+        if "profile" in validated_data:
+            profile_data = validated_data.pop("profile")
+
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+
+        if profile_data is not None:
+            profile_inst = instance.profile
+            for attr, value in profile_data.items():
+                old_value = getattr(profile_inst, attr)
+                if old_value == value:
+                    continue
+                setattr(profile_inst, attr, value)
+
+            profile_inst.save()
+
+        instance.save()
+        return instance
+
+
+class SetActiveUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["is_active"]
