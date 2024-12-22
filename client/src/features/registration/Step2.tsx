@@ -2,9 +2,9 @@ import { Input } from "../../components/ui";
 import { NewUserErrorsType } from "./helpers";
 import { type NewUserObjectType } from "./helpers";
 import { selectOptionFormatString } from "../../utils";
+import { formatInputDate } from "../../utils/formatters";
 
 type Step2Props = {
-  hidden: boolean;
   formState: NewUserObjectType;
   picture: string | ArrayBuffer | null;
   setFormState: (
@@ -15,7 +15,6 @@ type Step2Props = {
 };
 
 const Step2 = ({
-  hidden,
   errors,
   formState,
   setFormState,
@@ -23,7 +22,7 @@ const Step2 = ({
   loading,
 }: Step2Props) => {
   return (
-    <div className={`flex flex-row gap-10 ${hidden && "hidden"}`}>
+    <div className="flex flex-col-reverse lg:flex-row gap-10 w-full">
       <fieldset className="flex flex-col gap-2 w-full">
         <Input
           type="text"
@@ -68,20 +67,46 @@ const Step2 = ({
           disabled={loading}
         />
       </fieldset>
-      <div className="w-full">
+      <div className="w-full mx-auto p-6 bg-gray-50 border border-gray-200 rounded-lg shadow-sm">
         {picture && (
-          <img
-            src={picture as string}
-            alt="Uploaded Preview"
-            className="w-[120px] h-[120px] object-cover rounded-full border-black border-[1px]"
-          />
+          <div className="flex items-center justify-center lg:mb-6">
+            <img
+              src={picture as string}
+              alt="Uploaded Preview"
+              className="w-[100px] h-[100px] object-cover rounded-full border-2 border-gray-300 shadow-sm"
+            />
+          </div>
         )}
-        <p>First Name: {formState.first_name}</p>
-        <p>Last Name: {formState.last_name}</p>
-        <p>Birthdate: {formState.profile.birthdate}</p>
-        <p>Role: {selectOptionFormatString(formState.profile.role)}</p>
-        <p>Position: {selectOptionFormatString(formState.profile.position)}</p>
-        <p>ID Number: {formState.profile.id_number}</p>
+        <div className="text-center lg:mb-6">
+          <h2 className="text-xl font-bold text-gray-800 capitalize">
+            {formState.first_name} {formState.last_name}
+          </h2>
+          <p className="text-sm text-gray-500 capitalize">
+            {formState.profile.role || "No Role Specified"}
+          </p>
+        </div>
+        <div className="lg:space-y-4 ">
+          <div className="flex justify-between items-center">
+            <span className="text-gray-600 font-medium">Birthdate:</span>
+            <span className="text-gray-800">
+              {(formState.profile.birthdate &&
+                formatInputDate(formState.profile.birthdate)) ||
+                "N/A"}
+            </span>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="text-gray-600 font-medium">Position:</span>
+            <span className="text-gray-800">
+              {selectOptionFormatString(formState.profile.position) || "N/A"}
+            </span>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="text-gray-600 font-medium">ID Number:</span>
+            <span className="text-gray-800">
+              {formState.profile.id_number || "N/A"}
+            </span>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -1,8 +1,9 @@
 import { useRef, useState } from "react";
 import { AxiosError } from "axios";
+import { Link } from "react-router-dom";
 
-import { Button, Form } from "../../components/ui";
-import { createNewUserApi } from "../../api";
+import { Form } from "../../components/ui";
+import { createNewUserApi } from "../../api/signUpRequest";
 
 import Step1 from "./Step1";
 import Step2 from "./Step2";
@@ -178,52 +179,124 @@ const SignUp = ({
         >
           {isLoading && <h1>Loading...</h1>}
           {isSuccessful && (
-            <div>
-              <h1>You have created an account.</h1>
-              <h1>
-                The administrator has to review your account. For the mean time
-                explore about us.
-              </h1>
+            <div className="flex flex-col items-center justify-center min-h-screen">
+              <div className="bg-white p-8 rounded-lg shadow-md text-center max-w-md">
+                <h1 className="text-2xl font-bold text-gray-800">
+                  Account Created Successfully!
+                </h1>
+                <p className="mt-4 text-gray-600">
+                  The administrator needs to review your account. In the
+                  meantime, feel free to explore our "About Us" section to learn
+                  more about us.
+                </p>
+                <button
+                  className="mt-6 px-6 py-2 text-white bg-blue-500 rounded-lg shadow hover:bg-blue-600 transition duration-200"
+                  onClick={() => (window.location.href = "/about-us")}
+                >
+                  Explore About Us
+                </button>
+              </div>
             </div>
           )}
         </div>
       )}
       <section
-        className={`w-full px-4  ${
+        className={`w-full px-4 py-4 ${
           (isLoading || isSuccessful) && "blur-[2px]"
         }`}
       >
+        <div className="mb-4">
+          <div className="flex flex-row items-center justify-evenly mt-4 mb-4">
+            <div
+              className={`w-16 h-16 flex items-center justify-center border-2 rounded-full text-4xl font-medium transform transition-all duration-500 ease-out 
+              ${
+                step === 1
+                  ? "bg-cyan-500 border-cyan-600 text-white font-bold"
+                  : "bg-white border-gray-300 text-gray-500"
+              } 
+              `}
+            >
+              1
+            </div>
+            <div
+              className={`w-16 h-16 flex items-center justify-center border-2 rounded-full text-4xl font-medium transform transition-all duration-500 ease-out 
+              ${
+                step === 2
+                  ? "bg-cyan-500 border-cyan-600 text-white font-bold"
+                  : "bg-white border-gray-300 text-gray-500"
+              } 
+              `}
+            >
+              2
+            </div>
+          </div>
+          <p className="mt-6 text-sm text-center text-gray-400">
+            Already have an account?{" "}
+            <Link
+              to="/login"
+              className="text-blue-500 focus:outline-none focus:underline hover:underline"
+            >
+              Login
+            </Link>
+            .
+          </p>
+        </div>
         <Form
           ref={formRef}
           onSubmitFunc={handleSignUpFormSubmit}
           hasFiles={true}
           error={formError}
         >
-          <Step1
-            hidden={step !== 1}
-            picture={profilePic}
-            errors={errors}
-            formState={newUser}
-            setFormState={handleFormStateChange}
-            loading={isLoading}
-          />
-          <Step2
-            hidden={step === 1}
-            errors={errors}
-            picture={profilePic}
-            formState={newUser}
-            setFormState={handleFormStateChange}
-            loading={isLoading}
-          />
-          <div className="mt-2">
-            <Button onClickFunc={handleNextStep}>
-              {step === 1 ? "Next" : "Back"}
-            </Button>
-            {step === 2 && (
-              <Button type="submit" disabled={isLoading}>
-                {isLoading ? "Submitting..." : "Submit"}
-              </Button>
-            )}
+          <div
+            className={`flex items-center justify-center ${
+              step !== 1 && "hidden"
+            }`}
+          >
+            <Step1
+              picture={profilePic}
+              errors={errors}
+              formState={newUser}
+              setFormState={handleFormStateChange}
+              loading={isLoading}
+            />
+          </div>
+
+          <div
+            className={`flex items-center justify-center ${
+              step === 1 && "hidden"
+            }`}
+          >
+            <Step2
+              errors={errors}
+              picture={profilePic}
+              formState={newUser}
+              setFormState={handleFormStateChange}
+              loading={isLoading}
+            />
+          </div>
+          <div className="mt-2 flex justify-center">
+            <div className="w-full flex flex-col lg:flex-row gap-2">
+              {step === 2 && (
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className={`w-full py-2 bg-green-500 text-white font-semibold rounded-md shadow-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 transition ${
+                    isLoading ? "bg-gray-400 cursor-not-allowed" : ""
+                  }`}
+                >
+                  {isLoading ? "Submitting..." : "Submit"}
+                </button>
+              )}
+              <button
+                onClick={handleNextStep}
+                type="button"
+                className={`w-full py-2 bg-blue-500 text-white font-semibold rounded-md shadow-md hover:bg-blue-600 active:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 transition ${
+                  isLoading ? "bg-gray-400 cursor-not-allowed" : ""
+                }`}
+              >
+                {step === 1 ? "Next" : "Back"}
+              </button>
+            </div>
           </div>
         </Form>
       </section>

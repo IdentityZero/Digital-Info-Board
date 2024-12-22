@@ -5,14 +5,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 
 from . import validators
-
-
-class TimestampedModel(models.Model):
-    created_at = models.DateTimeField(verbose_name="Created at", auto_now_add=True)
-    last_modified = models.DateTimeField(verbose_name="Last modified", auto_now=True)
-
-    class Meta:
-        abstract = True
+from utils.models import TimestampedModel
 
 
 class Profile(TimestampedModel):

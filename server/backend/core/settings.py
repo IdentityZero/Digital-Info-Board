@@ -47,12 +47,13 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 if not DEBUG:
-    raise NotImplementedError("Check for RESTFRAMEWORK SESSION AUTHENTICATION")
+    raise NotImplementedError("Check for RESTFRAMEWORK BASIC AUTHENTICATION")
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework.authentication.BasicAuthentication",  # Remove this in production
         "rest_framework_simplejwt.authentication.JWTAuthentication",
-        "rest_framework.authentication.SessionAuthentication",  # Remove on production
+        "rest_framework.authentication.SessionAuthentication",
     ),
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",
@@ -61,8 +62,7 @@ REST_FRAMEWORK = {
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
-    "REFRESH_TOKEN_LIFETIME": timedelta(minutes=10),
-    # "REFRESH_TOKEN_LIFETIME": timedelta(minutes=45),
+    "REFRESH_TOKEN_LIFETIME": timedelta(minutes=30),
 }
 
 
@@ -79,6 +79,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "users",
     "myauth",
+    "announcements",
 ]
 
 MIDDLEWARE = [

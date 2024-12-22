@@ -16,6 +16,7 @@ export type NewUserErrorsType = {
     birthdate: string | string[];
     role: string | string[];
     position: string | string[];
+    image: string | string[];
   };
 };
 
@@ -60,4 +61,19 @@ export const newUserObject: NewUserObjectType = {
     position: "",
     image: null,
   },
+};
+
+export const handleDurationInputs = (text: string): string => {
+  if (text.length === 9) return text.slice(0, -1);
+
+  const lastChar: any = text.slice(-1);
+  if (isNaN(lastChar)) {
+    return text.slice(0, -1);
+  }
+
+  if (text.length === 2 || text.length === 5) {
+    return text + ":";
+  }
+
+  return text;
 };

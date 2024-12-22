@@ -13,13 +13,9 @@ const SignUpPage = () => {
         isSuccessful={isSuccessful}
         setIsSuccessful={setIsSuccessful}
       />
-      <div className={`z-0 ${(isLoading || isSuccessful) && "blur-[2px]"}`}>
-        There is a content here <br />
-        There is a content here <br />
-        There is a content here <br />
-        There is a content here <br />
-        There is a content here <br />
-      </div>
+      <div
+        className={`z-0 ${(isLoading || isSuccessful) && "blur-[2px]"}`}
+      ></div>
     </div>
   );
 };

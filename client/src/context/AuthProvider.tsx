@@ -1,11 +1,14 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import axios, { AxiosError } from "axios";
+import axios, { AxiosError, AxiosInstance } from "axios";
 
 import { User, decodeUserJWT } from "../types/UserTypes";
+import { isJwtExpired } from "../utils";
+import LoadingScreen from "../components/LoadingScreen";
 
 type AuthContextType = {
   user: User | null;
   isLoading: boolean;
+  userApi: AxiosInstance;
   login: (username: string, password: string) => void;
   logout: () => void;
   error: string | null;
@@ -14,36 +17,58 @@ type AuthContextType = {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
 
-  useEffect(() => {
-    if (user) return;
+  const userApi = axios.create({
+    baseURL: "http://127.0.0.1:8000",
+  });
 
-    const refreshToken = async () => {
-      setIsLoading(true);
-      setError(null);
-
-      try {
-        const response = await axios.post<{ access: string }>(
-          "http://127.0.0.1:8000/auth/v1/token/refresh/",
-          {},
-          { withCredentials: true }
-        );
-
-        setUser(decodeUserJWT(response.data.access));
-      } catch (error) {
-        if (error instanceof AxiosError) {
-          if (error.request.response.includes("expired")) {
-            setError("Session expired. Login again.");
-          }
-        }
-      } finally {
-        setIsLoading(false);
+  userApi.interceptors.request.use(
+    async (config) => {
+      if (!user) {
+        setError("You are no longer authenticated. Login again.");
+        throw new Error("You are no longer authenticated. Login again.");
       }
-    };
+      config.headers.Authorization = `Bearer ${user.token}`;
 
+      if (isJwtExpired(user.token)) {
+        config.headers.Authorization = `Bearer ${await refreshToken()}`;
+      }
+
+      return config;
+    },
+    (error) => {
+      return Promise.reject(error);
+    }
+  );
+
+  const refreshToken = async () => {
+    setError(null);
+
+    try {
+      const response = await axios.post<{ access: string }>(
+        "http://127.0.0.1:8000/auth/v1/token/refresh/",
+        {},
+        { withCredentials: true }
+      );
+
+      setUser(decodeUserJWT(response.data.access));
+      return response.data.access;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (error.request.response.includes("expired")) {
+          setError("Session expired. Login again.");
+          setUser(null);
+        }
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
     refreshToken();
   }, []);
 
@@ -104,8 +129,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, isLoading, error, login, logout }}>
-      {isLoading ? <div>Loading...</div> : <div>{children}</div>}
+    <AuthContext.Provider
+      value={{ user, isLoading, error, login, userApi, logout }}
+    >
+      {isLoading ? (
+        <div>
+          <LoadingScreen>Loading dashboard...</LoadingScreen>
+        </div>
+      ) : (
+        <div>{children}</div>
+      )}
     </AuthContext.Provider>
   );
 };

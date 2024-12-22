@@ -43,7 +43,7 @@ type BaseUser = {
 
 export type User = BaseUser & Role;
 
-type DecodedJWTType = Role & {
+export type DecodedJWTType = Role & {
   user_id: number;
   username: string;
   exp: number;
@@ -73,4 +73,21 @@ export const decodeUserJWT = (token: string): User | null => {
   }
 
   return user;
+};
+
+type UserProfileType = {
+  id: string;
+  id_number: string;
+  role: Role["role"];
+  position: Role["position"];
+  birthdate: string;
+  image: string | File;
+};
+
+export type FullUserType = {
+  id: string;
+  username: string;
+  last_name: string;
+  first_name: string;
+  profile: UserProfileType;
 };
