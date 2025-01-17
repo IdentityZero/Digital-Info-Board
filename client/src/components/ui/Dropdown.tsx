@@ -1,6 +1,7 @@
-import React, { createContext, SetStateAction, useState } from "react";
+import React, { createContext, SetStateAction, useRef, useState } from "react";
 
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import useOutsideClick from "../../hooks/useOutsideClick";
 
 interface DropdownProps {
   buttonContent: React.ReactNode;
@@ -18,9 +19,11 @@ export const DropdownContext = createContext<DropdownContextType | undefined>(
 
 const Dropdown = ({ buttonContent, children }: DropdownProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  useOutsideClick(containerRef, () => setIsExpanded(false));
 
   return (
-    <div className="relative w-full">
+    <div className="relative w-full" ref={containerRef}>
       <DropdownContext.Provider value={{ isExpanded, setIsExpanded }}>
         <button
           className="flex flex-row items-center justify-between"

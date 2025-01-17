@@ -1,7 +1,7 @@
 import { useLocation, Link } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { IconType } from "react-icons";
-import { FaUser, FaPowerOff, FaBell, FaSearch, FaBars } from "react-icons/fa";
+import { FaUser, FaPowerOff, FaBell, FaSearch } from "react-icons/fa";
 
 import { extractUrlname } from "../../utils/formatters";
 import { useAuth } from "../../context/AuthProvider";
@@ -28,7 +28,7 @@ const DashboardTopbar = () => {
   }, []);
 
   return (
-    <div className="relative group h-20">
+    <div className="relative group h-20 z-50">
       <div
         className={`${
           fetchedUser && "group-hover:opacity-0"
@@ -60,9 +60,6 @@ const DashboardTopbar = () => {
             <div className="text-white bg-darkTeal p-3 rounded-full text-xl transition-transform duration-300 hover:scale-110">
               <FaSearch />
             </div>
-            <div className="text-white bg-darkTeal p-3 rounded-full text-2xl transition-transform duration-300 hover:scale-110">
-              <FaBars />
-            </div>
           </div>
         </div>
       )}
@@ -72,7 +69,6 @@ const DashboardTopbar = () => {
 
 function Userbox({ user }: { user: FullUserType }) {
   const full_name = user.first_name + " " + user.last_name;
-  // const full_name = truncateString(user.first_name + " " + user.last_name);
   const dropdownContext = useContext(DropdownContext);
 
   if (!dropdownContext) {

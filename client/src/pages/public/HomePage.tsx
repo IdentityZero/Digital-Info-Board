@@ -50,6 +50,8 @@ const HomePage = () => {
   };
 
   const handleNext = () => {
+    console.log("hello");
+
     if (isTransitioning) return;
     setIsTransitioning(true);
     setCurrentIndex((prevIndex) => prevIndex + 1);

@@ -9,6 +9,7 @@ import {
 
 import { FaChevronRight, FaChevronLeft } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
+import useOutsideClick from "../../hooks/useOutsideClick";
 
 interface DropdownProps {
   buttonContent: React.ReactNode;
@@ -27,7 +28,9 @@ export const SideDropdownContext = createContext<
 const SideDropdown = ({ buttonContent, children }: DropdownProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const buttonContentRef = useRef<HTMLDivElement | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
   const [buttonContentWidth, setButtonContentWidth] = useState(0);
+  useOutsideClick(containerRef, () => setIsExpanded(false));
 
   useEffect(() => {
     if (buttonContentRef.current) {
@@ -41,7 +44,7 @@ const SideDropdown = ({ buttonContent, children }: DropdownProps) => {
   };
 
   return (
-    <div className="relative flex items-start">
+    <div className="relative flex items-start w-fit" ref={containerRef}>
       <SideDropdownContext.Provider value={{ isExpanded, setIsExpanded }}>
         <div
           className="flex flex-row items-center justify-between"
