@@ -8,9 +8,10 @@ import ImageSlider from "../../components/ImageSlider";
 
 type DetailAnnouncementProps = {
   data: AnnouncementRetrieveType;
+  resetIndex: boolean;
 };
 
-const DetailAnnouncement = ({ data }: DetailAnnouncementProps) => {
+const DetailAnnouncement = ({ data, resetIndex }: DetailAnnouncementProps) => {
   const { title, text_announcement } = data;
 
   const imageUrls = data.image_announcement?.map((image) => {
@@ -49,6 +50,7 @@ const DetailAnnouncement = ({ data }: DetailAnnouncementProps) => {
                 durations={imageDurations as number[]}
                 showDuration={false}
                 showArrows={false}
+                reset={resetIndex}
               />
             )}
         </div>

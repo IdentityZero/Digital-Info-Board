@@ -5,6 +5,7 @@ interface ImageSliderProps {
   durations: number[];
   showDuration?: boolean;
   showArrows?: boolean;
+  reset?: boolean;
 }
 
 const ImageSlider: React.FC<ImageSliderProps> = ({
@@ -12,6 +13,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
   durations,
   showDuration = true,
   showArrows = true,
+  reset = false,
 }) => {
   const [currentIndex, setCurrentIndex] = useState(1);
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -23,6 +25,12 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
     ...durations,
     durations[0],
   ];
+
+  useEffect(() => {
+    if (reset) {
+      setCurrentIndex(1);
+    }
+  }, [reset]);
 
   const handlePrev = () => {
     if (isTransitioning) return;

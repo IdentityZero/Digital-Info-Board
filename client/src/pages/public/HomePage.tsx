@@ -50,14 +50,15 @@ const HomePage = () => {
   };
 
   const handleNext = () => {
-    console.log("hello");
-
     if (isTransitioning) return;
+
     setIsTransitioning(true);
     setCurrentIndex((prevIndex) => prevIndex + 1);
   };
 
   const handleTransitionEnd = () => {
+    console.log("123");
+
     setIsTransitioning(false);
     if (currentIndex === 0) {
       setCurrentIndex(announcements?.length);
@@ -67,12 +68,14 @@ const HomePage = () => {
   };
 
   useEffect(() => {
+    if (announcements.length === 0) return;
+
     const interval = setInterval(() => {
       handleNext();
     }, extendedDurations[currentIndex]);
 
     return () => clearInterval(interval);
-  }, [isTransitioning, currentIndex]);
+  }, [isTransitioning, currentIndex, announcements]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -113,7 +116,10 @@ const HomePage = () => {
       >
         {extendedAnnouncements?.map((announcement, index) => (
           <div className="w-full flex-shrink-0" key={index}>
-            <DetailAnnouncement data={announcement} />
+            <DetailAnnouncement
+              data={announcement}
+              resetIndex={!isTransitioning}
+            />
           </div>
         ))}
       </div>
