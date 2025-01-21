@@ -145,7 +145,7 @@ const EditImageAnnouncement = forwardRef<
       <div className="flex flex-col gap-4">
         <QuillEditor
           label="Announcement Title"
-          id="edit-text-announcement-title"
+          id="edit-image-announcement-title"
           value={JSON.parse(imageAnnouncement.title as string)}
           onChange={handleTitleEditorChange}
           error={errors.title}
@@ -195,7 +195,7 @@ const EditImageAnnouncement = forwardRef<
           </div>
           <div className="mt-2">
             <h3 className="bg-[#6e8ea4] px-5 py-2 text-xl font-bold">
-              Uploaded Videos
+              Uploaded Images
             </h3>
             <div className="mt-2">
               <div className="flex items-center justify-between gap-2 py-3 mb-2 border-t-2 border-b-2 border-gray-500">
@@ -240,7 +240,7 @@ const EditImageAnnouncement = forwardRef<
                         ctrl_type="controlled"
                         label=""
                         type="text"
-                        name={`image_announcement[${index}][duration]`}
+                        name={`image_announcement[${index}][duration]`} // This does not matter
                         inputValue={image.duration as string}
                         setInputValue={(e) => handleDurationChange(e, index)}
                         error={errors.to_update[index]?.duration}
@@ -307,7 +307,7 @@ const EditImageAnnouncement = forwardRef<
                       ctrl_type="controlled"
                       label=""
                       type="text"
-                      name={`image_announcement[${index}][duration]`}
+                      name={`image_announcement[${index}][duration]`} // This does not matter
                       inputValue={image.duration as string}
                       setInputValue={(e) =>
                         handleNewImageDurationChange(e, index)

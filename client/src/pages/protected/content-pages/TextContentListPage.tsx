@@ -15,13 +15,16 @@ import {
   listTextAnnouncementApi,
   deleteTextAnnouncementApi,
 } from "../../../api/announcementRequest";
+import LoadingSpinner from "../../../components/LoadingSpinner";
 
 const TextContentListPage = () => {
+  const { userApi } = useAuth();
   const [announcements, setAnnouncements] = useState<
     AnnouncementListType | undefined
   >(undefined);
+
+  const [hasLoadingError, setHasLoadingError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { userApi } = useAuth();
 
   useEffect(() => {
     const fetchAnnouncements = async () => {
@@ -31,6 +34,7 @@ const TextContentListPage = () => {
 
         setAnnouncements(data);
       } catch (error) {
+        setHasLoadingError(true);
       } finally {
         setIsLoading(false);
       }
@@ -58,7 +62,19 @@ const TextContentListPage = () => {
     }
   };
 
-  if (isLoading) return <div>Loading...</div>;
+  if (hasLoadingError) {
+    return <div>Unexpected Error Occured. Try refreshing the page</div>;
+  }
+
+  if (isLoading)
+    return (
+      <div className="w-full flex flex-row items-center justify-center gap-2 mb-2">
+        <LoadingSpinner />
+        <p className="text-lg font-medium text-gray-600 animate-pulse">
+          Loading...
+        </p>
+      </div>
+    );
 
   return (
     <div className="mt-5 w-full overflow-x-auto">

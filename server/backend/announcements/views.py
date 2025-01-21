@@ -12,6 +12,7 @@ from .serializers import (
     CreateAnnouncementSerializer,
     RetrieveFullAnnouncementSerializer,
     UpdateFullImageAnnouncementSerializer,
+    UpdateFullVideoAnnouncementSerializer,
     ActivateAnnouncementSerializer,
 )
 from .models import Announcements
@@ -228,6 +229,7 @@ class RetrieveUpdateImageAnnouncementAPIView(generics.RetrieveUpdateAPIView):
     def get_to_update(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
         found_data = []
         pattern = r"^to_update\[\d+\]\[id\]$"
+
         for key, value in data.items():
             if re.match(pattern, key):
                 dict = {}
@@ -237,6 +239,100 @@ class RetrieveUpdateImageAnnouncementAPIView(generics.RetrieveUpdateAPIView):
                     dict["duration"] = data[duration_key_pattern]
 
                 dict["id"] = value
+                found_data.append(dict)
+
+        return found_data
+
+    def get_queryset(self):
+        qs = Announcements.objects.filter(author=self.request.user)
+        return qs
+
+
+class RetrieveUpdateVideoAnnouncementAPIView(generics.RetrieveUpdateAPIView):
+    """
+    This endpoint will
+        - Delete Video Content individually
+        - Add New Video Content
+        - Update Existing Video content (duration only).
+    Updating video is not supported instead, delete existing video content then add new one
+
+    How to delete:
+        Add 'to_delete' which will contain a list of IDs of the Video Announcement to be deleted.
+        'to_delete' will be in the top level, alongside the title and dates
+
+    How to update:
+        Add 'to_update which will contain a list of key-value pair that will contain id and value to update.
+        E.G
+        [
+            {
+                id: 1,
+                duration: '00:00:40'
+            }
+        ]
+        'to_update' will be in the top level, alongside the title and dates
+
+    """
+
+    serializer_class = UpdateFullVideoAnnouncementSerializer
+    permission_classes = [IsAuthenticated]
+
+    def update(self, request, *args, **kwargs):
+        data = request.data.dict()
+
+        video_announcement = self.get_video_announcements(data)
+        print(video_announcement)
+        if video_announcement:
+            data["video_announcement"] = video_announcement
+
+        to_update = self.get_to_update(data)
+        if to_update:
+            data["to_update"] = to_update
+
+        stringified_to_delete = data.get("to_delete")
+        if stringified_to_delete:
+            data["to_delete"] = json.loads(stringified_to_delete)
+
+        partial = kwargs.pop("partial", False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        if getattr(instance, "_prefetched_objects_cache", None):
+            instance._prefetched_objects_cache = {}
+
+        return response.Response(serializer.data)
+
+    def get_to_update(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
+        found_data = []
+        pattern = r"^to_update\[\d+\]\[id\]$"
+
+        for key, value in data.items():
+            if re.match(pattern, key):
+                dict = {}
+                duration_key_pattern = key.replace("[id]", "[duration]")
+
+                if duration_key_pattern in data:
+                    dict["duration"] = data[duration_key_pattern]
+
+                dict["id"] = value
+                found_data.append(dict)
+
+        return found_data
+
+    def get_video_announcements(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
+        found_data = []
+        pattern = r"^video_announcement\[\d+\]\[video\]$"
+
+        for video_key, value in data.items():
+            if re.match(pattern, video_key):
+                dict = {}
+                duration_key_pattern = video_key.replace("[video]", "[duration]")
+
+                if duration_key_pattern in data:
+                    dict["duration"] = data[duration_key_pattern]
+
+                dict["video"] = value
                 found_data.append(dict)
 
         return found_data
@@ -272,5 +368,20 @@ class ListImageAnnouncementAPIView(generics.ListAPIView):
     def get_queryset(self):
         qs = Announcements.objects.filter(
             author=self.request.user, image_announcement__isnull=False
+        ).distinct()
+        return qs
+
+
+class ListVideoAnnouncementAPIView(generics.ListAPIView):
+    """
+    List of Base Announcement with Video Announcement and is owned by User
+    """
+
+    serializer_class = CreateAnnouncementSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        qs = Announcements.objects.filter(
+            author=self.request.user, video_announcement__isnull=False
         ).distinct()
         return qs

@@ -1,3 +1,5 @@
+// For Creating
+
 export type TextAnnouncementErrorT = {
   title: string | string[];
   start_date: string | string[];
@@ -37,6 +39,27 @@ export const CreateImageAnnouncementErrorState: ImageAnnouncementErrorT = {
   image_announcement: [],
 };
 
+type BareVideoAnnouncementErrorT = {
+  video: string | string[];
+  duration: string | string[];
+};
+
+export type VideoAnnouncementErrorT = {
+  title: string | string[];
+  start_date: string | string[];
+  end_date: string | string[];
+  video_announcement: BareVideoAnnouncementErrorT[] | [];
+};
+
+export const CreateVideoAnnouncementErrorState: VideoAnnouncementErrorT = {
+  title: "",
+  start_date: "",
+  end_date: "",
+  video_announcement: [],
+};
+
+// For Updating
+
 type ToUpdateErrorT = {
   duration: string | string[];
 };
@@ -51,5 +74,18 @@ export const UpdateImageAnnouncementErrorState: UpdateImageAnnouncementErrorT =
     start_date: "",
     end_date: "",
     image_announcement: [],
+    to_update: [],
+  };
+
+export type UpdateVideoAnnouncementErrorT = VideoAnnouncementErrorT & {
+  to_update: ToUpdateErrorT[];
+};
+
+export const UpdateVideoAnnouncementErrorState: UpdateVideoAnnouncementErrorT =
+  {
+    title: "",
+    start_date: "",
+    end_date: "",
+    video_announcement: [],
     to_update: [],
   };

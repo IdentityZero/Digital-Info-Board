@@ -6,6 +6,7 @@ import { listAnnouncementApi } from "../../api/announcementRequest";
 import { DetailAnnouncement } from "../../features/announcements";
 
 const HomePage = () => {
+  // TODO: POSSIBILITY OF EMPTY ANNOUNCEMENT
   const [announcements, setAnnouncements] = useState<AnnouncementListType>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<any>(null);
@@ -26,10 +27,22 @@ const HomePage = () => {
           announcement.text_announcement.duration as string
         ) * 1000
       );
-    } else if (announcement.image_announcement) {
+    } else if (
+      announcement.image_announcement &&
+      announcement.image_announcement.length > 0
+    ) {
       return (
         convertDurationToSeconds(
           addTotalDuration(announcement.image_announcement)
+        ) * 1000
+      );
+    } else if (
+      announcement.video_announcement &&
+      announcement.video_announcement.length > 0
+    ) {
+      return (
+        convertDurationToSeconds(
+          addTotalDuration(announcement.video_announcement)
         ) * 1000
       );
     } else {
@@ -57,8 +70,6 @@ const HomePage = () => {
   };
 
   const handleTransitionEnd = () => {
-    console.log("123");
-
     setIsTransitioning(false);
     if (currentIndex === 0) {
       setCurrentIndex(announcements?.length);
@@ -119,6 +130,8 @@ const HomePage = () => {
             <DetailAnnouncement
               data={announcement}
               resetIndex={!isTransitioning}
+              index={index}
+              indexOnPlay={currentIndex}
             />
           </div>
         ))}

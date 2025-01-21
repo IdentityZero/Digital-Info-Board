@@ -5,13 +5,22 @@ import DisplayQuillEditor from "../../components/DisplayQuillEditor";
 import AuthorCard from "../../components/AuthorCard";
 import { convertDurationToSeconds } from "../../utils/utils";
 import ImageSlider from "../../components/ImageSlider";
+import VideoSlider from "../../components/VideoSlider";
 
 type DetailAnnouncementProps = {
   data: AnnouncementRetrieveType;
   resetIndex: boolean;
+  // This will come from the parent to control which one is playing
+  index: number;
+  indexOnPlay: number;
 };
 
-const DetailAnnouncement = ({ data, resetIndex }: DetailAnnouncementProps) => {
+const DetailAnnouncement = ({
+  data,
+  resetIndex,
+  index,
+  indexOnPlay,
+}: DetailAnnouncementProps) => {
   const { title, text_announcement } = data;
 
   const imageUrls = data.image_announcement?.map((image) => {
@@ -19,6 +28,14 @@ const DetailAnnouncement = ({ data, resetIndex }: DetailAnnouncementProps) => {
   });
   const imageDurations = data.image_announcement?.map((image) => {
     return convertDurationToSeconds(image.duration as string) * 1000;
+  });
+
+  const videoUrls = data.video_announcement?.map((video) => {
+    return video.video;
+  });
+
+  const videoDurations = data.video_announcement?.map((video) => {
+    return convertDurationToSeconds(video.duration as string) * 1000;
   });
 
   return (
@@ -51,6 +68,18 @@ const DetailAnnouncement = ({ data, resetIndex }: DetailAnnouncementProps) => {
                 showDuration={false}
                 showArrows={false}
                 reset={resetIndex}
+              />
+            )}
+          {videoUrls &&
+            videoDurations &&
+            data.video_announcement &&
+            data.video_announcement?.length > 0 && (
+              <VideoSlider
+                videos={videoUrls as string[]}
+                durations={videoDurations as number[]}
+                showDuration={false}
+                showArrows={false}
+                stop={index !== indexOnPlay}
               />
             )}
         </div>

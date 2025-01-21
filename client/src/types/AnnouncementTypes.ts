@@ -79,28 +79,41 @@ export type ImageAnnouncementType = ImageAnnouncementCreateType & {
   file_size: number;
 };
 
+// Image Announcement Type with Base and author
 export type FullImageAnnouncementType = BaseAnnouncementType & {
   image_announcement: ImageAnnouncementType[];
   author: AuthorType;
 };
 
-// export type VideoAnnouncementCreateType = {
-//   video: string | File;
-//   duration: string;
-// };
+// Bare Create Video Announcement Type
+export type VideoAnnouncementCreateType = {
+  video: string | File;
+  duration: string;
+};
 
-// export type VideoAnnouncementType = VideoAnnouncementCreateType & {
-//   id: string;
-//   last_modified: string;
-//   created_at: string;
-//   url?: string;
-// };
+export type CreateVideoAnnouncementT = AnnouncementCreateType & {
+  video_announcement: VideoAnnouncementCreateType[];
+};
+
+// Retrieved Data from API Image type
+export type VideoAnnouncementType = VideoAnnouncementCreateType & {
+  id: string;
+  last_modified: string;
+  created_at: string;
+  url?: string;
+  file_size: number;
+};
+
+export type FullVideoAnnouncementType = BaseAnnouncementType & {
+  video_announcement: VideoAnnouncementType[];
+  author: AuthorType;
+};
 
 export type AnnouncementRetrieveType = BaseAnnouncementType & {
   author: AuthorType;
   text_announcement?: TextAnnouncementType;
   image_announcement?: ImageAnnouncementType[];
-  // video_announcement?: VideoAnnouncementType[];
+  video_announcement?: VideoAnnouncementType[];
 };
 
 export type AnnouncementListType = AnnouncementRetrieveType[];

@@ -1,0 +1,349 @@
+import { useEffect, useRef, useState } from "react";
+import QuillEditor, { isQuillValueEmpty } from "../../components/QuillEditor";
+import { Delta } from "quill/core";
+import ReactQuill from "react-quill";
+import axios from "axios";
+import { FaPlusCircle, FaTrashAlt } from "react-icons/fa";
+
+import { Input, Form } from "../../components/ui";
+import { useAuth } from "../../context/AuthProvider";
+
+import {
+  CreateVideoAnnouncementT,
+  VideoAnnouncementCreateType,
+} from "../../types/AnnouncementTypes";
+import { listCreateAllTypeAnnouncementEndpoint } from "../../api/announcementRequest";
+import {
+  CreateVideoAnnouncementErrorState,
+  VideoAnnouncementErrorT,
+} from "./helpers";
+
+const CreateVideoAnnouncement = () => {
+  const [title, setTitle] = useState<Delta>(new Delta());
+  const titleRef = useRef<ReactQuill>(null);
+
+  const { userApi } = useAuth();
+
+  const [videos, setVideos] = useState<VideoAnnouncementCreateType[]>([]);
+  const [videoDurations, setVideoDurations] = useState<string[]>([]);
+  const MAX_UPLOAD = 5;
+  const [uploadProgress, setUploadProgress] = useState(0);
+
+  const [error, setError] = useState<VideoAnnouncementErrorT>(
+    CreateVideoAnnouncementErrorState
+  );
+  const [loading, setLoading] = useState(false);
+
+  // I used this because for some reason, the display of the video source is not rerendering. I used this to temporarily remove the entire video list then render again
+  const [rerenderTrigger, setRerenderTrigger] = useState(false);
+
+  useEffect(() => {
+    if (rerenderTrigger) {
+      setRerenderTrigger(false);
+    }
+  }, [rerenderTrigger]);
+
+  const handleTitleEditorChange = (
+    __value: any,
+    _delta: any,
+    _source: any,
+    editor: ReactQuill.UnprivilegedEditor
+  ) => {
+    setTitle(editor.getContents());
+  };
+
+  const handleUploadOnchange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (videos.length > MAX_UPLOAD - 1) {
+      alert(`Maximum of ${MAX_UPLOAD} videos only`);
+      return;
+    }
+
+    const files = e.target.files;
+    if (!files) return;
+    const file = files[0];
+
+    const isDuplicate = videos.some((existingImage) => {
+      if (!(existingImage.video instanceof File)) return false;
+
+      return (
+        existingImage.video.name === file.name &&
+        existingImage.video.size === file.size
+      );
+    });
+
+    if (isDuplicate) {
+      alert("This video is already uploaded");
+      e.target.value = "";
+      return;
+    }
+
+    setVideos((prev) => [...prev, { video: file, duration: "00:00:40" }]);
+
+    e.target.value = "";
+  };
+
+  const handleDurationChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    index: number
+  ) => {
+    setVideos((prevVideos) => {
+      const updatedVideos = [...prevVideos];
+      updatedVideos[index].duration = e.target.value;
+      return updatedVideos;
+    });
+  };
+
+  const handleDeleteUpload = (index: number) => {
+    const newVideos = [...videos];
+    newVideos.splice(index, 1);
+    setVideos(newVideos);
+
+    const newVideoDurations = [...videoDurations];
+    newVideoDurations.splice(index, 1);
+    setVideoDurations(newVideoDurations);
+
+    setRerenderTrigger(true);
+
+    const newErrorMsg = [...error.video_announcement];
+    newErrorMsg.splice(index, 1);
+    setError((prev) => ({
+      ...prev,
+      video_announcement: newErrorMsg,
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (isQuillValueEmpty(title) && titleRef.current?.editor) {
+      titleRef.current.editor.focus();
+      setError((prev) => ({
+        ...prev,
+        title: "Title cannot be empty.",
+      }));
+      return;
+    }
+
+    if (videos.length === 0) {
+      alert("Upload images...");
+      return;
+    }
+
+    const fd = new FormData(e.currentTarget);
+
+    const obj_data = Object.fromEntries(fd.entries());
+
+    const newVideoAnnData: CreateVideoAnnouncementT = {
+      title: JSON.stringify(title),
+      start_date: obj_data["start_date"] as string,
+      end_date: obj_data["end_date"] as string,
+      video_announcement: videos,
+    };
+
+    try {
+      setLoading(true);
+      setError(CreateVideoAnnouncementErrorState);
+      const res = await userApi.post(
+        listCreateAllTypeAnnouncementEndpoint,
+        newVideoAnnData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          onUploadProgress({ progress }) {
+            if (progress) {
+              setUploadProgress(progress * 100);
+            }
+          },
+        }
+      );
+      const form = e.target as HTMLFormElement;
+      setTitle(new Delta());
+      setVideos([]);
+      setVideoDurations([]);
+      form.reset();
+      const redirect_conf = confirm(
+        "New Image Announcement has been created. Do you want to be redirected to the Annoucement?"
+      );
+      console.log(res);
+
+      if (redirect_conf) {
+        // navigate(`/dashboard/contents/video/${res.data.id}`);
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const err = error.response?.data;
+        if (!err) {
+          alert("Unexpected error occured. Please try again.");
+        }
+        setError((prev) => ({
+          ...prev,
+          ...err,
+        }));
+      } else {
+        alert("Unexpected error occured. Please try again.");
+      }
+    } finally {
+      setLoading(false);
+      setUploadProgress(0);
+    }
+  };
+
+  return (
+    <div className="p-3">
+      <Form onSubmitFunc={handleSubmit}>
+        <QuillEditor
+          id="image-title"
+          label="Announcement Title"
+          value={title}
+          onChange={handleTitleEditorChange}
+          readonly={loading}
+          ref={titleRef}
+          error={error.title}
+          placeholder="Create a title for your announcement"
+          isTitle
+        />
+        <div className="mt-2 flex flex-wrap gap-2">
+          <div className="basis-[calc(50%-0.5rem)]">
+            <Input
+              type="datetime-local"
+              ctrl_type="uncontrolled"
+              name="start_date"
+              label="Start date"
+              required
+              disabled={loading}
+              error={error.start_date}
+            />
+          </div>
+          <div className="basis-[calc(50%-0.5rem)]">
+            <Input
+              type="datetime-local"
+              ctrl_type="uncontrolled"
+              name="end_date"
+              label="End date"
+              required
+              disabled={loading}
+              error={error.end_date}
+            />
+          </div>
+        </div>
+        <div className="w-full flex flex-col mt-5 ">
+          <label
+            htmlFor="create-image-file-upload"
+            className="w-full flex flex-row items-center justify-center gap-2 bg-cyanBlue text-center text-xl font-bold py-2 cursor-pointer"
+          >
+            <FaPlusCircle className="text-3xl" />
+            <span>Add Videos</span>
+          </label>
+          <input
+            type="file"
+            id="create-image-file-upload"
+            className="hidden invisible"
+            onChange={handleUploadOnchange}
+            accept="video/mp4, video/mov, video/avi"
+            disabled={loading}
+          />
+        </div>
+        <div>
+          {videos.length === 0 && (
+            <div className="w-full text-center">No video uploaded yet...</div>
+          )}
+          <div
+            className={`w-full text-center relative my-2 rounded-xl overflow-hidden ${
+              uploadProgress <= 0 ? "hidden" : "border-2 border-black"
+            }`}
+          >
+            <div
+              className={`bg-cyanBlue-light  absolute h-full -z-1`}
+              style={{ width: `${uploadProgress.toFixed(0)}%` }}
+            />
+            <p className="relative z-10">{uploadProgress.toFixed(2)}%</p>
+          </div>
+          {!rerenderTrigger &&
+            videos.map((video, index) => {
+              const video_file = video.video as File;
+              const videoUrl = URL.createObjectURL(video.video as File);
+
+              return (
+                <div key={index} className="flex flex-col mt-4">
+                  <div className="flex gap-4 ">
+                    <video
+                      controls
+                      className="w-[500px] h-[280px] rounded-xl"
+                      ref={(el) => {
+                        if (el) {
+                          el.onloadedmetadata = () => {
+                            const duration = el.duration.toFixed(2); // Get the duration in seconds
+                            setVideoDurations((prev) => [...prev, duration]);
+                          };
+                        }
+                      }}
+                    >
+                      <source type={video_file.type} src={videoUrl} />
+                      Your browser does not support the video tag.
+                    </video>
+                    <div className="flex-1 flex flex-col justify-between">
+                      <div>
+                        <p className="font-bold">{video_file.name}</p>
+                        <p className="text-gray-500">
+                          {(video_file.size / (1024 * 1024)).toFixed(2)} MB
+                        </p>
+                        <p
+                          className="text-gray-500"
+                          // id={`duration-${video_file.name}-${video_file.size}`}
+                        >
+                          Video Duration: {videoDurations[index]} seconds
+                        </p>
+                      </div>
+
+                      <div className="flex items-center justify-between">
+                        <div className="w-64">
+                          <Input
+                            ctrl_type="controlled"
+                            label="Display Duration"
+                            type="text"
+                            name={`image_announcement[${index}][duration]`}
+                            inputValue={video.duration as string}
+                            setInputValue={(e) =>
+                              handleDurationChange(e, index)
+                            }
+                            error={error.video_announcement[index]?.duration}
+                            disabled={loading}
+                            helpText={
+                              "Duration when being displayed. Starts in 0."
+                            }
+                          />
+                        </div>
+                        <button
+                          onClick={() => handleDeleteUpload(index)}
+                          className="bg-red-500 hover:bg-red-700 active:bg-red-800 p-2 rounded-lg flex gap-2 items-center text-white"
+                          type="button"
+                          disabled={loading}
+                        >
+                          <FaTrashAlt />
+                          <span>Remove</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+        </div>
+        <div className="w-full mt-2 flex justify-end">
+          <button
+            className={`px-10 py-2 rounded-full border border-black mr-2 ${
+              loading
+                ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                : "bg-lightBlue hover:bg-lightBlue-300 active:bg-lightBlue-500"
+            }`}
+            type="submit"
+          >
+            {loading ? "Saving..." : "Save"}
+          </button>
+        </div>
+      </Form>
+    </div>
+  );
+};
+export default CreateVideoAnnouncement;

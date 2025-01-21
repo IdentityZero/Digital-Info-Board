@@ -170,8 +170,6 @@ const ImageContentPage = () => {
       alert("Update successful");
       setNewImages([]);
     } catch (error) {
-      console.log(error);
-
       if (axios.isAxiosError(error)) {
         const err = error.response?.data;
         if (!err) {

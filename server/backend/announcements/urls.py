@@ -7,6 +7,8 @@ from .views import (
     ListImageAnnouncementAPIView,
     RetrieveUpdateImageAnnouncementAPIView,
     UpdateAnnouncementActiveStatusAPIView,
+    ListVideoAnnouncementAPIView,
+    RetrieveUpdateVideoAnnouncementAPIView,
 )
 
 urlpatterns = [
@@ -23,7 +25,9 @@ urlpatterns = [
     path("v1/text/", ListTextAnnouncementAPIView.as_view()),
     path("v1/image/", ListImageAnnouncementAPIView.as_view()),
     path(
-        "v1/<int:pk>/image",
+        "v1/<int:pk>/image/",
         RetrieveUpdateImageAnnouncementAPIView.as_view(),
     ),
+    path("v1/video/", ListVideoAnnouncementAPIView.as_view()),
+    path("v1/<int:pk>/video/", RetrieveUpdateVideoAnnouncementAPIView.as_view()),
 ]

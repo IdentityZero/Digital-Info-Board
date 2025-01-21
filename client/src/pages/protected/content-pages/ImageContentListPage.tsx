@@ -15,21 +15,27 @@ import {
 } from "../../../utils/formatters";
 import IconWithTooltip from "../../../components/IconWithTooltip";
 import { addTotalDuration } from "../../../utils/utils";
+import LoadingSpinner from "../../../components/LoadingSpinner";
 
 const ImageContentListPage = () => {
+  const { userApi } = useAuth();
+
   const [announcements, setAnnouncements] = useState<
     AnnouncementListType | undefined
   >(undefined);
-  const { userApi } = useAuth();
+
+  const [hasLoadingError, setHasLoadingError] = useState(false);
+  const [isLoading, setisLoading] = useState(true);
 
   useEffect(() => {
     const fetchAnnouncements = async () => {
       try {
         const data = await listImageAnnouncementApi(userApi);
-        console.log(data);
         setAnnouncements(data);
       } catch (error) {
+        setHasLoadingError(true);
       } finally {
+        setisLoading(false);
       }
     };
     fetchAnnouncements();
@@ -55,6 +61,20 @@ const ImageContentListPage = () => {
     }
   };
 
+  if (hasLoadingError) {
+    return <div>Unexpected Error Occured. Try refreshing the page</div>;
+  }
+
+  if (isLoading)
+    return (
+      <div className="w-full flex flex-row items-center justify-center gap-2 mb-2">
+        <LoadingSpinner />
+        <p className="text-lg font-medium text-gray-600 animate-pulse">
+          Loading...
+        </p>
+      </div>
+    );
+
   return (
     <div className="mt-5 w-full overflow-x-auto">
       <table className="border w-full overflow-x-auto border-gray-200 shadow-md rounded-lg">
@@ -69,7 +89,8 @@ const ImageContentListPage = () => {
             <th className="px-6 py-3">Actions</th>
           </tr>
         </thead>
-        <tbody className="overflow-x-scroll">
+
+        <tbody className="overflow-x-scroll ">
           {announcements?.map((announcement) => (
             <tr className="border-t hover:bg-gray-50" key={announcement.id}>
               <td className="px-6 py-3 font-bold hover:underline">

@@ -32,7 +32,7 @@ const DashboardTopbar = () => {
       <div
         className={`${
           fetchedUser && "group-hover:opacity-0"
-        } opacity-100 bg-cyanBlue font-bold text-xl h-full uppercase flex items-center pl-3 transition-all duration-300 ease-in-out`}
+        } opacity-100 font-bold text-xl h-full uppercase flex items-center pl-3 transition-all duration-300 ease-in-out`}
       >
         {extractUrlname(location.pathname)}
       </div>

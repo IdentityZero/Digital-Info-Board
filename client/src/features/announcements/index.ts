@@ -8,6 +8,9 @@ import RetrieveImageAnnouncement from "./RetrieveImageAnnouncement";
 import EditImageAnnouncement from "./EditImageAnnouncement";
 import ListInactiveAnnouncement from "./ListInactiveAnnouncement";
 import ListActiveAnnouncement from "./ListActiveAnnouncement";
+import CreateVideoAnnouncement from "./CreateVideoAnnouncement";
+import RetrieveVideoAnnouncement from "./RetrieveVideoAnnouncement";
+import EditVideoAnnouncement from "./EditVideoAnnouncement";
 
 export {
   DetailAnnouncement,
@@ -20,4 +23,7 @@ export {
   EditImageAnnouncement,
   ListInactiveAnnouncement,
   ListActiveAnnouncement,
+  CreateVideoAnnouncement,
+  RetrieveVideoAnnouncement,
+  EditVideoAnnouncement,
 };

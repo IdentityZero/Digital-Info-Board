@@ -1,4 +1,7 @@
-import { ImageAnnouncementCreateType } from "../types/AnnouncementTypes";
+import {
+  ImageAnnouncementCreateType,
+  VideoAnnouncementCreateType,
+} from "../types/AnnouncementTypes";
 
 export function getLaterDate(timestamp1: string, timestamp2: string): string {
   const date1 = new Date(timestamp1);
@@ -69,7 +72,9 @@ export function filterNullFromObject(obj: any): Record<string, any> {
 }
 
 export function addTotalDuration(
-  announcement_arr: Array<ImageAnnouncementCreateType>
+  announcement_arr: Array<
+    ImageAnnouncementCreateType | VideoAnnouncementCreateType
+  >
 ) {
   /**
    * This will take a list of Image or Video announcements

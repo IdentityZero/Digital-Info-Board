@@ -49,6 +49,7 @@ import {
   ProfileRequestPage,
   ListOfAccountsPage,
 } from "./pages/protected/account-pages";
+import VideoContentPage from "./pages/protected/content-pages/VideoContentPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -87,6 +88,7 @@ const router = createBrowserRouter(
         <Route path="contents" element={<ContentsPage />}>
           <Route index element={<VideoContentListPage />} />
           <Route path="video" element={<VideoContentListPage />} />
+          <Route path="video/:id" element={<VideoContentPage />} />
           <Route path="text" element={<TextContentListPage />} />
           <Route path="text/:id" element={<TextContentPage />} />
           <Route path="image" element={<ImageContentListPage />} />

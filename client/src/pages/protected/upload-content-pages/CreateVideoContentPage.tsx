@@ -1,6 +1,7 @@
 import ClosableMessage from "../../../components/ClosableMessage";
 
 import { FaExclamationCircle } from "react-icons/fa";
+import { CreateVideoAnnouncement } from "../../../features/announcements";
 
 const CreateVideoContentPage = () => {
   return (
@@ -24,6 +25,9 @@ const CreateVideoContentPage = () => {
         <h3 className="bg-[#ececec] px-5 py-3 text-xl font-bold">
           Banner videos
         </h3>
+        <div className="p-3">
+          <CreateVideoAnnouncement />
+        </div>
       </div>
     </>
   );

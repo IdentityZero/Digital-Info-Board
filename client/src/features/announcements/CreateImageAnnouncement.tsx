@@ -22,6 +22,7 @@ const CreateImageAnnouncement = () => {
   const [title, setTitle] = useState<Delta>(new Delta());
   const titleRef = useRef<ReactQuill>(null);
   const [images, setImages] = useState<ImageAnnouncementCreateType[]>([]);
+
   const [error, setError] = useState(CreateImageAnnouncementErrorState);
   const [loading, setLoading] = useState(false);
 
@@ -196,11 +197,12 @@ const CreateImageAnnouncement = () => {
               id="create-image-file-upload"
               className="hidden invisible"
               onChange={handleUploadOnchange}
+              disabled={loading}
             />
           </div>
           <div>
             <h3 className="bg-[#6e8ea4] px-5 py-2 text-xl font-bold">
-              Uploaded Videos
+              Uploaded Images
             </h3>
             <div className="mt-2">
               <div className="flex items-center justify-between gap-2 py-3 mb-2 border-t-2 border-b-2 border-gray-500">
@@ -268,6 +270,7 @@ const CreateImageAnnouncement = () => {
                         onClick={() => handleDeleteUpload(index)}
                         className="bg-red-500 hover:bg-red-700 p-2 rounded-full"
                         type="button"
+                        disabled={loading}
                       >
                         <FaTrashAlt className="text-white" />
                       </button>
@@ -280,7 +283,7 @@ const CreateImageAnnouncement = () => {
           <div className="w-full mt-2 flex justify-end">
             <button
               className={`px-10 py-2 rounded-full border border-black mr-2 ${
-                false
+                loading
                   ? "bg-gray-300 text-gray-500 cursor-not-allowed"
                   : "bg-lightBlue hover:bg-lightBlue-300 active:bg-lightBlue-500"
               }`}

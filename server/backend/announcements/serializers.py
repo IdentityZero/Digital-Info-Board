@@ -118,9 +118,16 @@ class PrimaryImageAnnouncementSerializer(
 
 
 class VideoAnnouncementSerializer(serializers.ModelSerializer):
+    file_size = serializers.SerializerMethodField(read_only=True)
+
     class Meta:
         model = VideoAnnouncements
-        fields = ["id", "video", "duration", "last_modified", "created_at"]
+        fields = ["id", "video", "duration", "last_modified", "created_at", "file_size"]
+
+    def get_file_size(self, obj):
+        if obj.video and obj.video.size:
+            return obj.video.size  # File size in bytes
+        return None
 
 
 class PrimaryVideoAnnouncementSerializer(
@@ -442,6 +449,117 @@ class UpdateFullImageAnnouncementSerializer(
                 for image_ann_datum in image_announcement:
                     ImageAnnouncements.objects.create(
                         announcement=instance, **image_ann_datum
+                    )
+
+        return super().update(instance, validated_data)
+
+
+class UpdateFullVideoAnnouncementSerializer(
+    AnnouncementValidationMixin, AnnouncementSerializer
+):
+    """
+    This serializer will be based on the Base Announcement but will handle the Video Announcement
+    """
+
+    author = UserSerializer(read_only=True)
+    video_announcement = VideoAnnouncementSerializer(many=True, required=False)
+    to_delete = serializers.ListField(write_only=True, required=False)
+    to_update = IDDurationFieldSerializer(write_only=True, required=False, many=True)
+
+    class Meta(AnnouncementSerializer.Meta):
+        fields = AnnouncementSerializer.Meta.fields + [
+            "id",
+            "author",
+            "video_announcement",
+            "to_delete",
+            "to_update",
+        ]
+
+    def validate_updates(self, data, video_announcements):
+        errors = []
+
+        base_ann_data = {
+            "title": data["title"],
+            "start_date": data["start_date"],
+            "end_date": data["end_date"],
+        }
+
+        base_ann_inst = Announcements(**base_ann_data)
+
+        for to_update in data["to_update"]:
+            inst = VideoAnnouncements.objects.filter(id=to_update["id"])
+
+            if (
+                not inst.exists()
+                or not video_announcements.filter(id=inst.first().id).exists()
+            ):
+                errors.append(0)
+                continue
+
+            complete_data = {
+                **to_update,
+                "announcement": base_ann_inst,
+            }
+
+            ann = VideoAnnouncements(**complete_data)
+
+            try:
+                ann.full_clean(exclude=["announcement", "video", "id"])
+                errors.append(0)
+            except Exception as e:
+                errors.append(e.message_dict)
+
+        return errors
+
+    def update(self, instance, validated_data):
+        print(validated_data)
+        video_announcements = instance.video_announcement.all()
+
+        if "to_update" in validated_data:
+            update_errors = self.validate_updates(validated_data, video_announcements)
+
+            if not all(value == 0 for value in update_errors):
+                raise serializers.ValidationError({"to_update": update_errors})
+
+        if "to_delete" in validated_data:
+            ids_to_delete = validated_data.pop("to_delete")
+
+            for id in ids_to_delete:
+                inst = VideoAnnouncements.objects.filter(id=id)
+
+                if (
+                    not inst.exists()
+                    or not video_announcements.filter(id=inst.first().id).exists()
+                ):
+                    continue
+
+                inst.delete()
+
+        if "to_update" in validated_data:
+            to_update_list = validated_data.pop("to_update")
+
+            for to_update in to_update_list:
+                id, duration = to_update.values()
+
+                inst = VideoAnnouncements.objects.filter(id=id)
+
+                if (
+                    not inst.exists()
+                    or not video_announcements.filter(id=inst.first().id).exists()
+                ):
+                    continue
+
+                inst = inst.first()
+                inst.duration = duration
+                inst.save()
+
+        if "video_announcement" in validated_data:
+            video_announcement = validated_data.pop("video_announcement")
+
+            if video_announcement and video_announcement is not None:
+                for video_ann_datum in video_announcement:
+                    VideoAnnouncements.objects.create(
+                        announcement=instance, **video_ann_datum
                     )
 
         return super().update(instance, validated_data)
