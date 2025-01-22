@@ -52,6 +52,17 @@ export function formatString(segment: string): string {
     .replace(/\b\w/g, (char) => char.toUpperCase());
 }
 
+export function formatStringUnderscores(segment: string): string {
+  /**
+   * Replaces _ to spaces
+   * and
+   * Capitalizes the first letter of each word
+   */
+  return segment
+    .replace(/_/g, " ")
+    .replace(/\b\w/g, (char) => char.toUpperCase());
+}
+
 export function extractUrlname(url: string): string {
   /**
    * Example usage:

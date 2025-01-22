@@ -11,6 +11,7 @@ import ListActiveAnnouncement from "./ListActiveAnnouncement";
 import CreateVideoAnnouncement from "./CreateVideoAnnouncement";
 import RetrieveVideoAnnouncement from "./RetrieveVideoAnnouncement";
 import EditVideoAnnouncement from "./EditVideoAnnouncement";
+import PreviewAnnouncement from "./PreviewAnnouncement";
 
 export {
   DetailAnnouncement,
@@ -26,4 +27,5 @@ export {
   CreateVideoAnnouncement,
   RetrieveVideoAnnouncement,
   EditVideoAnnouncement,
+  PreviewAnnouncement,
 };

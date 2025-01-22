@@ -51,7 +51,11 @@ const PermissionsPage = () => {
         </button>
       </div>
       {page === 1 && (
-        <ListActiveAnnouncement activeAnnouncements={activeAnnouncements} />
+        <ListActiveAnnouncement
+          activeAnnouncements={activeAnnouncements}
+          setActiveAnnouncements={setActiveAnnouncements}
+          setInactiveAnnouncements={setInactiveAnnouncements}
+        />
       )}
       {page === 2 && (
         <ListInactiveAnnouncement

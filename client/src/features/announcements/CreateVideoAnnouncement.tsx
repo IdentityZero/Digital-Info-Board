@@ -17,10 +17,12 @@ import {
   CreateVideoAnnouncementErrorState,
   VideoAnnouncementErrorT,
 } from "./helpers";
+import { useNavigate } from "react-router-dom";
 
 const CreateVideoAnnouncement = () => {
   const [title, setTitle] = useState<Delta>(new Delta());
   const titleRef = useRef<ReactQuill>(null);
+  const navigate = useNavigate();
 
   const { userApi } = useAuth();
 
@@ -168,7 +170,7 @@ const CreateVideoAnnouncement = () => {
       console.log(res);
 
       if (redirect_conf) {
-        // navigate(`/dashboard/contents/video/${res.data.id}`);
+        navigate(`/dashboard/contents/video/${res.data.id}`);
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {

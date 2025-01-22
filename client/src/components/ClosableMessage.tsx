@@ -13,6 +13,15 @@ const ClosableMessage = ({
   className,
   icon: Icon,
 }: ClosableMessageProps) => {
+  /**
+   * Recommended use case:
+   * <ClosableMessage
+        className="w-full flex flex-row items-center justify-between pr-5 p-2 bg-[#305ab3] font-bold"
+        icon={FaExclamationCircle}
+      >
+        Message Here
+      </ClosableMessage>
+   */
   const [isClosed, setIsClosed] = useState(false);
   const classes = className
     ? className

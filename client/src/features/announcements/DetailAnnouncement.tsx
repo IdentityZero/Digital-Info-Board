@@ -9,8 +9,8 @@ import VideoSlider from "../../components/VideoSlider";
 
 type DetailAnnouncementProps = {
   data: AnnouncementRetrieveType;
+  // This will come from the parent to control which one is playing in the sliders
   resetIndex: boolean;
-  // This will come from the parent to control which one is playing
   index: number;
   indexOnPlay: number;
 };
