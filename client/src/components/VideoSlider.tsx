@@ -6,6 +6,8 @@ interface VideoSliderProps {
   showDuration?: boolean;
   showArrows?: boolean;
   stop?: boolean;
+  crossOrigin?: React.VideoHTMLAttributes<HTMLVideoElement>["crossOrigin"];
+  showControls?: boolean;
 }
 
 const VideoSlider: React.FC<VideoSliderProps> = ({
@@ -14,6 +16,8 @@ const VideoSlider: React.FC<VideoSliderProps> = ({
   showDuration = true,
   showArrows = true,
   stop = false,
+  crossOrigin,
+  showControls = true,
 }) => {
   const [currentIndex, setCurrentIndex] = useState(1);
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -106,9 +110,10 @@ const VideoSlider: React.FC<VideoSliderProps> = ({
         {extendedVideos.map((video, index) => (
           <div key={index} className="w-full flex-shrink-0">
             <video
-              controls
+              controls={showControls}
               ref={(el) => (videoRefs.current[index] = el)}
               className="w-full h-[350px] object-contain"
+              crossOrigin={crossOrigin || undefined}
             >
               <source src={video} />
               Your browser does not support the video tag.
