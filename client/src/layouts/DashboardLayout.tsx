@@ -10,11 +10,13 @@ import { logoLg } from "../assets";
 import DashboardMobileSidebar from "../components/nav/DashboardMobileSidebar";
 import DashboardTopbar from "../components/nav/DashboardTopbar";
 import { useEffect, useState } from "react";
+import { useAuth } from "../context/AuthProvider";
 
 const PROTECTED_LINKS = LINKS.protected;
 
 const DashboardLayout = () => {
   const [backgroundImage, setBackgroundImage] = useState<string | null>(null);
+  const { user } = useAuth();
 
   useEffect(() => {
     const img = new Image();
@@ -27,6 +29,8 @@ const DashboardLayout = () => {
       <div className="sticky min-w-fit top-0 h-screen bg-darkTeal z-50 text-white hover:overflow-y-auto overflow-hidden custom-scrollbar max-lg:hidden">
         <DashboardSidebar>
           {PROTECTED_LINKS.map((link) => {
+            if (!user?.is_admin && link.adminOnly) return null;
+
             return <SidebarItem key={link.label} link={link} />;
           })}
         </DashboardSidebar>

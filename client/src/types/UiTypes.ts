@@ -3,7 +3,8 @@ import { IconType } from "react-icons";
 type LinksType = {
   label: string;
   to: string;
-  icon: IconType;
+  icon?: IconType;
+  adminOnly?: boolean;
 };
 
 export type { LinksType };

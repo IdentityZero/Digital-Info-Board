@@ -2,7 +2,6 @@ import { type LinksType } from "../types/UiTypes";
 import {
   FaThLarge,
   FaWallet,
-  FaInfoCircle,
   FaFolderPlus,
   FaUser,
   FaSignOutAlt,
@@ -39,7 +38,12 @@ const PROTECTED_LINKS: LinksType[] = [
     to: "/dashboard/contents",
     icon: FaScroll,
   },
-  { label: "permissions", to: "/dashboard/permissions", icon: FaWallet },
+  {
+    label: "permissions",
+    to: "/dashboard/permissions",
+    icon: FaWallet,
+    adminOnly: true,
+  },
   { label: "calendar", to: "/dashboard/calendar", icon: FaCalendar },
   { label: "default display", to: "/dashboard/default-display", icon: FaTv },
 

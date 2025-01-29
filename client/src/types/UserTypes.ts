@@ -39,6 +39,7 @@ type BaseUser = {
   id: number;
   username: string;
   token: string;
+  is_admin: boolean;
 };
 
 export type User = BaseUser & Role;
@@ -47,10 +48,12 @@ export type DecodedJWTType = Role & {
   user_id: number;
   username: string;
   exp: number;
+  is_admin: boolean;
 };
 
 export const decodeUserJWT = (token: string): User | null => {
   const decodedJWT = jwtDecode<DecodedJWTType>(token);
+  console.log(decodedJWT);
 
   let user: User | null = null;
 
@@ -61,6 +64,7 @@ export const decodeUserJWT = (token: string): User | null => {
       id: decodedJWT.user_id,
       username: decodedJWT.username,
       token: token,
+      is_admin: decodedJWT.is_admin,
     };
   } else if (decodedJWT.role === "student") {
     user = {
@@ -68,6 +72,7 @@ export const decodeUserJWT = (token: string): User | null => {
       position: decodedJWT.position as Student["position"],
       id: decodedJWT.user_id,
       username: decodedJWT.username,
+      is_admin: decodedJWT.is_admin,
       token: token,
     };
   }

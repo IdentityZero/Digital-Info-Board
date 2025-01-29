@@ -55,6 +55,7 @@ class Profile(TimestampedModel):
     image = models.ImageField(
         upload_to="profile_pics", default="profile_pics/profile.png"
     )
+    is_admin = models.BooleanField(default=False)
 
     def clean(self) -> None:
         errors = {}

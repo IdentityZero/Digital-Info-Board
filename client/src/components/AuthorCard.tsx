@@ -1,3 +1,5 @@
+import { formatStringUnderscores } from "../utils/formatters";
+
 interface AuthorCardProps {
   image: string;
   name: string;
@@ -27,7 +29,7 @@ const AuthorCard: React.FC<AuthorCardProps> = ({
               {name}
             </div>
             <div className="mt-0.5 dark:text-slate-300 capitalize">
-              {role} - {position}
+              {role} - {formatStringUnderscores(position)}
             </div>
           </div>
         </figcaption>

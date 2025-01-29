@@ -50,6 +50,7 @@ import {
   ListOfAccountsPage,
 } from "./pages/protected/account-pages";
 import VideoContentPage from "./pages/protected/content-pages/VideoContentPage";
+import AdminRoutes from "./routes/AdminRoutes";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -95,15 +96,36 @@ const router = createBrowserRouter(
           <Route path="image/:id" element={<ImageContentPage />} />
         </Route>
 
-        <Route path="permissions" element={<PermissionsPage />} />
+        <Route
+          path="permissions"
+          element={
+            <AdminRoutes>
+              <PermissionsPage />
+            </AdminRoutes>
+          }
+        />
         <Route path="current-display" element={<CurrentDisplayPage />} />
         <Route path="calendar" element={<CalendarPage />} />
         <Route path="default-display" element={<DefaultDisplayPage />} />
 
         <Route path="account" element={<AccountSettingsPage />}>
           <Route index element={<MyProfilePage />} />
-          <Route path="profile-request" element={<ProfileRequestPage />} />
-          <Route path="list-of-accounts" element={<ListOfAccountsPage />} />
+          <Route
+            path="profile-request"
+            element={
+              <AdminRoutes>
+                <ProfileRequestPage />
+              </AdminRoutes>
+            }
+          />
+          <Route
+            path="list-of-accounts"
+            element={
+              <AdminRoutes>
+                <ListOfAccountsPage />
+              </AdminRoutes>
+            }
+          />
         </Route>
 
         <Route path="settings" element={<SettingsPage />} />

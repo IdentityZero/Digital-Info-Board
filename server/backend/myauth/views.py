@@ -9,7 +9,10 @@ from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
 from rest_framework.permissions import AllowAny
 
 
-from .serializers import TokenObtainPairWithRoleSerializer
+from .serializers import (
+    TokenObtainPairWithRoleSerializer,
+    TokenRefreshWithRoleSerializer,
+)
 
 
 class TokenObtainPairViewV1(TokenObtainPairView):
@@ -42,6 +45,7 @@ class TokenObtainPairViewV1(TokenObtainPairView):
 
 class CookieBasedTokenRefreshViewV1(TokenRefreshView):
     permission_classes = [AllowAny]
+    serializer_class = TokenRefreshWithRoleSerializer
 
     def post(self, request, *args, **kwargs):
         refresh_token = request.COOKIES.get("token")

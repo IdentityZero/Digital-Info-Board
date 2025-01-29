@@ -88,6 +88,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       setUser(decodeUserJWT(response.data.access));
     } catch (error) {
+      console.log(error);
+
       if (error instanceof AxiosError) {
         if (error.request.response) {
           const msg = JSON.parse(error.request.response);
