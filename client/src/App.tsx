@@ -48,6 +48,9 @@ import {
   MyProfilePage,
   ProfileRequestPage,
   ListOfAccountsPage,
+  ViewProfilePage,
+  ChangeMyPasswordPage,
+  ChangeOthersPasswordPage,
 } from "./pages/protected/account-pages";
 import VideoContentPage from "./pages/protected/content-pages/VideoContentPage";
 import AdminRoutes from "./routes/AdminRoutes";
@@ -108,8 +111,10 @@ const router = createBrowserRouter(
         <Route path="calendar" element={<CalendarPage />} />
         <Route path="default-display" element={<DefaultDisplayPage />} />
 
+        {/* Accounts Pages */}
         <Route path="account" element={<AccountSettingsPage />}>
           <Route index element={<MyProfilePage />} />
+          <Route path="change-password" element={<ChangeMyPasswordPage />} />
           <Route
             path="profile-request"
             element={
@@ -123,6 +128,22 @@ const router = createBrowserRouter(
             element={
               <AdminRoutes>
                 <ListOfAccountsPage />
+              </AdminRoutes>
+            }
+          />
+          <Route
+            path="list-of-accounts/:id"
+            element={
+              <AdminRoutes>
+                <ViewProfilePage />
+              </AdminRoutes>
+            }
+          />
+          <Route
+            path="list-of-accounts/:id/change-password"
+            element={
+              <AdminRoutes>
+                <ChangeOthersPasswordPage />
               </AdminRoutes>
             }
           />

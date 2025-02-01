@@ -7,9 +7,15 @@ from django.shortcuts import get_object_or_404
 from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.exceptions import PermissionDenied
 
 
-from .serializers import UserSerializer, SetActiveUserSerializer
+from .serializers import (
+    UserSerializer,
+    SetActiveUserSerializer,
+    ChangePasswordSerializer,
+)
+from utils.permissions import IsAdmin
 
 
 class CreateUserView(generics.CreateAPIView):
@@ -28,6 +34,7 @@ class RetrieveUpdateUserView(generics.RetrieveUpdateAPIView):
 
     def update(self, request, *args, **kwargs):
         data = request.data.dict()
+        print(data)
         profile = self.get_profile_data(data)
         if profile:
             data["profile"] = profile
@@ -66,7 +73,7 @@ class RetrieveUpdateUserView(generics.RetrieveUpdateAPIView):
 
 class ListInactiveUserView(generics.ListAPIView):
     serializer_class = UserSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAdmin]
 
     def get_queryset(self):
         qs = User.objects.filter(is_active=False)
@@ -75,8 +82,47 @@ class ListInactiveUserView(generics.ListAPIView):
 
 class SetActiveUserView(generics.UpdateAPIView):
     serializer_class = SetActiveUserSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAdmin]
 
     def get_object(self):
         pk = self.kwargs.get("pk")
         return get_object_or_404(User, id=pk)
+
+
+class ListAllUsersView(generics.ListAPIView):
+    serializer_class = UserSerializer
+    permission_classes = [IsAuthenticated, IsAdmin]
+
+    def get_queryset(self):
+        qs = User.objects.all()
+        user = self.request.user
+        # Remove the user in the queryset
+
+        return qs.exclude(id=user.id)
+
+
+class DeleteUserView(generics.DestroyAPIView):
+    serializer_class = UserSerializer
+    permission_classes = [IsAuthenticated, IsAdmin]
+
+    def get_object(self):
+        pk = self.kwargs.get("pk")
+        return get_object_or_404(User, id=pk)
+
+
+class ChangePasswordView(generics.UpdateAPIView):
+    serializer_class = ChangePasswordSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        """Retrieve the user object, ensuring proper access control."""
+        pk = self.kwargs.get("pk")
+        user = self.request.user
+
+        if user.profile.is_admin:
+            return get_object_or_404(User, id=pk)
+
+        if str(user.id) != str(pk):
+            raise PermissionDenied("You can only change your own password.")
+
+        return user

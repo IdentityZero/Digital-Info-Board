@@ -36,7 +36,7 @@ export type AllFacultyPositions = [
 export type Role = Student | Faculty;
 
 type BaseUser = {
-  id: number;
+  id: string;
   username: string;
   token: string;
   is_admin: boolean;
@@ -45,7 +45,7 @@ type BaseUser = {
 export type User = BaseUser & Role;
 
 export type DecodedJWTType = Role & {
-  user_id: number;
+  user_id: string;
   username: string;
   exp: number;
   is_admin: boolean;
@@ -53,7 +53,6 @@ export type DecodedJWTType = Role & {
 
 export const decodeUserJWT = (token: string): User | null => {
   const decodedJWT = jwtDecode<DecodedJWTType>(token);
-  console.log(decodedJWT);
 
   let user: User | null = null;
 
@@ -87,6 +86,7 @@ type UserProfileType = {
   position: Role["position"];
   birthdate: string;
   image: string | File;
+  is_admin: boolean;
 };
 
 export type FullUserType = {
@@ -94,5 +94,6 @@ export type FullUserType = {
   username: string;
   last_name: string;
   first_name: string;
+  is_active: boolean;
   profile: UserProfileType;
 };

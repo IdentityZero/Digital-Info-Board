@@ -12,7 +12,8 @@ const AccountSettingsPage = () => {
           to=""
           className={({ isActive }) =>
             `capitalize p-3 pl-6 flex h-14 flex-row items-center justify-center gap-3  border-black hover:bg-cyanBlue-dark active:bg-cyanBlue-darker ${
-              isActive && location.pathname == "/dashboard/account"
+              (isActive && location.pathname == "/dashboard/account") ||
+              location.pathname == "/dashboard/account/change-password"
                 ? "font-bold bg-cyanBlue"
                 : "border-2 border-black bg-white"
             } `

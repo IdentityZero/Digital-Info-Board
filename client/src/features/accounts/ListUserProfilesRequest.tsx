@@ -1,14 +1,15 @@
 import { FullUserType } from "../../types/UserTypes";
+import { formatStringUnderscores } from "../../utils/formatters";
 
-type ListUserProfilesProps = {
+type ListUserProfilesRequestProps = {
   usersList: FullUserType[];
-  approveFunc: (id: string | number) => void;
+  approveFunc: (id: string) => void;
 };
 
-const ListUserProfiles = ({
+const ListUserProfilesRequest = ({
   usersList,
   approveFunc,
-}: ListUserProfilesProps) => {
+}: ListUserProfilesRequestProps) => {
   return (
     <div className="flex flex-col gap-4">
       {usersList.map((user) => (
@@ -47,7 +48,7 @@ const ListUserProfiles = ({
               <div className="flex justify-between items-center">
                 <span className="text-gray-600 font-medium">Position:</span>
                 <span className="text-black font-bold capitalize">
-                  {user.profile.position}
+                  {formatStringUnderscores(user.profile.position)}
                 </span>
               </div>
             </div>
@@ -55,7 +56,7 @@ const ListUserProfiles = ({
 
           <div className="mt-2 w-full flex justify-end">
             <button
-              className={`py-2 px-16 rounded-full bg-cyanBlue hover:bg-cyanBlue-dark active:bg-cyanBlue-darker font-semibold `}
+              className={`py-2 px-16 max-sm:px-8  rounded-full bg-cyanBlue hover:bg-cyanBlue-dark active:bg-cyanBlue-darker font-semibold `}
               type="button"
               onClick={() => approveFunc(user.id)}
             >
@@ -67,4 +68,4 @@ const ListUserProfiles = ({
     </div>
   );
 };
-export default ListUserProfiles;
+export default ListUserProfilesRequest;

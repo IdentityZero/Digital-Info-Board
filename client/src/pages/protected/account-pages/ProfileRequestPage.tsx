@@ -7,7 +7,7 @@ import {
   listInactiveUsersApi,
   updateUserActiveStatusApi,
 } from "../../../api/userRequest";
-import { ListUserProfiles } from "../../../features/accounts";
+import { ListUserProfilesRequest } from "../../../features/accounts";
 
 const ProfileRequestPage = () => {
   const { userApi } = useAuth();
@@ -30,7 +30,7 @@ const ProfileRequestPage = () => {
     fetchUsersList();
   }, []);
 
-  const handleApproveButton = async (id: string | number) => {
+  const handleApproveButton = async (id: string) => {
     const confirm_approve = window.confirm(
       "Are you sure you want to activate this user?"
     );
@@ -72,7 +72,7 @@ const ProfileRequestPage = () => {
           <div>There are no profile requests</div>
         )}
         {usersList && (
-          <ListUserProfiles
+          <ListUserProfilesRequest
             usersList={usersList}
             approveFunc={handleApproveButton}
           />

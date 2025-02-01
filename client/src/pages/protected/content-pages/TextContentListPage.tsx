@@ -15,7 +15,7 @@ import {
   listTextAnnouncementApi,
   deleteTextAnnouncementApi,
 } from "../../../api/announcementRequest";
-import LoadingSpinner from "../../../components/LoadingSpinner";
+import LoadingMessage from "../../../components/LoadingMessage";
 
 const TextContentListPage = () => {
   const { userApi } = useAuth();
@@ -66,15 +66,9 @@ const TextContentListPage = () => {
     return <div>Unexpected Error Occured. Try refreshing the page</div>;
   }
 
-  if (isLoading)
-    return (
-      <div className="w-full flex flex-row items-center justify-center gap-2 mb-2">
-        <LoadingSpinner />
-        <p className="text-lg font-medium text-gray-600 animate-pulse">
-          Loading...
-        </p>
-      </div>
-    );
+  if (isLoading) {
+    return <LoadingMessage message="Loading..." />;
+  }
 
   return (
     <div className="mt-5 w-full overflow-x-auto">

@@ -15,7 +15,7 @@ import {
 } from "../../../utils/formatters";
 import IconWithTooltip from "../../../components/IconWithTooltip";
 import { addTotalDuration } from "../../../utils/utils";
-import LoadingSpinner from "../../../components/LoadingSpinner";
+import LoadingMessage from "../../../components/LoadingMessage";
 
 const ImageContentListPage = () => {
   const { userApi } = useAuth();
@@ -65,15 +65,9 @@ const ImageContentListPage = () => {
     return <div>Unexpected Error Occured. Try refreshing the page</div>;
   }
 
-  if (isLoading)
-    return (
-      <div className="w-full flex flex-row items-center justify-center gap-2 mb-2">
-        <LoadingSpinner />
-        <p className="text-lg font-medium text-gray-600 animate-pulse">
-          Loading...
-        </p>
-      </div>
-    );
+  if (isLoading) {
+    return <LoadingMessage message="Loading..." />;
+  }
 
   return (
     <div className="mt-5 w-full overflow-x-auto">

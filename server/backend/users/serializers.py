@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
@@ -12,7 +13,15 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Profile
-        fields = ["id", "id_number", "role", "position", "birthdate", "image"]
+        fields = [
+            "id",
+            "id_number",
+            "role",
+            "position",
+            "birthdate",
+            "image",
+            "is_admin",
+        ]
 
     def validate(self, attrs):
         profile = Profile(**attrs)
@@ -25,7 +34,15 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ["id", "username", "password", "last_name", "first_name", "profile"]
+        fields = [
+            "id",
+            "username",
+            "password",
+            "last_name",
+            "first_name",
+            "profile",
+            "is_active",
+        ]
         extra_kwargs = {"password": {"write_only": True}}
 
     def validate_password(self, value):
@@ -36,6 +53,7 @@ class UserSerializer(serializers.ModelSerializer):
         return value
 
     def create(self, validated_data):
+        # TODO: When there is no active user, set active to True
 
         user = User.objects.create_user(
             username=validated_data["username"],
@@ -78,3 +96,37 @@ class SetActiveUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ["is_active"]
+
+
+class ChangePasswordSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(
+        write_only=True, required=True, validators=[validate_password]
+    )
+    password2 = serializers.CharField(write_only=True, required=True)
+    old_password = serializers.CharField(write_only=True, required=True)
+
+    class Meta:
+        model = User
+        fields = ("old_password", "password", "password2")
+
+    def validate(self, attrs):
+        if attrs["password"] != attrs["password2"]:
+            raise serializers.ValidationError(
+                {"password": "Password fields didn't match."}
+            )
+
+        return attrs
+
+    def validate_old_password(self, value):
+        pk = self.context["view"].kwargs.get("pk")
+        user = get_object_or_404(User, pk=pk)
+        if not user.check_password(value):
+            raise serializers.ValidationError("Old password is not correct")
+        return value
+
+    def update(self, instance, validated_data):
+
+        instance.set_password(validated_data["password"])
+        instance.save()
+
+        return instance

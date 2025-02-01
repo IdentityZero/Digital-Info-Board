@@ -19,7 +19,7 @@ const DashboardTopbar = () => {
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
-        const data = await retrieveUserInformation(userApi, user?.id);
+        const data = await retrieveUserInformation(userApi, user?.id as string);
         setFetchedUser(data);
       } catch (error) {}
     };

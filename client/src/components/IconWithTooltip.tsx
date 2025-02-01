@@ -13,6 +13,16 @@ const IconWithTooltip = ({
   iconClassName,
   labelClassName,
 }: IconWithTooltipProps) => {
+  /**
+   * Example:
+   * <IconWithTooltip
+        icon={FaEye}
+        label="View"
+        iconClassName="text-btSecondary hover:text-btSecondary-hover active: active:text-btSecondary-active cursor-pointer"
+        labelClassName="p-1 px-2 rounded-md shadow-md bg-btSecondary text-white"
+      />
+   * 
+   */
   return (
     <div className="relative flex items-center justify-center group">
       <div className={`${iconClassName}`}>

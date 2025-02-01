@@ -8,7 +8,6 @@ import {
 } from "react-icons/fa";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import LoadingSpinner from "../../../components/LoadingSpinner";
 
 import {
   FullVideoAnnouncementType,
@@ -31,6 +30,7 @@ import {
 } from "../../../utils/utils";
 import { isQuillValueEmpty } from "../../../components/QuillEditor";
 import { UpdateVideoAnnouncementErrorState } from "../../../features/announcements/helpers";
+import LoadingMessage from "../../../components/LoadingMessage";
 
 const VideoContentPage = () => {
   const { id } = useParams();
@@ -243,16 +243,7 @@ const VideoContentPage = () => {
           </div>
         </div>
 
-        {fetchLoading && (
-          <div>
-            <div className="w-full flex flex-row items-center justify-center gap-2 mb-2">
-              <LoadingSpinner />
-              <p className="text-lg font-medium text-gray-600 animate-pulse">
-                Loading...
-              </p>
-            </div>
-          </div>
-        )}
+        {fetchLoading && <LoadingMessage message="Loading..." />}
         {fetchError && <div>{fetchError}</div>}
 
         {/* Set up to avoid rerendering and refetching files */}

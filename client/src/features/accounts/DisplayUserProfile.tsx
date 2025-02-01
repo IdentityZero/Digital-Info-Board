@@ -3,6 +3,7 @@ import { Errortext } from "../../components/ui";
 import { FaExclamationCircle } from "react-icons/fa";
 
 import { useMyProfilePageContext } from "../../pages/protected/account-pages/MyProfilePage";
+import { formatStringUnderscores } from "../../utils/formatters";
 
 const DisplayUserProfile = ({}) => {
   const {
@@ -86,18 +87,36 @@ const DisplayUserProfile = ({}) => {
           Change Profile
         </label>
       </div>
+
       <div className="flex-1 flex flex-col gap-2">
         {/* Username Field */}
-        <div className="flex flex-row items-center rounded-md overflow-hidden">
-          <label className="w-[150px] xl:w-[180px] bg-desaturatedBlueGray py-3 px-2 font-bold">
-            Username
-          </label>
-          <input
-            type="text"
-            value={userProfileForEdit.username}
-            className="flex-1 bg-gray-200 py-3 pl-2 cursor-not-allowed"
-            disabled
-          />
+        <div>
+          <div
+            className={`flex flex-row items-center rounded-md overflow-hidden border-2 h-[48px] bg-desaturatedBlueGray ${
+              errors.username && "border-2 border-red-500"
+            }`}
+          >
+            <label
+              htmlFor="username"
+              className="w-[150px] xl:w-[180px] px-2 font-bold flex flex-row items-center gap-2"
+            >
+              {errors.username && (
+                <FaExclamationCircle className="text-red-500" />
+              )}
+              Username
+            </label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              value={userProfileForEdit.username}
+              className="flex-1 bg-gray-200 py-3 pl-2"
+              onChange={handleInputChange}
+              required
+              disabled={isLoading}
+            />
+          </div>
+          <Errortext text={errors.username} />
         </div>
 
         {/* Role Field */}
@@ -120,7 +139,7 @@ const DisplayUserProfile = ({}) => {
           </label>
           <input
             type="text"
-            value={userProfileForEdit.profile.position}
+            value={formatStringUnderscores(userProfileForEdit.profile.position)}
             className="flex-1 bg-gray-200 py-3 pl-2 cursor-not-allowed capitalize"
             disabled
           />
