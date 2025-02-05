@@ -19,7 +19,7 @@ const ChangeMyPasswordPage = () => {
         <FaArrowLeft />
         Back to Profile
       </Link>
-      <ChangePassword userID={user.id} />
+      <ChangePassword />
     </div>
   );
 };

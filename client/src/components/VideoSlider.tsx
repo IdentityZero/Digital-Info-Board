@@ -112,7 +112,7 @@ const VideoSlider: React.FC<VideoSliderProps> = ({
             <video
               controls={showControls}
               ref={(el) => (videoRefs.current[index] = el)}
-              className="w-full h-[350px] object-contain"
+              className="w-full h-[400px] object-contain"
               crossOrigin={crossOrigin || undefined}
             >
               <source src={video} />

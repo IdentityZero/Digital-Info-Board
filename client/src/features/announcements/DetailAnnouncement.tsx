@@ -41,11 +41,11 @@ const DetailAnnouncement = ({
   });
 
   return (
-    <div className="w-full pb-4">
-      <div>
+    <div className="w-full pb-4 min-h-[calc(100vh-80px)] flex flex-col justify-between">
+      <div className="mb-4 w-full">
         <DisplayQuillEditor value={JSON.parse(title as string)} isTitle />
       </div>
-      <div className="w-full m-auto md:w-4/5 lg:w-1/2 p-4 bg-white shadow-lg rounded-lg border border-gray-200 mt-2">
+      <div className=" flex-grow flex flex-col m-auto w-[80%] p-4 bg-white shadow-lg rounded-lg border border-gray-200 mt-2">
         <div>
           <AuthorCard
             image={data.author.profile.image}
@@ -54,10 +54,11 @@ const DetailAnnouncement = ({
             position={data.author.profile.position}
           />
         </div>
-        <div>
+        <div className="flex-grow flex items-center">
           {data.text_announcement && (
             <DisplayQuillEditor
               value={JSON.parse(text_announcement?.details as string)}
+              className="h-[400px]"
             />
           )}
           {imageUrls &&

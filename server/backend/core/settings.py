@@ -84,6 +84,7 @@ INSTALLED_APPS = [
     "users",
     "myauth",
     "announcements",
+    "fixed_contents",
 ]
 
 MIDDLEWARE = [

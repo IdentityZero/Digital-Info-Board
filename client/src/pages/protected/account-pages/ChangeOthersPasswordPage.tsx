@@ -4,6 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import LoadingMessage from "../../../components/LoadingMessage";
 import { retrieveUserInformation } from "../../../api/userRequest";
 import { useAuth } from "../../../context/AuthProvider";
+import { ChangeOthersPassword } from "../../../features/accounts";
 
 const ChangeOthersPasswordPage = () => {
   // TODO: THIS IS A MAJOR SECURITY RISK. DO THIS BETTER
@@ -59,7 +60,7 @@ const ChangeOthersPasswordPage = () => {
         <FaArrowLeft />
         Back to Profile
       </Link>
-      <div>For Questioning...</div>
+      <ChangeOthersPassword userID={id as string} />
     </div>
   );
 };

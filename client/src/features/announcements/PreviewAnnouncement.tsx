@@ -21,7 +21,7 @@ const PreviewAnnouncement = ({
          )}
    */
   return (
-    <div className="fixed top-0 left-0 w-screen h-screen bg-gray-600 bg-opacity-90 z-50 flex flex-col">
+    <div className="fixed top-0 left-0 w-screen h-screen bg-gray-600 bg-opacity-90 z-50 flex flex-col overflow-auto ">
       <button
         className="text-5xl font-bold text-black hover:text-gray-800 active:text-gray-900 w-full text-right pr-12 mb-2"
         onClick={() => {

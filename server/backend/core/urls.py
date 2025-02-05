@@ -25,6 +25,7 @@ urlpatterns = [
     path("auth/", include("myauth.urls")),
     path("users/", include("users.urls")),
     path("announcements/", include("announcements.urls")),
+    path("fixed-contents/", include("fixed_contents.urls")),
 ]
 
 if settings.DEBUG:

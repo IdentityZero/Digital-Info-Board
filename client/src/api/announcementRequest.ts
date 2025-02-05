@@ -6,7 +6,10 @@ import {
   FullVideoAnnouncementType,
 } from "../types/AnnouncementTypes";
 
-// This is for base axios instance not using the users api
+/**
+ * BASE_ENDPOINT is only used when not using the users api
+ */
+
 const BASE_ENDPOINT = "http://127.0.0.1:8000/";
 
 export const listCreateAllTypeAnnouncementEndpoint = "announcements/v1/"; // Exported that will be used for Video uploads

@@ -76,7 +76,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
             <img
               src={image}
               alt={`Slide ${index}`}
-              className="w-full h-[350px] object-contain"
+              className="w-full h-[400px] object-contain"
             />
           </div>
         ))}

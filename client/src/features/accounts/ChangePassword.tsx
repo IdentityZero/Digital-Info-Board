@@ -6,8 +6,8 @@ import { useAuth } from "../../context/AuthProvider";
 import { ChangePasswordErrorState } from "./helpers";
 import FormField from "./components/FormField";
 
-const ChangePassword = ({ userID }: { userID: string }) => {
-  const { userApi } = useAuth();
+const ChangePassword = () => {
+  const { userApi, user } = useAuth();
 
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -28,7 +28,7 @@ const ChangePassword = ({ userID }: { userID: string }) => {
     try {
       setIsSaving(true);
       setUpdateErrors(ChangePasswordErrorState);
-      await updateUserPasswordApi(userApi, userID, data);
+      await updateUserPasswordApi(userApi, user?.id as string, data);
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");

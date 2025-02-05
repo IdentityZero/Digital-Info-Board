@@ -4,9 +4,10 @@ import { addTotalDuration, convertDurationToSeconds } from "../../utils/utils";
 import { AnnouncementListType } from "../../types/AnnouncementTypes";
 import { listAnnouncementApi } from "../../api/announcementRequest";
 import { DetailAnnouncement } from "../../features/announcements";
+import { FixedContentDisplay } from "../../features/fixedContent";
 
 const HomePage = () => {
-  // TODO: POSSIBILITY OF EMPTY ANNOUNCEMENT
+  // TODO: POSSIBILITY OF EMPTY ANNOUNCEMENT (The announcement has no body or type)
   const [announcements, setAnnouncements] = useState<AnnouncementListType>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<any>(null);
@@ -117,37 +118,42 @@ const HomePage = () => {
   }
 
   return (
-    <div className="relative w-full mx-auto overflow-hidden">
-      <div
-        className={`flex transition-transform  ${
-          isTransitioning ? "duration-500" : "duration-0"
-        }`}
-        style={{ transform: `translateX(-${currentIndex * 100}%)` }}
-        onTransitionEnd={handleTransitionEnd}
-      >
-        {extendedAnnouncements?.map((announcement, index) => (
-          <div className="w-full flex-shrink-0" key={index}>
-            <DetailAnnouncement
-              data={announcement}
-              resetIndex={!isTransitioning}
-              index={index}
-              indexOnPlay={currentIndex}
-            />
-          </div>
-        ))}
+    <div className="flex flex-col items-center justify-center">
+      <div className="relative w-full mx-auto overflow-hidden">
+        <div
+          className={`flex transition-transform  ${
+            isTransitioning ? "duration-500" : "duration-0"
+          }`}
+          style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+          onTransitionEnd={handleTransitionEnd}
+        >
+          {extendedAnnouncements?.map((announcement, index) => (
+            <div className="w-full flex-shrink-0" key={index}>
+              <DetailAnnouncement
+                data={announcement}
+                resetIndex={!isTransitioning}
+                index={index}
+                indexOnPlay={currentIndex}
+              />
+            </div>
+          ))}
+        </div>
+        <button
+          onClick={handlePrev}
+          className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-gray-800 bg-opacity-50 text-white p-2 rounded-full hover:bg-gray-600 focus:outline-none"
+        >
+          &#8249;
+        </button>
+        <button
+          onClick={handleNext}
+          className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-gray-800 bg-opacity-50 text-white p-2 rounded-full hover:bg-gray-600 focus:outline-none"
+        >
+          &#8250;
+        </button>
       </div>
-      <button
-        onClick={handlePrev}
-        className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-gray-800 bg-opacity-50 text-white p-2 rounded-full hover:bg-gray-600 focus:outline-none"
-      >
-        &#8249;
-      </button>
-      <button
-        onClick={handleNext}
-        className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-gray-800 bg-opacity-50 text-white p-2 rounded-full hover:bg-gray-600 focus:outline-none"
-      >
-        &#8250;
-      </button>
+      <div className="max-w-[80%] w-full my-8">
+        <FixedContentDisplay />
+      </div>
     </div>
   );
 };
