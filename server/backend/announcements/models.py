@@ -36,6 +36,7 @@ class Announcements(TimestampedModel):
         help_text="Select the date and time when the announcement will no longer be displayed.",
     )
     is_active = models.BooleanField(default=False)
+    position = models.PositiveIntegerField(blank=True, null=True)
 
     def clean(self):
         errors = {}

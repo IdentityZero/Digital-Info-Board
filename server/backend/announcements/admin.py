@@ -11,6 +11,7 @@ from .models import (
 class AnnouncementAdmin(admin.ModelAdmin):
     list_display = [
         "id",
+        "position",
         "author",
         "title",
         "start_date",

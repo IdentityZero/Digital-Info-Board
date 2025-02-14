@@ -45,7 +45,7 @@ const DetailAnnouncement = ({
       <div className="mb-4 w-full">
         <DisplayQuillEditor value={JSON.parse(title as string)} isTitle />
       </div>
-      <div className=" flex-grow flex flex-col m-auto w-[80%] p-4 bg-white shadow-lg rounded-lg border border-gray-200 mt-2">
+      <div className="flex-grow flex flex-col m-auto w-[80%] p-4 bg-white shadow-lg rounded-lg border border-gray-200 mt-2">
         <div>
           <AuthorCard
             image={data.author.profile.image}
@@ -54,7 +54,7 @@ const DetailAnnouncement = ({
             position={data.author.profile.position}
           />
         </div>
-        <div className="flex-grow flex items-center">
+        <div className="flex-grow flex items-center h-full">
           {data.text_announcement && (
             <DisplayQuillEditor
               value={JSON.parse(text_announcement?.details as string)}
@@ -65,26 +65,30 @@ const DetailAnnouncement = ({
             imageDurations &&
             data.image_announcement &&
             data.image_announcement?.length > 0 && (
-              <ImageSlider
-                images={imageUrls as string[]}
-                durations={imageDurations as number[]}
-                showDuration={false}
-                showArrows={false}
-                reset={resetIndex}
-              />
+              <div className="h-[400px] w-full">
+                <ImageSlider
+                  images={imageUrls as string[]}
+                  durations={imageDurations as number[]}
+                  showDuration={false}
+                  showArrows={false}
+                  reset={resetIndex}
+                />
+              </div>
             )}
           {videoUrls &&
             videoDurations &&
             data.video_announcement &&
             data.video_announcement?.length > 0 && (
-              <VideoSlider
-                videos={videoUrls as string[]}
-                durations={videoDurations as number[]}
-                showDuration={false}
-                showArrows={false}
-                stop={index !== indexOnPlay}
-                crossOrigin={videoCrossOrigin || undefined}
-              />
+              <div className="h-[400px] w-full">
+                <VideoSlider
+                  videos={videoUrls as string[]}
+                  durations={videoDurations as number[]}
+                  showDuration={false}
+                  showArrows={false}
+                  stop={index !== indexOnPlay}
+                  crossOrigin={videoCrossOrigin || undefined}
+                />
+              </div>
             )}
         </div>
       </div>

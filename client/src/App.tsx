@@ -15,6 +15,7 @@ import {
   SignUpPage,
   AboutPage,
   ContactUsPage,
+  LiveAnnouncementPage,
 } from "./pages/public";
 import {
   AccountSettingsPage,
@@ -71,6 +72,7 @@ const router = createBrowserRouter(
         <Route path="signup" element={<SignUpPage />} />
         <Route path="about-us" element={<AboutPage />} />
         <Route path="contact" element={<ContactUsPage />} />
+        <Route path="kiosk" element={<LiveAnnouncementPage />} />
       </Route>
       <Route
         path="dashboard"

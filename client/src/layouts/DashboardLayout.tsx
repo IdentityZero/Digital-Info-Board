@@ -25,7 +25,7 @@ const DashboardLayout = () => {
   }, [logoLg]);
 
   return (
-    <div className="flex min-h-screen lg:flex-row flex-col ">
+    <div className="flex min-h-screen max-w-screen-2xl lg:flex-row flex-col ">
       <div className="sticky min-w-fit top-0 h-screen bg-darkTeal z-50 text-white hover:overflow-y-auto overflow-hidden custom-scrollbar max-lg:hidden">
         <DashboardSidebar>
           {PROTECTED_LINKS.map((link) => {
@@ -39,9 +39,7 @@ const DashboardLayout = () => {
         <DashboardMobileSidebar links={PROTECTED_LINKS} />
       </div>
 
-      {/* <main className="flex-1 pl-0 max-w-full overflow-hidden"> */}
-      {/* Dont know why overflow is hidden */}
-      <main className="flex-1 pl-0 max-w-full">
+      <main className="flex-1 pl-0 max-w-full overflow-hidden">
         <div className="hidden lg:block">
           {/* Topbar */}
           <DashboardTopbar />

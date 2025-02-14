@@ -10,6 +10,7 @@ import {
 import { restrictToHorizontalAxis } from "@dnd-kit/modifiers";
 import {
   arrayMove,
+  defaultAnimateLayoutChanges,
   horizontalListSortingStrategy,
   SortableContext,
   sortableKeyboardCoordinates,
@@ -22,15 +23,23 @@ import { AnnouncementThumbnail } from "../features/announcements";
 type DragAndDropProps = {
   items: AnnouncementListType;
   setItems: React.Dispatch<React.SetStateAction<AnnouncementListType>>;
+  containerSize?: string;
+  disabled?: boolean;
 };
 
-const DragAndDrop = ({ items, setItems }: DragAndDropProps) => {
+const DragAndDrop = ({
+  items,
+  setItems,
+  disabled = false,
+  containerSize = "100%",
+}: DragAndDropProps) => {
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     })
   );
+
   return (
     <div className="w-full">
       <DndContext
@@ -42,11 +51,19 @@ const DragAndDrop = ({ items, setItems }: DragAndDropProps) => {
         <SortableContext
           items={items.map((item) => item.id)}
           strategy={horizontalListSortingStrategy}
+          disabled={disabled}
         >
-          <div className="flex flex-row gap-2 overflow-auto w-full custom-scrollbar">
-            {items.map((item) => (
-              <DnDSortableItem key={item.id} id={item.id}>
-                <div className="bg-yellowishBeige w-[120px] h-[120px] rounded-xl touch-none mb-1.5 overflow-hidden">
+          <div
+            className={`flex flex-row gap-2 overflow-auto custom-scrollbar`}
+            style={{ width: containerSize, margin: "0 auto" }}
+          >
+            {items.map((item, index) => (
+              <DnDSortableItem key={item.id} id={item.id} editMode={!disabled}>
+                <div
+                  className={`bg-yellowishBeige w-[120px] h-[120px] rounded-xl touch-none mb-1.5 overflow-hidden ${
+                    index === 0 && "mr-3"
+                  }`}
+                >
                   <AnnouncementThumbnail data={item} />
                 </div>
               </DnDSortableItem>
@@ -71,15 +88,32 @@ const DragAndDrop = ({ items, setItems }: DragAndDropProps) => {
   }
 };
 
+function animateLayoutChangeOnStationary(args: any) {
+  const { isSorting, wasSorting } = args;
+
+  if (isSorting || wasSorting) {
+    return defaultAnimateLayoutChanges(args);
+  }
+
+  return true;
+}
+
 const DnDSortableItem = ({
   id,
   children,
+  editMode,
 }: {
   id: string;
   children: React.ReactNode;
+  editMode: boolean;
 }) => {
   const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id: id });
+    useSortable({
+      animateLayoutChanges: editMode
+        ? defaultAnimateLayoutChanges
+        : animateLayoutChangeOnStationary,
+      id: id,
+    });
 
   const style = {
     transform: CSS.Transform.toString(transform),

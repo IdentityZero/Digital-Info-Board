@@ -28,7 +28,8 @@ const WeatherForecast = () => {
   >(undefined);
   const [fetchWeatherInfoError, setFetchWeatherInfoError] = useState(false);
 
-  const key = "";
+  // PUT KEY HERE
+  const key = "a7317a47824c4883ac064102241208";
 
   const url = `https://api.weatherapi.com/v1/forecast.json?key=${key}&q=Laoag&days=3`;
 

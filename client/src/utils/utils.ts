@@ -132,6 +132,54 @@ export function filterListObjectKeys(obj_list: any, keysToKeep: any) {
 }
 
 export function convertDurationToSeconds(duration: string): number {
+  /**
+   * Converts a duration field 'xx:xx:xx' into milliseconds
+   */
   const [hours, minutes, seconds] = duration.split(":").map(Number);
   return hours * 3600 + minutes * 60 + seconds;
 }
+
+export function moveFirstToLast<T>(arr: T[]): T[] {
+  /**
+   * Moves the first element of an array to the last
+   */
+
+  if (arr.length === 0) return arr;
+  const firstElement = arr.shift();
+  if (firstElement !== undefined) arr.push(firstElement);
+  return arr;
+}
+
+export const calculateElapsedTime = (dateString: string): number => {
+  /**
+   * Calculates Elapsed time since the given dateString in milliseconds
+   */
+  const pastDate = new Date(dateString);
+  const now = new Date();
+
+  if (isNaN(pastDate.getTime())) {
+    return 0;
+  }
+
+  const elapsedMilliseconds = now.getTime() - pastDate.getTime();
+
+  return elapsedMilliseconds;
+};
+
+export const findIndexByWeight = (arr: number[], value: number): number => {
+  /**
+   * Finds the index in a weighted array where a given value falls.
+   *
+   * @param arr - An array of numbers representing weights.
+   * @param value - A number used to determine the index based on cumulative weight.
+   * @returns The index where the value falls within the cumulative sum, or -1 if not found.
+   */
+  let cumulativeSum = 0;
+  for (let i = 0; i < arr.length; i++) {
+    cumulativeSum += arr[i];
+    if (value < cumulativeSum) {
+      return i;
+    }
+  }
+  return -1;
+};

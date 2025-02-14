@@ -5,6 +5,7 @@ import json
 
 from rest_framework import generics, response, status, response, parsers
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from django.db.models import OrderBy, F
 
 from .serializers import (
     CreateAnnouncementSerializer,
@@ -34,7 +35,6 @@ class ListCreateAllAnnouncementAPIView(generics.ListCreateAPIView):
     Remove text_announcement if you dont want to add text announcement or set text_announcement details to null or ''
     """
 
-    queryset = Announcements.objects.all()
     serializer_class = CreateAnnouncementSerializer
     permission_classes = [AllowAny]
     parser_classes = [parsers.MultiPartParser, parsers.FormParser]
@@ -125,6 +125,12 @@ class ListCreateAllAnnouncementAPIView(generics.ListCreateAPIView):
 
         if serializer.is_valid(raise_exception=True):
             serializer.save(author=self.request.user)
+
+    def get_queryset(self):
+        qs = Announcements.objects.all().order_by(
+            OrderBy(F("position"), nulls_last=True)
+        )
+        return qs
 
 
 class UpdateAnnouncementActiveStatusAPIView(generics.RetrieveUpdateAPIView):

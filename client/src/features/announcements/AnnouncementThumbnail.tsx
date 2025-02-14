@@ -31,14 +31,16 @@ const AnnouncementThumbnail = ({ data }: AnnouncementThumbnailProps) => {
 
   return (
     <>
-      <div className="w-[500px] m-auto bg-white shadow-lg rounded-lg border border-gray-200 mt-2 scale-[0.25] origin-top-left hover:!cursor-pointer">
-        <AuthorCard
-          image={data.author.profile.image}
-          name={data.author.first_name + " " + data.author.last_name}
-          role={data.author.profile.role}
-          position={data.author.profile.position}
-        />
-        <div ref={container}>
+      <div className="w-[500px] h-[500px] bg-white shadow-lg rounded-lg border border-gray-200 mt-2 scale-[0.25] origin-top-left hover:!cursor-pointer">
+        <div className="h-fit">
+          <AuthorCard
+            image={data.author.profile.image}
+            name={data.author.first_name + " " + data.author.last_name}
+            role={data.author.profile.role}
+            position={data.author.profile.position}
+          />
+        </div>
+        <div ref={container} className="h-[300px]">
           {data.text_announcement && (
             <DisplayQuillEditor
               value={JSON.parse(text_announcement?.details as string)}

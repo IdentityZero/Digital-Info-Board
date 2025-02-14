@@ -26,6 +26,7 @@ urlpatterns = [
     path("users/", include("users.urls")),
     path("announcements/", include("announcements.urls")),
     path("fixed-contents/", include("fixed_contents.urls")),
+    path("settings/", include("settings.urls")),
 ]
 
 if settings.DEBUG:

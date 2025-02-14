@@ -62,21 +62,21 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
   }, [isTransitioning, currentIndex]);
 
   return (
-    <div className="relative w-full mx-auto overflow-hidden">
+    <div className="relative w-full h-full mx-auto overflow-hidden">
       {/* Image Slider */}
       <div
-        className={`flex transition-transform  ${
+        className={`flex transition-transform h-full ${
           isTransitioning ? "duration-500" : "duration-0"
         }`}
         style={{ transform: `translateX(-${currentIndex * 100}%)` }}
         onTransitionEnd={handleTransitionEnd}
       >
         {extendedImages.map((image, index) => (
-          <div key={index} className="w-full flex-shrink-0">
+          <div key={index} className="w-full h-full flex-shrink-0">
             <img
               src={image}
               alt={`Slide ${index}`}
-              className="w-full h-[400px] object-contain"
+              className="w-auto h-full object-contain mx-auto"
             />
           </div>
         ))}

@@ -3,6 +3,7 @@ from django.urls import reverse
 
 from rest_framework import serializers
 from django.utils import timezone
+from django.db.models import Max
 
 from .models import (
     Announcements,
@@ -59,23 +60,6 @@ class TextAnnouncementSerializer(serializers.ModelSerializer):
         fields = ["id", "details", "duration", "last_modified", "created_at"]
 
 
-class PrimaryTextAnnouncementSerializer(
-    TextAnnouncementSerializer, PrimaryChildAnnouncementSerializerInterface
-):
-    def validate(self, attrs):
-        self.validate_before_save(attrs)
-
-        return super().validate(attrs)
-
-    def create(self, validated_data):
-        view = self.context.get("view")
-        ann_pk = view.kwargs.get("announcement_pk")
-        ann_inst = Announcements.objects.get(id=ann_pk)
-        validated_data["announcement"] = ann_inst
-
-        return super().create(validated_data)
-
-
 # endregion
 
 # region Topic: Image Announcement Serializers
@@ -94,24 +78,6 @@ class ImageAnnouncementSerializer(serializers.ModelSerializer):
         return None
 
 
-class PrimaryImageAnnouncementSerializer(
-    ImageAnnouncementSerializer,
-    PrimaryChildAnnouncementSerializerInterface,
-):
-    def validate(self, attrs):
-        super().validate(attrs)
-        self.validate_before_save(attrs)
-
-        return attrs
-
-    def create(self, validated_data):
-        view = self.context.get("view")
-        ann_pk = view.kwargs.get("announcement_pk")
-        ann_inst = Announcements.objects.get(id=ann_pk)
-        validated_data["announcement"] = ann_inst
-        return super().create(validated_data)
-
-
 # endregion
 
 # region Topic: Video Announcement Serializers
@@ -128,25 +94,6 @@ class VideoAnnouncementSerializer(serializers.ModelSerializer):
         if obj.video and obj.video.size:
             return obj.video.size  # File size in bytes
         return None
-
-
-class PrimaryVideoAnnouncementSerializer(
-    VideoAnnouncementSerializer,
-    PrimaryChildAnnouncementSerializerInterface,
-):
-    def validate(self, attrs):
-        super().validate(attrs)
-        self.validate_before_save(attrs)
-
-        return attrs
-
-    def create(self, validated_data):
-        view = self.context.get("view")
-        ann_pk = view.kwargs.get("announcement_pk")
-        ann_inst = Announcements.objects.get(id=ann_pk)
-        validated_data["announcement"] = ann_inst
-
-        return super().create(validated_data)
 
 
 # endregion
@@ -583,6 +530,7 @@ class CreateAnnouncementSerializer(
             "id",
             "url",
             "title",
+            "position",
             "author",
             "start_date",
             "end_date",
@@ -619,7 +567,11 @@ class CreateAnnouncementSerializer(
         if "video_announcement" in validated_data:
             video_ann_data = validated_data.pop("video_announcement")
 
-        ann = Announcements.objects.create(**validated_data)
+        next_position = (
+            Announcements.objects.aggregate(max_value=Max("position"))["max_value"] or 0
+        )
+
+        ann = Announcements.objects.create(**validated_data, position=next_position + 1)
         ann = Announcements.objects.get(id=ann.id)
 
         if (
