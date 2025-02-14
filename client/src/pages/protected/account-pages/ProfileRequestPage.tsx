@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaExclamationTriangle } from "react-icons/fa";
 
 import { useAuth } from "../../../context/AuthProvider";
@@ -8,8 +8,12 @@ import {
   updateUserActiveStatusApi,
 } from "../../../api/userRequest";
 import { ListUserProfilesRequest } from "../../../features/accounts";
+import useLoadingToast from "../../../hooks/useLoadingToast";
+import { Id } from "react-toastify";
 
 const ProfileRequestPage = () => {
+  const toastId = useRef<Id | null>(null);
+  const { loading, update } = useLoadingToast(toastId);
   const { userApi } = useAuth();
 
   const [usersList, setUsersList] = useState<FullUserType[]>([]);
@@ -41,13 +45,18 @@ const ProfileRequestPage = () => {
       is_active: true,
     };
 
+    loading("Activating user account. Please wait...");
+
     try {
       await updateUserActiveStatusApi(userApi, id, activate_acc_data);
       const udpatedUserList = usersList.filter((user) => user.id !== id);
       setUsersList(udpatedUserList);
-      alert("Account activated.");
+      update({ render: "Account Activated", type: "success" });
     } catch (error) {
-      alert("Unexpected Error occured.");
+      update({
+        render: "Activation Unsuccesful. Please try again.",
+        type: "error",
+      });
     }
   };
 

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { toast } from "react-toastify";
 import QuillEditor, { isQuillValueEmpty } from "../../components/QuillEditor";
 import { Delta } from "quill/core";
 import ReactQuill from "react-quill";
@@ -56,7 +57,7 @@ const CreateVideoAnnouncement = () => {
 
   const handleUploadOnchange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (videos.length > MAX_UPLOAD - 1) {
-      alert(`Maximum of ${MAX_UPLOAD} videos only`);
+      toast.warning(`Maximum of ${MAX_UPLOAD} videos only`);
       return;
     }
 
@@ -74,7 +75,7 @@ const CreateVideoAnnouncement = () => {
     });
 
     if (isDuplicate) {
-      alert("This video is already uploaded");
+      toast.warning("This video is already uploaded");
       e.target.value = "";
       return;
     }
@@ -123,11 +124,12 @@ const CreateVideoAnnouncement = () => {
         ...prev,
         title: "Title cannot be empty.",
       }));
+      toast.warning("Title cannot be empty.");
       return;
     }
 
     if (videos.length === 0) {
-      alert("Upload images...");
+      toast.warning("Contents cannot be empty.");
       return;
     }
 
@@ -164,10 +166,10 @@ const CreateVideoAnnouncement = () => {
       setVideos([]);
       setVideoDurations([]);
       form.reset();
+      toast.success("Video Content Created.");
       const redirect_conf = confirm(
         "New Image Announcement has been created. Do you want to be redirected to the Annoucement?"
       );
-      console.log(res);
 
       if (redirect_conf) {
         navigate(`/dashboard/contents/video/${res.data.id}`);
@@ -176,14 +178,16 @@ const CreateVideoAnnouncement = () => {
       if (axios.isAxiosError(error)) {
         const err = error.response?.data;
         if (!err) {
-          alert("Unexpected error occured. Please try again.");
+          toast.error("Unexpected error occured. Please try again.");
+          return;
         }
         setError((prev) => ({
           ...prev,
           ...err,
         }));
+        toast.warning("Please check errors before submitting.");
       } else {
-        alert("Unexpected error occured. Please try again.");
+        toast.error("Unexpected error occured. Please try again.");
       }
     } finally {
       setLoading(false);

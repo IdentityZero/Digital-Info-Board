@@ -8,6 +8,7 @@ import {
 } from "react-icons/fa";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 import {
   FullVideoAnnouncementType,
@@ -31,8 +32,12 @@ import {
 import { isQuillValueEmpty } from "../../../components/QuillEditor";
 import { UpdateVideoAnnouncementErrorState } from "../../../features/announcements/helpers";
 import LoadingMessage from "../../../components/LoadingMessage";
+import { Id } from "react-toastify";
+import useLoadingToast from "../../../hooks/useLoadingToast";
 
 const VideoContentPage = () => {
+  const toastId = useRef<Id | null>(null);
+  const { loading, update } = useLoadingToast(toastId);
   const { id } = useParams();
   const { userApi } = useAuth();
   const formRef = useRef<HTMLFormElement | null>(null);
@@ -84,16 +89,19 @@ const VideoContentPage = () => {
       "Are you sure you want to delete this announcement?"
     );
 
-    if (!delete_conf) return;
-    if (!videoAnnouncement) return;
+    if (!delete_conf || !videoAnnouncement) return;
+    loading("Deleting. Please wait...");
 
     try {
       setDeleteLoading(true);
       await deleteVideoAnnouncementApi(userApi, videoAnnouncement.id as string);
-      alert("Deleted successfully.");
+      update({ render: "Delete successful", type: "success" });
       navigate("/dashboard/contents/video");
     } catch (error) {
-      alert("Unexpected error occured. Please try again.");
+      update({
+        render: "Delete unsuccessful. Please try again.",
+        type: "error",
+      });
     } finally {
       setDeleteLoading(false);
     }
@@ -111,6 +119,7 @@ const VideoContentPage = () => {
     setVideoAnnouncementForEdit(videoAnnouncement);
     setIsEditMode(false);
     setIsEditMode(false);
+    setSaveErrors(UpdateVideoAnnouncementErrorState);
   };
 
   const handleSave = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -123,12 +132,12 @@ const VideoContentPage = () => {
     if (
       isQuillValueEmpty(JSON.parse(videoAnnouncementForEdit?.title as string))
     ) {
-      alert("Empty title");
+      toast.warn("Title cannot be empty.");
       return;
     }
 
     if (videoAnnouncementForEdit?.video_announcement.length === 0) {
-      alert("Images cannot be empty");
+      toast.warn("Videos cannot be empty.");
       return;
     }
 
@@ -149,6 +158,8 @@ const VideoContentPage = () => {
       video_announcement: newVideos,
     };
 
+    loading("Saving updates. Please wait...");
+
     try {
       setSaveLoading(true);
       const res_data = await updateVideoAnnouncementApi(
@@ -161,21 +172,31 @@ const VideoContentPage = () => {
       setIsEditMode(false);
       setSaveErrors(UpdateVideoAnnouncementErrorState);
       setNewVideos([]);
-      alert("Update successful");
+      update({ render: "Update successful", type: "success" });
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const err = error.response?.data;
-        console.log(err);
 
         if (!err) {
-          alert("Unexpected error occured. Please try again.");
+          update({
+            render: "Update unsuccessful. Please try again.",
+            type: "error",
+          });
+          return;
         }
         setSaveErrors((prev) => ({
           ...prev,
           ...err,
         }));
+        update({
+          render: "Please check errors before submitting.",
+          type: "warning",
+        });
       } else {
-        alert("Unexpected error occured. Please try again.");
+        update({
+          render: "Update unsuccessful. Please try again.",
+          type: "error",
+        });
       }
     } finally {
       setSaveLoading(false);

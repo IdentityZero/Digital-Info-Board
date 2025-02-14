@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaEye, FaTrash, FaTimesCircle, FaCheckCircle } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
@@ -16,9 +16,14 @@ import {
   deleteTextAnnouncementApi,
 } from "../../../api/announcementRequest";
 import LoadingMessage from "../../../components/LoadingMessage";
+import { Id } from "react-toastify";
+import useLoadingToast from "../../../hooks/useLoadingToast";
 
 const TextContentListPage = () => {
   const { userApi } = useAuth();
+  const toastId = useRef<Id | null>(null);
+  const { loading, update } = useLoadingToast(toastId);
+
   const [announcements, setAnnouncements] = useState<
     AnnouncementListType | undefined
   >(undefined);
@@ -49,16 +54,20 @@ const TextContentListPage = () => {
 
     if (!confirm_delete) return;
 
+    loading(`Deleting - ${announcement_id}. Please wait...`);
     try {
       await deleteTextAnnouncementApi(userApi, announcement_id);
-      alert("Deleted successfully.");
+      update({ render: "Delete successful", type: "success" });
       // Remove the data
       const updated = announcements?.filter(
         (announcement) => announcement.id !== announcement_id
       );
       setAnnouncements(updated);
     } catch (error) {
-      alert("Unexpected error occured. Please try again.");
+      update({
+        render: "Delete unsuccessful. Please try again.",
+        type: "error",
+      });
     }
   };
 

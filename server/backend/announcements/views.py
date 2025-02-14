@@ -284,7 +284,6 @@ class RetrieveUpdateVideoAnnouncementAPIView(generics.RetrieveUpdateAPIView):
         data = request.data.dict()
 
         video_announcement = self.get_video_announcements(data)
-        print(video_announcement)
         if video_announcement:
             data["video_announcement"] = video_announcement
 

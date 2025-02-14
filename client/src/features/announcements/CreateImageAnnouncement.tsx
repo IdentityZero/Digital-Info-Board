@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { toast } from "react-toastify";
 import ReactQuill from "react-quill";
 import { Delta } from "quill/core";
 import { FaPlusCircle, FaTrashAlt } from "react-icons/fa";
@@ -50,7 +51,7 @@ const CreateImageAnnouncement = () => {
     });
 
     if (isDuplicate) {
-      alert("This image is already uploaded");
+      toast.warning("This image is already uploaded");
       e.target.value = "";
       return;
     }
@@ -91,11 +92,12 @@ const CreateImageAnnouncement = () => {
         ...prev,
         title: "Title cannot be empty.",
       }));
+      toast.warning("Title cannot be empty.");
       return;
     }
 
     if (images.length === 0) {
-      alert("Upload images...");
+      toast.warning("Content cannot be empty.");
       return;
     }
 
@@ -121,6 +123,7 @@ const CreateImageAnnouncement = () => {
       setTitle(new Delta());
       setImages([]);
       form.reset();
+      toast.success("Image Content Created.");
       const redirect_conf = confirm(
         "New Image Announcement has been created. Do you want to be redirected to the Annoucement?"
       );
@@ -131,14 +134,16 @@ const CreateImageAnnouncement = () => {
       if (axios.isAxiosError(error)) {
         const err = error.response?.data;
         if (!err) {
-          alert("Unexpected error occured. Please try again.");
+          toast.error("Unexpected error occured. Please try again.");
+          return;
         }
         setError((prev) => ({
           ...prev,
           ...err,
         }));
+        toast.warning("Please check errors before submitting.");
       } else {
-        alert("Unexpected error occured. Please try again.");
+        toast.error("Unexpected error occured. Please try again.");
       }
     } finally {
       setLoading(false);

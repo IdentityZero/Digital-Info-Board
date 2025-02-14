@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { toast } from "react-toastify";
 import ReactQuill from "react-quill";
 import { Delta } from "quill/core";
 import axios from "axios";
@@ -61,7 +62,7 @@ const CreateTextAnnouncement = () => {
         ...prev,
         title: "Title cannot be empty.",
       }));
-
+      toast.warning("Title cannot be empty.");
       return;
     }
 
@@ -74,7 +75,7 @@ const CreateTextAnnouncement = () => {
           details: "Details cannot be empty",
         },
       }));
-
+      toast.warning("Details cannot be empty.");
       return;
     }
 
@@ -99,6 +100,7 @@ const CreateTextAnnouncement = () => {
       setTitle(new Delta());
       setDetails(new Delta());
       form.reset();
+      toast.success("Text Content Created.");
       const redirect_conf = confirm(
         "New Text Announcement created. Do you want to be redirected to the Annoucement?"
       );
@@ -110,14 +112,16 @@ const CreateTextAnnouncement = () => {
       if (axios.isAxiosError(error)) {
         const err = error.response?.data;
         if (!err) {
-          alert("Unexpected error occured. Please try again.");
+          toast.error("Unexpected error occured. Please try again.");
+          return;
         }
         setError((prev) => ({
           ...prev,
           ...err,
         }));
+        toast.warning("Please check errors before submitting.");
       } else {
-        alert("Unexpected error occured. Please try again.");
+        toast.error("Unexpected error occured. Please try again.");
       }
     } finally {
       setLoading(false);

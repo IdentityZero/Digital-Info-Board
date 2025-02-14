@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   FIXED_CONTENTS,
   FixedContentType,
@@ -7,8 +7,12 @@ import {
 import LoadingMessage from "../../components/LoadingMessage";
 import { updateFixedContentStatus } from "../../api/fixedContentRquests";
 import { useAuth } from "../../context/AuthProvider";
+import { Id } from "react-toastify";
+import useLoadingToast from "../../hooks/useLoadingToast";
 
 const DefaultDisplayPage = () => {
+  const toastId = useRef<Id | null>(null);
+  const { loading, update } = useLoadingToast(toastId);
   const { userApi } = useAuth();
 
   const [activeContents, setActiveContents] = useState<FixedContentType[]>([]);
@@ -39,6 +43,11 @@ const DefaultDisplayPage = () => {
     );
 
     if (!save_confirm) return;
+    loading(
+      isDisplayed
+        ? "Removing from Display. Please wait..."
+        : "Adding to Display. Please wait..."
+    );
 
     try {
       await updateFixedContentStatus(userApi, id, !isDisplayed);
@@ -56,9 +65,17 @@ const DefaultDisplayPage = () => {
         });
       }
 
-      alert("Updated successfully.");
+      update({
+        render: isDisplayed
+          ? "Update Successful. Display Removed."
+          : "Update Successful. Display Added.",
+        type: "success",
+      });
     } catch (error) {
-      alert("There was an error updating contents.");
+      update({
+        render: "Update unsuccessful. Please try again.",
+        type: "error",
+      });
     }
   };
 

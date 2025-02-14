@@ -10,8 +10,10 @@ import {
 } from "../../types/AnnouncementTypes";
 import { updateAnnouncementApi } from "../../api/announcementRequest";
 import { useAuth } from "../../context/AuthProvider";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import PreviewAnnouncement from "./PreviewAnnouncement";
+import { Id } from "react-toastify";
+import useLoadingToast from "../../hooks/useLoadingToast";
 
 type ListInactiveAnnouncementProps = {
   inactiveAnnouncements: AnnouncementListType;
@@ -28,6 +30,8 @@ const ListInactiveAnnouncement = ({
   setActiveAnnouncements,
   setInactiveAnnouncements,
 }: ListInactiveAnnouncementProps) => {
+  const toastId = useRef<Id | null>(null);
+  const { loading, update } = useLoadingToast(toastId);
   const { userApi } = useAuth();
 
   const [showPreview, setShowPreview] = useState<boolean>(false);
@@ -45,7 +49,9 @@ const ListInactiveAnnouncement = ({
     );
 
     if (!approve_confirm) return;
-    // #TODO
+
+    loading(`Approving - ${id}. Please wait...`);
+
     try {
       await updateAnnouncementApi(userApi, id, data);
       const updatedData = inactiveAnnouncements.find(
@@ -59,10 +65,15 @@ const ListInactiveAnnouncement = ({
           ),
         ][0];
 
+        update({ render: "Activation successful", type: "success" });
+
         setInactiveAnnouncements(updatedInActiveList);
       }
     } catch (error) {
-      alert("Unexpected error occured. Please try again later.");
+      update({
+        render: "Activation unsuccessful. Please try again.",
+        type: "error",
+      });
     }
   };
 

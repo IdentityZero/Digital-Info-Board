@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { updateAnnouncementApi } from "../../api/announcementRequest";
 import { useAuth } from "../../context/AuthProvider";
 import {
@@ -12,6 +12,8 @@ import {
 } from "../../utils/formatters";
 import { addTotalDuration } from "../../utils/utils";
 import PreviewAnnouncement from "./PreviewAnnouncement";
+import { Id } from "react-toastify";
+import useLoadingToast from "../../hooks/useLoadingToast";
 
 const ListActiveAnnouncement = ({
   activeAnnouncements,
@@ -26,6 +28,8 @@ const ListActiveAnnouncement = ({
     React.SetStateAction<AnnouncementListType>
   >;
 }) => {
+  const toastId = useRef<Id | null>(null);
+  const { loading, update } = useLoadingToast(toastId);
   const { userApi } = useAuth();
   const [showPreview, setShowPreview] = useState<boolean>(false);
   const [dataToPreview, setDataToPreview] = useState<
@@ -42,6 +46,7 @@ const ListActiveAnnouncement = ({
     );
 
     if (!deactivate_confirm) return;
+    loading(`Deactivating - ${id}. Please wait...`);
     try {
       await updateAnnouncementApi(userApi, id, data);
       const updatedData = activeAnnouncements.find(
@@ -55,8 +60,12 @@ const ListActiveAnnouncement = ({
 
         setActiveAnnouncements(updatedActiveList);
       }
+      update({ render: "Deactivation successful", type: "success" });
     } catch (error) {
-      alert("Unexpected error occured. Please try again later.");
+      update({
+        render: "Deactivation unsuccessful. Please try again.",
+        type: "error",
+      });
     }
   };
 

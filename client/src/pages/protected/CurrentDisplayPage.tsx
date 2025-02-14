@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import { customCircle } from "../../assets";
 import DragAndDrop from "../../components/DragAndDrop";
 import LoadingMessage from "../../components/LoadingMessage";
@@ -119,6 +120,7 @@ const CurrentDisplayPage = () => {
 
     if (socket?.readyState !== WebSocket.OPEN) {
       alert("An error occured. Please try refreshing the page.");
+      toast.error("Update unsuccessful. Try refreshing the page.");
       return;
     }
 
@@ -132,6 +134,7 @@ const CurrentDisplayPage = () => {
 
     socket?.send(JSON.stringify({ type: "new_sequence", message: wsMessage }));
     setCurrentIndex(0);
+    toast.success("Updated Successfully.");
   };
 
   if (!carouselIndex || !carouselStartInterval || isLoading || !announcements) {

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaCheckCircle, FaEye, FaTimesCircle, FaTrash } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
@@ -16,9 +16,13 @@ import {
 import IconWithTooltip from "../../../components/IconWithTooltip";
 import { addTotalDuration } from "../../../utils/utils";
 import LoadingMessage from "../../../components/LoadingMessage";
+import useLoadingToast from "../../../hooks/useLoadingToast";
+import { Id } from "react-toastify";
 
 const ImageContentListPage = () => {
   const { userApi } = useAuth();
+  const toastId = useRef<Id | null>(null);
+  const { loading, update } = useLoadingToast(toastId);
 
   const [announcements, setAnnouncements] = useState<
     AnnouncementListType | undefined
@@ -47,17 +51,21 @@ const ImageContentListPage = () => {
     );
 
     if (!confirm_delete) return;
+    loading(`Deleting - ${announcement_id}. Please wait...`);
 
     try {
       await deleteImageAnnouncementApi(userApi, announcement_id);
-      alert("Deleted successfully.");
+      update({ render: "Delete successful", type: "success" });
       // Remove the data
       const updated = announcements?.filter(
         (announcement) => announcement.id !== announcement_id
       );
       setAnnouncements(updated);
     } catch (error) {
-      alert("Unexpected error occured. Please try again.");
+      update({
+        render: "Delete unsuccessful. Please try again.",
+        type: "error",
+      });
     }
   };
 

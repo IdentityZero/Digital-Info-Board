@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FullUserType } from "../../types/UserTypes";
 import {
   deleteUserApi,
@@ -11,8 +11,12 @@ import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 import IconWithTooltip from "../../components/IconWithTooltip";
 import { Link } from "react-router-dom";
 import LoadingMessage from "../../components/LoadingMessage";
+import useLoadingToast from "../../hooks/useLoadingToast";
+import { Id } from "react-toastify";
 
 const ListAllUserProfiles = () => {
+  const toastId = useRef<Id | null>(null);
+  const { loading, update } = useLoadingToast(toastId);
   const { userApi } = useAuth();
 
   const [usersList, setUsersList] = useState<FullUserType[]>([]);
@@ -42,6 +46,7 @@ const ListAllUserProfiles = () => {
       <LoadingMessage message="Loading List of Accounts. Please wait for a moment..." />
     );
   }
+
   if (hasError) {
     return <div>Unexpected error occured. Please try again later.</div>;
   }
@@ -58,6 +63,11 @@ const ListAllUserProfiles = () => {
     );
 
     if (!confirmDeac) return;
+    loading(
+      activate
+        ? "Activating user account. Please wait..."
+        : "Deactivating user account. Please wait..."
+    );
 
     const activateData = {
       is_active: activate,
@@ -71,8 +81,17 @@ const ListAllUserProfiles = () => {
 
       setUsersList(updatedUserList);
       alert(`Account ${activate ? "Activated" : "Deactivated"}.`);
+      update({
+        render: activate
+          ? "Account Activated Succesfully."
+          : "Account Deactivated Succesfully.",
+        type: "success",
+      });
     } catch (error) {
-      alert("Unexpected Error occured.");
+      update({
+        render: "Update unsuccessful. Please try again.",
+        type: "error",
+      });
     }
   };
 
@@ -82,14 +101,21 @@ const ListAllUserProfiles = () => {
     );
 
     if (!confirmDelete) return;
+    loading("Deleting User Account. Please wait...");
 
     try {
       await deleteUserApi(userApi, id);
       const updatedUserList = usersList.filter((user) => user.id !== id);
       setUsersList(updatedUserList);
-      alert("Account deleted.");
+      update({
+        render: "Account Deleted Succesfully.",
+        type: "success",
+      });
     } catch (error) {
-      alert("Unexpected Error occured.");
+      update({
+        render: "Could not delete Account. Please try again.",
+        type: "error",
+      });
     }
   };
 

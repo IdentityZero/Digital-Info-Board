@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FullUserType, Role } from "../../types/UserTypes";
 import {
   retrieveUserInformation,
@@ -14,12 +14,16 @@ import axios from "axios";
 import { Errortext } from "../../components/ui";
 import FormField from "./components/FormField";
 import { Link } from "react-router-dom";
+import useLoadingToast from "../../hooks/useLoadingToast";
+import { Id } from "react-toastify";
 
 type RetrieveUserProfileProps = {
   id: string;
 };
 
 const RetrieveUserProfile = ({ id }: RetrieveUserProfileProps) => {
+  const toastId = useRef<Id | null>(null);
+  const { loading, update } = useLoadingToast(toastId);
   const { userApi } = useAuth();
 
   const [userData, setUserData] = useState<FullUserType>();
@@ -153,6 +157,8 @@ const RetrieveUserProfile = ({ id }: RetrieveUserProfileProps) => {
       _.unset(updatedUserInformation, "profile.image");
     }
 
+    loading("Saving Updates. Please wait...");
+
     try {
       setUpdateErrors(UserInformationErrorState);
       setIsSaving(true);
@@ -162,19 +168,34 @@ const RetrieveUserProfile = ({ id }: RetrieveUserProfileProps) => {
         updatedUserInformation
       );
       setUserData(res_data);
-      alert("Update Successful");
+      update({
+        render: "Update Succesful.",
+        type: "success",
+      });
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const err = error.response?.data;
         if (!err) {
-          alert("Unexpected error occured. Please try again.");
+          update({
+            render: "Update unsuccessful. Please try again.",
+            type: "error",
+          });
+          return;
         }
         setUpdateErrors((prev) => ({
           ...prev,
           ...err,
         }));
+        update({
+          render: "Please check errors before submitting.",
+          type: "warning",
+        });
       } else {
-        alert("Unexpected error occured. Please try again.");
+        update({
+          render: "Update unsuccessful. Please try again.",
+          type: "error",
+        });
+        return;
       }
     } finally {
       setIsSaving(false);

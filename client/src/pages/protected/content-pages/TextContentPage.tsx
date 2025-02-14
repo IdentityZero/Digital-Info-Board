@@ -8,6 +8,7 @@ import {
   FaTimes,
 } from "react-icons/fa";
 import axios from "axios";
+import { Id, toast } from "react-toastify";
 
 import { isObjectEqual } from "../../../utils/utils";
 import {
@@ -27,7 +28,11 @@ import {
 } from "../../../features/announcements/helpers";
 import { isQuillValueEmpty } from "../../../components/QuillEditor";
 
+import useLoadingToast from "../../../hooks/useLoadingToast";
+
 const TextContentPage = () => {
+  const toastId = useRef<Id | null>(null);
+  const { loading: toastLoading, update } = useLoadingToast(toastId);
   const { id } = useParams();
   const { userApi } = useAuth();
   const navigate = useNavigate();
@@ -84,14 +89,21 @@ const TextContentPage = () => {
 
     if (!delete_conf) return;
     if (!data) return;
+
+    toastLoading("Deleting. Please wait...");
+
     try {
       setDeleteLoading(true);
       await deleteTextAnnouncementApi(userApi, data?.id);
       setData(undefined);
-      alert("Deleted successfully.");
+      update({ render: "Delete successful", type: "success" });
+
       navigate("/dashboard/contents/text");
     } catch (error) {
-      alert("Unexpected error occured. Please try again.");
+      update({
+        render: "Delete unsuccessful. Please try again.",
+        type: "error",
+      });
     } finally {
       setDeleteLoading(false);
     }
@@ -108,6 +120,7 @@ const TextContentPage = () => {
 
     setDataForEdit(data);
     setIsEditMode(false);
+    setSavingError(textAnnouncementErrorState);
   };
 
   const handleSave = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -125,6 +138,7 @@ const TextContentPage = () => {
         ...prev,
         title: "Title cannot be empty",
       }));
+      toast.warn("Title cannot be empty.");
     }
     if (
       isQuillValueEmpty(
@@ -139,6 +153,7 @@ const TextContentPage = () => {
           details: "Details cannot be empty",
         },
       }));
+      toast.warn("Details cannot be empty.");
     }
 
     if (emptyErrors) return;
@@ -153,6 +168,8 @@ const TextContentPage = () => {
       },
     };
 
+    toastLoading("Saving updates. Please wait...");
+
     try {
       setSavingError(textAnnouncementErrorState);
       setSavingLoading(true);
@@ -163,20 +180,31 @@ const TextContentPage = () => {
       );
       setData(res_data);
       setDataForEdit(res_data);
-      alert("Saved successfully...");
+      update({ render: "Update successful", type: "success" });
       setIsEditMode(false);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const err = error.response?.data;
         if (!err) {
-          alert("Unexpected error occured. Please try again.");
+          update({
+            render: "Update unsuccessful. Please try again.",
+            type: "error",
+          });
+          return;
         }
         setSavingError((prev) => ({
           ...prev,
           ...err,
         }));
+        update({
+          render: "Please check errors before submitting.",
+          type: "warning",
+        });
       } else {
-        alert("Unexpected error occured. Please try again.");
+        update({
+          render: "Update unsuccessful. Please try again.",
+          type: "error",
+        });
       }
     } finally {
       setSavingLoading(false);

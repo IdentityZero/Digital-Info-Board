@@ -4,6 +4,7 @@ import { LINKS } from "../constants";
 import DashboardSidebar, {
   SidebarItem,
 } from "../components/nav/DashboardSidebar";
+import { ToastContainer } from "react-toastify";
 
 import { logoLg } from "../assets";
 
@@ -54,6 +55,7 @@ const DashboardLayout = () => {
           <Outlet />
         </div>
       </main>
+      <ToastContainer />
     </div>
   );
 };

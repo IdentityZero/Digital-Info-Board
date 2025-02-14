@@ -8,6 +8,7 @@ import {
   FaTrashAlt,
 } from "react-icons/fa";
 import axios from "axios";
+import { Id, toast } from "react-toastify";
 
 import { isQuillValueEmpty } from "../../../components/QuillEditor";
 import {
@@ -30,6 +31,7 @@ import {
   ImageAnnouncementCreateType,
 } from "../../../types/AnnouncementTypes";
 import { UpdateImageAnnouncementErrorState } from "../../../features/announcements/helpers";
+import useLoadingToast from "../../../hooks/useLoadingToast";
 
 // TODO: Switching re fetches images
 
@@ -39,6 +41,8 @@ const ImageContentPage = () => {
    */
 
   // #region: Initialization
+  const toastId = useRef<Id | null>(null);
+  const { loading, update } = useLoadingToast(toastId);
   const { id } = useParams();
   const { userApi } = useAuth();
   const formRef = useRef<HTMLFormElement | null>(null);
@@ -106,15 +110,18 @@ const ImageContentPage = () => {
       "Are you sure you want to delete this announcement?"
     );
 
-    if (!delete_conf) return;
-    if (!imageAnnouncement) return;
+    if (!delete_conf || !imageAnnouncement) return;
+    loading("Deleting. Please wait...");
     try {
       setDeleteLoading(true);
       await deleteImageAnnouncementApi(userApi, imageAnnouncement?.id);
-      alert("Deleted successfully.");
+      update({ render: "Delete successful", type: "success" });
       navigate("/dashboard/contents/image");
     } catch (error) {
-      alert("Unexpected error occured. Please try again.");
+      update({
+        render: "Delete unsuccessful. Please try again.",
+        type: "error",
+      });
     } finally {
       setDeleteLoading(false);
     }
@@ -130,12 +137,12 @@ const ImageContentPage = () => {
     if (
       isQuillValueEmpty(JSON.parse(imageAnnouncementForEdit?.title as string))
     ) {
-      alert("Empty title");
+      toast.warn("Title cannot be empty.");
       return;
     }
 
     if (imageAnnouncementForEdit?.image_announcement.length === 0) {
-      alert("Images cannot be empty");
+      toast.warn("Images cannot be empty.");
       return;
     }
 
@@ -156,6 +163,8 @@ const ImageContentPage = () => {
       image_announcement: newImages,
     };
 
+    loading("Saving updates. Please wait...");
+
     try {
       setSaveLoading(true);
       const res_data = await updateImageAnnouncementApi(
@@ -167,20 +176,31 @@ const ImageContentPage = () => {
       setImageAnnouncementForEdit(res_data);
       setIsEditMode(false);
       setSaveErrors(UpdateImageAnnouncementErrorState);
-      alert("Update successful");
+      update({ render: "Update successful", type: "success" });
       setNewImages([]);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const err = error.response?.data;
         if (!err) {
-          alert("Unexpected error occured. Please try again.");
+          update({
+            render: "Update unsuccessful. Please try again.",
+            type: "error",
+          });
+          return;
         }
         setSaveErrors((prev) => ({
           ...prev,
           ...err,
         }));
+        update({
+          render: "Please check errors before submitting.",
+          type: "warning",
+        });
       } else {
-        alert("Unexpected error occured. Please try again.");
+        update({
+          render: "Update unsuccessful. Please try again.",
+          type: "error",
+        });
       }
     } finally {
       setSaveLoading(false);

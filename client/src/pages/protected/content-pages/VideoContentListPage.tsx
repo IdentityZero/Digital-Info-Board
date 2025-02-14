@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { Id } from "react-toastify";
 import { Link } from "react-router-dom";
 import { FaCheckCircle, FaEye, FaTimesCircle, FaTrash } from "react-icons/fa";
 
@@ -17,9 +18,12 @@ import {
   listVideoAnnouncementApi,
 } from "../../../api/announcementRequest";
 import LoadingMessage from "../../../components/LoadingMessage";
+import useLoadingToast from "../../../hooks/useLoadingToast";
 
 const VideoContentListPage = () => {
   const { userApi } = useAuth();
+  const toastId = useRef<Id | null>(null);
+  const { loading, update } = useLoadingToast(toastId);
 
   const [announcements, setAnnouncements] = useState<
     AnnouncementListType | undefined
@@ -56,16 +60,21 @@ const VideoContentListPage = () => {
     );
 
     if (!delete_conf) return;
+    loading(`Deleting - ${announcement_id}. Please wait...`);
 
     try {
       await deleteVideoAnnouncementApi(userApi, announcement_id);
-      alert("Deleted successfully.");
+      // toast.success("Deleted Successfully.");
       const updatedAnnouncements = announcements?.filter(
         (announcement) => announcement.id !== announcement_id
       );
+      update({ render: "Delete successful", type: "success" });
       setAnnouncements(updatedAnnouncements);
     } catch (error) {
-      alert("Unexpected error occured. Please try again.");
+      update({
+        render: "Delete unsuccessful. Please try again.",
+        type: "error",
+      });
     }
   };
 

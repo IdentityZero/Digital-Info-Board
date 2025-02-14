@@ -1,12 +1,16 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import axios from "axios";
 
 import { updateUserPasswordApi } from "../../api/userRequest";
 import { useAuth } from "../../context/AuthProvider";
 import { ChangePasswordErrorState } from "./helpers";
 import FormField from "./components/FormField";
+import { Id } from "react-toastify";
+import useLoadingToast from "../../hooks/useLoadingToast";
 
 const ChangePassword = () => {
+  const toastId = useRef<Id | null>(null);
+  const { loading, update } = useLoadingToast(toastId);
   const { userApi, user } = useAuth();
 
   const [currentPassword, setCurrentPassword] = useState("");
@@ -25,6 +29,8 @@ const ChangePassword = () => {
       password2: confirmPassword,
     };
 
+    loading("Updating password. Please wait", { position: "top-center" });
+
     try {
       setIsSaving(true);
       setUpdateErrors(ChangePasswordErrorState);
@@ -32,19 +38,31 @@ const ChangePassword = () => {
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
-      alert("Password Updated");
+      update({ render: "Update successful", type: "success" });
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const err = error.response?.data;
         if (!err) {
-          alert("Unexpected error occured. Please try again.");
+          update({
+            render: "Update unsuccessful. Please try again.",
+            type: "error",
+          });
+          return;
         }
         setUpdateErrors((prev) => ({
           ...prev,
           ...err,
         }));
+        update({
+          render: "Please check errors before submitting.",
+          type: "warning",
+        });
       } else {
-        alert("Unexpected error occured. Please try again.");
+        update({
+          render: "Update unsuccessful. Please try again.",
+          type: "error",
+        });
+        return;
       }
     } finally {
       setIsSaving(false);

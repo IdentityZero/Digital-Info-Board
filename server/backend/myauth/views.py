@@ -105,7 +105,6 @@ def delete_cookie_view(request):
 def test_view(request):
     response = HttpResponse("This is a test")
     token = request.COOKIES.get("token")
-    print("Token: ", token)
 
     # Deleting the cookie by name
 

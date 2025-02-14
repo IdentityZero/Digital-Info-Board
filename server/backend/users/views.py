@@ -34,7 +34,6 @@ class RetrieveUpdateUserView(generics.RetrieveUpdateAPIView):
 
     def update(self, request, *args, **kwargs):
         data = request.data.dict()
-        print(data)
         profile = self.get_profile_data(data)
         if profile:
             data["profile"] = profile

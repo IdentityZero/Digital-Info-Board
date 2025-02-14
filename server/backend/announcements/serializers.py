@@ -459,7 +459,6 @@ class UpdateFullVideoAnnouncementSerializer(
         return errors
 
     def update(self, instance, validated_data):
-        print(validated_data)
         video_announcements = instance.video_announcement.all()
 
         if "to_update" in validated_data:

@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { FaExclamationTriangle } from "react-icons/fa";
 // import { useBlocker } from "react-router-dom";
@@ -19,6 +19,8 @@ import {
   type UserInformationErrorT,
 } from "../../../features/accounts/helpers";
 import { Link } from "react-router-dom";
+import { Id } from "react-toastify";
+import useLoadingToast from "../../../hooks/useLoadingToast";
 
 type MyProfilePageContextProps = {
   userProfileForEdit: FullUserType;
@@ -35,6 +37,8 @@ export const MyProfilePageContext = createContext<
 >(undefined);
 
 const MyProfilePage = () => {
+  const toastId = useRef<Id | null>(null);
+  const { loading, update } = useLoadingToast(toastId);
   const { user, userApi } = useAuth();
   const [userProfile, setUserProfile] = useState<FullUserType | undefined>(
     undefined
@@ -96,6 +100,8 @@ const MyProfilePage = () => {
       _.unset(updatedUserInformation, "profile.image");
     }
 
+    loading("Saving Updates. Please wait...");
+
     try {
       setSaveLoading(true);
       setUpdateErrors(UserInformationErrorState);
@@ -106,19 +112,33 @@ const MyProfilePage = () => {
       );
       setUserProfileForEdit(res_data);
       setUserProfile(res_data);
-      alert("Profile Successfully updated.");
+      update({
+        render: "Update Successful.",
+        type: "success",
+      });
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const err = error.response?.data;
         if (!err) {
-          alert("Unexpected error occured. Please try again.");
+          update({
+            render: "Update unsuccessful. Please try again.",
+            type: "error",
+          });
+          return;
         }
         setUpdateErrors((prev) => ({
           ...prev,
           ...err,
         }));
+        update({
+          render: "Please check errors before submitting.",
+          type: "warning",
+        });
       } else {
-        alert("Unexpected error occured. Please try again.");
+        update({
+          render: "Update unsuccessful. Please try again.",
+          type: "error",
+        });
       }
     } finally {
       setSaveLoading(false);
