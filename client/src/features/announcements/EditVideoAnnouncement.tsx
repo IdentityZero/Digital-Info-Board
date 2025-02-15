@@ -13,6 +13,7 @@ import {
 import { FaPlusCircle, FaTrashAlt } from "react-icons/fa";
 import { forwardRef, useEffect, useState } from "react";
 import { UpdateVideoAnnouncementErrorT } from "./helpers";
+import { toast } from "react-toastify";
 
 type EditVideoAnnouncementProps = {
   videoAnnouncementData: FullVideoAnnouncementType;
@@ -121,7 +122,7 @@ const EditVideoAnnouncement = forwardRef<
       });
 
       if (isDuplicate) {
-        alert("This video is already uploaded");
+        toast.warn("This video is already uploaded.");
         e.target.value = "";
         return;
       }

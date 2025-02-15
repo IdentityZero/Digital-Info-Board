@@ -80,7 +80,7 @@ const ListAllUserProfiles = () => {
       );
 
       setUsersList(updatedUserList);
-      alert(`Account ${activate ? "Activated" : "Deactivated"}.`);
+
       update({
         render: activate
           ? "Account Activated Succesfully."

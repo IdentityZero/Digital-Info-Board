@@ -9,10 +9,12 @@ from .views import (
     UpdateAnnouncementActiveStatusAPIView,
     ListVideoAnnouncementAPIView,
     RetrieveUpdateVideoAnnouncementAPIView,
+    ListAnnouncementAPIViewStatusBased,
 )
 
 urlpatterns = [
     path("v1/", ListCreateAllAnnouncementAPIView.as_view()),
+    path("v1/status/<str:status>/", ListAnnouncementAPIViewStatusBased.as_view()),
     path(
         "v1/<int:pk>/",
         RetrieveUpdateDestroyAnnouncementAPIView.as_view(),

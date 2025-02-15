@@ -119,7 +119,6 @@ const CurrentDisplayPage = () => {
     setIsEditMode(false);
 
     if (socket?.readyState !== WebSocket.OPEN) {
-      alert("An error occured. Please try refreshing the page.");
       toast.error("Update unsuccessful. Try refreshing the page.");
       return;
     }
@@ -137,12 +136,20 @@ const CurrentDisplayPage = () => {
     toast.success("Updated Successfully.");
   };
 
-  if (!carouselIndex || !carouselStartInterval || isLoading || !announcements) {
-    return (
-      <div className="mt-4">
-        <LoadingMessage message="Loading and Syncing data..." />;
-      </div>
-    );
+  if (!carouselIndex || !carouselStartInterval || isLoading) {
+    if (!announcements) {
+      return (
+        <div className="mt-4">
+          <LoadingMessage message="Loading and Syncing data..." />;
+        </div>
+      );
+    } else if (announcements.length === 0) {
+      return (
+        <div className="mt-4 text-center">
+          Looks like we do not have Active Contents yet.
+        </div>
+      );
+    }
   }
 
   return (
@@ -153,12 +160,14 @@ const CurrentDisplayPage = () => {
       <div className="flex flex-row max-xl:flex-col h-full">
         <div className="w-1/2 max-xl:w-full h-full p-4">
           <div className="w-full h-full border-[6px] border-darkTeal rounded-md overflow-hidden">
-            <AnnouncementCarousel
-              announcements={announcements}
-              durations={durations}
-              index={carouselIndex}
-              startInterval={carouselStartInterval}
-            />
+            {carouselIndex && (
+              <AnnouncementCarousel
+                announcements={announcements}
+                durations={durations}
+                index={carouselIndex}
+                startInterval={carouselStartInterval}
+              />
+            )}
           </div>
         </div>
         <div className="w-1/2 max-xl:w-full h-full">

@@ -38,10 +38,16 @@ const updateVideoAnnouncementEndpoint = (announcement_id: string) => {
 
 const listVideoAnnouncementEndpoint = "announcements/v1/video/";
 
-export const listAnnouncementApi = async (): Promise<AnnouncementListType> => {
+export const listAnnouncementApi = async (
+  status: "active" | "inactive" | "all" = "active"
+): Promise<AnnouncementListType> => {
   try {
     const response = await axios.get(
-      BASE_ENDPOINT + listCreateAllTypeAnnouncementEndpoint
+      BASE_ENDPOINT +
+        listCreateAllTypeAnnouncementEndpoint +
+        "status/" +
+        status +
+        "/"
     );
     return response.data;
   } catch (error) {

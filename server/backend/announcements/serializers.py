@@ -555,6 +555,7 @@ class CreateAnnouncementSerializer(
         text_ann_data = None
         image_ann_data = None
         video_ann_data = None
+        user = self.context["request"].user
 
         # Remove child data from validated data first
         if "text_announcement" in validated_data:
@@ -570,7 +571,11 @@ class CreateAnnouncementSerializer(
             Announcements.objects.aggregate(max_value=Max("position"))["max_value"] or 0
         )
 
-        ann = Announcements.objects.create(**validated_data, position=next_position + 1)
+        ann = Announcements.objects.create(
+            **validated_data,
+            is_active=user.profile.is_admin,
+            position=next_position + 1
+        )
         ann = Announcements.objects.get(id=ann.id)
 
         if (

@@ -17,9 +17,9 @@ const PermissionsPage = () => {
     useState<AnnouncementListType>([]);
 
   useEffect(() => {
-    const fetchInActiveAnnouncements = async () => {
+    const fetchAnnouncements = async () => {
       try {
-        const res_data = await listAnnouncementApi();
+        const res_data = await listAnnouncementApi("all");
         setActiveAnnouncements(res_data.filter((data) => data.is_active));
         setInactiveAnnouncements(
           res_data.filter((data) => data.is_active === false)
@@ -27,7 +27,7 @@ const PermissionsPage = () => {
       } catch (error) {}
     };
 
-    fetchInActiveAnnouncements();
+    fetchAnnouncements();
   }, []);
 
   return (

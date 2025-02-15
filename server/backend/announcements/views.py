@@ -36,7 +36,7 @@ class ListCreateAllAnnouncementAPIView(generics.ListCreateAPIView):
     """
 
     serializer_class = CreateAnnouncementSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [AllowAny, IsAuthenticated]
     parser_classes = [parsers.MultiPartParser, parsers.FormParser]
 
     def create(self, request, *args, **kwargs):
@@ -133,12 +133,38 @@ class ListCreateAllAnnouncementAPIView(generics.ListCreateAPIView):
         return qs
 
 
+class ListAnnouncementAPIViewStatusBased(generics.ListAPIView):
+    serializer_class = CreateAnnouncementSerializer
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        print("Hello world")
+        status = self.kwargs.get("status")
+        active_status = True
+        if status == "active":
+            active_status = True
+        elif status == "inactive":
+            active_status = False
+        elif status == "all":
+            return Announcements.objects.all()
+        else:
+            return Announcements.objects.none()
+
+        qs = Announcements.objects.filter(is_active=active_status).order_by(
+            OrderBy(F("position"), nulls_last=True)
+        )
+        return qs
+
+
 class UpdateAnnouncementActiveStatusAPIView(generics.RetrieveUpdateAPIView):
     serializer_class = ActivateAnnouncementSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        qs = Announcements.objects.filter(author=self.request.user)
+        if self.request.user.profile.is_admin:
+            qs = Announcements.objects.all()
+        else:
+            qs = Announcements.objects.filter(author=self.request.user)
         return qs
 
 

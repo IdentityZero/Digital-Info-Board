@@ -10,6 +10,7 @@ import {
 } from "../../types/AnnouncementTypes";
 import { convertToDatetimeLocal } from "../../utils/formatters";
 import { UpdateImageAnnouncementErrorT } from "./helpers";
+import { toast } from "react-toastify";
 
 type EditImageAnnouncementProps = {
   imageAnnouncement: FullImageAnnouncementType;
@@ -108,7 +109,7 @@ const EditImageAnnouncement = forwardRef<
       });
 
       if (isDuplicate) {
-        alert("This image is already uploaded");
+        toast.warn("This image is already uploaded.");
         e.target.value = "";
         return;
       }
