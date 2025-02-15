@@ -1,6 +1,9 @@
+export const BASE_API_URL = "localhost:8000";
+
 export const LIVE_ANNOUNCEMENT_URL =
-  "ws://localhost:8000/ws/live-announcement/";
+  "ws://" + BASE_API_URL + "/ws/live-announcement/";
 
-export const SITE_SETTINGS_URL = "http://localhost:8000/settings/";
+export const SITE_SETTINGS_URL = "http://" + BASE_API_URL + "/settings/";
 
-export const FIELD_DEVICES_URL = "ws://localhost:8000/ws/field-devices/";
+export const FIELD_DEVICES_URL =
+  "ws://+ " + BASE_API_URL + "/ws/field-devices/";

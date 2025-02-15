@@ -1,11 +1,12 @@
 import axios from "axios";
+import { BASE_API_URL } from "../constants/urls";
 
 export const createNewUserApi = async (user: {
   [k: string]: FormDataEntryValue;
 }) => {
   try {
     const response = await axios.post(
-      "http://localhost:8000/users/v1/create/",
+      "http://" + BASE_API_URL + "/users/v1/create/",
       user,
       {
         headers: {

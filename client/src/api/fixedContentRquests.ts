@@ -1,10 +1,11 @@
 import axios, { AxiosInstance } from "axios";
+import { BASE_API_URL } from "../constants/urls";
 
 /**
  * BASE_ENDPOINT is only used when not using the users api
  */
 
-const BASE_ENDPOINT = "http://127.0.0.1:8000/";
+const BASE_ENDPOINT = "http://" + BASE_API_URL + "/";
 
 const listActiveFixedContentsEndpoint = "fixed-contents/v1/active/";
 const updateFixedContentStatusEndpoint = (id: number) => {

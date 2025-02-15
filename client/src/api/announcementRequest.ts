@@ -5,12 +5,13 @@ import {
   type FullImageAnnouncementType,
   FullVideoAnnouncementType,
 } from "../types/AnnouncementTypes";
+import { BASE_API_URL } from "../constants/urls";
 
 /**
  * BASE_ENDPOINT is only used when not using the users api
  */
 
-const BASE_ENDPOINT = "http://127.0.0.1:8000/";
+const BASE_ENDPOINT = "http://" + BASE_API_URL + "/";
 
 export const listCreateAllTypeAnnouncementEndpoint = "announcements/v1/"; // Exported that will be used for Video uploads
 const deleteRetrieveAnnouncementEndpoint = (announcement_id: string) => {

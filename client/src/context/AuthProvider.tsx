@@ -4,6 +4,7 @@ import axios, { AxiosError, AxiosInstance } from "axios";
 import { User, decodeUserJWT } from "../types/UserTypes";
 import { isJwtExpired } from "../utils";
 import LoadingScreen from "../components/LoadingScreen";
+import { BASE_API_URL } from "../constants/urls";
 
 type AuthContextType = {
   user: User | null;
@@ -22,7 +23,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
 
   const userApi = axios.create({
-    baseURL: "http://127.0.0.1:8000",
+    baseURL: "http://" + BASE_API_URL,
   });
 
   userApi.interceptors.request.use(
@@ -49,7 +50,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     try {
       const response = await axios.post<{ access: string }>(
-        "http://127.0.0.1:8000/auth/v1/token/refresh/",
+        "http://" + BASE_API_URL + "/auth/v1/token/refresh/",
         {},
         { withCredentials: true }
       );
@@ -78,7 +79,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     try {
       const response = await axios.post<{ access: string }>(
-        "http://127.0.0.1:8000/auth/v1/token/",
+        "http://" + BASE_API_URL + "/auth/v1/token/",
         {
           username,
           password,
@@ -116,7 +117,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const startLogout = async () => {
       try {
         await axios.post(
-          "http://127.0.0.1:8000/auth/v1/token/refresh/delete",
+          "http://" + BASE_API_URL + "/auth/v1/token/refresh/delete",
           {},
           { withCredentials: true }
         );
