@@ -23,7 +23,7 @@ const Dropdown = ({ buttonContent, children }: DropdownProps) => {
   useOutsideClick(containerRef, () => setIsExpanded(false));
 
   return (
-    <div className="relative w-full" ref={containerRef}>
+    <div className="relative" ref={containerRef}>
       <DropdownContext.Provider value={{ isExpanded, setIsExpanded }}>
         <button
           className="flex flex-row items-center justify-between"
@@ -34,7 +34,7 @@ const Dropdown = ({ buttonContent, children }: DropdownProps) => {
             {isExpanded ? <FaChevronUp /> : <FaChevronDown />}
           </span>
         </button>
-        <div className="absolute w-full">{isExpanded && children}</div>
+        <div className="absolute">{isExpanded && children}</div>
       </DropdownContext.Provider>
     </div>
   );

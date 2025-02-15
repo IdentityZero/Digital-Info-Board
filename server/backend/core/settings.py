@@ -87,6 +87,8 @@ INSTALLED_APPS = [
     "announcements",
     "fixed_contents",
     "settings",
+    "notifications",
+    "field_devices",
 ]
 
 MIDDLEWARE = [

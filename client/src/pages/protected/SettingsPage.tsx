@@ -1,7 +1,27 @@
 import { FaExclamationCircle } from "react-icons/fa";
 import ClosableMessage from "../../components/ClosableMessage";
+import { useEffect, useState } from "react";
+import { FIELD_DEVICES_URL } from "../../constants/urls";
 
 const SettingsPage = () => {
+  const [socket, setSocket] = useState<WebSocket | null>(null);
+
+  useEffect(() => {
+    const ws = new WebSocket(FIELD_DEVICES_URL);
+    setSocket(ws);
+  }, []);
+
+  const handleShutdown = () => {
+    const shutdownConf = window.confirm(
+      "Are you sure you want to shutdown the RPI?"
+    );
+
+    if (!shutdownConf) return;
+    socket?.send(
+      JSON.stringify({ type: "shutdown_rpi", message: "shutdown_rpi" })
+    );
+  };
+
   return (
     <div className="min-h-[calc(100vh-80px)] flex flex-col gap-8 items-center justify-center">
       <ClosableMessage
@@ -21,7 +41,10 @@ const SettingsPage = () => {
           Main Control
         </h2>
         <div className="w-full flex p-5 justify-center">
-          <button className="text-center py-3 px-10 bg-btDanger rounded-full uppercase font-bold">
+          <button
+            className="text-center py-3 px-10 bg-btDanger rounded-full uppercase font-bold"
+            onClick={handleShutdown}
+          >
             Shutdown
           </button>
         </div>
