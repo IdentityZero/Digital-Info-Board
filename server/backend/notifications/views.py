@@ -10,7 +10,6 @@ class NotificationsListAPIView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        user = self.request.user
-        qs = Notifications.objects.filter(user=user)
+        qs = self.request.user.notifications.all().order_by("-created_at")
 
         return qs

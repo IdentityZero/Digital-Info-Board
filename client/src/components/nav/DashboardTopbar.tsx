@@ -3,15 +3,18 @@ import { useContext, useEffect, useState } from "react";
 import { IconType } from "react-icons";
 import { FaUser, FaPowerOff, FaBell, FaSearch } from "react-icons/fa";
 
-import { extractUrlname } from "../../utils/formatters";
+import { extractUrlname, formatTimestamp } from "../../utils/formatters";
 import { useAuth } from "../../context/AuthProvider";
 import { type FullUserType } from "../../types/UserTypes";
 import { retrieveUserInformation } from "../../api/userRequest";
 import Dropdown, { DropdownContext } from "../ui/Dropdown";
+import useNotifications from "../../hooks/useNotifications";
+import { NotificationType } from "../../types/NotificationTypes";
 
 const DashboardTopbar = () => {
   const location = useLocation();
   const { user, userApi } = useAuth();
+  const { notifications } = useNotifications();
   const [fetchedUser, setFetchedUser] = useState<FullUserType | undefined>(
     undefined
   );
@@ -26,6 +29,8 @@ const DashboardTopbar = () => {
 
     fetchUserInfo();
   }, []);
+
+  console.log(notifications);
 
   return (
     <div className="relative group h-20 z-50">
@@ -54,16 +59,20 @@ const DashboardTopbar = () => {
                 />
               </ul>
             </Dropdown>
-            <Dropdown
-              showArrow={false}
-              buttonContent={
-                <div className="text-white bg-darkTeal p-3 rounded-full text-2xl transition-transform duration-300 hover:scale-110">
-                  <FaBell />
-                </div>
-              }
-            >
-              <ul className="bg-darkTeal px-1 py-2 flex flex-col gap-1 w-fit mt-2">
-                <NotificationContainer />
+            <Dropdown showArrow={false} buttonContent={<NotificationIcon />}>
+              <ul className="bg-darkTeal p-2 flex flex-col gap-1 w-fit min-h-[70vh] mt-2 rounded-lg">
+                {notifications.length > 0 ? (
+                  notifications.map((notification) => (
+                    <NotificationContainer
+                      key={notification.id}
+                      notification={notification}
+                    />
+                  ))
+                ) : (
+                  <div className="w-[360px] text-center mt-2">
+                    You don't have notifications.
+                  </div>
+                )}
               </ul>
             </Dropdown>
 
@@ -158,10 +167,53 @@ function DropdownContentContainer({
   );
 }
 
-function NotificationContainer() {
+function NotificationIcon({ notificationCount = 10 }) {
   return (
-    <div className="w-[150px]">
-      Hello worldHello worldHello worldHello world
+    <div className="relative">
+      <div className="text-white bg-darkTeal p-3 rounded-full text-2xl transition-transform duration-300 hover:scale-110 relative">
+        <FaBell />
+        {notificationCount > 0 && (
+          <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+            {notificationCount}
+          </span>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// Customized for this component only
+
+function NotificationContainer({
+  notification,
+}: {
+  notification: NotificationType;
+}) {
+  const { message, created_by, created_at, is_read } = notification;
+
+  return (
+    <div
+      className={`w-[360px] p-4 rounded-xl shadow-lg flex items-center space-x-3 transition-all duration-300 ease-in-out cursor-pointer 
+        bg-gray-700 hover:bg-gray-600
+        `}
+    >
+      <img
+        src={created_by.profile.image as string}
+        alt="Creator Avatar"
+        className="w-12 h-12 rounded-full object-cover border-2 border-white"
+      />
+
+      <div className="flex flex-col flex-grow">
+        <span className={`text-white`}>
+          {message.length > 70 ? message.substring(0, 70) + "..." : message}
+        </span>
+        <span className="text-xs text-gray-300">
+          {formatTimestamp(created_at)}
+        </span>
+      </div>
+      {!is_read && (
+        <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse"></div>
+      )}
     </div>
   );
 }

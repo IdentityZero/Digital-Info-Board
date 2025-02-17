@@ -27,7 +27,7 @@ urlpatterns = [
     path("announcements/", include("announcements.urls")),
     path("fixed-contents/", include("fixed_contents.urls")),
     path("settings/", include("settings.urls")),
-    path("notifications", include("notifications.urls")),
+    path("notifications/", include("notifications.urls")),
 ]
 
 if settings.DEBUG:

@@ -13,8 +13,15 @@ class Notifications(TimestampedModel):
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="notifications"
     )
+    created_by = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="created_notifications",
+    )
     message = models.TextField()
-    is_read = models.BooleanField(False)
+    is_read = models.BooleanField(default=False)
 
     def mark_as_read(self):
         self.is_read = True
