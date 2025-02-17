@@ -6,6 +6,7 @@ import useOutsideClick from "../../hooks/useOutsideClick";
 interface DropdownProps {
   buttonContent: React.ReactNode;
   children: React.ReactNode;
+  showArrow?: boolean;
 }
 
 interface DropdownContextType {
@@ -17,7 +18,11 @@ export const DropdownContext = createContext<DropdownContextType | undefined>(
   undefined
 );
 
-const Dropdown = ({ buttonContent, children }: DropdownProps) => {
+const Dropdown = ({
+  buttonContent,
+  children,
+  showArrow = true,
+}: DropdownProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
   useOutsideClick(containerRef, () => setIsExpanded(false));
@@ -30,11 +35,15 @@ const Dropdown = ({ buttonContent, children }: DropdownProps) => {
           onClick={() => setIsExpanded(!isExpanded)}
         >
           <div className="relative">{buttonContent}</div>
-          <span className="absolute right-4 top-2 text-white">
-            {isExpanded ? <FaChevronUp /> : <FaChevronDown />}
-          </span>
+          {showArrow && (
+            <span className="absolute right-4 top-2 text-white">
+              {isExpanded ? <FaChevronUp /> : <FaChevronDown />}
+            </span>
+          )}
         </button>
-        <div className="absolute">{isExpanded && children}</div>
+        <div className="absolute min-w-full right-0">
+          {isExpanded && children}
+        </div>
       </DropdownContext.Provider>
     </div>
   );

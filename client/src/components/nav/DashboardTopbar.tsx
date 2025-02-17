@@ -54,9 +54,19 @@ const DashboardTopbar = () => {
                 />
               </ul>
             </Dropdown>
-            <div className="text-white bg-darkTeal p-3 rounded-full text-2xl transition-transform duration-300 hover:scale-110">
-              <FaBell />
-            </div>
+            <Dropdown
+              showArrow={false}
+              buttonContent={
+                <div className="text-white bg-darkTeal p-3 rounded-full text-2xl transition-transform duration-300 hover:scale-110">
+                  <FaBell />
+                </div>
+              }
+            >
+              <ul className="bg-darkTeal px-1 py-2 flex flex-col gap-1 w-fit mt-2">
+                <NotificationContainer />
+              </ul>
+            </Dropdown>
+
             <div className="text-white bg-darkTeal p-3 rounded-full text-xl transition-transform duration-300 hover:scale-110">
               <FaSearch />
             </div>
@@ -145,6 +155,14 @@ function DropdownContentContainer({
         <p className="font-semibold">{label}</p>
       </div>
     </Link>
+  );
+}
+
+function NotificationContainer() {
+  return (
+    <div className="w-[150px]">
+      Hello worldHello worldHello worldHello world
+    </div>
   );
 }
 
