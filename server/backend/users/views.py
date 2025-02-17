@@ -93,7 +93,8 @@ class ListAllUsersView(generics.ListAPIView):
     permission_classes = [IsAuthenticated, IsAdmin]
 
     def get_queryset(self):
-        qs = User.objects.all()
+        qs = User.objects.select_related("profile").filter(profile__isnull=False)
+
         user = self.request.user
         # Remove the user in the queryset
 
