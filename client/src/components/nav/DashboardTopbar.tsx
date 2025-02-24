@@ -8,10 +8,13 @@ import { useAuth } from "../../context/AuthProvider";
 import { type FullUserType } from "../../types/UserTypes";
 import { retrieveUserInformation } from "../../api/userRequest";
 import Dropdown, { DropdownContext } from "../ui/Dropdown";
+import useNotifications from "../../hooks/useNotifications";
+import NotificationContainer from "../../features/notifications/NotificationContainer";
 
 const DashboardTopbar = () => {
   const location = useLocation();
   const { user, userApi } = useAuth();
+  const { notifications, handleLoadMore } = useNotifications();
   const [fetchedUser, setFetchedUser] = useState<FullUserType | undefined>(
     undefined
   );
@@ -57,13 +60,38 @@ const DashboardTopbar = () => {
             <Dropdown
               showArrow={false}
               buttonContent={
-                <div className="text-white bg-darkTeal p-3 rounded-full text-2xl transition-transform duration-300 hover:scale-110">
-                  <FaBell />
-                </div>
+                <NotificationIcon
+                  notificationCount={notifications.unread_count}
+                />
               }
             >
-              <ul className="bg-darkTeal px-1 py-2 flex flex-col gap-1 w-fit mt-2">
-                <NotificationContainer />
+              <ul className="bg-darkTeal p-2 flex flex-col gap-1 w-fit h-[70vh] overflow-auto mt-2 rounded-lg">
+                {notifications && notifications.results.length > 0 ? (
+                  <>
+                    {notifications.results.map((notification) => (
+                      <NotificationContainer
+                        key={notification.id}
+                        notification={notification}
+                      />
+                    ))}
+                    {notifications.next ? (
+                      <button
+                        className="bg-gray-700 hover:bg-gray-600 py-2 text-white"
+                        onClick={handleLoadMore}
+                      >
+                        Load more
+                      </button>
+                    ) : (
+                      <span className="bg-gray-700 hover:bg-gray-600 py-2 text-white text-center">
+                        You have reached the end.
+                      </span>
+                    )}
+                  </>
+                ) : (
+                  <div className="w-[360px] text-center mt-2 text-white">
+                    You don't have notifications.
+                  </div>
+                )}
               </ul>
             </Dropdown>
 
@@ -123,7 +151,6 @@ type DropdownContentType = {
   to: string;
 };
 
-// Customized for this component only
 function DropdownContentContainer({
   label,
   icon: Icon,
@@ -158,10 +185,17 @@ function DropdownContentContainer({
   );
 }
 
-function NotificationContainer() {
+function NotificationIcon({ notificationCount = 0 }) {
   return (
-    <div className="w-[150px]">
-      Hello worldHello worldHello worldHello world
+    <div className="relative">
+      <div className="text-white bg-darkTeal p-3 rounded-full text-2xl transition-transform duration-300 hover:scale-110 relative">
+        <FaBell />
+        {notificationCount > 0 && (
+          <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+            {notificationCount}
+          </span>
+        )}
+      </div>
     </div>
   );
 }

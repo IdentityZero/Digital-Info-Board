@@ -4,6 +4,7 @@ import { NavLink } from "react-router-dom";
 
 import { LinksType } from "../../types/UiTypes";
 import { logo } from "../../assets";
+import { LINKS_WITH_CHILDREN } from "../../constants/links";
 
 const SideBarContext = createContext<{ expanded: boolean } | undefined>(
   undefined
@@ -68,14 +69,12 @@ const SidebarItem = ({ link }: { link: LinksType }) => {
     }
   };
 
-  const special_cases: string[] = ["upload content", "contents", "profile"];
-
   return (
     <li className="relative group">
       <NavLink
         onClick={handleLogoutClick}
         to={link.to}
-        end={!special_cases.includes(link.label)}
+        end={!LINKS_WITH_CHILDREN.includes(link.label)}
         className={({ isActive }) =>
           `capitalize p-3 pl-6 mb-2 flex h-14 flex-row items-center gap-3 hover:bg-lightBlue-500 active:bg-lightBlue-600 ${
             isActive && "font-bold bg-lightBlue"

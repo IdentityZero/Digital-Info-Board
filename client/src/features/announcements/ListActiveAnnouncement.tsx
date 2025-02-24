@@ -18,13 +18,9 @@ import useLoadingToast from "../../hooks/useLoadingToast";
 const ListActiveAnnouncement = ({
   activeAnnouncements,
   setActiveAnnouncements,
-  setInactiveAnnouncements,
 }: {
   activeAnnouncements: AnnouncementListType;
   setActiveAnnouncements: React.Dispatch<
-    React.SetStateAction<AnnouncementListType>
-  >;
-  setInactiveAnnouncements: React.Dispatch<
     React.SetStateAction<AnnouncementListType>
   >;
 }) => {
@@ -53,7 +49,6 @@ const ListActiveAnnouncement = ({
         (announcement) => announcement.id === id
       );
       if (updatedData) {
-        setInactiveAnnouncements((prev) => [...prev, updatedData]);
         const updatedActiveList = [
           activeAnnouncements.filter((announcement) => announcement.id !== id),
         ][0];
@@ -133,7 +128,7 @@ function AnnouncementCard({
   }
 
   return (
-    <div className="w-full bg-white border-2 border-black">
+    <div className="w-full bg-white border-2 border-black" id={announcement.id}>
       <p className="w-full bg-cyanBlue p-3 capitalize font-semibold rounded-full">
         From:{" "}
         {announcement.author.first_name + " " + announcement.author.last_name}{" "}
@@ -142,6 +137,10 @@ function AnnouncementCard({
         </span>
       </p>
       <div className="p-2">
+        <p className="text-sm text-gray-600 flex items-start">
+          <span className="font-medium min-w-[150px] block">ID:</span>
+          <span>{announcement.id}</span>
+        </p>
         <p className="text-sm text-gray-600 flex items-start">
           <span className="font-medium min-w-[150px] block">Title:</span>
           <span>{extractReactQuillText(announcement.title as string)}</span>
