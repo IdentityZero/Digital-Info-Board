@@ -29,7 +29,7 @@ const WeatherForecast = () => {
   const [fetchWeatherInfoError, setFetchWeatherInfoError] = useState(false);
 
   // PUT KEY HERE
-  const key = "a7317a47824c4883ac064102241208";
+  const key = import.meta.env.VITE_WEATHER_API_KEY;
 
   const url = `https://api.weatherapi.com/v1/forecast.json?key=${key}&q=Laoag&days=3`;
 
