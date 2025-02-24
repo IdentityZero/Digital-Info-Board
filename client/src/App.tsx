@@ -21,7 +21,6 @@ import {
   AccountSettingsPage,
   DashBoardPage,
   LogoutPage,
-  PermissionsPage,
   UploadContentPage,
   CurrentDisplayPage,
   CalendarPage,
@@ -29,6 +28,7 @@ import {
   SettingsPage,
   HelpPage,
   ContentsPage,
+  PermissionsPage,
 } from "./pages/protected";
 
 import {
@@ -55,6 +55,10 @@ import {
 } from "./pages/protected/account-pages";
 import VideoContentPage from "./pages/protected/content-pages/VideoContentPage";
 import AdminRoutes from "./routes/AdminRoutes";
+import {
+  ActiveListPage,
+  InActiveListPage,
+} from "./pages/protected/permission-pages";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -108,7 +112,11 @@ const router = createBrowserRouter(
               <PermissionsPage />
             </AdminRoutes>
           }
-        />
+        >
+          <Route index element={<ActiveListPage />} />
+          <Route path="inactive" element={<InActiveListPage />} />
+        </Route>
+
         <Route path="current-display" element={<CurrentDisplayPage />} />
         <Route path="calendar" element={<CalendarPage />} />
         <Route path="default-display" element={<DefaultDisplayPage />} />

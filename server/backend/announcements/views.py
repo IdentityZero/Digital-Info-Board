@@ -138,7 +138,6 @@ class ListAnnouncementAPIViewStatusBased(generics.ListAPIView):
     permission_classes = [AllowAny]
 
     def get_queryset(self):
-        print("Hello world")
         status = self.kwargs.get("status")
         active_status = True
         if status == "active":

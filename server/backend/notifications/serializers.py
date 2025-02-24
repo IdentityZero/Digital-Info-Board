@@ -17,4 +17,13 @@ class NotificationsSerializer(serializers.ModelSerializer):
             "is_read",
             "created_at",
             "last_modified",
+            "target_id",
         ]
+
+
+class MarkNotificationReadSerializer(NotificationsSerializer):
+    class Meta(NotificationsSerializer.Meta):
+        extra_kwargs = {
+            field: {"read_only": True} for field in NotificationsSerializer.Meta.fields
+        }
+        extra_kwargs["is_read"] = {"read_only": False}

@@ -3,18 +3,18 @@ import { useContext, useEffect, useState } from "react";
 import { IconType } from "react-icons";
 import { FaUser, FaPowerOff, FaBell, FaSearch } from "react-icons/fa";
 
-import { extractUrlname, formatTimestamp } from "../../utils/formatters";
+import { extractUrlname } from "../../utils/formatters";
 import { useAuth } from "../../context/AuthProvider";
 import { type FullUserType } from "../../types/UserTypes";
 import { retrieveUserInformation } from "../../api/userRequest";
 import Dropdown, { DropdownContext } from "../ui/Dropdown";
 import useNotifications from "../../hooks/useNotifications";
-import { NotificationType } from "../../types/NotificationTypes";
+import NotificationContainer from "../../features/notifications/NotificationContainer";
 
 const DashboardTopbar = () => {
   const location = useLocation();
   const { user, userApi } = useAuth();
-  const { notifications } = useNotifications();
+  const { notifications, handleLoadMore } = useNotifications();
   const [fetchedUser, setFetchedUser] = useState<FullUserType | undefined>(
     undefined
   );
@@ -29,8 +29,6 @@ const DashboardTopbar = () => {
 
     fetchUserInfo();
   }, []);
-
-  console.log(notifications);
 
   return (
     <div className="relative group h-20 z-50">
@@ -59,17 +57,38 @@ const DashboardTopbar = () => {
                 />
               </ul>
             </Dropdown>
-            <Dropdown showArrow={false} buttonContent={<NotificationIcon />}>
-              <ul className="bg-darkTeal p-2 flex flex-col gap-1 w-fit min-h-[70vh] mt-2 rounded-lg">
-                {notifications.length > 0 ? (
-                  notifications.map((notification) => (
-                    <NotificationContainer
-                      key={notification.id}
-                      notification={notification}
-                    />
-                  ))
+            <Dropdown
+              showArrow={false}
+              buttonContent={
+                <NotificationIcon
+                  notificationCount={notifications.unread_count}
+                />
+              }
+            >
+              <ul className="bg-darkTeal p-2 flex flex-col gap-1 w-fit h-[70vh] overflow-auto mt-2 rounded-lg">
+                {notifications && notifications.results.length > 0 ? (
+                  <>
+                    {notifications.results.map((notification) => (
+                      <NotificationContainer
+                        key={notification.id}
+                        notification={notification}
+                      />
+                    ))}
+                    {notifications.next ? (
+                      <button
+                        className="bg-gray-700 hover:bg-gray-600 py-2 text-white"
+                        onClick={handleLoadMore}
+                      >
+                        Load more
+                      </button>
+                    ) : (
+                      <span className="bg-gray-700 hover:bg-gray-600 py-2 text-white text-center">
+                        You have reached the end.
+                      </span>
+                    )}
+                  </>
                 ) : (
-                  <div className="w-[360px] text-center mt-2">
+                  <div className="w-[360px] text-center mt-2 text-white">
                     You don't have notifications.
                   </div>
                 )}
@@ -132,7 +151,6 @@ type DropdownContentType = {
   to: string;
 };
 
-// Customized for this component only
 function DropdownContentContainer({
   label,
   icon: Icon,
@@ -167,7 +185,7 @@ function DropdownContentContainer({
   );
 }
 
-function NotificationIcon({ notificationCount = 10 }) {
+function NotificationIcon({ notificationCount = 0 }) {
   return (
     <div className="relative">
       <div className="text-white bg-darkTeal p-3 rounded-full text-2xl transition-transform duration-300 hover:scale-110 relative">
@@ -178,42 +196,6 @@ function NotificationIcon({ notificationCount = 10 }) {
           </span>
         )}
       </div>
-    </div>
-  );
-}
-
-// Customized for this component only
-
-function NotificationContainer({
-  notification,
-}: {
-  notification: NotificationType;
-}) {
-  const { message, created_by, created_at, is_read } = notification;
-
-  return (
-    <div
-      className={`w-[360px] p-4 rounded-xl shadow-lg flex items-center space-x-3 transition-all duration-300 ease-in-out cursor-pointer 
-        bg-gray-700 hover:bg-gray-600
-        `}
-    >
-      <img
-        src={created_by.profile.image as string}
-        alt="Creator Avatar"
-        className="w-12 h-12 rounded-full object-cover border-2 border-white"
-      />
-
-      <div className="flex flex-col flex-grow">
-        <span className={`text-white`}>
-          {message.length > 70 ? message.substring(0, 70) + "..." : message}
-        </span>
-        <span className="text-xs text-gray-300">
-          {formatTimestamp(created_at)}
-        </span>
-      </div>
-      {!is_read && (
-        <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse"></div>
-      )}
     </div>
   );
 }

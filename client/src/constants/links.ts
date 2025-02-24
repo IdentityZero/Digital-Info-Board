@@ -55,9 +55,16 @@ const PROTECTED_LINKS: LinksType[] = [
   { label: "Help", to: "/dashboard/help", icon: FaQuestionCircle },
 ];
 
+const LINKS_WITH_CHILDREN: string[] = [
+  "upload content",
+  "contents",
+  "profile",
+  "permissions",
+];
+
 const LINKS = {
   public: PUBLIC_LINKS,
   protected: PROTECTED_LINKS,
 };
 
-export default LINKS;
+export { LINKS as default, LINKS_WITH_CHILDREN };

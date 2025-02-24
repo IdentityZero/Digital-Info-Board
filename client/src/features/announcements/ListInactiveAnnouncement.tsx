@@ -14,12 +14,11 @@ import { useRef, useState } from "react";
 import PreviewAnnouncement from "./PreviewAnnouncement";
 import { Id } from "react-toastify";
 import useLoadingToast from "../../hooks/useLoadingToast";
+import { useLocation } from "react-router-dom";
 
 type ListInactiveAnnouncementProps = {
   inactiveAnnouncements: AnnouncementListType;
-  setActiveAnnouncements: React.Dispatch<
-    React.SetStateAction<AnnouncementListType>
-  >;
+
   setInactiveAnnouncements: React.Dispatch<
     React.SetStateAction<AnnouncementListType>
   >;
@@ -27,9 +26,11 @@ type ListInactiveAnnouncementProps = {
 
 const ListInactiveAnnouncement = ({
   inactiveAnnouncements,
-  setActiveAnnouncements,
   setInactiveAnnouncements,
 }: ListInactiveAnnouncementProps) => {
+  const { hash } = useLocation();
+  const targetId = hash.substring(1);
+
   const toastId = useRef<Id | null>(null);
   const { loading, update } = useLoadingToast(toastId);
   const { userApi } = useAuth();
@@ -58,7 +59,6 @@ const ListInactiveAnnouncement = ({
         (announcement) => announcement.id === id
       );
       if (updatedData) {
-        setActiveAnnouncements((prev) => [...prev, updatedData]);
         const updatedInActiveList = [
           inactiveAnnouncements.filter(
             (announcement) => announcement.id !== id
@@ -93,6 +93,7 @@ const ListInactiveAnnouncement = ({
             handleApproveClick={handleApproveClick}
             setShowPreview={setShowPreview}
             setDataToPreview={setDataToPreview}
+            isHighlighted={targetId == announcement.id}
           />
         );
       })}
@@ -107,6 +108,7 @@ type AnnouncementCardProps = {
   setDataToPreview: React.Dispatch<
     React.SetStateAction<AnnouncementRetrieveType | undefined>
   >;
+  isHighlighted?: boolean;
 };
 
 function AnnouncementCard({
@@ -114,6 +116,7 @@ function AnnouncementCard({
   handleApproveClick,
   setShowPreview,
   setDataToPreview,
+  isHighlighted = false,
 }: AnnouncementCardProps) {
   const { user } = useAuth();
 
@@ -141,7 +144,12 @@ function AnnouncementCard({
   }
 
   return (
-    <div className="w-full bg-white border-2 border-black">
+    <div
+      className={`w-full bg-white border-2 border-black ${
+        isHighlighted && "shadow-[0_0_10px_rgba(255,255,0,0.8)]"
+      }`}
+      id={announcement.id}
+    >
       <p className="w-full bg-cyanBlue p-3 capitalize font-semibold rounded-full">
         From:{" "}
         {announcement.author.first_name + " " + announcement.author.last_name}{" "}
@@ -150,6 +158,10 @@ function AnnouncementCard({
         </span>
       </p>
       <div className="p-2">
+        <p className="text-sm text-gray-600 flex items-start">
+          <span className="font-medium min-w-[150px] block">ID:</span>
+          <span>{announcement.id}</span>
+        </p>
         <p className="text-sm text-gray-600 flex items-start">
           <span className="font-medium min-w-[150px] block">Title:</span>
           <span>{extractReactQuillText(announcement.title as string)}</span>
