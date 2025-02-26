@@ -16,6 +16,7 @@ import AnnouncementThumbnail from "./AnnouncementThumbnail";
 import DetailAnnouncementCurrDisplay from "./DetailAnnouncementCurrDisplay";
 import LiveAnnouncement from "./LiveAnnouncement";
 import AnnouncementCarousel from "./AnnouncementCarousel";
+import NoAnnouncementCard from "./NoAnnouncementCard";
 
 export {
   DetailAnnouncement,
@@ -36,4 +37,5 @@ export {
   DetailAnnouncementCurrDisplay,
   LiveAnnouncement,
   AnnouncementCarousel,
+  NoAnnouncementCard,
 };

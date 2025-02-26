@@ -10,15 +10,17 @@ type DisplayQuillEditorProps = {
   value: string | Delta;
   isTitle?: boolean;
   className?: string;
+  withBackground?: boolean;
 };
 
 const DisplayQuillEditor = ({
   value,
   isTitle = false,
   className,
+  withBackground = true,
 }: DisplayQuillEditorProps) => {
   return (
-    <div className="bg-white">
+    <div className={`${withBackground ? "bg-white" : "bg-transparent"}`}>
       <ReactQuill
         theme="snow"
         value={value}
