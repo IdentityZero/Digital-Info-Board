@@ -21,20 +21,7 @@ const AccountSettingsPage = () => {
         >
           My Profile
         </NavLink>
-        {user?.is_admin && (
-          <NavLink
-            to="profile-request"
-            className={({ isActive }) =>
-              `capitalize p-3 pl-6 flex h-14 flex-row items-center justify-center gap-3  hover:bg-cyanBlue-dark active:bg-cyanBlue-darker ${
-                isActive
-                  ? "font-bold bg-cyanBlue"
-                  : "border-2 border-black bg-white"
-              } `
-            }
-          >
-            Profile Request
-          </NavLink>
-        )}
+
         {user?.is_admin && (
           <NavLink
             to="list-of-accounts"

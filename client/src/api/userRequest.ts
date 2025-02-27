@@ -52,6 +52,9 @@ export const updateUserInformationApi = async (
 };
 
 export const listInactiveUsersApi = async (axiosInstance: AxiosInstance) => {
+  /**
+   * Not in use. Remove this comment if will be used.
+   */
   try {
     const response = await axiosInstance.get(listInactiveUsersEndpoint);
     return response.data;

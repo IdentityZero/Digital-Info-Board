@@ -46,7 +46,6 @@ import {
 
 import {
   MyProfilePage,
-  ProfileRequestPage,
   ListOfAccountsPage,
   ViewProfilePage,
   ChangeMyPasswordPage,
@@ -125,14 +124,7 @@ const router = createBrowserRouter(
         <Route path="account" element={<AccountSettingsPage />}>
           <Route index element={<MyProfilePage />} />
           <Route path="change-password" element={<ChangeMyPasswordPage />} />
-          <Route
-            path="profile-request"
-            element={
-              <AdminRoutes>
-                <ProfileRequestPage />
-              </AdminRoutes>
-            }
-          />
+
           <Route
             path="list-of-accounts"
             element={
