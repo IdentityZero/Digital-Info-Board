@@ -58,7 +58,14 @@ export default {
         desaturatedBlueGray: {
           DEFAULT: '#6e8ea4'
         }
-      }
+      }, animation: {
+        "dynamic-slide": "dynamic-slide 4s infinite ease-in-out",
+      }, keyframes: {
+        "dynamic-slide": {
+          "0%, 100%": { transform: "translateX(0%)", width: "40%" },
+          "50%": { transform: "translateX(100%)", width: "50%" },
+        },
+      },
     },
   },
   plugins: [],

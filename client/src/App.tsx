@@ -59,6 +59,7 @@ import {
   InActiveListPage,
 } from "./pages/protected/permission-pages";
 import LiveAnnouncementKioskSize from "./pages/public/LiveAnnouncementKioskSize";
+import LiveAnnouncementKioskSizeV2 from "./pages/public/LiveAnnouncementKioskSizeV2";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -78,6 +79,7 @@ const router = createBrowserRouter(
         <Route path="contact" element={<ContactUsPage />} />
       </Route>
       <Route path="kiosk" element={<LiveAnnouncementKioskSize />} />
+      <Route path="v2/kiosk" element={<LiveAnnouncementKioskSizeV2 />} />
       <Route
         path="dashboard"
         element={
