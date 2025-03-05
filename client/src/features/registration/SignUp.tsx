@@ -1,9 +1,13 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AxiosError } from "axios";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
+import LoadingMessage from "../../components/LoadingMessage";
 import { Form } from "../../components/ui";
-import { createNewUserApi } from "../../api/signUpRequest";
+import {
+  createNewUserApi,
+  retrieveInvitationDetailsApi,
+} from "../../api/signUpRequest";
 
 import Step1 from "./Step1";
 import Step2 from "./Step2";
@@ -15,6 +19,7 @@ import {
   NewUserErrorsType,
 } from "./helpers";
 import SuccessSignup from "./SuccessSignup";
+import useDebounce from "../../hooks/useDebounce";
 
 //#TODO UNEXPECTED ERRORS
 
@@ -31,6 +36,9 @@ const SignUp = ({
   isSuccessful,
   setIsSuccessful,
 }: SignUpProps) => {
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+
   const [step, setStep] = useState<1 | 2>(1);
   const formRef = useRef<HTMLFormElement | null>(null);
   const [newUser, setNewUser] = useState(newUserObject);
@@ -41,6 +49,7 @@ const SignUp = ({
     newUserErrorInitialState
   );
   const [formError, setFormError] = useState("");
+  const debouncedData = useDebounce(newUser.invitation_code, 500);
 
   const handleFormStateChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -170,23 +179,54 @@ const SignUp = ({
     createNewUser();
   };
 
+  const fetchInvitationDetails = async (code: string) => {
+    try {
+      const res_data = await retrieveInvitationDetailsApi(code);
+
+      setNewUser((prev) => ({
+        ...prev,
+        profile: {
+          ...prev.profile,
+          position: res_data.position,
+          role: res_data.role,
+        },
+      }));
+    } catch (error) {
+      console.log("Fetching Invitation Details Error: ", error);
+    }
+  };
+
+  useEffect(() => {
+    const invitation_code = queryParams.get("ic");
+    if (!invitation_code) return;
+    setNewUser((prev) => ({ ...prev, invitation_code: invitation_code }));
+    fetchInvitationDetails(invitation_code);
+  }, []);
+
+  useEffect(() => {
+    if (debouncedData && debouncedData.trim() !== "") {
+      fetchInvitationDetails(debouncedData);
+    }
+  }, [debouncedData]);
+
+  if (isSuccessful) {
+    return <SuccessSignup />;
+  }
+
   return (
     <>
-      {(isLoading || isSuccessful) && (
+      {isLoading && (
         <div
           className={`min-w-full min-h-full bg-[#f1f1f1] ${
             isLoading && "bg-opacity-30"
           } absolute top-0 left-0 z-50 flex items-center justify-center`}
         >
-          {isLoading && <h1>Loading...</h1>}
-          {isSuccessful && <SuccessSignup />}
+          {isLoading && (
+            <LoadingMessage message="Verifying account details..." />
+          )}
         </div>
       )}
-      <section
-        className={`w-full px-4 py-4 ${
-          (isLoading || isSuccessful) && "blur-[2px]"
-        }`}
-      >
+      <section className={`w-full px-4 py-4 ${isLoading && "blur-[2px]"}`}>
         <div className="mb-4">
           <div className="flex flex-row items-center justify-evenly mt-4 mb-4">
             <div

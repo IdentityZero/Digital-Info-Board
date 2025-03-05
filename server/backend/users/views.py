@@ -10,7 +10,7 @@ from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
 from email.utils import formataddr
 
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.exceptions import PermissionDenied
@@ -32,6 +32,47 @@ class CreateUserView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [AllowAny]
+
+    def create(self, request, *args, **kwargs):
+        invitation_code = request.data.get("invitation_code")
+
+        if not invitation_code:
+            return Response(
+                {"invitation_code": ["Invitation code is required."]},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        invitation = NewUserInvitation.objects.filter(
+            code=invitation_code, is_used=False
+        )
+
+        if not invitation.exists():
+            return Response(
+                {
+                    "invitation_code": [
+                        "This invitation code is invalid or has already been used. Please request a new one."
+                    ]
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        invitation = invitation.first()
+        data = request.data.copy()
+        data["email"] = invitation.email
+        data["profile.position"] = invitation.position
+        data["profile.role"] = invitation.role
+
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+
+        invitation.is_used = True
+        invitation.save()
+
+        headers = self.get_success_headers(serializer.data)
+        return Response(
+            serializer.data, status=status.HTTP_201_CREATED, headers=headers
+        )
 
 
 class RetrieveUpdateUserView(generics.RetrieveUpdateAPIView):
@@ -166,7 +207,7 @@ class ListCreateUserInvitationView(generics.ListCreateAPIView):
         return super().list(request, *args, **kwargs)
 
     def get_queryset(self):
-        qs = NewUserInvitation.objects.all().order_by("-id")
+        qs = NewUserInvitation.objects.filter(inviter=self.request.user).order_by("-id")
         return qs
 
     def perform_create(self, serializer):
@@ -190,6 +231,20 @@ class DeleteUserInvitationView(generics.DestroyAPIView):
 
     def get_queryset(self):
         qs = NewUserInvitation.objects.filter(inviter=self.request.user)
+        return qs
+
+
+class RetrieveInvitationCodeDetailsView(generics.RetrieveAPIView):
+    serializer_class = InviteNewUserSerializer
+    permission_classes = [AllowAny]
+    lookup_field = "code"
+
+    def get_serializer(self, *args, **kwargs):
+        kwargs["context"] = {"use_minimal": True}
+        return super().get_serializer(*args, **kwargs)
+
+    def get_queryset(self):
+        qs = NewUserInvitation.objects.all()
         return qs
 
 

@@ -38,6 +38,7 @@ class UserSerializer(serializers.ModelSerializer):
             "id",
             "username",
             "password",
+            "email",
             "last_name",
             "first_name",
             "profile",
@@ -61,8 +62,6 @@ class UserSerializer(serializers.ModelSerializer):
             first_name=validated_data["first_name"],
             last_name=validated_data["last_name"],
         )
-        # Account is not activated by default
-        user.is_active = False
         user.save()
         profile_data = validated_data.pop("profile")
 
@@ -151,6 +150,12 @@ class InviteNewUserSerializer(serializers.ModelSerializer):
             "is_used": {"read_only": True},
             "is_email_sent": {"read_only": True},
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.context.get("use_minimal"):
+            for field in ["inviter", "email"]:
+                self.fields.pop(field, None)
 
     def validate(self, attrs):
         inst = NewUserInvitation(**attrs)

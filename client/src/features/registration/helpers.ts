@@ -1,4 +1,9 @@
-const step1FormNames = ["first_name", "last_name", "profile"];
+const step1FormNames = [
+  "first_name",
+  "last_name",
+  "profile",
+  "invitation_code",
+];
 export const step2FormNames = ["username", "password", "repeat_password"];
 
 export function step1HasErrors(obj: any) {
@@ -11,6 +16,7 @@ export type NewUserErrorsType = {
   repeat_password: string | string[];
   first_name: string | string[];
   last_name: string | string[];
+  invitation_code: string | string[];
   profile: {
     id_number: string | string[];
     birthdate: string | string[];
@@ -20,12 +26,13 @@ export type NewUserErrorsType = {
   };
 };
 
-export const newUserErrorInitialState = {
+export const newUserErrorInitialState: NewUserErrorsType = {
   username: "",
   password: "",
   repeat_password: "",
   first_name: "",
   last_name: "",
+  invitation_code: "",
   profile: {
     id_number: "",
     birthdate: "",
@@ -40,6 +47,7 @@ export type NewUserObjectType = {
   password: string;
   first_name: string;
   last_name: string;
+  invitation_code: string;
   profile: {
     id_number: string;
     birthdate: string;
@@ -54,6 +62,7 @@ export const newUserObject: NewUserObjectType = {
   password: "",
   first_name: "",
   last_name: "",
+  invitation_code: "",
   profile: {
     id_number: "",
     birthdate: "",

@@ -101,7 +101,7 @@ class NewUserInvitation(TimestampedModel):
         verbose_name = "New User Invitation"
         verbose_name_plural = "New User Invitations"
 
-    code = models.CharField(max_length=6, default=generate_unique_code)
+    code = models.CharField(max_length=6, default=generate_unique_code, unique=True)
     inviter = models.ForeignKey(User, on_delete=models.CASCADE, related_name="invites")
     email = models.EmailField(unique=True)
     role = models.CharField(max_length=10, choices=ROLE_CHOICES, verbose_name="Role")
@@ -129,6 +129,10 @@ class NewUserInvitation(TimestampedModel):
             return super().clean()
 
     def save(self, *args, **kwargs):
-        while NewUserInvitation.objects.filter(code=self.code).exists():
+
+        while (
+            NewUserInvitation.objects.filter(code=self.code).exists()
+            and self.pk is None
+        ):
             self.code = generate_unique_code()
         super().save(*args, **kwargs)

@@ -1,5 +1,6 @@
 import axios from "axios";
 import { BASE_API_URL } from "../constants/urls";
+import { RetrieveUserInvitationType } from "../types/UserTypes";
 
 export const createNewUserApi = async (user: {
   [k: string]: FormDataEntryValue;
@@ -20,6 +21,22 @@ export const createNewUserApi = async (user: {
       throw error;
     }
 
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+export const retrieveInvitationDetailsApi = async (
+  code: string
+): Promise<RetrieveUserInvitationType> => {
+  try {
+    const response = await axios.get(
+      "http://" + BASE_API_URL + `/users/v1/invite/code/${code}/`
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw error;
+    }
     throw new Error("An unexpected error occurred");
   }
 };

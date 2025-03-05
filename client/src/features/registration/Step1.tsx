@@ -1,10 +1,8 @@
-import { useState } from "react";
 import { FaUpload } from "react-icons/fa";
 
-import { Errortext, Input, Select } from "../../components/ui";
-import { type Role } from "../../types/UserTypes";
-import { get_role_positions } from "../../constants";
+import { Errortext, Input } from "../../components/ui";
 import { type NewUserErrorsType, type NewUserObjectType } from "./helpers";
+import { formatStringUnderscores } from "../../utils/formatters";
 
 // TODO: Display image on load
 
@@ -25,20 +23,19 @@ const Step1 = ({
   loading,
   setFormState,
 }: Step1Props) => {
-  const [selectedRole, setSelectedRole] = useState<Role["role"]>("student");
-  const [roleOptions, setRoleOptions] = useState<string[]>(
-    get_role_positions(selectedRole)
-  );
-  console.log(formState);
-
-  const handleOnRoleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedRole(e.target.value as Role["role"]);
-    setRoleOptions(get_role_positions(e.target.value as Role["role"]));
-  };
-
   return (
     <div className="w-full flex flex-col gap-4 lg:flex-row">
       <div className="flex flex-col gap-4 w-full">
+        <Input
+          labelText="Invitation Code"
+          required
+          name="invitation_code"
+          placeholder="Invitation Code"
+          value={formState.invitation_code}
+          onChange={setFormState}
+          error={errors.invitation_code}
+          disabled={loading}
+        />
         <Input
           type="text"
           required={true}
@@ -61,24 +58,25 @@ const Step1 = ({
           error={errors.last_name}
           disabled={loading}
         />
-        <Select
-          required={true}
-          options={["student", "faculty"]}
-          defaultValue={selectedRole}
+        <Input
           labelText="Role"
-          name="profile.role"
-          onChangeFunc={handleOnRoleChange}
+          required
+          disabled
           error={errors.profile.role}
-          disabled
+          name="profile.role"
+          placeholder="Role is automatically filled by the invitation code."
+          value={formatStringUnderscores(formState.profile.role)}
         />
-        <Select
-          required={true}
-          options={roleOptions}
+        <Input
           labelText="Position"
-          name="profile.position"
-          error={errors.profile.position}
+          required
           disabled
+          error={errors.profile.role}
+          name="profile.position"
+          placeholder="Position is automatically filled by the invitation code."
+          value={formatStringUnderscores(formState.profile.position)}
         />
+
         <Input
           type="text"
           required={true}

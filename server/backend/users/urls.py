@@ -11,6 +11,7 @@ from .views import (
     ListCreateUserInvitationView,
     DeleteUserInvitationView,
     resend_invitation_email,
+    RetrieveInvitationCodeDetailsView,
 )
 
 urlpatterns = [
@@ -24,4 +25,5 @@ urlpatterns = [
     path("v1/invite/", ListCreateUserInvitationView.as_view()),
     path("v1/invite/<int:pk>/", DeleteUserInvitationView.as_view()),
     path("v1/invite/resend/<int:pk>/", resend_invitation_email),
+    path("v1/invite/code/<str:code>/", RetrieveInvitationCodeDetailsView.as_view()),
 ]
