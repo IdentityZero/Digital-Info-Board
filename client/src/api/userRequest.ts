@@ -1,5 +1,10 @@
 import axios, { AxiosInstance } from "axios";
-import { type FullUserType } from "../types/UserTypes";
+import {
+  type CreateUserInvitationType,
+  type RetrieveUserInvitationType,
+  type FullUserType,
+  ListUserInvitationType,
+} from "../types/UserTypes";
 
 const retrieveUpdateUserInformationEndpoint = (id: string) => {
   return `users/v1/account/${id}/`;
@@ -11,6 +16,8 @@ const updateUserActiveStatusEndpoint = (id: string) => {
 };
 
 const listAllUsersEndpoint = "users/v1/";
+
+const createListUserInvitationEndpoint = "users/v1/invite/";
 
 export const retrieveUserInformation = async (
   axiosInstance: AxiosInstance,
@@ -129,6 +136,76 @@ export const updateUserPasswordApi = async (
       {
         headers: { "Content-Type": "application/json" },
       }
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw error;
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+export const createUserInvitationApi = async (
+  axiosInstance: AxiosInstance,
+  data: CreateUserInvitationType
+): Promise<RetrieveUserInvitationType> => {
+  try {
+    const response = await axiosInstance.post(
+      createListUserInvitationEndpoint,
+      data
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw error;
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+export const listUserInvitationsApi = async (
+  axiosInstance: AxiosInstance,
+  page: number = 1,
+  page_size: number = 10
+): Promise<ListUserInvitationType> => {
+  try {
+    const response = await axiosInstance.get(
+      createListUserInvitationEndpoint + `?page=${page}&page_size=${page_size}`
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw error;
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+export const deleteUserInvitationApi = async (
+  axiosInstance: AxiosInstance,
+  id: number
+) => {
+  try {
+    const response = await axiosInstance.delete(
+      createListUserInvitationEndpoint + id + "/"
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw error;
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+export const resendUserInvitationApi = async (
+  axiosInstance: AxiosInstance,
+  id: number
+) => {
+  try {
+    const response = await axiosInstance.post(
+      createListUserInvitationEndpoint + "resend/" + id + "/"
     );
     return response.data;
   } catch (error) {

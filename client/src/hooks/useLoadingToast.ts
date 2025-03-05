@@ -5,6 +5,10 @@ const useLoadingToast = (Id: React.MutableRefObject<Id | null>) => {
   /**
    * Used for Forms
    * Ex.
+   * import { Id } from "react-toastify";
+   * const toastId = useRef<Id | null>(null);
+     const { loading, update } = useLoadingToast(toastId);
+   * 
    * loading("Saving updates. Please wait...");
    * update({
             render: "Update unsuccessful. Please try again.",
@@ -16,7 +20,7 @@ const useLoadingToast = (Id: React.MutableRefObject<Id | null>) => {
     options: ToastOptions = { type: "default" }
   ) => {
     return (Id.current = toast(
-      LoadingMessage({ message: message, spinnerSize: 32, fontSize: "md" }),
+      LoadingMessage({ message: message, spinnerSize: 32, fontSize: "base" }),
       { autoClose: false, ...options }
     ));
   };

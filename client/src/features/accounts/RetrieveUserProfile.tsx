@@ -245,8 +245,8 @@ const RetrieveUserProfile = ({ id }: RetrieveUserProfileProps) => {
           type="text"
           name="username"
           onChange={handleInputChange}
-          isDisabled={isSaving}
-          isRequired
+          disabled={isSaving}
+          required
         />
 
         {/* Role Field */}
@@ -302,8 +302,8 @@ const RetrieveUserProfile = ({ id }: RetrieveUserProfileProps) => {
           type="text"
           name="first_name"
           onChange={handleInputChange}
-          isDisabled={isSaving}
-          isRequired
+          disabled={isSaving}
+          required
         />
 
         {/* Last Name Field */}
@@ -314,8 +314,8 @@ const RetrieveUserProfile = ({ id }: RetrieveUserProfileProps) => {
           type="text"
           name="last_name"
           onChange={handleInputChange}
-          isDisabled={isSaving}
-          isRequired
+          disabled={isSaving}
+          required
         />
 
         {/* Id Number Field */}
@@ -327,8 +327,8 @@ const RetrieveUserProfile = ({ id }: RetrieveUserProfileProps) => {
           type="text"
           name="profile.id_number"
           onChange={handleInputChange}
-          isDisabled={isSaving}
-          isRequired
+          disabled={isSaving}
+          required
         />
 
         {/* Birthdate Field */}
@@ -340,8 +340,8 @@ const RetrieveUserProfile = ({ id }: RetrieveUserProfileProps) => {
           type="date"
           name="profile.birthdate"
           onChange={handleInputChange}
-          isDisabled={isSaving}
-          isRequired
+          disabled={isSaving}
+          required
         />
 
         {/* Admin Field */}

@@ -5,7 +5,7 @@ from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 
 
-from .models import Profile
+from .models import Profile, NewUserInvitation
 
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -130,3 +130,33 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
         instance.save()
 
         return instance
+
+
+class InviteNewUserSerializer(serializers.ModelSerializer):
+    inviter = UserSerializer(read_only=True)
+
+    class Meta:
+        model = NewUserInvitation
+        fields = [
+            "id",
+            "email",
+            "inviter",
+            "role",
+            "position",
+            "is_used",
+            "is_email_sent",
+        ]
+        extra_kwargs = {
+            "id": {"read_only": True},
+            "is_used": {"read_only": True},
+            "is_email_sent": {"read_only": True},
+        }
+
+    def validate(self, attrs):
+        inst = NewUserInvitation(**attrs)
+        inst.clean()
+
+        return attrs
+
+    def to_representation(self, instance):
+        return super().to_representation(instance)

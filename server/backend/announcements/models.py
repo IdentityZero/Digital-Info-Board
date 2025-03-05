@@ -1,6 +1,4 @@
-from typing import Dict, Any
 from datetime import timedelta
-
 
 from django.contrib.auth.models import User
 from django.db import models

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Email Template</title>
+</head>
+
+<body style="margin: 0; padding: 0; background-color: #f4f4f4;">
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0"
+        style="background-color: #f4f4f4; padding: 20px;">
+        <tr>
+            <td align="center">
+                <table role="presentation" width="100%" max-width="600px" cellspacing="0" cellpadding="0" border="0"
+                    style="background-color: #ffffff; border-radius: 8px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); padding: 20px;">
+                    <tr>
+                        <td align="center">
+                            <p style="color: #2ecc71; font-size: 22px; font-weight: bold; margin: 0;">Welcome to our
+                                Digital Information Board! </p>
+                            <p style="font-size: 16px; color: #333; margin: 15px 0;">
+                                Your registration code is:
+                            </p>
+                            <p
+                                style="font-size: 24px; font-weight: bold; color: #e74c3c; background-color: #fbeee6; padding: 10px 20px; border-radius: 5px; display: inline-block;">
+                                {{ code }}
+                            </p>
+                            <p style="font-size: 16px; color: #333; margin: 15px 0;">
+                                Use this code to complete your registration.
+                            </p>
+                            <table role="presentation" cellspacing="0" cellpadding="0" border="0">
+                                <tr>
+                                    <td align="center" style="border-radius: 5px; background-color: #3498db;">
+                                        <a href="{{ host }}"
+                                            style="display: inline-block; font-size: 16px; font-weight: bold; color: #ffffff; text-decoration: none; padding: 12px 20px; border-radius: 5px;">
+                                            Complete Registration
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                            <p style="font-size: 12px; color: #777; margin-top: 20px;">
+                                If you didn’t request this email, you can safely ignore it.
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

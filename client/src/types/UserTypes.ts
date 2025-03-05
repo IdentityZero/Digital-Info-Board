@@ -1,4 +1,5 @@
 import { jwtDecode } from "jwt-decode";
+import { ListType } from "./ListType";
 
 //#region: Student and All Student Positions should match
 export type Student = {
@@ -96,4 +97,30 @@ export type FullUserType = {
   first_name: string;
   is_active: boolean;
   profile: UserProfileType;
+};
+
+export type CreateUserInvitationType = {
+  email: string;
+  role: Role["role"];
+  position: Role["position"];
+};
+
+export type RetrieveUserInvitationType = {
+  id: number;
+  email: string;
+  role: Role["role"];
+  position: Role["position"];
+  is_used: boolean;
+  is_email_sent: boolean;
+};
+
+export type ListUserInvitationType = ListType & {
+  results: RetrieveUserInvitationType[];
+};
+
+export const listUserInvitationInitState: ListUserInvitationType = {
+  count: 0,
+  next: null,
+  previous: null,
+  results: [],
 };

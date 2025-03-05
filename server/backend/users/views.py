@@ -1,21 +1,31 @@
 import re
 from typing import Dict, Any
+import socket
 
+from django.conf import settings
+from django.http import JsonResponse
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
+from django.template.loader import render_to_string
+from django.core.mail import EmailMessage
+from email.utils import formataddr
 
 from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.exceptions import PermissionDenied
+from rest_framework.decorators import api_view, permission_classes
 
 
 from .serializers import (
     UserSerializer,
     SetActiveUserSerializer,
     ChangePasswordSerializer,
+    InviteNewUserSerializer,
 )
+from .models import NewUserInvitation
 from utils.permissions import IsAdmin
+from utils.pagination import CustomPageNumberPagination
 
 
 class CreateUserView(generics.CreateAPIView):
@@ -126,3 +136,75 @@ class ChangePasswordView(generics.UpdateAPIView):
             raise PermissionDenied("You can only change your own password.")
 
         return user
+
+
+def send_email(code: str, to_email: str, url: str) -> None:
+    subject = "Welcome to Computer Engineering - MMSU Digital Information Board"
+    html_content = render_to_string(
+        "users/email_invitation.html",
+        {"code": code, "host": url},
+    )
+
+    from_email = formataddr(
+        (
+            "CpE MMSU Digital Info Board",
+            getattr(settings, "EMAIL_HOST_USER", "mmsucpe@gmail.com"),
+        )
+    )
+    email = EmailMessage(subject, html_content, from_email, [to_email])
+    email.content_subtype = "html"
+    email.send()
+
+
+class ListCreateUserInvitationView(generics.ListCreateAPIView):
+    serializer_class = InviteNewUserSerializer
+    permission_classes = [IsAuthenticated, IsAdmin]
+    pagination_class = CustomPageNumberPagination
+
+    def list(self, request, *args, **kwargs):
+        self.queryset = NewUserInvitation.objects.filter(inviter=self.request.user)
+        return super().list(request, *args, **kwargs)
+
+    def get_queryset(self):
+        qs = NewUserInvitation.objects.all().order_by("-id")
+        return qs
+
+    def perform_create(self, serializer):
+        inst = serializer.save(inviter=self.request.user)
+
+        try:
+            registration_url = self.request.build_absolute_uri("/")
+            send_email(inst.code, inst.email, registration_url)
+            inst.is_email_sent = True
+            inst.save()
+        except (socket.gaierror, socket.timeout, OSError) as e:
+            pass
+            # is_email_sent is False by Default
+            # inst.is_email_sent = False
+            # inst.save()
+
+
+class DeleteUserInvitationView(generics.DestroyAPIView):
+    serializer_class = InviteNewUserSerializer
+    permission_classes = [IsAuthenticated, IsAdmin]
+
+    def get_queryset(self):
+        qs = NewUserInvitation.objects.filter(inviter=self.request.user)
+        return qs
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated, IsAdmin])
+def resend_invitation_email(request, pk):
+    inst = get_object_or_404(NewUserInvitation, id=pk)
+
+    try:
+        registration_url = request.build_absolute_uri("/")
+        send_email(inst.code, inst.email, registration_url)
+        inst.is_email_sent = True
+        inst.save()
+        return JsonResponse(
+            {"success": True, "message": "Invitation email resent successfully."}
+        )
+    except:
+        return JsonResponse({"success": False, "message": "Failed to send email."})

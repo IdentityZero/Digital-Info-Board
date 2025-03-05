@@ -81,8 +81,8 @@ const ChangePassword = () => {
           type="password"
           name="old_password"
           onChange={(e) => setCurrentPassword(e.target.value)}
-          isRequired
-          isDisabled={isSaving}
+          required
+          disabled={isSaving}
           placeholder="Old/Current Password"
         />
         <FormField
@@ -93,8 +93,8 @@ const ChangePassword = () => {
           type="password"
           name="password"
           onChange={(e) => setNewPassword(e.target.value)}
-          isRequired
-          isDisabled={isSaving}
+          required
+          disabled={isSaving}
           placeholder="New Password"
         />
         <FormField
@@ -105,8 +105,8 @@ const ChangePassword = () => {
           type="password"
           name="password2"
           onChange={(e) => setConfirmPassword(e.target.value)}
-          isRequired
-          isDisabled={isSaving}
+          required
+          disabled={isSaving}
           placeholder="Confirm New Password"
         />
 

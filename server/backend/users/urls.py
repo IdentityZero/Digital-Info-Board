@@ -8,6 +8,9 @@ from .views import (
     ListAllUsersView,
     DeleteUserView,
     ChangePasswordView,
+    ListCreateUserInvitationView,
+    DeleteUserInvitationView,
+    resend_invitation_email,
 )
 
 urlpatterns = [
@@ -18,4 +21,7 @@ urlpatterns = [
     path("v1/account/<int:pk>/delete/", DeleteUserView.as_view()),
     path("v1/inactive/", ListInactiveUserView.as_view()),
     path("v1/inactive/<int:pk>/", SetActiveUserView.as_view()),
+    path("v1/invite/", ListCreateUserInvitationView.as_view()),
+    path("v1/invite/<int:pk>/", DeleteUserInvitationView.as_view()),
+    path("v1/invite/resend/<int:pk>/", resend_invitation_email),
 ]

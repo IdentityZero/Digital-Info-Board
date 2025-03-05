@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Profile
+from .models import Profile, NewUserInvitation
 
 
 class ProfileAdmin(admin.ModelAdmin):
@@ -15,4 +15,16 @@ class ProfileAdmin(admin.ModelAdmin):
     ]
 
 
+class NewUserInvitationAdmin(admin.ModelAdmin):
+    list_display = [
+        "code",
+        "inviter",
+        "role",
+        "position",
+        "is_used",
+        "expiration_date",
+    ]
+
+
 admin.site.register(Profile, ProfileAdmin)
+admin.site.register(NewUserInvitation, NewUserInvitationAdmin)

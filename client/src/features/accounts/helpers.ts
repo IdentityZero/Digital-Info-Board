@@ -1,3 +1,5 @@
+import { Role } from "../../types/UserTypes";
+
 export type UserInformationErrorT = {
   username: string | string[];
   last_name: string | string[];
@@ -30,4 +32,26 @@ export const ChangePasswordErrorState: ChangePasswordErrorT = {
   old_password: "",
   password: "",
   password2: "",
+};
+
+export const CreateInvitationFormDataInitialState: {
+  email: string;
+  role: Role["role"] | "";
+  position: Role["position"] | "";
+} = {
+  email: "",
+  role: "",
+  position: "",
+};
+
+export type CreateInvitationErrorT = {
+  email: string | string[];
+  role: string | string[];
+  position: string | string[];
+};
+
+export const CreateInvitationErrorInitialState: CreateInvitationErrorT = {
+  email: "",
+  role: "",
+  position: "",
 };
