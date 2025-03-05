@@ -14,6 +14,7 @@ import {
   newUserObject,
   NewUserErrorsType,
 } from "./helpers";
+import SuccessSignup from "./SuccessSignup";
 
 //#TODO UNEXPECTED ERRORS
 
@@ -178,26 +179,7 @@ const SignUp = ({
           } absolute top-0 left-0 z-50 flex items-center justify-center`}
         >
           {isLoading && <h1>Loading...</h1>}
-          {isSuccessful && (
-            <div className="flex flex-col items-center justify-center min-h-screen">
-              <div className="bg-white p-8 rounded-lg shadow-md text-center max-w-md">
-                <h1 className="text-2xl font-bold text-gray-800">
-                  Account Created Successfully!
-                </h1>
-                <p className="mt-4 text-gray-600">
-                  The administrator needs to review your account. In the
-                  meantime, feel free to explore our "About Us" section to learn
-                  more about us.
-                </p>
-                <button
-                  className="mt-6 px-6 py-2 text-white bg-blue-500 rounded-lg shadow hover:bg-blue-600 transition duration-200"
-                  onClick={() => (window.location.href = "/about-us")}
-                >
-                  Explore About Us
-                </button>
-              </div>
-            </div>
-          )}
+          {isSuccessful && <SuccessSignup />}
         </div>
       )}
       <section

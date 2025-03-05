@@ -213,9 +213,8 @@ const CreateVideoAnnouncement = () => {
           <div className="basis-[calc(50%-0.5rem)]">
             <Input
               type="datetime-local"
-              ctrl_type="uncontrolled"
               name="start_date"
-              label="Start date"
+              labelText="Start date"
               required
               disabled={loading}
               error={error.start_date}
@@ -224,9 +223,8 @@ const CreateVideoAnnouncement = () => {
           <div className="basis-[calc(50%-0.5rem)]">
             <Input
               type="datetime-local"
-              ctrl_type="uncontrolled"
               name="end_date"
-              label="End date"
+              labelText="End date"
               required
               disabled={loading}
               error={error.end_date}
@@ -305,14 +303,11 @@ const CreateVideoAnnouncement = () => {
                       <div className="flex items-center justify-between">
                         <div className="w-64">
                           <Input
-                            ctrl_type="controlled"
-                            label="Display Duration"
+                            labelText="Display Duration"
                             type="text"
                             name={`image_announcement[${index}][duration]`}
-                            inputValue={video.duration as string}
-                            setInputValue={(e) =>
-                              handleDurationChange(e, index)
-                            }
+                            value={video.duration as string}
+                            onChange={(e) => handleDurationChange(e, index)}
                             error={error.video_announcement[index]?.duration}
                             disabled={loading}
                             helpText={

@@ -19,8 +19,7 @@ const Login = () => {
         <div className="flex flex-col gap-4">
           <div>
             <Input
-              label="Username"
-              ctrl_type="uncontrolled"
+              labelText="Username"
               name="username"
               placeholder="Enter Username"
               required={true}
@@ -28,8 +27,7 @@ const Login = () => {
           </div>
           <div>
             <Input
-              label="Password"
-              ctrl_type="uncontrolled"
+              labelText="Password"
               type="password"
               name="password"
               placeholder="Enter password"

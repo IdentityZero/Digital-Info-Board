@@ -158,9 +158,8 @@ const CreateTextAnnouncement = () => {
           <div className="basis-[calc(50%-0.5rem)]">
             <Input
               type="datetime-local"
-              ctrl_type="uncontrolled"
               name="start_date"
-              label="Start date"
+              labelText="Start date"
               required
               disabled={loading}
               error={error.start_date}
@@ -169,9 +168,8 @@ const CreateTextAnnouncement = () => {
           <div className="basis-[calc(50%-0.5rem)]">
             <Input
               type="datetime-local"
-              ctrl_type="uncontrolled"
               name="end_date"
-              label="End date"
+              labelText="End date"
               required
               disabled={loading}
               error={error.end_date}
@@ -180,9 +178,8 @@ const CreateTextAnnouncement = () => {
           <div className="basis-[calc(50%-0.5rem)]">
             <Input
               type="number"
-              ctrl_type="uncontrolled"
               name="duration"
-              label="Duration in seconds"
+              labelText="Duration in seconds"
               placeholder="Set empty for default (40 sec)"
               helpText={[
                 "Duration for which announcement will be displayed.",

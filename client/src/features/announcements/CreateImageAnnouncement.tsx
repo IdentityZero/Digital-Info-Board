@@ -169,9 +169,8 @@ const CreateImageAnnouncement = () => {
             <div className="basis-[calc(50%-0.5rem)]">
               <Input
                 type="datetime-local"
-                ctrl_type="uncontrolled"
                 name="start_date"
-                label="Start date"
+                labelText="Start date"
                 required
                 disabled={loading}
                 error={error.start_date}
@@ -180,9 +179,8 @@ const CreateImageAnnouncement = () => {
             <div className="basis-[calc(50%-0.5rem)]">
               <Input
                 type="datetime-local"
-                ctrl_type="uncontrolled"
                 name="end_date"
-                label="End date"
+                labelText="End date"
                 required
                 disabled={loading}
                 error={error.end_date}
@@ -257,12 +255,11 @@ const CreateImageAnnouncement = () => {
                     </span>
                     <span className="flex-1 text-center">
                       <Input
-                        ctrl_type="controlled"
-                        label=""
+                        labelText=""
                         type="text"
                         name={`image_announcement[${index}][duration]`}
-                        inputValue={image.duration as string}
-                        setInputValue={(e) => handleDurationChange(e, index)}
+                        value={image.duration as string}
+                        onChange={(e) => handleDurationChange(e, index)}
                         error={error.image_announcement[index]?.duration}
                         disabled={loading}
                       />

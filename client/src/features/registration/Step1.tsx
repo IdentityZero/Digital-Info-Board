@@ -29,6 +29,7 @@ const Step1 = ({
   const [roleOptions, setRoleOptions] = useState<string[]>(
     get_role_positions(selectedRole)
   );
+  console.log(formState);
 
   const handleOnRoleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedRole(e.target.value as Role["role"]);
@@ -41,10 +42,9 @@ const Step1 = ({
         <Input
           type="text"
           required={true}
-          ctrl_type="controlled"
-          inputValue={formState.first_name}
-          setInputValue={setFormState}
-          label="First Name"
+          value={formState.first_name}
+          onChange={setFormState}
+          labelText="First Name"
           name="first_name"
           placeholder="First name (e.g. Maria, Lea)"
           error={errors.first_name}
@@ -53,10 +53,9 @@ const Step1 = ({
         <Input
           type="text"
           required={true}
-          ctrl_type="controlled"
-          inputValue={formState.last_name}
-          setInputValue={setFormState}
-          label="Last name"
+          value={formState.last_name}
+          onChange={setFormState}
+          labelText="Last name"
           name="last_name"
           placeholder="Last name (e.g. Castillo, Collado)"
           error={errors.last_name}
@@ -66,25 +65,26 @@ const Step1 = ({
           required={true}
           options={["student", "faculty"]}
           defaultValue={selectedRole}
-          label="Role"
+          labelText="Role"
           name="profile.role"
           onChangeFunc={handleOnRoleChange}
           error={errors.profile.role}
+          disabled
         />
         <Select
           required={true}
           options={roleOptions}
-          label="Position"
+          labelText="Position"
           name="profile.position"
           error={errors.profile.position}
+          disabled
         />
         <Input
           type="text"
           required={true}
-          ctrl_type="controlled"
-          inputValue={formState.profile.id_number}
-          setInputValue={setFormState}
-          label="ID Number"
+          value={formState.profile.id_number}
+          onChange={setFormState}
+          labelText="ID Number"
           name="profile.id_number"
           placeholder="Student number (xx-xxxxxx)."
           helpText="Must have a pattern of xx-xxxxxx. (e.g. 20-123456)"
@@ -94,10 +94,9 @@ const Step1 = ({
         <Input
           type="date"
           required={true}
-          ctrl_type="controlled"
-          inputValue={formState.profile.birthdate}
-          setInputValue={setFormState}
-          label="birthdate"
+          value={formState.profile.birthdate}
+          onChange={setFormState}
+          labelText="birthdate"
           name="profile.birthdate"
           error={errors.profile.birthdate}
           disabled={loading}

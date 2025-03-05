@@ -91,11 +91,10 @@ const EditTextAnnouncement = forwardRef<
             <div className="basis-[calc(50%-0.5rem)]">
               <Input
                 type="datetime-local"
-                ctrl_type="controlled"
-                inputValue={convertToDatetimeLocal(data.start_date)}
-                setInputValue={handleInputChange}
+                value={convertToDatetimeLocal(data.start_date)}
+                onChange={handleInputChange}
                 name="start_date"
-                label="Start date"
+                labelText="Start date"
                 required
                 error={errors.start_date}
                 disabled={isLoading}
@@ -104,11 +103,10 @@ const EditTextAnnouncement = forwardRef<
             <div className="basis-[calc(50%-0.5rem)]">
               <Input
                 type="datetime-local"
-                ctrl_type="controlled"
-                inputValue={convertToDatetimeLocal(data.end_date)}
-                setInputValue={handleInputChange}
+                value={convertToDatetimeLocal(data.end_date)}
+                onChange={handleInputChange}
                 name="end_date"
-                label="End date"
+                labelText="End date"
                 required
                 error={errors.end_date}
                 disabled={isLoading}
@@ -117,16 +115,15 @@ const EditTextAnnouncement = forwardRef<
             <div className="basis-[calc(50%-0.5rem)]">
               <Input
                 type="string"
-                ctrl_type="controlled"
                 name="duration"
-                label="Duration in seconds"
+                labelText="Duration in seconds"
                 helpText={[
                   "Follow HH:MM:SS format",
                   "Duration for which announcement will be displayed.",
                 ]}
                 required
-                inputValue={data.text_announcement.duration as string}
-                setInputValue={handleInputChange}
+                value={data.text_announcement.duration as string}
+                onChange={handleInputChange}
                 error={errors.text_announcement.duration}
                 disabled={isLoading}
               />

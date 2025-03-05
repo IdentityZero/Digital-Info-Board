@@ -158,18 +158,15 @@ const EditImageAnnouncement = forwardRef<
             <div className="basis-[calc(50%-0.5rem)]">
               <Input
                 type="datetime-local"
-                ctrl_type="controlled"
-                inputValue={convertToDatetimeLocal(
-                  imageAnnouncement.start_date
-                )}
-                setInputValue={(e) =>
+                value={convertToDatetimeLocal(imageAnnouncement.start_date)}
+                onChange={(e) =>
                   setImageAnnouncement({
                     ...imageAnnouncement,
                     start_date: e.target.value,
                   })
                 }
                 name="start_date"
-                label="Start date"
+                labelText="Start date"
                 required
                 error={errors.start_date}
                 disabled={isLoading}
@@ -178,16 +175,15 @@ const EditImageAnnouncement = forwardRef<
             <div className="basis-[calc(50%-0.5rem)]">
               <Input
                 type="datetime-local"
-                ctrl_type="controlled"
-                inputValue={convertToDatetimeLocal(imageAnnouncement.end_date)}
-                setInputValue={(e) =>
+                value={convertToDatetimeLocal(imageAnnouncement.end_date)}
+                onChange={(e) =>
                   setImageAnnouncement({
                     ...imageAnnouncement,
                     end_date: e.target.value,
                   })
                 }
                 name="end_date"
-                label="End date"
+                labelText="End date"
                 required
                 error={errors.end_date}
                 disabled={isLoading}
@@ -238,12 +234,11 @@ const EditImageAnnouncement = forwardRef<
                     </span>
                     <span className="flex-1 text-center">
                       <Input
-                        ctrl_type="controlled"
-                        label=""
+                        labelText=""
                         type="text"
                         name={`image_announcement[${index}][duration]`} // This does not matter
-                        inputValue={image.duration as string}
-                        setInputValue={(e) => handleDurationChange(e, index)}
+                        value={image.duration as string}
+                        onChange={(e) => handleDurationChange(e, index)}
                         error={errors.to_update[index]?.duration}
                         disabled={isLoading}
                       />
@@ -305,14 +300,11 @@ const EditImageAnnouncement = forwardRef<
                   <span className=" flex-1 text-center">{image_file.name}</span>
                   <span className="flex-1 text-center">
                     <Input
-                      ctrl_type="controlled"
-                      label=""
+                      labelText=""
                       type="text"
                       name={`image_announcement[${index}][duration]`} // This does not matter
-                      inputValue={image.duration as string}
-                      setInputValue={(e) =>
-                        handleNewImageDurationChange(e, index)
-                      }
+                      value={image.duration as string}
+                      onChange={(e) => handleNewImageDurationChange(e, index)}
                       error={errors.image_announcement[index]?.duration}
                       disabled={isLoading}
                     />

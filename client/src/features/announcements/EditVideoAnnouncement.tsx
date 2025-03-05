@@ -171,18 +171,15 @@ const EditVideoAnnouncement = forwardRef<
             <div className="basis-[calc(50%-0.5rem)]">
               <Input
                 type="datetime-local"
-                ctrl_type="controlled"
-                inputValue={convertToDatetimeLocal(
-                  videoAnnouncementData.start_date
-                )}
-                setInputValue={(e) =>
+                value={convertToDatetimeLocal(videoAnnouncementData.start_date)}
+                onChange={(e) =>
                   setVideoAnnouncementData({
                     ...videoAnnouncementData,
                     start_date: e.target.value,
                   })
                 }
                 name="start_date"
-                label="Start date"
+                labelText="Start date"
                 required
                 error={errors.start_date}
                 disabled={isLoading}
@@ -191,18 +188,15 @@ const EditVideoAnnouncement = forwardRef<
             <div className="basis-[calc(50%-0.5rem)]">
               <Input
                 type="datetime-local"
-                ctrl_type="controlled"
-                inputValue={convertToDatetimeLocal(
-                  videoAnnouncementData.end_date
-                )}
-                setInputValue={(e) =>
+                value={convertToDatetimeLocal(videoAnnouncementData.end_date)}
+                onChange={(e) =>
                   setVideoAnnouncementData({
                     ...videoAnnouncementData,
                     end_date: e.target.value,
                   })
                 }
                 name="end_date"
-                label="End date"
+                labelText="End date"
                 required
                 error={errors.end_date}
                 disabled={isLoading}
@@ -260,14 +254,11 @@ const EditVideoAnnouncement = forwardRef<
                       <div className="flex items-center justify-between">
                         <div className="w-64">
                           <Input
-                            ctrl_type="controlled"
-                            label="Display Duration"
+                            labelText="Display Duration"
                             type="text"
                             name={`video_announcement[${index}][duration]`} // This does not matter
-                            inputValue={video.duration as string}
-                            setInputValue={(e) =>
-                              handleDurationChange(e, index)
-                            }
+                            value={video.duration as string}
+                            onChange={(e) => handleDurationChange(e, index)}
                             error={errors.to_update[index]?.duration}
                             disabled={isLoading}
                             helpText={
@@ -352,12 +343,11 @@ const EditVideoAnnouncement = forwardRef<
                         <div className="flex items-center justify-between">
                           <div className="w-64">
                             <Input
-                              ctrl_type="controlled"
-                              label="Display Duration"
+                              labelText="Display Duration"
                               type="text"
                               name={`video_announcement[${index}][duration]`} // this does not matter
-                              inputValue={video.duration as string}
-                              setInputValue={(e) =>
+                              value={video.duration as string}
+                              onChange={(e) =>
                                 handleNewVideoDurationChange(e, index)
                               }
                               error={errors.video_announcement[index]?.duration}

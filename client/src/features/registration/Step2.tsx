@@ -27,10 +27,9 @@ const Step2 = ({
         <Input
           type="text"
           required={true}
-          ctrl_type="controlled"
-          inputValue={formState.username}
-          setInputValue={setFormState}
-          label="Username"
+          value={formState.username}
+          onChange={setFormState}
+          labelText="Username"
           name="username"
           placeholder="Enter a username"
           helpText="Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only."
@@ -40,10 +39,9 @@ const Step2 = ({
         <Input
           type="password"
           required={true}
-          ctrl_type="controlled"
-          inputValue={formState.password}
-          setInputValue={setFormState}
-          label="Password"
+          value={formState.password}
+          onChange={setFormState}
+          labelText="Password"
           name="password"
           placeholder="Enter a strong password"
           helpText={[
@@ -58,8 +56,7 @@ const Step2 = ({
         <Input
           type="password"
           required={true}
-          ctrl_type="uncontrolled"
-          label="Repeat Password"
+          labelText="Repeat Password"
           name="repeat_password"
           placeholder="Repeat password"
           helpText="Enter the same password as before, for verification."
