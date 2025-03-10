@@ -1,13 +1,16 @@
 import { useEffect, useRef, useState } from "react";
-import { toast } from "react-toastify";
-import QuillEditor, { isQuillValueEmpty } from "../../components/QuillEditor";
+import { useNavigate } from "react-router-dom";
+import { Id, toast } from "react-toastify";
 import { Delta } from "quill/core";
 import ReactQuill from "react-quill";
 import axios from "axios";
 import { FaPlusCircle, FaTrashAlt } from "react-icons/fa";
 
+import QuillEditor, { isQuillValueEmpty } from "../../components/QuillEditor";
 import { Input, Form } from "../../components/ui";
+
 import { useAuth } from "../../context/AuthProvider";
+import useLoadingToast from "../../hooks/useLoadingToast";
 
 import {
   CreateVideoAnnouncementT,
@@ -18,9 +21,11 @@ import {
   CreateVideoAnnouncementErrorState,
   VideoAnnouncementErrorT,
 } from "./helpers";
-import { useNavigate } from "react-router-dom";
 
 const CreateVideoAnnouncement = () => {
+  const toastId = useRef<Id | null>(null);
+  const { loading: loadingToast, update } = useLoadingToast(toastId);
+
   const [title, setTitle] = useState<Delta>(new Delta());
   const titleRef = useRef<ReactQuill>(null);
   const navigate = useNavigate();
@@ -37,7 +42,7 @@ const CreateVideoAnnouncement = () => {
   );
   const [loading, setLoading] = useState(false);
 
-  // I used this because for some reason, the display of the video source is not rerendering. I used this to temporarily remove the entire video list then render again
+  // Used this because for some reason, the display of the video source is not rerendering. Used this to temporarily remove the entire video list then render again
   const [rerenderTrigger, setRerenderTrigger] = useState(false);
 
   useEffect(() => {
@@ -144,6 +149,8 @@ const CreateVideoAnnouncement = () => {
       video_announcement: videos,
     };
 
+    loadingToast("Saving content...");
+
     try {
       setLoading(true);
       setError(CreateVideoAnnouncementErrorState);
@@ -166,7 +173,7 @@ const CreateVideoAnnouncement = () => {
       setVideos([]);
       setVideoDurations([]);
       form.reset();
-      toast.success("Video Content Created.");
+      update({ render: "Video Content Created", type: "success" });
       const redirect_conf = confirm(
         "New Image Announcement has been created. Do you want to be redirected to the Annoucement?"
       );
@@ -178,16 +185,25 @@ const CreateVideoAnnouncement = () => {
       if (axios.isAxiosError(error)) {
         const err = error.response?.data;
         if (!err) {
-          toast.error("Unexpected error occured. Please try again.");
+          update({
+            render: "Unexpected error occured. Please try again.",
+            type: "error",
+          });
           return;
         }
         setError((prev) => ({
           ...prev,
           ...err,
         }));
-        toast.warning("Please check errors before submitting.");
+        update({
+          render: "Please check errors before submitting.",
+          type: "warning",
+        });
       } else {
-        toast.error("Unexpected error occured. Please try again.");
+        update({
+          render: "Unexpected error occured. Please try again.",
+          type: "error",
+        });
       }
     } finally {
       setLoading(false);

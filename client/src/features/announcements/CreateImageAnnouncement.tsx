@@ -1,22 +1,28 @@
 import { useRef, useState } from "react";
-import { toast } from "react-toastify";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { Id, toast } from "react-toastify";
 import ReactQuill from "react-quill";
 import { Delta } from "quill/core";
 import { FaPlusCircle, FaTrashAlt } from "react-icons/fa";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
 import QuillEditor, { isQuillValueEmpty } from "../../components/QuillEditor";
 import { Input, Form, Errortext } from "../../components/ui";
+
+import { useAuth } from "../../context/AuthProvider";
+import useLoadingToast from "../../hooks/useLoadingToast";
+
 import {
   type ImageAnnouncementCreateType,
   type CreateImageAnnouncementT,
 } from "../../types/AnnouncementTypes";
 import { createNewAllTypeAnnouncementApi } from "../../api/announcementRequest";
-import { useAuth } from "../../context/AuthProvider";
 import { CreateImageAnnouncementErrorState } from "./helpers";
 
 const CreateImageAnnouncement = () => {
+  const toastId = useRef<Id | null>(null);
+  const { loading: loadingToast, update } = useLoadingToast(toastId);
+
   const { userApi } = useAuth();
   const navigate = useNavigate();
 
@@ -112,6 +118,8 @@ const CreateImageAnnouncement = () => {
       image_announcement: images,
     };
 
+    loadingToast("Saving content...");
+
     try {
       setLoading(true);
       setError(CreateImageAnnouncementErrorState);
@@ -123,7 +131,7 @@ const CreateImageAnnouncement = () => {
       setTitle(new Delta());
       setImages([]);
       form.reset();
-      toast.success("Image Content Created.");
+      update({ render: "Image Content Created", type: "success" });
       const redirect_conf = confirm(
         "New Image Announcement has been created. Do you want to be redirected to the Annoucement?"
       );
@@ -134,16 +142,25 @@ const CreateImageAnnouncement = () => {
       if (axios.isAxiosError(error)) {
         const err = error.response?.data;
         if (!err) {
-          toast.error("Unexpected error occured. Please try again.");
+          update({
+            render: "Unexpected error occured. Please try again.",
+            type: "error",
+          });
           return;
         }
         setError((prev) => ({
           ...prev,
           ...err,
         }));
-        toast.warning("Please check errors before submitting.");
+        update({
+          render: "Please check errors before submitting.",
+          type: "warning",
+        });
       } else {
-        toast.error("Unexpected error occured. Please try again.");
+        update({
+          render: "Unexpected error occured. Please try again.",
+          type: "error",
+        });
       }
     } finally {
       setLoading(false);
