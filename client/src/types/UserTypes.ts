@@ -99,6 +99,14 @@ export type FullUserType = {
   profile: UserProfileType;
 };
 
+export type ListUserType = ListType<FullUserType>;
+export const listUserInitState: ListUserType = {
+  count: 0,
+  next: null,
+  previous: null,
+  results: [],
+};
+
 export type CreateUserInvitationType = {
   email: string;
   role: Role["role"];
@@ -114,10 +122,7 @@ export type RetrieveUserInvitationType = {
   is_email_sent: boolean;
 };
 
-export type ListUserInvitationType = ListType & {
-  results: RetrieveUserInvitationType[];
-};
-
+export type ListUserInvitationType = ListType<RetrieveUserInvitationType>;
 export const listUserInvitationInitState: ListUserInvitationType = {
   count: 0,
   next: null,

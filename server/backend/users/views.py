@@ -142,6 +142,7 @@ class SetActiveUserView(generics.UpdateAPIView):
 class ListAllUsersView(generics.ListAPIView):
     serializer_class = UserSerializer
     permission_classes = [IsAuthenticated, IsAdmin]
+    pagination_class = CustomPageNumberPagination
 
     def get_queryset(self):
         qs = User.objects.select_related("profile").filter(profile__isnull=False)

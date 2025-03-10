@@ -4,6 +4,7 @@ import {
   type RetrieveUserInvitationType,
   type FullUserType,
   ListUserInvitationType,
+  ListUserType,
 } from "../types/UserTypes";
 
 const retrieveUpdateUserInformationEndpoint = (id: string) => {
@@ -112,9 +113,15 @@ export const deleteUserApi = async (
   }
 };
 
-export const listAllUsersApi = async (axiosInstance: AxiosInstance) => {
+export const listAllUsersApi = async (
+  axiosInstance: AxiosInstance,
+  page: number = 1,
+  page_size: number = 10
+): Promise<ListUserType> => {
   try {
-    const response = await axiosInstance.get(listAllUsersEndpoint);
+    const response = await axiosInstance.get(
+      listAllUsersEndpoint + `?page=${page}&page_size=${page_size}`
+    );
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
