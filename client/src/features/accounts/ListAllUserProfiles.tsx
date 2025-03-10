@@ -137,6 +137,7 @@ const ListAllUserProfiles = () => {
       />
       {usersList.results.map((user) => (
         <ProfileCard
+          key={user.id}
           user={user}
           handleActivation={handleActivation}
           handleDelete={handleDelete}

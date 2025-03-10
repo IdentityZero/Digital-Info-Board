@@ -7,6 +7,8 @@ from rest_framework import generics, response, status, response, parsers
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.db.models import OrderBy, F
 
+from utils.pagination import CustomPageNumberPagination
+
 from .serializers import (
     CreateAnnouncementSerializer,
     RetrieveFullAnnouncementSerializer,
@@ -377,6 +379,7 @@ class ListTextAnnouncementAPIView(generics.ListAPIView):
 
     serializer_class = CreateAnnouncementSerializer
     permission_classes = [IsAuthenticated]
+    pagination_class = CustomPageNumberPagination
 
     def get_queryset(self):
         qs = Announcements.objects.filter(
@@ -392,6 +395,7 @@ class ListImageAnnouncementAPIView(generics.ListAPIView):
 
     serializer_class = CreateAnnouncementSerializer
     permission_classes = [IsAuthenticated]
+    pagination_class = CustomPageNumberPagination
 
     def get_queryset(self):
         qs = Announcements.objects.filter(
@@ -407,6 +411,7 @@ class ListVideoAnnouncementAPIView(generics.ListAPIView):
 
     serializer_class = CreateAnnouncementSerializer
     permission_classes = [IsAuthenticated]
+    pagination_class = CustomPageNumberPagination
 
     def get_queryset(self):
         qs = Announcements.objects.filter(

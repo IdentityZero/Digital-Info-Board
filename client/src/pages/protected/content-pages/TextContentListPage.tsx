@@ -1,51 +1,63 @@
 import { useEffect, useRef, useState } from "react";
 import { FaEye, FaTrash, FaTimesCircle, FaCheckCircle } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { Id } from "react-toastify";
 
-import { AnnouncementListType } from "../../../types/AnnouncementTypes";
+import LoadingMessage from "../../../components/LoadingMessage";
+import IconWithTooltip from "../../../components/IconWithTooltip";
+
+import useLoadingToast from "../../../hooks/useLoadingToast";
 import { useAuth } from "../../../context/AuthProvider";
+import usePagination from "../../../hooks/usePagination";
 import {
   extractReactQuillText,
   formatTimestamp,
   truncateStringVariableLen,
 } from "../../../utils/formatters";
-import IconWithTooltip from "../../../components/IconWithTooltip";
 
 import {
   listTextAnnouncementApi,
   deleteTextAnnouncementApi,
 } from "../../../api/announcementRequest";
-import LoadingMessage from "../../../components/LoadingMessage";
-import { Id } from "react-toastify";
-import useLoadingToast from "../../../hooks/useLoadingToast";
+import {
+  AnnouncementListTypeV1,
+  AnnouncementRetrieveType,
+} from "../../../types/AnnouncementTypes";
+import { getListTypeInitState } from "../../../types/ListType";
+import Pagination from "../../../components/Pagination";
 
 const TextContentListPage = () => {
   const { userApi } = useAuth();
   const toastId = useRef<Id | null>(null);
   const { loading, update } = useLoadingToast(toastId);
+  const { page, setPage, pageSize, setPageSize } = usePagination(
+    "pageSize_textList",
+    10
+  );
 
-  const [announcements, setAnnouncements] = useState<
-    AnnouncementListType | undefined
-  >(undefined);
+  const [announcements, setAnnouncements] = useState<AnnouncementListTypeV1>(
+    getListTypeInitState()
+  );
+  const totalPages = Math.max(1, Math.ceil(announcements.count / pageSize));
 
   const [hasLoadingError, setHasLoadingError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    const fetchAnnouncements = async () => {
-      try {
-        setIsLoading(true);
-        const data = await listTextAnnouncementApi(userApi);
+  const fetchAnnouncements = async (ppage: number, ppageSize: number) => {
+    try {
+      setIsLoading(true);
+      const data = await listTextAnnouncementApi(userApi, ppage, ppageSize);
 
-        setAnnouncements(data);
-      } catch (error) {
-        setHasLoadingError(true);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchAnnouncements();
-  }, []);
+      setAnnouncements(data);
+    } catch (error) {
+      setHasLoadingError(true);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  useEffect(() => {
+    fetchAnnouncements(page, pageSize);
+  }, [page, pageSize]);
 
   const handleDelete = async (announcement_id: string) => {
     const confirm_delete = confirm(
@@ -59,10 +71,10 @@ const TextContentListPage = () => {
       await deleteTextAnnouncementApi(userApi, announcement_id);
       update({ render: "Delete successful", type: "success" });
       // Remove the data
-      const updated = announcements?.filter(
+      const updated = announcements.results.filter(
         (announcement) => announcement.id !== announcement_id
       );
-      setAnnouncements(updated);
+      setAnnouncements((prev) => ({ ...prev, results: updated }));
     } catch (error) {
       update({
         render: "Delete unsuccessful. Please try again.",
@@ -95,75 +107,90 @@ const TextContentListPage = () => {
           </tr>
         </thead>
         <tbody className="overflow-x-scroll">
-          {announcements?.map((announcement) => (
-            <tr className="border-t hover:bg-gray-50" key={announcement.id}>
-              <td className="px-6 py-3 font-bold hover:underline">
-                <Link to={`${announcement.id}`}>{announcement.id} </Link>
-              </td>
-              <td className="px-6 py-3">
-                {truncateStringVariableLen(
-                  extractReactQuillText(announcement.title as string)
-                )}
-              </td>
-              <td className="px-6 py-3">
-                {truncateStringVariableLen(
-                  extractReactQuillText(
-                    announcement.text_announcement?.details as string
-                  )
-                )}
-              </td>
-
-              <td className="px-6 py-3">
-                {formatTimestamp(announcement.start_date)}
-              </td>
-              <td className="px-6 py-3">
-                {formatTimestamp(announcement.end_date)}
-              </td>
-              <td className="px-6 py-3">
-                {announcement.text_announcement?.duration}
-              </td>
-              <td className="px-6 py-3">
-                <span className="flex justify-center">
-                  {announcement.is_active ? (
-                    <FaCheckCircle className="text-green-500" />
-                  ) : (
-                    <FaTimesCircle className="text-red-500" />
-                  )}
-                </span>
-              </td>
-              <td className="px-6 py-3">
-                <div className="flex flex-row gap-2">
-                  <span>
-                    <Link to={`${announcement.id}`}>
-                      <IconWithTooltip
-                        icon={FaEye}
-                        label="View"
-                        iconClassName="text-btSecondary hover:text-btSecondary-hover active: active:text-btSecondary-active cursor-pointer"
-                        labelClassName="p-1 px-2 rounded-md shadow-md bg-btSecondary text-white"
-                      />
-                    </Link>
-                  </span>
-                  <span onClick={() => handleDelete(announcement.id)}>
-                    <IconWithTooltip
-                      icon={FaTrash}
-                      label="Delete"
-                      iconClassName="text-btDanger hover:text-btDanger-hover active: active:text-btDanger-active cursor-pointer"
-                      labelClassName="p-1 px-2 rounded-md shadow-md bg-btDanger text-white"
-                    />
-                  </span>
-                </div>
-              </td>
-            </tr>
+          {announcements.results.map((announcement) => (
+            <TableRow
+              key={announcement.id}
+              announcement={announcement}
+              handleDelete={handleDelete}
+            />
           ))}
         </tbody>
       </table>
-      {!announcements ||
-        (announcements.length === 0 && (
-          <div className="w-full text-center mt-2">
-            <h2 className="font-semibold">No data found...</h2>
-          </div>
-        ))}
+      {announcements.results.length === 0 && (
+        <div className="w-full text-center mt-2">
+          <h2 className="font-semibold">No contents can be shown.</h2>
+        </div>
+      )}
+      <Pagination
+        pageSize={pageSize}
+        page={page}
+        totalPages={totalPages}
+        setPageSize={setPageSize}
+        setPage={setPage}
+      />
     </div>
   );
 };
 export default TextContentListPage;
+
+type TableRowProps = {
+  announcement: AnnouncementRetrieveType;
+  handleDelete: (announcement_id: string) => void;
+};
+
+function TableRow({ announcement, handleDelete }: TableRowProps) {
+  return (
+    <tr className="border-t hover:bg-gray-50" key={announcement.id}>
+      <td className="px-6 py-3 font-bold hover:underline">
+        <Link to={`${announcement.id}`}>{announcement.id} </Link>
+      </td>
+      <td className="px-6 py-3">
+        {truncateStringVariableLen(
+          extractReactQuillText(announcement.title as string)
+        )}
+      </td>
+      <td className="px-6 py-3">
+        {truncateStringVariableLen(
+          extractReactQuillText(
+            announcement.text_announcement?.details as string
+          )
+        )}
+      </td>
+
+      <td className="px-6 py-3">{formatTimestamp(announcement.start_date)}</td>
+      <td className="px-6 py-3">{formatTimestamp(announcement.end_date)}</td>
+      <td className="px-6 py-3">{announcement.text_announcement?.duration}</td>
+      <td className="px-6 py-3">
+        <span className="flex justify-center">
+          {announcement.is_active ? (
+            <FaCheckCircle className="text-green-500" />
+          ) : (
+            <FaTimesCircle className="text-red-500" />
+          )}
+        </span>
+      </td>
+      <td className="px-6 py-3">
+        <div className="flex flex-row gap-2">
+          <span>
+            <Link to={`${announcement.id}`}>
+              <IconWithTooltip
+                icon={FaEye}
+                label="View"
+                iconClassName="text-btSecondary hover:text-btSecondary-hover active: active:text-btSecondary-active cursor-pointer"
+                labelClassName="p-1 px-2 rounded-md shadow-md bg-btSecondary text-white"
+              />
+            </Link>
+          </span>
+          <span onClick={() => handleDelete(announcement.id)}>
+            <IconWithTooltip
+              icon={FaTrash}
+              label="Delete"
+              iconClassName="text-btDanger hover:text-btDanger-hover active: active:text-btDanger-active cursor-pointer"
+              labelClassName="p-1 px-2 rounded-md shadow-md bg-btDanger text-white"
+            />
+          </span>
+        </div>
+      </td>
+    </tr>
+  );
+}

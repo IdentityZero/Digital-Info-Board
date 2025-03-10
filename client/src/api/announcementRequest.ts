@@ -4,6 +4,7 @@ import {
   type FullTextAnnouncementType,
   type FullImageAnnouncementType,
   FullVideoAnnouncementType,
+  AnnouncementListTypeV1,
 } from "../types/AnnouncementTypes";
 import { BASE_API_URL } from "../constants/urls";
 
@@ -112,10 +113,14 @@ export const updateAnnouncementApi = async (
 };
 
 export const listTextAnnouncementApi = async (
-  axiosInstance: AxiosInstance
-): Promise<AnnouncementListType> => {
+  axiosInstance: AxiosInstance,
+  page: number = 1,
+  page_size: number = 10
+): Promise<AnnouncementListTypeV1> => {
   try {
-    const response = await axiosInstance.get(listTextAnnouncementEndpoint);
+    const response = await axiosInstance.get(
+      listTextAnnouncementEndpoint + `?page=${page}&page_size=${page_size}`
+    );
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -183,10 +188,14 @@ export const updateTextAnnouncementApi = async (
 };
 
 export const listImageAnnouncementApi = async (
-  axiosInstance: AxiosInstance
-): Promise<AnnouncementListType> => {
+  axiosInstance: AxiosInstance,
+  page: number = 1,
+  page_size: number = 10
+): Promise<AnnouncementListTypeV1> => {
   try {
-    const response = await axiosInstance.get(listImageAnnouncementEndpoint);
+    const response = await axiosInstance.get(
+      listImageAnnouncementEndpoint + `?page=${page}&page_size=${page_size}`
+    );
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -254,10 +263,14 @@ export const updateImageAnnouncementApi = async (
 };
 
 export const listVideoAnnouncementApi = async (
-  axiosInstance: AxiosInstance
-): Promise<AnnouncementListType> => {
+  axiosInstance: AxiosInstance,
+  page: number = 1,
+  page_size: number = 10
+): Promise<AnnouncementListTypeV1> => {
   try {
-    const response = await axiosInstance.get(listVideoAnnouncementEndpoint);
+    const response = await axiosInstance.get(
+      listVideoAnnouncementEndpoint + `?page=${page}&page_size=${page_size}`
+    );
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {

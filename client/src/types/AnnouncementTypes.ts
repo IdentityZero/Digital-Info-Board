@@ -1,4 +1,5 @@
 import { Delta } from "quill/core";
+import { ListType } from "./ListType";
 
 export type AuthorType = {
   id: string;
@@ -117,3 +118,4 @@ export type AnnouncementRetrieveType = BaseAnnouncementType & {
 };
 
 export type AnnouncementListType = AnnouncementRetrieveType[];
+export type AnnouncementListTypeV1 = ListType<AnnouncementRetrieveType>;
