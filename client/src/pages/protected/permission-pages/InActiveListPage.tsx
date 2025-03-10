@@ -1,30 +1,56 @@
 import { useEffect, useState } from "react";
-import { AnnouncementListType } from "../../../types/AnnouncementTypes";
+import {
+  AnnouncementRetrieveType,
+  type PaginatedAnnouncementListTypeV1,
+} from "../../../types/AnnouncementTypes";
 import { ListInactiveAnnouncement } from "../../../features/announcements";
-import { listAnnouncementApi } from "../../../api/announcementRequest";
+import { listStatBasedAnnouncementApi } from "../../../api/announcementRequest";
 import LoadingMessage from "../../../components/LoadingMessage";
+import { getListTypeInitState } from "../../../types/ListType";
+import usePagination from "../../../hooks/usePagination";
+import Pagination from "../../../components/Pagination";
 
 const InActiveListPage = () => {
+  const { page, setPage, pageSize, setPageSize } = usePagination(
+    "pageSize_inAtiveList",
+    10
+  );
+
   const [inActiveAnnouncements, setInActiveAnnouncements] =
-    useState<AnnouncementListType>([]);
+    useState<PaginatedAnnouncementListTypeV1>(getListTypeInitState());
+  const totalPages = Math.max(
+    1,
+    Math.ceil(inActiveAnnouncements.count / pageSize)
+  );
+
   const [isFetching, setIsFetching] = useState(true);
   const [hasError, setHasError] = useState(false);
 
-  useEffect(() => {
-    const fetchAnnouncements = async () => {
-      try {
-        setIsFetching(true);
-        const res_data = await listAnnouncementApi("inactive");
-        setInActiveAnnouncements(res_data);
-      } catch (error) {
-        setHasError(true);
-      } finally {
-        setIsFetching(false);
-      }
-    };
+  const fetchAnnouncements = async (ppage: number, ppageSize: number) => {
+    try {
+      setIsFetching(true);
+      const res_data = await listStatBasedAnnouncementApi(
+        "inactive",
+        ppage,
+        ppageSize
+      );
+      setInActiveAnnouncements(res_data);
+    } catch (error) {
+      setHasError(true);
+    } finally {
+      setIsFetching(false);
+    }
+  };
 
-    fetchAnnouncements();
-  }, []);
+  useEffect(() => {
+    fetchAnnouncements(page, pageSize);
+  }, [page, pageSize]);
+
+  const handleSetInActiveAnnouncements = (
+    updatedList: AnnouncementRetrieveType[]
+  ) => {
+    setInActiveAnnouncements((prev) => ({ ...prev, results: updatedList }));
+  };
 
   if (isFetching)
     return (
@@ -43,9 +69,18 @@ const InActiveListPage = () => {
 
   return (
     <>
+      <div className="px-4">
+        <Pagination
+          pageSize={pageSize}
+          page={page}
+          totalPages={totalPages}
+          setPageSize={setPageSize}
+          setPage={setPage}
+        />
+      </div>
       <ListInactiveAnnouncement
-        inactiveAnnouncements={inActiveAnnouncements}
-        setInactiveAnnouncements={setInActiveAnnouncements}
+        inactiveAnnouncements={inActiveAnnouncements.results}
+        setInactiveAnnouncements={handleSetInActiveAnnouncements}
       />
     </>
   );

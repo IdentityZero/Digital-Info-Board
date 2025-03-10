@@ -19,7 +19,7 @@ import { getListTypeInitState } from "../../../types/ListType";
 import usePagination from "../../../hooks/usePagination";
 
 import {
-  AnnouncementListTypeV1,
+  PaginatedAnnouncementListTypeV1,
   AnnouncementRetrieveType,
 } from "../../../types/AnnouncementTypes";
 import {
@@ -36,9 +36,8 @@ const VideoContentListPage = () => {
     10
   );
 
-  const [announcements, setAnnouncements] = useState<AnnouncementListTypeV1>(
-    getListTypeInitState()
-  );
+  const [announcements, setAnnouncements] =
+    useState<PaginatedAnnouncementListTypeV1>(getListTypeInitState());
   const totalPages = Math.max(1, Math.ceil(announcements.count / pageSize));
 
   const [hasLoadingError, setHasLoadingError] = useState(false);

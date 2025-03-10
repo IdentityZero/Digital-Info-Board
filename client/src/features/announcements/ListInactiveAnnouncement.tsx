@@ -19,9 +19,7 @@ import { useLocation } from "react-router-dom";
 type ListInactiveAnnouncementProps = {
   inactiveAnnouncements: AnnouncementListType;
 
-  setInactiveAnnouncements: React.Dispatch<
-    React.SetStateAction<AnnouncementListType>
-  >;
+  setInactiveAnnouncements: (updatedList: AnnouncementRetrieveType[]) => void;
 };
 
 const ListInactiveAnnouncement = ({

@@ -138,6 +138,7 @@ class ListCreateAllAnnouncementAPIView(generics.ListCreateAPIView):
 class ListAnnouncementAPIViewStatusBased(generics.ListAPIView):
     serializer_class = CreateAnnouncementSerializer
     permission_classes = [AllowAny]
+    pagination_class = CustomPageNumberPagination
 
     def get_queryset(self):
         status = self.kwargs.get("status")

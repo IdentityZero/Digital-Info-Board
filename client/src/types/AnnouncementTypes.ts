@@ -118,4 +118,5 @@ export type AnnouncementRetrieveType = BaseAnnouncementType & {
 };
 
 export type AnnouncementListType = AnnouncementRetrieveType[];
-export type AnnouncementListTypeV1 = ListType<AnnouncementRetrieveType>;
+export type PaginatedAnnouncementListTypeV1 =
+  ListType<AnnouncementRetrieveType>;

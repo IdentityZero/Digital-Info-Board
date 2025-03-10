@@ -20,7 +20,7 @@ import {
   deleteTextAnnouncementApi,
 } from "../../../api/announcementRequest";
 import {
-  AnnouncementListTypeV1,
+  PaginatedAnnouncementListTypeV1,
   AnnouncementRetrieveType,
 } from "../../../types/AnnouncementTypes";
 import { getListTypeInitState } from "../../../types/ListType";
@@ -35,9 +35,8 @@ const TextContentListPage = () => {
     10
   );
 
-  const [announcements, setAnnouncements] = useState<AnnouncementListTypeV1>(
-    getListTypeInitState()
-  );
+  const [announcements, setAnnouncements] =
+    useState<PaginatedAnnouncementListTypeV1>(getListTypeInitState());
   const totalPages = Math.max(1, Math.ceil(announcements.count / pageSize));
 
   const [hasLoadingError, setHasLoadingError] = useState(false);

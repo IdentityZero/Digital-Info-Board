@@ -20,9 +20,7 @@ const ListActiveAnnouncement = ({
   setActiveAnnouncements,
 }: {
   activeAnnouncements: AnnouncementListType;
-  setActiveAnnouncements: React.Dispatch<
-    React.SetStateAction<AnnouncementListType>
-  >;
+  setActiveAnnouncements: (updatedList: AnnouncementRetrieveType[]) => void;
 }) => {
   const toastId = useRef<Id | null>(null);
   const { loading, update } = useLoadingToast(toastId);

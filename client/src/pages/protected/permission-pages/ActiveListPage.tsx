@@ -1,30 +1,56 @@
 import { useEffect, useState } from "react";
-import { listAnnouncementApi } from "../../../api/announcementRequest";
-import { ListActiveAnnouncement } from "../../../features/announcements";
-import { AnnouncementListType } from "../../../types/AnnouncementTypes";
+
 import LoadingMessage from "../../../components/LoadingMessage";
+import usePagination from "../../../hooks/usePagination";
+import Pagination from "../../../components/Pagination";
+import { getListTypeInitState } from "../../../types/ListType";
+import { listStatBasedAnnouncementApi } from "../../../api/announcementRequest";
+import {
+  type AnnouncementRetrieveType,
+  type PaginatedAnnouncementListTypeV1,
+} from "../../../types/AnnouncementTypes";
+
+import { ListActiveAnnouncement } from "../../../features/announcements";
 
 const ActiveListPage = () => {
+  const { page, setPage, pageSize, setPageSize } = usePagination(
+    "pageSize_activeList",
+    10
+  );
   const [activeAnnouncements, setActiveAnnouncements] =
-    useState<AnnouncementListType>([]);
+    useState<PaginatedAnnouncementListTypeV1>(getListTypeInitState());
+  const totalPages = Math.max(
+    1,
+    Math.ceil(activeAnnouncements.count / pageSize)
+  );
+
   const [isFetching, setIsFetching] = useState(true);
   const [hasError, setHasError] = useState(false);
 
+  const fetchAnnouncements = async (ppage: number, ppageSize: number) => {
+    try {
+      setIsFetching(true);
+      const res_data = await listStatBasedAnnouncementApi(
+        "active",
+        ppage,
+        ppageSize
+      );
+      setActiveAnnouncements(res_data);
+    } catch (error) {
+      setHasError(true);
+    } finally {
+      setIsFetching(false);
+    }
+  };
   useEffect(() => {
-    const fetchAnnouncements = async () => {
-      try {
-        setIsFetching(true);
-        const res_data = await listAnnouncementApi("active");
-        setActiveAnnouncements(res_data);
-      } catch (error) {
-        setHasError(true);
-      } finally {
-        setIsFetching(false);
-      }
-    };
+    fetchAnnouncements(page, pageSize);
+  }, [page, pageSize]);
 
-    fetchAnnouncements();
-  }, []);
+  const handleSetActiveAnnouncements = (
+    updatedList: AnnouncementRetrieveType[]
+  ) => {
+    setActiveAnnouncements((prev) => ({ ...prev, results: updatedList }));
+  };
 
   if (isFetching)
     return (
@@ -43,9 +69,18 @@ const ActiveListPage = () => {
 
   return (
     <>
+      <div className="px-4">
+        <Pagination
+          pageSize={pageSize}
+          page={page}
+          totalPages={totalPages}
+          setPageSize={setPageSize}
+          setPage={setPage}
+        />
+      </div>
       <ListActiveAnnouncement
-        activeAnnouncements={activeAnnouncements}
-        setActiveAnnouncements={setActiveAnnouncements}
+        activeAnnouncements={activeAnnouncements.results}
+        setActiveAnnouncements={handleSetActiveAnnouncements}
       />
     </>
   );

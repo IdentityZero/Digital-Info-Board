@@ -4,7 +4,7 @@ import {
   type FullTextAnnouncementType,
   type FullImageAnnouncementType,
   FullVideoAnnouncementType,
-  AnnouncementListTypeV1,
+  PaginatedAnnouncementListTypeV1,
 } from "../types/AnnouncementTypes";
 import { BASE_API_URL } from "../constants/urls";
 
@@ -40,16 +40,30 @@ const updateVideoAnnouncementEndpoint = (announcement_id: string) => {
 
 const listVideoAnnouncementEndpoint = "announcements/v1/video/";
 
-export const listAnnouncementApi = async (
-  status: "active" | "inactive" | "all" = "active"
-): Promise<AnnouncementListType> => {
+export const listAnnouncementApi = async (): Promise<AnnouncementListType> => {
+  try {
+    const response = await axios.get(
+      BASE_ENDPOINT + listCreateAllTypeAnnouncementEndpoint + "status/all/"
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw error;
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+export const listStatBasedAnnouncementApi = async (
+  status: "active" | "inactive",
+  page: number = 1,
+  page_size: number = 10
+): Promise<PaginatedAnnouncementListTypeV1> => {
   try {
     const response = await axios.get(
       BASE_ENDPOINT +
         listCreateAllTypeAnnouncementEndpoint +
-        "status/" +
-        status +
-        "/"
+        `status/${status}/?page=${page}&page_size=${page_size}`
     );
     return response.data;
   } catch (error) {
@@ -116,7 +130,7 @@ export const listTextAnnouncementApi = async (
   axiosInstance: AxiosInstance,
   page: number = 1,
   page_size: number = 10
-): Promise<AnnouncementListTypeV1> => {
+): Promise<PaginatedAnnouncementListTypeV1> => {
   try {
     const response = await axiosInstance.get(
       listTextAnnouncementEndpoint + `?page=${page}&page_size=${page_size}`
@@ -191,7 +205,7 @@ export const listImageAnnouncementApi = async (
   axiosInstance: AxiosInstance,
   page: number = 1,
   page_size: number = 10
-): Promise<AnnouncementListTypeV1> => {
+): Promise<PaginatedAnnouncementListTypeV1> => {
   try {
     const response = await axiosInstance.get(
       listImageAnnouncementEndpoint + `?page=${page}&page_size=${page_size}`
@@ -266,7 +280,7 @@ export const listVideoAnnouncementApi = async (
   axiosInstance: AxiosInstance,
   page: number = 1,
   page_size: number = 10
-): Promise<AnnouncementListTypeV1> => {
+): Promise<PaginatedAnnouncementListTypeV1> => {
   try {
     const response = await axiosInstance.get(
       listVideoAnnouncementEndpoint + `?page=${page}&page_size=${page_size}`
