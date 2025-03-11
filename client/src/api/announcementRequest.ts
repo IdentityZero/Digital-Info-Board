@@ -43,8 +43,9 @@ const listVideoAnnouncementEndpoint = "announcements/v1/video/";
 export const listAnnouncementApi = async (): Promise<AnnouncementListType> => {
   try {
     const response = await axios.get(
-      BASE_ENDPOINT + listCreateAllTypeAnnouncementEndpoint + "status/all/"
+      BASE_ENDPOINT + listCreateAllTypeAnnouncementEndpoint
     );
+
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {

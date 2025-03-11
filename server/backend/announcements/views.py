@@ -128,6 +128,13 @@ class ListCreateAllAnnouncementAPIView(generics.ListCreateAPIView):
         if serializer.is_valid(raise_exception=True):
             serializer.save(author=self.request.user)
 
+    def get_permissions(self):
+        if self.request.method == "GET":
+            return [AllowAny()]
+        elif self.request.method == "POST":
+            return [IsAuthenticated()]
+        return super().get_permissions()
+
     def get_queryset(self):
         qs = Announcements.objects.all().order_by(
             OrderBy(F("position"), nulls_last=True)
