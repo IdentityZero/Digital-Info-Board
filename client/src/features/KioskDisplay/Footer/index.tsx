@@ -11,8 +11,8 @@ const Footer = memo(({ headlines }: { headlines: string[] }) => {
         {/* Weather Forecast */}
         <div
           className="relative flex-1 flex flex-col items-center justify-between 
-                 bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-xl p-6 
-                 text-white text-center h-[450px] w-[360px] max-h-[450px] overflow-hidden"
+                 bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-xl p-2 
+                 text-white text-center h-[350px] w-[360px] max-h-[350px] overflow-hidden"
         >
           <WeatherForecast />
         </div>
@@ -20,14 +20,14 @@ const Footer = memo(({ headlines }: { headlines: string[] }) => {
         {/* Date Time Card */}
         <div
           className="relative flex-1 flex flex-col items-center justify-between 
-                   bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-xl p-6 
-                   text-white text-center h-[450px] w-[360px] max-h-[450px] overflow-hidden"
+                   bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-xl p-2 
+                   text-white text-center h-[350px] w-[360px] max-h-[350px] overflow-hidden"
         >
           <DateTimeCard />
         </div>
 
         {/* Facts */}
-        <div className="flex-1 flex items-center justify-center  h-[450px] max-h-[450px] bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-xl overflow-hidden">
+        <div className="flex-1 flex items-center justify-center  h-[350px] max-h-[350px] bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-xl overflow-hidden">
           <img
             src="https://picsum.photos/200/300?random=2"
             className="h-full w-full object-fill"

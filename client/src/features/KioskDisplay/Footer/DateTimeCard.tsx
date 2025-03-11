@@ -27,7 +27,7 @@ const DateTimeCard = () => {
       {/* Glowing Effect */}
       <div className="absolute inset-0 bg-gradient-to-br from-blue-500/40 to-purple-500/30 rounded-2xl blur-2xl"></div>
 
-      {/* Content 1 */}
+      {/* Time */}
       <div className="text-7xl font-mono font-bold mt-3 animate-pulse">
         {time}
       </div>
@@ -35,7 +35,7 @@ const DateTimeCard = () => {
       {/* Divider */}
       <div className="w-5/6 h-0.5 bg-gradient-to-r from-transparent via-white to-transparent animate-pulse"></div>
 
-      {/* Content 2 */}
+      {/* Date */}
       <div className="flex flex-col items-center">
         <div className="text-6xl font-bold tracking-wide">{day}</div>
         <div className="text-4xl opacity-90">{date}</div>
