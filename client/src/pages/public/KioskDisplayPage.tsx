@@ -41,7 +41,7 @@ const KioskDisplayPage = () => {
 
   return (
     <div className="w-full min-h-screen flex flex-col bg-[#1B0B7C] text-white">
-      <header className="min-h-20 h-[10vh] max-h-[10%] flex items-center justify-center w-full">
+      <header className="min-h-20 h-[8vh] max-h-[8%] flex items-center justify-center w-full">
         <DisplayQuillEditor
           value={JSON.parse(mediaAnnouncements[currentIndex].title as string)}
           withBackground={false}

@@ -67,6 +67,7 @@ const WeatherForecast = () => {
         Weather Forecast
       </div>
 
+      {/* 3 Day forecast */}
       <div className="relative z-10 flex flex-col w-full items-center gap-4">
         {weatherInfo &&
           weatherInfo.forecast.forecastday.map((day, index) => {
@@ -80,13 +81,14 @@ const WeatherForecast = () => {
               day: "numeric",
             });
 
+            // Card
             return (
               <div
                 key={index}
-                className="flex flex-col items-center w-5/6 p-3 bg-white/10 rounded-lg border border-white/20 "
+                className="flex flex-col items-center justify-center w-full py-1 bg-white/10 rounded-lg border border-white/20 "
               >
-                <div className="flex justify-between w-full px-4">
-                  <span className="text-md font-semibold w-1/3">
+                <div className="flex justify-between w-full px-1">
+                  <span className="font-semibold text-sm w-1/3">
                     {formattedDay}, {formattedDate}
                   </span>
                   <img
@@ -94,7 +96,7 @@ const WeatherForecast = () => {
                     alt={day.day.condition.text}
                     className="h-8 w-8"
                   />
-                  <span className="text-lg w-1/3">
+                  <span className="text-md w-1/3">
                     {day.day.avgtemp_c} &deg;C
                   </span>
                 </div>
@@ -103,6 +105,7 @@ const WeatherForecast = () => {
           })}
       </div>
 
+      {/* Hourly */}
       <div className="relative z-10 flex w-full justify-around items-center mb-4">
         {hourlyInfo.map((hour, index) => {
           const datetime = new Date(hour.time);
