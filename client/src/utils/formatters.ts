@@ -135,7 +135,8 @@ export function convertToDatetimeLocal(datetimeStr: string): string {
 export function formatInputDate(inputDate: string): string {
   // Ensure the input date string is in YYYY-MM-DD format
   if (!/^\d{4}-\d{2}-\d{2}$/.test(inputDate)) {
-    throw new Error("Invalid date format. Expected format: YYYY-MM-DD");
+    // throw new Error("Invalid date format. Expected format: YYYY-MM-DD");
+    return "Invalid format";
   }
 
   // Parse the date string into a Date object
