@@ -1,38 +1,30 @@
+import os
+from django.conf import settings
+from django.db.models.signals import post_delete
 from django.dispatch import receiver
-from django.db.models.signals import post_migrate
-from django.db.utils import IntegrityError
 
-from .models import FixedContent
+from .models import OrganizationMembers, MediaDisplays
 
 
-@receiver(post_migrate)
-def populate_fixed_content(sender, **kwargs):
+@receiver(post_delete, sender=OrganizationMembers)
+def delete_old_org_member_image(sender, instance: OrganizationMembers, *args, **kwargs):
     """
-    Automatically populate fixed contents on migrations
+    Delete images of deleted instances of Org members
     """
-
-    if not sender.name == "fixed_contents":
+    if not instance.image or instance.image == "org_members/default.png":
         return
 
-    if FixedContent.objects.exists():
+    if os.path.isfile(instance.image.path):
+        os.remove(instance.image.path)
+
+
+@receiver(post_delete, sender=MediaDisplays)
+def delete_media_file(sender, instance: MediaDisplays, *args, **kwargs):
+    """
+    Delete files of deleted MediaDisplays instances
+    """
+    if not instance.file:
         return
 
-    initial_contents = [
-        {
-            "title": "CpE Department",
-            "description": "Display CpE Department Faculty Members",
-        },
-        {
-            "title": "Student Organization",
-            "description": "Display CpE Department Student Organization Members",
-        },
-        {"title": "Calendar", "description": "Display Calendar"},
-        {"title": "Weather Forecast", "description": "Display Weather Forecast"},
-        {"title": "Facts", "description": "Display MMSU and CpE Facts"},
-    ]
-
-    for contents in initial_contents:
-        try:
-            FixedContent.objects.create(**contents)
-        except IntegrityError:
-            pass
+    if os.path.isfile(instance.file.path):
+        os.remove(instance.file.path)

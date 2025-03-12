@@ -1,3 +1,5 @@
+import os
+
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 from django.db.models.signals import post_save, post_delete
@@ -6,7 +8,7 @@ from django.contrib.auth.models import User
 
 from utils.utils import extract_react_quill_text
 
-from .models import Announcements
+from .models import Announcements, ImageAnnouncements, VideoAnnouncements
 from notifications.models import Notifications
 
 
@@ -55,3 +57,33 @@ def delete_notif_on_deleted_announcements(sender, instance, **kwargs):
         target_id=instance.id, action="approve_announcement"
     )
     notifications.delete()
+
+
+@receiver(post_delete, sender=ImageAnnouncements)
+def delete_image_announcement_image(
+    sender, instance: ImageAnnouncements, *args, **kwargs
+):
+    """
+    Delete images of deleted image announcements
+    """
+
+    if not instance.image:
+        return
+
+    if os.path.isfile(instance.image.path):
+        os.remove(instance.image.path)
+
+
+@receiver(post_delete, sender=VideoAnnouncements)
+def delete_video_announcement_video(
+    sender, instance: VideoAnnouncements, *args, **kwargs
+):
+    """
+    Delete videos of deleted video announcements
+    """
+
+    if not instance.video:
+        return
+
+    if os.path.isfile(instance.video.path):
+        os.remove(instance.video.path)

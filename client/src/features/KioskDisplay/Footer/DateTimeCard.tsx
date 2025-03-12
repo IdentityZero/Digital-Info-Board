@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import useClock from "../../fixedContent/hooks/useClock";
+import useClock from "../../../hooks/useClock";
 
 const DateTimeCard = () => {
   const { time, date, day } = useClock();

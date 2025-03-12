@@ -7,7 +7,10 @@ import {
 
 import PublicRoutes from "./routes/PublicRoutes";
 import ProtectedRoutes from "./routes/ProtectedRoutes";
+import AdminRoutes from "./routes/AdminRoutes";
+
 import { DashboardLayout, PublicLayout } from "./layouts";
+
 import {
   HomePage,
   NotFoundPage,
@@ -17,6 +20,7 @@ import {
   ContactUsPage,
   KioskDisplayPage,
 } from "./pages/public";
+
 import {
   AccountSettingsPage,
   DashBoardPage,
@@ -53,12 +57,21 @@ import {
   ChangeOthersPasswordPage,
   NewUsersPage,
 } from "./pages/protected/account-pages";
+
 import VideoContentPage from "./pages/protected/content-pages/VideoContentPage";
-import AdminRoutes from "./routes/AdminRoutes";
+
 import {
   ActiveListPage,
   InActiveListPage,
 } from "./pages/protected/permission-pages";
+
+// Default Display Pages
+import DefaultDisplaySettingsPage from "./pages/protected/default-display-pages/DefaultDisplaySettingsPage";
+import OrganizationPage from "./pages/protected/default-display-pages/OrganizationPage";
+import UpcomingEventsPage from "./pages/protected/default-display-pages/UpcomingEventsPage";
+import MediaDisplaysPage from "./pages/protected/default-display-pages/MediaDisplaysPage";
+import WeatherForecastSettingsPage from "./pages/protected/default-display-pages/WeatherForecastSettingsPage";
+import CalendarSettingsPage from "./pages/protected/default-display-pages/CalendarSettingsPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -78,6 +91,7 @@ const router = createBrowserRouter(
         <Route path="contact" element={<ContactUsPage />} />
       </Route>
       <Route path="kiosk" element={<KioskDisplayPage />} />
+
       <Route
         path="dashboard"
         element={
@@ -105,6 +119,7 @@ const router = createBrowserRouter(
           <Route path="image/:id" element={<ImageContentPage />} />
         </Route>
 
+        {/* Permission Pages */}
         <Route
           path="permissions"
           element={
@@ -118,8 +133,16 @@ const router = createBrowserRouter(
         </Route>
 
         <Route path="current-display" element={<CurrentDisplayPage />} />
+
         <Route path="calendar" element={<CalendarPage />} />
-        <Route path="default-display" element={<DefaultDisplayPage />} />
+        <Route path="default-display" element={<DefaultDisplayPage />}>
+          <Route index element={<DefaultDisplaySettingsPage />} />
+          <Route path="organization" element={<OrganizationPage />} />
+          <Route path="events" element={<UpcomingEventsPage />} />
+          <Route path="media" element={<MediaDisplaysPage />} />
+          <Route path="forecast" element={<WeatherForecastSettingsPage />} />
+          <Route path="calendar" element={<CalendarSettingsPage />} />
+        </Route>
 
         {/* Accounts Pages */}
         <Route path="account" element={<AccountSettingsPage />}>

@@ -30,8 +30,7 @@ const InvitationList = ({
     loading("Resending email...");
 
     try {
-      const res_data = await resendUserInvitationApi(userApi, id);
-      console.log(res_data);
+      await resendUserInvitationApi(userApi, id);
       update({
         render: "Email Sent.",
         type: "success",
