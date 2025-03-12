@@ -1,7 +1,6 @@
 import useAnnouncementSlider from "../../features/announcements/hooks/useAnnouncementSlider";
 import LoadingMessage from "../../components/LoadingMessage";
 import { LiveAnnouncement } from "../../features/announcements";
-import { FixedContentDisplay } from "../../features/fixedContent";
 
 const HomePage = () => {
   // TODO: POSSIBILITY OF EMPTY ANNOUNCEMENT (The announcement has no body or type)
@@ -28,9 +27,6 @@ const HomePage = () => {
   return (
     <div className="flex flex-col items-center justify-center">
       <LiveAnnouncement />
-      <div className="max-w-[80%] w-full my-8">
-        <FixedContentDisplay />
-      </div>
     </div>
   );
 };

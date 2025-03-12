@@ -3,8 +3,8 @@ import {
   type AnnouncementListType,
   type FullTextAnnouncementType,
   type FullImageAnnouncementType,
-  FullVideoAnnouncementType,
-  PaginatedAnnouncementListTypeV1,
+  type FullVideoAnnouncementType,
+  type PaginatedAnnouncementListTypeV1,
 } from "../types/AnnouncementTypes";
 import { BASE_API_URL } from "../constants/urls";
 

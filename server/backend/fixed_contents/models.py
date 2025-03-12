@@ -1,16 +1,40 @@
 from django.db import models
 
 from utils.models import TimestampedModel
+from utils.validators import validate_file_name_length
 
 
-class FixedContent(TimestampedModel):
+class OrganizationMembers(TimestampedModel):
     class Meta:
-        verbose_name = "Fixed Content"
-        verbose_name_plural = "Fixed Contents"
+        verbose_name = "Organization Member"
+        verbose_name_plural = "Organization Members"
+        ordering = ["-created_at"]
 
-    title = models.CharField(verbose_name="Title", max_length=127)
-    description = models.TextField(verbose_name="Description", blank=True)
-    is_displayed = models.BooleanField(default=True)
+    name = models.CharField(max_length=64)
+    position = models.CharField(max_length=32)
+    image = models.ImageField(
+        upload_to="org_members", default="org_members/default.png"
+    )
 
-    def __str__(self):
-        return self.title
+
+class UpcomingEvents(TimestampedModel):
+    class Meta:
+        verbose_name = "Upcoming Event"
+        verbose_name_plural = "Upcoming Events"
+        ordering = ["-created_at"]
+
+    name = models.CharField(max_length=64)
+    date = models.DateField()
+
+
+class MediaDisplays(TimestampedModel):
+    class Meta:
+        verbose_name = "Media Display"
+        verbose_name_plural = "Media Displays"
+        ordering = ["-created_at"]
+
+    name = models.CharField(max_length=64)
+    file = models.FileField(
+        upload_to="media_displays",
+        validators=[validate_file_name_length],
+    )

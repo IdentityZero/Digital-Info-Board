@@ -1,25 +1,24 @@
 from django.contrib import admin
 
-from .models import FixedContent
-
-# Register your models here.
+from .models import OrganizationMembers, UpcomingEvents, MediaDisplays
 
 
-class FixedContentAdmin(admin.ModelAdmin):
-    list_display = [
-        "id",
-        "title",
-        "description",
-        "is_displayed",
-        "last_modified",
-        "created_at",
-    ]
-
-    def has_add_permission(self, request):
-        return False
-
-    def has_delete_permission(self, request, obj=None):
-        return False
+class OrganizationMembersAdmin(admin.ModelAdmin):
+    list_display = ["id", "name", "position", "last_modified"]
 
 
-admin.site.register(FixedContent, FixedContentAdmin)
+admin.site.register(OrganizationMembers, OrganizationMembersAdmin)
+
+
+class UpcomingEventsAdmin(admin.ModelAdmin):
+    list_display = ["id", "name", "date"]
+
+
+admin.site.register(UpcomingEvents, UpcomingEventsAdmin)
+
+
+class MediaDisplaysAdmin(admin.ModelAdmin):
+    list_display = ["id", "name", "file"]
+
+
+admin.site.register(MediaDisplays, MediaDisplaysAdmin)

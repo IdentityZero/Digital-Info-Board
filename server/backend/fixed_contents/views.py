@@ -1,26 +1,60 @@
-from django.shortcuts import get_object_or_404
-from rest_framework import generics
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework import generics, permissions
 
 from utils.permissions import IsAdmin
+from utils.pagination import CustomPageNumberPagination
 
-from .serializers import FixedContentSerializer, IsDisplayedStatusSerializer
-from .models import FixedContent
-
-
-class ListActiveFixedContentAPIView(generics.ListAPIView):
-    serializer_class = FixedContentSerializer
-    permission_classes = [AllowAny]
-
-    def get_queryset(self):
-        qs = FixedContent.objects.filter(is_displayed=True)
-        return qs
+from . import serializers, models
 
 
-class RetrieveUpdateFixedContentStatusAPIView(generics.UpdateAPIView):
-    serializer_class = IsDisplayedStatusSerializer
-    permission_classes = [IsAuthenticated, IsAdmin]
+class ListCreateOrgMembersApiView(generics.ListCreateAPIView):
+    serializer_class = serializers.OrganizationMembersSerializer
+    queryset = models.OrganizationMembers.objects.all()
+    pagination_class = CustomPageNumberPagination
 
-    def get_object(self):
-        pk = self.kwargs.get("pk")
-        return get_object_or_404(FixedContent, id=pk)
+    def get_permissions(self):
+        if self.request.method == "GET":
+            return [permissions.AllowAny()]
+        else:
+            return [permissions.IsAuthenticated(), IsAdmin()]
+
+
+class DeleteOrganizationMembersApiView(generics.DestroyAPIView):
+    serializer_class = serializers.OrganizationMembersSerializer
+    queryset = models.OrganizationMembers.objects.all()
+    permission_classes = [permissions.IsAuthenticated, IsAdmin]
+
+
+class ListCreateUpcomingEventApiView(generics.ListCreateAPIView):
+    serializer_class = serializers.UpcomingEventsSerializer
+    queryset = models.UpcomingEvents.objects.all()
+    pagination_class = CustomPageNumberPagination
+
+    def get_permissions(self):
+        if self.request.method == "GET":
+            return [permissions.AllowAny()]
+        else:
+            return [permissions.IsAuthenticated(), IsAdmin()]
+
+
+class DeleteUpcomingEventApiView(generics.DestroyAPIView):
+    serializer_class = serializers.UpcomingEventsSerializer
+    queryset = models.UpcomingEvents.objects.all()
+    permission_classes = [permissions.IsAuthenticated, IsAdmin]
+
+
+class ListCreateMediaDisplaysApiView(generics.ListCreateAPIView):
+    serializer_class = serializers.MediaDisplaysSerializer
+    queryset = models.MediaDisplays.objects.all()
+    pagination_class = CustomPageNumberPagination
+
+    def get_permissions(self):
+        if self.request.method == "GET":
+            return [permissions.AllowAny()]
+        else:
+            return [permissions.IsAuthenticated(), IsAdmin()]
+
+
+class DeleteMediaDisplayApiView(generics.DestroyAPIView):
+    serializer_class = serializers.MediaDisplaysSerializer
+    queryset = models.MediaDisplays.objects.all()
+    permission_classes = [permissions.IsAuthenticated, IsAdmin]

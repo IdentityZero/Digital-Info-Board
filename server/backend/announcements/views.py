@@ -8,6 +8,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.db.models import OrderBy, F
 
 from utils.pagination import CustomPageNumberPagination
+from utils.permissions import IsAdmin
 
 from .serializers import (
     CreateAnnouncementSerializer,
@@ -132,7 +133,7 @@ class ListCreateAllAnnouncementAPIView(generics.ListCreateAPIView):
         if self.request.method == "GET":
             return [AllowAny()]
         elif self.request.method == "POST":
-            return [IsAuthenticated()]
+            return [IsAuthenticated(), IsAdmin()]
         return super().get_permissions()
 
     def get_queryset(self):
