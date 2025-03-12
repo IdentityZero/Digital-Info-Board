@@ -57,7 +57,9 @@ const ListAllUserProfiles = () => {
   }
 
   if (!hasError && !isLoading && usersList.results.length === 0) {
-    return <div>You are the only user.</div>;
+    return (
+      <div>No data can be shown. Refresh if this message is incorrect.</div>
+    );
   }
 
   const handleActivation = async (id: string, activate: boolean) => {
