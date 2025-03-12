@@ -60,7 +60,7 @@ const InvitationList = ({
       });
       setInvitations((prev) => {
         const arr = prev.results.filter((res) => res.id !== id);
-        return { ...prev, results: arr };
+        return { ...prev, results: arr, count: prev.count - 1 };
       });
     } catch (error) {
       update({

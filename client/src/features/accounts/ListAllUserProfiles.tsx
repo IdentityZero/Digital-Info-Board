@@ -115,7 +115,11 @@ const ListAllUserProfiles = () => {
       const updatedUserList = usersList.results.filter(
         (user) => user.id !== id
       );
-      setUsersList((prev) => ({ ...prev, results: updatedUserList }));
+      setUsersList((prev) => ({
+        ...prev,
+        results: updatedUserList,
+        count: prev.count - 1,
+      }));
       update({
         render: "Account Deleted Succesfully.",
         type: "success",

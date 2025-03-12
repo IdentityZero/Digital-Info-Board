@@ -80,7 +80,11 @@ const VideoContentListPage = () => {
         (announcement) => announcement.id !== announcement_id
       );
       update({ render: "Delete successful", type: "success" });
-      setAnnouncements((prev) => ({ ...prev, results: updatedAnnouncements }));
+      setAnnouncements((prev) => ({
+        ...prev,
+        results: updatedAnnouncements,
+        count: prev.count - 1,
+      }));
     } catch (error) {
       update({
         render: "Delete unsuccessful. Please try again.",

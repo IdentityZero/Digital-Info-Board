@@ -73,7 +73,11 @@ const ImageContentListPage = () => {
       const updated = announcements.results.filter(
         (announcement) => announcement.id !== announcement_id
       );
-      setAnnouncements((prev) => ({ ...prev, results: updated }));
+      setAnnouncements((prev) => ({
+        ...prev,
+        results: updated,
+        count: prev.count - 1,
+      }));
     } catch (error) {
       update({
         render: "Delete unsuccessful. Please try again.",
