@@ -85,6 +85,7 @@ INSTALLED_APPS = [
     "settings",
     "notifications",
     "field_devices",
+    "custom_calendar",
 ]
 
 MIDDLEWARE = [
@@ -193,3 +194,6 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = os.getenv("EMAIL_HOST_USER")
+
+GOOGLE_CALENDAR_CREDENTIALS_LOC = os.getenv("GAPI_JSON_CREDENTIALS_LOC")
+GOOGLE_CALENDAR_ID = os.getenv("CALENDAR_ID")

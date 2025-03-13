@@ -71,7 +71,10 @@ import OrganizationPage from "./pages/protected/default-display-pages/Organizati
 import UpcomingEventsPage from "./pages/protected/default-display-pages/UpcomingEventsPage";
 import MediaDisplaysPage from "./pages/protected/default-display-pages/MediaDisplaysPage";
 import WeatherForecastSettingsPage from "./pages/protected/default-display-pages/WeatherForecastSettingsPage";
-import CalendarSettingsPage from "./pages/protected/default-display-pages/CalendarSettingsPage";
+
+// Calendar Pages
+import CalendarContentsPage from "./pages/protected/calendar-pages/CalendarContentsPage";
+import CalendarSettingsPage from "./pages/protected/calendar-pages/CalendarSettingsPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -101,14 +104,12 @@ const router = createBrowserRouter(
         }
       >
         <Route index element={<DashBoardPage />} />
-
         <Route path="upload-content" element={<UploadContentPage />}>
           <Route index element={<CreateVideoContentPage />} />
           <Route path="video" element={<CreateVideoContentPage />} />
           <Route path="text" element={<CreateTextContentPage />} />
           <Route path="image" element={<CreateImageContentPage />} />
         </Route>
-
         <Route path="contents" element={<ContentsPage />}>
           <Route index element={<VideoContentListPage />} />
           <Route path="video" element={<VideoContentListPage />} />
@@ -118,7 +119,6 @@ const router = createBrowserRouter(
           <Route path="image" element={<ImageContentListPage />} />
           <Route path="image/:id" element={<ImageContentPage />} />
         </Route>
-
         {/* Permission Pages */}
         <Route
           path="permissions"
@@ -131,19 +131,22 @@ const router = createBrowserRouter(
           <Route index element={<ActiveListPage />} />
           <Route path="inactive" element={<InActiveListPage />} />
         </Route>
-
         <Route path="current-display" element={<CurrentDisplayPage />} />
+        {/* Calendar Pages */}
 
-        <Route path="calendar" element={<CalendarPage />} />
+        <Route path="calendar" element={<CalendarPage />}>
+          <Route index element={<CalendarContentsPage />} />
+          <Route path="settings" element={<CalendarSettingsPage />} />
+        </Route>
+
+        {/* Default Display Pages */}
         <Route path="default-display" element={<DefaultDisplayPage />}>
           <Route index element={<DefaultDisplaySettingsPage />} />
           <Route path="organization" element={<OrganizationPage />} />
           <Route path="events" element={<UpcomingEventsPage />} />
           <Route path="media" element={<MediaDisplaysPage />} />
           <Route path="forecast" element={<WeatherForecastSettingsPage />} />
-          <Route path="calendar" element={<CalendarSettingsPage />} />
         </Route>
-
         {/* Accounts Pages */}
         <Route path="account" element={<AccountSettingsPage />}>
           <Route index element={<MyProfilePage />} />
@@ -182,7 +185,6 @@ const router = createBrowserRouter(
             }
           />
         </Route>
-
         <Route path="settings" element={<SettingsPage />} />
         <Route path="logout" element={<LogoutPage />} />
         <Route path="help" element={<HelpPage />} />
