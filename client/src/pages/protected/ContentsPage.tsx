@@ -1,9 +1,10 @@
-import { Outlet, useLocation } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
 
 import SideDropdown, {
   DropdownContainer,
   SideDropdownItem,
 } from "../../components/ui/SideDropdown";
+import { Button } from "../../components/ui";
 
 type ContentType = "video" | "image" | "text";
 type ContentLinkT = {
@@ -34,25 +35,30 @@ const ContentsPage = () => {
   };
   return (
     <div className="p-5">
-      <SideDropdown
-        buttonContent={<DropdownContainer label={get_type_location()} />}
-      >
-        <div className="flex flex-col border-2 border-black bg-white">
-          {links.map((link) => (
-            <SideDropdownItem
-              to={link.to}
-              key={link.to}
-              end
-              className={`z-[9999] px-8 py-2 capitalize border-black border text-center hover:bg-cyanBlue-light active:bg-cyanBlue-dark ${
-                link.label === get_type_location() && "bg-cyanBlue"
-              }`}
-              isActiveClassName="bg-cyanBlue"
-            >
-              {link.label}
-            </SideDropdownItem>
-          ))}
-        </div>
-      </SideDropdown>
+      <div className="w-full flex items-center justify-between">
+        <SideDropdown
+          buttonContent={<DropdownContainer label={get_type_location()} />}
+        >
+          <div className="flex flex-col border-2 border-black bg-white">
+            {links.map((link) => (
+              <SideDropdownItem
+                to={link.to}
+                key={link.to}
+                end
+                className={`z-[9999] px-8 py-2 capitalize border-black border text-center hover:bg-cyanBlue-light active:bg-cyanBlue-dark ${
+                  link.label === get_type_location() && "bg-cyanBlue"
+                }`}
+                isActiveClassName="bg-cyanBlue"
+              >
+                {link.label}
+              </SideDropdownItem>
+            ))}
+          </div>
+        </SideDropdown>
+        <Link to={`/dashboard/upload-content/${get_type_location()}`}>
+          <Button>Upload {get_type_location()} content</Button>
+        </Link>
+      </div>
       <div>
         <Outlet />
       </div>
