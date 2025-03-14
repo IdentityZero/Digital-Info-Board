@@ -1,29 +1,30 @@
 import { memo } from "react";
 import TextNewsTicker from "../TextNewsTicker";
-import DateTimeCard from "./DateTimeCard";
+// import DateTimeCard from "./DateTimeCard";
 import WeatherForecast from "./WeatherForecast";
+import UpcomingEventsCard from "./UpcomingEventsCard";
 
 const Footer = memo(({ headlines }: { headlines: string[] }) => {
   return (
     <div className="w-full h-full">
-      <TextNewsTicker headlines={headlines} />
       <div className="w-full flex flex-row gap-1 p-2 text-white text-md">
         {/* Weather Forecast */}
         <div
           className="relative flex-1 flex flex-col items-center justify-between 
-                 bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-xl p-2 
-                 text-white text-center h-[350px] w-[360px] max-h-[350px] overflow-hidden"
+                 bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-xl 
+                 text-white text-center h-[350px] max-h-[350px] overflow-hidden"
         >
           <WeatherForecast />
         </div>
 
-        {/* Date Time Card */}
+        {/* Date Time or Upcoming Events Card */}
         <div
           className="relative flex-1 flex flex-col items-center justify-between 
-                   bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-xl p-2 
-                   text-white text-center h-[350px] w-[360px] max-h-[350px] overflow-hidden"
+          bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-xl 
+          text-white text-center h-[350px] max-h-[350px] overflow-hidden"
         >
-          <DateTimeCard />
+          {/* <DateTimeCard /> */}
+          <UpcomingEventsCard />
         </div>
 
         {/* Facts */}
@@ -35,6 +36,7 @@ const Footer = memo(({ headlines }: { headlines: string[] }) => {
           />
         </div>
       </div>
+      <TextNewsTicker headlines={headlines} />
 
       <div className="w-full flex items-center justify-center text-white text-sm p-0.5 mb-1 lowercase">
         Powered by Computer Engineering Students

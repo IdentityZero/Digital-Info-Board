@@ -59,6 +59,22 @@ export const listPaginatedOrgMembersApi = async (
   }
 };
 
+export const listOrgmembersApi = async (): Promise<
+  OrganizationMembersType[]
+> => {
+  try {
+    const response = await axios.get(
+      FIXED_CONTENT_BASE_ENDPOINT + `v1/org-members/?active=true`
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw error;
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
 export const deleteOrgMemberApi = async (
   axiosInstance: AxiosInstance,
   id: number
@@ -102,6 +118,20 @@ export const listPaginatedUpcomingEventsApi = async (
     const response = await axios.get(
       FIXED_CONTENT_BASE_ENDPOINT +
         `v1/upcoming-events/?page=${page}&page_size=${page_size}`
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw error;
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+export const listUpcomingEventsApi = async (): Promise<UpcomingEventType[]> => {
+  try {
+    const response = await axios.get(
+      FIXED_CONTENT_BASE_ENDPOINT + `v1/upcoming-events/?active=true`
     );
     return response.data;
   } catch (error) {

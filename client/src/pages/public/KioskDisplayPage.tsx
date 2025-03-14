@@ -41,7 +41,7 @@ const KioskDisplayPage = () => {
 
   return (
     <div className="w-full min-h-screen flex flex-col bg-[#1B0B7C] text-white">
-      <header className="min-h-20 h-[8vh] max-h-[8%] flex items-center justify-center w-full">
+      <header className="min-h-20 h-[5vh] max-h-[5%] flex items-center justify-center w-full">
         <DisplayQuillEditor
           value={JSON.parse(mediaAnnouncements[currentIndex].title as string)}
           withBackground={false}
@@ -49,7 +49,7 @@ const KioskDisplayPage = () => {
       </header>
 
       <main
-        className={`min-h-[700px] h-[60vh] max-h-[60%] flex p-2 gap-2 ${
+        className={`min-h-[700px] h-[64vh] max-h-[64%] flex gap-2 ${
           isPortrait ? "flex-row" : "flex-col"
         }`}
       >
@@ -76,11 +76,7 @@ const KioskDisplayPage = () => {
         </div>
 
         <div
-          className={`${
-            isPortrait
-              ? "basis-[34.72%] h-full flex-col gap-2"
-              : "w-full h-[39%] flex-row gap-1 p-2"
-          } flex `}
+          className={`${isPortrait ? "w-[34.72%]" : "w-full h-[40%]"} flex `}
         >
           <MainAside isPortrait={isPortrait} />
         </div>
