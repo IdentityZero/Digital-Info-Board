@@ -20,7 +20,7 @@ const TextNewsTicker = ({ headlines }: TextNewsTickerProps) => {
             "Mariano Marcos State University",
           ]
         }
-        className="bg-[#0073C5] p-1 font-bold text-2xl text-[#F8E94E]"
+        className="bg-[#0073C5] p-1 font-bold text-3xl text-[#F8E94E]"
       />
     </div>
   );

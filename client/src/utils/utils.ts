@@ -183,3 +183,15 @@ export const findIndexByWeight = (arr: number[], value: number): number => {
   }
   return -1;
 };
+
+export const chunkArray = <T>(arr: T[], size: number): T[][] => {
+  /**
+   * Chunk Arrays into the given size
+   */
+
+  return arr.reduce<T[][]>(
+    (chunks, _, i) =>
+      i % size === 0 ? [...chunks, arr.slice(i, i + size)] : chunks,
+    []
+  );
+};

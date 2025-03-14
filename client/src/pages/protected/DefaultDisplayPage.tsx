@@ -6,13 +6,12 @@ const LINKS = [
   { label: "Upcoming Events", url: "events" },
   { label: "Media Displays", url: "media" },
   { label: "Weather Forecast", url: "forecast" },
-  { label: "Calendar", url: "calendar" },
 ];
 
 const DefaultDisplayPage = () => {
   return (
     <div className="p-4">
-      <section className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-1">
+      <section className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-1">
         {LINKS.map((link, index) => (
           <NavLink
             key={index}
