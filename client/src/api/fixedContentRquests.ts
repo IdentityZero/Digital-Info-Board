@@ -75,6 +75,24 @@ export const listOrgmembersApi = async (): Promise<
   }
 };
 
+export const updateOrgMemberPriorityApi = async (
+  axiosInstance: AxiosInstance,
+  data: { id: number; priority: number }[]
+) => {
+  try {
+    const response = axiosInstance.put(
+      FIXED_CONTENT_BASE_ENDPOINT + "v1/org-members/priority-update/",
+      data
+    );
+    return (await response).data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw error;
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
 export const deleteOrgMemberApi = async (
   axiosInstance: AxiosInstance,
   id: number
@@ -191,6 +209,20 @@ export const listPaginatedMediaDisplayApi = async (
     const response = await axios.get(
       FIXED_CONTENT_BASE_ENDPOINT +
         `v1/media-displays/?page=${page}&page_size=${page_size}`
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw error;
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+export const listMediaDisplaysApi = async (): Promise<MediaDisplayType[]> => {
+  try {
+    const response = await axios.get(
+      FIXED_CONTENT_BASE_ENDPOINT + "v1/media-displays/"
     );
     return response.data;
   } catch (error) {

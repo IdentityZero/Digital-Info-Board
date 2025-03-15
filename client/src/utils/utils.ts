@@ -195,3 +195,22 @@ export const chunkArray = <T>(arr: T[], size: number): T[][] => {
     []
   );
 };
+
+export function getChangedObj<T>(oldObj: T[], newObj: T[]) {
+  /**
+   * Returns the changed objects from oldObj
+   *
+   * Args: odlObj and newObj are objects of the same length and the same structure
+   *
+   * Returns:
+   *      A list of objects whose values have changed from the oldObj
+   */
+
+  if (oldObj.length !== newObj.length)
+    throw new Error("Arrays must be of the same length");
+
+  return newObj.filter((newItem, index) => {
+    const oldItem = oldObj[index];
+    return JSON.stringify(oldItem) !== JSON.stringify(newItem);
+  });
+}

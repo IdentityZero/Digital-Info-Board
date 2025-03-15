@@ -3,6 +3,7 @@ export type OrganizationMembersType = {
   name: string;
   position: string;
   image: string;
+  priority: number;
 };
 
 export type UpcomingEventType = {

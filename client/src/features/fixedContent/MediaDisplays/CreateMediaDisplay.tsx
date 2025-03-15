@@ -60,6 +60,7 @@ const CreateMediaDisplay = ({ onSuccess }: CreateMediaDisplayProps) => {
         type: "success",
       });
       formRef.current?.reset();
+      setFile(undefined);
     } catch (error) {
       console.log(error);
 

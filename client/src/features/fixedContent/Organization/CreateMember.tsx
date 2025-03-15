@@ -47,6 +47,7 @@ const CreateMember = ({ onSuccess }: CreateMemberProps) => {
         type: "success",
       });
       formRef.current?.reset();
+      setImage(undefined);
     } catch (error) {
       update({
         render: "Failed to save. Please try again.",
@@ -60,7 +61,7 @@ const CreateMember = ({ onSuccess }: CreateMemberProps) => {
   return (
     <form encType="multipart/form-data" onSubmit={handleSubmit} ref={formRef}>
       <Accordion>
-        <AccordionItem title="Add New Member">
+        <AccordionItem title="Add New Member" isOpenInit={false}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="flex flex-col h-[250px]">
               {image ? (

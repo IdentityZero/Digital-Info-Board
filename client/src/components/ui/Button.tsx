@@ -1,11 +1,8 @@
 import React from "react";
 
 type ButtonProps = {
-  type?: "button" | "submit" | "reset";
-  onClickFunc?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   children: React.ReactNode;
-  disabled?: boolean;
-};
+} & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
 const isChildrenText = (children: React.ReactNode) => {
   return React.Children.toArray(children).every(
@@ -13,23 +10,11 @@ const isChildrenText = (children: React.ReactNode) => {
   );
 };
 
-const Button = ({
-  type = "button",
-  disabled = false,
-  children,
-  ...props
-}: ButtonProps) => {
-  const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (type === "button" && props.onClickFunc) {
-      props.onClickFunc(e);
-    }
-  };
-
+const Button = ({ children, ...props }: ButtonProps) => {
+  const { disabled } = props;
   return (
     <button
-      type={type}
-      disabled={disabled}
-      onClick={handleButtonClick}
+      {...props}
       className={`${
         isChildrenText(children)
           ? disabled

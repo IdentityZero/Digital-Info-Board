@@ -3,6 +3,7 @@ import TextNewsTicker from "../TextNewsTicker";
 // import DateTimeCard from "./DateTimeCard";
 import WeatherForecast from "./WeatherForecast";
 import UpcomingEventsCard from "./UpcomingEventsCard";
+import MediaDisplay from "../MediaDisplay";
 
 const Footer = memo(({ headlines }: { headlines: string[] }) => {
   return (
@@ -29,11 +30,7 @@ const Footer = memo(({ headlines }: { headlines: string[] }) => {
 
         {/* Facts */}
         <div className="flex-1 flex items-center justify-center  h-[350px] max-h-[350px] bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-xl overflow-hidden">
-          <img
-            src="https://picsum.photos/200/300?random=2"
-            className="h-full w-full object-fill"
-            alt="Image"
-          />
+          <MediaDisplay />
         </div>
       </div>
       <TextNewsTicker headlines={headlines} />

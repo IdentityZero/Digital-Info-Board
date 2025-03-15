@@ -4,7 +4,7 @@ from .models import OrganizationMembers, UpcomingEvents, MediaDisplays
 
 
 class OrganizationMembersAdmin(admin.ModelAdmin):
-    list_display = ["id", "name", "position", "last_modified"]
+    list_display = ["id", "name", "position", "priority", "last_modified"]
 
 
 admin.site.register(OrganizationMembers, OrganizationMembersAdmin)

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Id } from "react-toastify";
+import { Id, toast } from "react-toastify";
 import { FaExclamationCircle } from "react-icons/fa";
 
 import ClosableMessage from "../../../components/ClosableMessage";
@@ -18,7 +18,10 @@ import { type OrganizationMembersType } from "../../../types/FixedContentTypes";
 import {
   deleteOrgMemberApi,
   listPaginatedOrgMembersApi,
+  updateOrgMemberPriorityApi,
 } from "../../../api/fixedContentRquests";
+import { getChangedObj, isObjectEqual } from "../../../utils/utils";
+import axios from "axios";
 
 const OrganizationPage = () => {
   const toastId = useRef<Id | null>(null);
@@ -53,7 +56,7 @@ const OrganizationPage = () => {
 
   const addNewMember = (newMember: OrganizationMembersType) => {
     setMembersList((prev) => {
-      const updatedList = [newMember, ...prev.results];
+      const updatedList = [...prev.results, newMember];
 
       if (updatedList.length > pageSize) {
         updatedList.pop();
@@ -88,6 +91,55 @@ const OrganizationPage = () => {
     }
   };
 
+  const handleUpdatePriority = async (
+    newPriorityArr: OrganizationMembersType[]
+  ) => {
+    // Get map of ids
+    if (isObjectEqual(newPriorityArr, membersList.results)) {
+      toast("No changes were made", { type: "info" });
+      return;
+    }
+
+    const updatedPrioList = getChangedObj(
+      membersList.results,
+      newPriorityArr
+    ).map((member) => ({ id: member.id, priority: member.priority }));
+
+    loading("Updating priority sequence. Please wait...");
+
+    try {
+      await updateOrgMemberPriorityApi(userApi, updatedPrioList);
+      update({
+        render: "Update successful",
+        type: "success",
+      });
+      setMembersList((prev) => ({ ...prev, results: newPriorityArr }));
+    } catch (error) {
+      if (!axios.isAxiosError(error)) {
+        update({
+          render: "Unexpected error occured. Please try again.",
+          type: "error",
+        });
+        return;
+      }
+
+      const err = error.response?.data;
+
+      if (!err) {
+        update({
+          render: "Unexpected error occured. Please try again.",
+          type: "error",
+        });
+        return;
+      }
+
+      update({
+        render: err.message || "Failed to save. Please try again.",
+        type: "error",
+      });
+    }
+  };
+
   useEffect(() => {
     fetchMembersList(page, pageSize);
   }, [page, pageSize]);
@@ -113,6 +165,7 @@ const OrganizationPage = () => {
             <ListMembers
               members={membersList.results}
               handleDelete={handleDelete}
+              handleUpdatePriority={handleUpdatePriority}
             />
             <Pagination
               pageSize={pageSize}

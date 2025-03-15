@@ -15,6 +15,7 @@ class OrganizationMembers(TimestampedModel):
     image = models.ImageField(
         upload_to="org_members", default="org_members/default.png"
     )
+    priority = models.PositiveIntegerField(blank=True, null=True)
 
 
 class UpcomingEvents(TimestampedModel):

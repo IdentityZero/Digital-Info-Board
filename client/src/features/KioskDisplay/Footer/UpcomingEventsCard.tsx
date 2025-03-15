@@ -51,7 +51,7 @@ const UpcomingEventsCard = () => {
           </div>
         </>
       ) : (
-        <div className="flex flex-col items-center space-y-4">
+        <div className="flex flex-col items-center space-y-4 z-10">
           {events.map((event, index) => (
             <div key={index} className="text-center">
               <div className="text-md font-bold tracking-wide">

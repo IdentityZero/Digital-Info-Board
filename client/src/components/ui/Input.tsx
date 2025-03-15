@@ -24,6 +24,7 @@ const Input = ({ error, helpText, labelText, ...inputProps }: InputPropsv1) => {
       </label>
       <div className="relative">
         <input
+          id={name}
           {...inputProps}
           type={inputType}
           className={`w-full px-3 py-2 rounded-md shadow-sm focus:outline-none ${

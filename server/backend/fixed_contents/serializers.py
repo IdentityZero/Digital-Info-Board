@@ -9,6 +9,15 @@ class OrganizationMembersSerializer(serializers.ModelSerializer):
         model = OrganizationMembers
         fields = "__all__"
 
+    def create(self, validated_data):
+        priority_number = OrganizationMembers.objects.count() + 1
+
+        inst = OrganizationMembers.objects.create(
+            **validated_data, priority=priority_number
+        )
+
+        return inst
+
 
 class UpcomingEventsSerializer(serializers.ModelSerializer):
     class Meta:

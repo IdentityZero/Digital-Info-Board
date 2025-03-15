@@ -52,7 +52,7 @@ const CreateEvent = ({ onSuccess }: CreateEventProps) => {
   return (
     <form onSubmit={handleSubmit} ref={formRef}>
       <Accordion>
-        <AccordionItem title="Add New Event">
+        <AccordionItem title="Add New Event" isOpenInit={false}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Input
               labelText="Event Name"
