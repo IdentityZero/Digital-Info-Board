@@ -9,6 +9,7 @@ import { FaPlusCircle, FaTrashAlt } from "react-icons/fa";
 import QuillEditor, { isQuillValueEmpty } from "../../components/QuillEditor";
 import { Input, Form } from "../../components/ui";
 
+import { convertSecondsToDuration } from "../../utils/utils";
 import { useAuth } from "../../context/AuthProvider";
 import useLoadingToast from "../../hooks/useLoadingToast";
 
@@ -34,6 +35,7 @@ const CreateVideoAnnouncement = () => {
 
   const [videos, setVideos] = useState<VideoAnnouncementCreateType[]>([]);
   const [videoDurations, setVideoDurations] = useState<string[]>([]);
+
   const MAX_UPLOAD = 5;
   const [uploadProgress, setUploadProgress] = useState(0);
 
@@ -293,8 +295,23 @@ const CreateVideoAnnouncement = () => {
                       ref={(el) => {
                         if (el) {
                           el.onloadedmetadata = () => {
-                            const duration = el.duration.toFixed(2); // Get the duration in seconds
-                            setVideoDurations((prev) => [...prev, duration]);
+                            const duration = el.duration; // Get the duration in seconds
+                            setVideoDurations((prev) => [
+                              ...prev,
+                              duration.toFixed(2),
+                            ]);
+
+                            setVideos((prev) =>
+                              prev.map((video, i) =>
+                                i === index
+                                  ? {
+                                      ...video,
+                                      duration:
+                                        convertSecondsToDuration(duration),
+                                    }
+                                  : video
+                              )
+                            );
                           };
                         }
                       }}

@@ -139,6 +139,20 @@ export function convertDurationToSeconds(duration: string): number {
   return hours * 3600 + minutes * 60 + seconds;
 }
 
+export function convertSecondsToDuration(seconds: number): string {
+  /**
+   * Converts seconds into a duration string 'hh:mm:ss'
+   * Ensures seconds are an integer by flooring the value.
+   */
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  const secs = Math.floor(seconds % 60); // Floor the seconds to remove decimals
+
+  return [hours, minutes, secs]
+    .map((unit) => String(unit).padStart(2, "0"))
+    .join(":");
+}
+
 export function moveFirstToLast<T>(arr: T[]): T[] {
   /**
    * Moves the first element of an array to the last
