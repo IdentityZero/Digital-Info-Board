@@ -1,5 +1,7 @@
 # Media Files (Not static)
 media/
+!media/profile_pics/profile.png
+!media/org_members/default.png
 
 # Environment Variables
 .env
