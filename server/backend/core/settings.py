@@ -86,6 +86,7 @@ INSTALLED_APPS = [
     "notifications",
     "field_devices",
     "custom_calendar",
+    "own_calendar",
 ]
 
 MIDDLEWARE = [
