@@ -18,6 +18,24 @@
   @apply bg-cyanBlue-darker;
 }
 
+.calendar-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.calendar-scrollbar::-webkit-scrollbar-track {
+  background: #2c6eb0; /* Darker shade of blue */
+}
+
+.calendar-scrollbar::-webkit-scrollbar-thumb {
+  background: #1b4d85; /* Even darker blue for contrast */
+  border-radius: 4px;
+}
+
+.calendar-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #133a63; /* A deeper shade when hovered */
+}
+
 .custom-quill .ql-editor {
   min-height: 16rem;
 }

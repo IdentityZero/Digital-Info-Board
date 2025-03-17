@@ -28,7 +28,7 @@ urlpatterns = [
     path("fixed-contents/", include("fixed_contents.urls")),
     path("settings/", include("settings.urls")),
     path("notifications/", include("notifications.urls")),
-    path("calendar/", include("custom_calendar.urls")),
+    path("calendar/", include("own_calendar.urls")),
 ]
 
 if settings.DEBUG:

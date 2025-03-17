@@ -73,7 +73,8 @@ import MediaDisplaysPage from "./pages/protected/default-display-pages/MediaDisp
 import WeatherForecastSettingsPage from "./pages/protected/default-display-pages/WeatherForecastSettingsPage";
 
 // Calendar Pages
-import CalendarContentsPage from "./pages/protected/calendar-pages/CalendarContentsPage";
+import CalendarContentsPageV2 from "./pages/protected/calendar-pages/CalendarContentsPageV2";
+// import CalendarContentsPage from "./pages/protected/calendar-pages/CalendarContentsPage";
 import CalendarSettingsPage from "./pages/protected/calendar-pages/CalendarSettingsPage";
 
 const router = createBrowserRouter(
@@ -135,7 +136,8 @@ const router = createBrowserRouter(
         {/* Calendar Pages */}
 
         <Route path="calendar" element={<CalendarPage />}>
-          <Route index element={<CalendarContentsPage />} />
+          {/* <Route index element={<CalendarContentsPage />} /> */}
+          <Route index element={<CalendarContentsPageV2 />} />
           <Route path="settings" element={<CalendarSettingsPage />} />
         </Route>
 

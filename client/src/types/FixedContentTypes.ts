@@ -19,3 +19,12 @@ export type MediaDisplayType = {
   file_size: number;
   type: "video" | "image";
 };
+
+export type CalendarEventType = {
+  id: number;
+  title: string;
+  description?: string;
+  location?: string;
+  start: Date;
+  end: Date;
+};
