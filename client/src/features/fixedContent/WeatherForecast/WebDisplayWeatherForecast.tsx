@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
-import { getNextFiveHours } from "../../../utils/utils";
 import {
   HourlyForecastType,
   WeatherForecastType,
 } from "../../../types/FixedContentTypes";
+import axios from "axios";
+import { getNextFiveHours } from "../../../utils/utils";
 
-const WeatherForecast = () => {
+const WebDisplayWeatherForecast = () => {
   const [weatherInfo, setWeatherInfo] = useState<
     WeatherForecastType | undefined
   >(undefined);
@@ -30,14 +30,17 @@ const WeatherForecast = () => {
   }, []);
 
   return (
-    <div className="relative flex flex-col items-center justify-between rounded-2xl shadow-lg h-full w-full px-1">
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/40 to-purple-500/30 rounded-2xl blur-2xl"></div>
-      <div className="relative z-10 text-3xl font-semibold">
-        Weather Forecast
+    <div className="relative flex flex-col items-center h-full px-4 py-6 bg-white text-black">
+      {/* Title */}
+      <div className="text-3xl font-mono font-bold relative z-10">
+        🌦️ Weather Forecast
       </div>
 
-      {/* 3 Day forecast */}
-      <div className="relative z-10 flex flex-col w-full items-center gap-4">
+      {/* Divider */}
+      <div className="w-5/6 h-0.5 bg-gray-300 my-3 relative z-10"></div>
+
+      {/* 3-Day Forecast */}
+      <div className="flex flex-col items-center space-y-4 relative z-10 w-full">
         {weatherInfo &&
           weatherInfo.forecast.forecastday.map((day, index) => {
             const date = new Date(day.date);
@@ -50,32 +53,27 @@ const WeatherForecast = () => {
               day: "numeric",
             });
 
-            // Card
             return (
               <div
                 key={index}
-                className="flex flex-col items-center justify-center w-full py-1 bg-white/10 rounded-lg border border-white/20 "
+                className="flex flex-row items-center justify-evenly w-[80%] p-2 bg-gray-100 rounded-lg border border-gray-300"
               >
-                <div className="flex justify-between w-full px-1">
-                  <span className="font-semibold text-sm w-1/3">
-                    {formattedDay}, {formattedDate}
-                  </span>
-                  <img
-                    src={day.day.condition.icon}
-                    alt={day.day.condition.text}
-                    className="h-8 w-8"
-                  />
-                  <span className="text-md w-1/3">
-                    {day.day.avgtemp_c} &deg;C
-                  </span>
-                </div>
+                <span className="font-semibold text-sm ">
+                  {formattedDay}, {formattedDate}
+                </span>
+                <img
+                  src={day.day.condition.icon}
+                  alt={day.day.condition.text}
+                  className="h-8 w-8"
+                />
+                <span className="text-md">{day.day.avgtemp_c} &deg;C</span>
               </div>
             );
           })}
       </div>
 
-      {/* Hourly */}
-      <div className="relative z-10 flex w-full justify-around items-center mb-4">
+      {/* Hourly Forecast */}
+      <div className="relative z-10 flex w-full justify-around items-center mt-4">
         {hourlyInfo.map((hour, index) => {
           const datetime = new Date(hour.time);
           const time = datetime.toLocaleTimeString("en-GB", {
@@ -99,4 +97,4 @@ const WeatherForecast = () => {
     </div>
   );
 };
-export default WeatherForecast;
+export default WebDisplayWeatherForecast;

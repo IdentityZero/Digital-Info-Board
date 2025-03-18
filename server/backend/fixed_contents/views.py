@@ -2,7 +2,7 @@ from django.db import transaction
 from rest_framework import generics, permissions, status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
-from django.db.models import OrderBy, F
+from django.db.models import OrderBy, F, Case, When, Value, IntegerField
 from django.utils.timezone import now
 
 from utils.permissions import IsAdmin
@@ -84,10 +84,22 @@ class ListCreateUpcomingEventApiView(generics.ListCreateAPIView):
     def get_queryset(self):
         qs = models.UpcomingEvents.objects.all()
 
-        active = self.request.query_params.get("active")
+        today = now().date()
 
+        # Annotate events to distinguish upcoming (0) and past (1) events
+        qs = qs.annotate(
+            is_past=Case(
+                When(date__lt=today, then=Value(1)),  # Past events get value 1
+                default=Value(0),  # Upcoming events get value 0
+                output_field=IntegerField(),
+            )
+        ).order_by(
+            "is_past", "date"
+        )  # Sort upcoming first, then by date
+
+        # Filter for active events if requested
+        active = self.request.query_params.get("active")
         if active:
-            today = now().date()
             qs = qs.filter(date__gt=today)
 
         return qs

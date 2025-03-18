@@ -71,7 +71,7 @@ const MediaDisplay = ({ initialIndex = 1 }: MediaDisplayProps) => {
             <div className="w-full h-full shrink-0" key={index}>
               <img
                 src={medium.file}
-                className="h-full w-full object-fill"
+                className="h-full w-full object-contain mx-auto"
                 alt="Image"
               />
             </div>

@@ -228,3 +228,13 @@ export function getChangedObj<T>(oldObj: T[], newObj: T[]) {
     return JSON.stringify(oldItem) !== JSON.stringify(newItem);
   });
 }
+
+export function getNextFiveHours<T>(data: T[]): T[] {
+  const totalHours = 24;
+  const currentHour = new Date().getHours();
+
+  if (currentHour + 5 <= totalHours) {
+    return data.slice(currentHour, currentHour + 5);
+  }
+  return data.slice(totalHours - 5, totalHours);
+}

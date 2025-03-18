@@ -63,7 +63,7 @@ const OrgMembers = () => {
   }, [isTransitioning, currentIndex]);
 
   return (
-    <div className="w-full h-full relative border rounded-lg shadow-lg overflow-hidden">
+    <div className="w-full h-full relative border rounded-lg shadow-lg overflow-hidden py-2">
       <img
         src={logoLg}
         alt="logo"

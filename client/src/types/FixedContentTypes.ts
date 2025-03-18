@@ -28,3 +28,28 @@ export type CalendarEventType = {
   start: Date;
   end: Date;
 };
+
+export type ForecastDayType = {
+  date: string;
+  day: {
+    avgtemp_c: number;
+    condition: {
+      icon: string;
+      text: string;
+    };
+  };
+  hour: {
+    time: string;
+    temp_c: number;
+    condition: {
+      icon: string;
+      text: string;
+    };
+  }[];
+};
+
+export type HourlyForecastType = ForecastDayType["hour"][0];
+
+export type WeatherForecastType = {
+  forecast: { forecastday: ForecastDayType[] };
+};
