@@ -55,6 +55,8 @@ const OrganizationPage = () => {
   };
 
   const addNewMember = (newMember: OrganizationMembersType) => {
+    console.log("Runing add member");
+
     setMembersList((prev) => {
       const updatedList = [...prev.results, newMember];
 
@@ -94,7 +96,6 @@ const OrganizationPage = () => {
   const handleUpdatePriority = async (
     newPriorityArr: OrganizationMembersType[]
   ) => {
-    // Get map of ids
     if (isObjectEqual(newPriorityArr, membersList.results)) {
       toast("No changes were made", { type: "info" });
       return;

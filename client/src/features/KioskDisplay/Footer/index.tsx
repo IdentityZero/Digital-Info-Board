@@ -12,8 +12,8 @@ const Footer = memo(({ headlines }: { headlines: string[] }) => {
         {/* Weather Forecast */}
         <div
           className="relative flex-1 flex flex-col items-center justify-between 
-                 bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-xl 
-                 text-white text-center h-[350px] max-h-[350px] overflow-hidden"
+         bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-xl 
+         text-white text-center h-[350px] max-h-[350px] overflow-hidden"
         >
           <WeatherForecast />
         </div>

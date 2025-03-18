@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaTrash } from "react-icons/fa";
 import {
   DndContext,
@@ -36,8 +36,12 @@ const ListMembers = ({
   const lowestPriority = Math.min(...items.map((item) => item.priority));
   const [hasChange, setHasChange] = useState(false);
 
+  useEffect(() => {
+    setItems(members);
+  }, [members]);
+
   const sensors = useSensors(
-    useSensor(PointerSensor),
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     })
@@ -85,7 +89,6 @@ const ListMembers = ({
             <thead className="bg-gray-200">
               <tr>
                 <th className="p-2 border">ID</th>
-                <th className="p-2 border">Priority</th>
                 <th className="p-2 border">Image</th>
                 <th className="p-2 border">Name</th>
                 <th className="p-2 border">Position</th>
@@ -128,7 +131,7 @@ function SortableTableRow({ member, handleDelete }: SortableTableRowProps) {
 
   const style = {
     transform: CSS.Transform.toString(transform),
-    transition,
+    transition: transform ? transition : "none", // Only transition when moving
   };
 
   return (
@@ -140,7 +143,6 @@ function SortableTableRow({ member, handleDelete }: SortableTableRowProps) {
       className="border hover:bg-gray-100 cursor-grab"
     >
       <td className="p-2 border text-center">{member.id}</td>
-      <td className="p-2 border text-center">{member.priority}</td>
       <td className="p-2 border text-center">
         {member.image ? (
           <img
@@ -155,7 +157,7 @@ function SortableTableRow({ member, handleDelete }: SortableTableRowProps) {
       <td className="p-2 border">{member.name}</td>
       <td className="p-2 border">{member.position}</td>
       <td className="p-2 text-center">
-        <button onClick={() => handleDelete(member.id)}>
+        <button onClick={() => handleDelete(member.id)} data-no-dnd={true}>
           <IconWithTooltip
             icon={FaTrash}
             label="Delete"

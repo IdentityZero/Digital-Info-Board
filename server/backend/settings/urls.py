@@ -1,5 +1,13 @@
 from django.urls import path
 
-from .views import RetrieveSettingsAPIView
+from .views import (
+    RetrieveSettingsAPIView,
+    RetrieveUpdateSettingsApiView,
+    RetrieveFixedContentSettingsApiView,
+)
 
-urlpatterns = [path("", RetrieveSettingsAPIView.as_view())]
+urlpatterns = [
+    path("", RetrieveSettingsAPIView.as_view()),
+    path("v1/", RetrieveUpdateSettingsApiView.as_view()),
+    path("v1/all/", RetrieveFixedContentSettingsApiView.as_view()),
+]

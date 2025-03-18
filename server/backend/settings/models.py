@@ -4,6 +4,11 @@ from django.utils import timezone
 
 class Settings(models.Model):
     announcement_start = models.DateTimeField(default=timezone.now)
+    show_organization = models.BooleanField(default=True)
+    show_upcoming_events = models.BooleanField(default=True)
+    show_media_displays = models.BooleanField(default=True)
+    show_weather_forecast = models.BooleanField(default=True)
+    show_calendar = models.BooleanField(default=True)
 
     def save(self, *args, **kwargs):
         self.pk = 1

@@ -60,9 +60,8 @@ const WeatherForecast = () => {
   }, []);
 
   return (
-    <>
+    <div className="relative flex flex-col items-center justify-between rounded-2xl shadow-lg h-full w-full px-1">
       <div className="absolute inset-0 bg-gradient-to-br from-blue-500/40 to-purple-500/30 rounded-2xl blur-2xl"></div>
-
       <div className="relative z-10 text-3xl font-semibold">
         Weather Forecast
       </div>
@@ -127,7 +126,7 @@ const WeatherForecast = () => {
           );
         })}
       </div>
-    </>
+    </div>
   );
 };
 export default WeatherForecast;

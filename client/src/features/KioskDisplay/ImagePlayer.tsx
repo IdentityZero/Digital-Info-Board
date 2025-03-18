@@ -35,7 +35,7 @@ const ImagePlayer = ({ images, setIsPortrait }: ImagePlayerProps) => {
             <img
               src={image.image as string}
               alt=""
-              className="w-full h-full object-cover"
+              className="w-full h-full object-contain"
               onLoad={(e) => {
                 const target = e.currentTarget;
                 setIsPortrait(target.naturalHeight > target.naturalWidth);

@@ -54,7 +54,7 @@ const MediaDisplay = ({ initialIndex = 1 }: MediaDisplayProps) => {
   }, []);
 
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-full overflow-hidden">
       {mediaDisplays.length === 0 ? (
         <div className="w-full h-full pt-4 text-center text-xl font-semibold">
           No displays to show
@@ -67,8 +67,8 @@ const MediaDisplay = ({ initialIndex = 1 }: MediaDisplayProps) => {
           style={{ transform: `translateX(-${currentIndex * 100}%)` }}
           onTransitionEnd={handleTransitionEnd}
         >
-          {extendedMedia.map((medium) => (
-            <div className="w-full h-full shrink-0" key={medium.id}>
+          {extendedMedia.map((medium, index) => (
+            <div className="w-full h-full shrink-0" key={index}>
               <img
                 src={medium.file}
                 className="h-full w-full object-fill"

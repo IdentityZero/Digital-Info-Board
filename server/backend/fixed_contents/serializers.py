@@ -1,5 +1,6 @@
-from rest_framework import serializers
 import mimetypes
+from django.db.models import Max
+from rest_framework import serializers
 
 from .models import OrganizationMembers, UpcomingEvents, MediaDisplays
 
@@ -10,7 +11,13 @@ class OrganizationMembersSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def create(self, validated_data):
-        priority_number = OrganizationMembers.objects.count() + 1
+        priority_number = (
+            OrganizationMembers.objects.aggregate(max_value=Max("priority"))[
+                "max_value"
+            ]
+            + 1
+            or 0
+        )
 
         inst = OrganizationMembers.objects.create(
             **validated_data, priority=priority_number
