@@ -130,6 +130,7 @@ const router = createBrowserRouter(
           }
         >
           <Route index element={<ActiveListPage />} />
+          <Route path="active" element={<ActiveListPage />} />
           <Route path="inactive" element={<InActiveListPage />} />
         </Route>
         <Route path="current-display" element={<CurrentDisplayPage />} />
@@ -144,6 +145,7 @@ const router = createBrowserRouter(
         {/* Default Display Pages */}
         <Route path="default-display" element={<DefaultDisplayPage />}>
           <Route index element={<DefaultDisplaySettingsPage />} />
+          <Route path="settings" element={<DefaultDisplaySettingsPage />} />
           <Route path="organization" element={<OrganizationPage />} />
           <Route path="events" element={<UpcomingEventsPage />} />
           <Route path="media" element={<MediaDisplaysPage />} />
@@ -152,6 +154,7 @@ const router = createBrowserRouter(
         {/* Accounts Pages */}
         <Route path="account" element={<AccountSettingsPage />}>
           <Route index element={<MyProfilePage />} />
+          <Route path="my-profile" element={<MyProfilePage />} />
           <Route path="change-password" element={<ChangeMyPasswordPage />} />
 
           <Route
