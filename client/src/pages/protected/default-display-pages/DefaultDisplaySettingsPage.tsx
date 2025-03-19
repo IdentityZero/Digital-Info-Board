@@ -18,6 +18,8 @@ import WeatherForecast from "../../../features/KioskDisplay/Footer/WeatherForeca
 import ActivationCard from "../../../features/fixedContent/Settings/ActivationCard";
 import CalendarCard from "../../../features/KioskDisplay/MainAside/CalendarCard";
 
+import SlideshowDuration from "./Settings/SlideshowDuration";
+
 type FixedContentMapType = {
   name: string;
   key: keyof SettingsType;
@@ -116,6 +118,18 @@ const DefaultDisplaySettingsPage = () => {
           </Modal>
         </>
       ))}
+      <section>
+        {settings && (
+          <SlideshowDuration
+            settings={settings}
+            setSettings={
+              setSettings as React.Dispatch<React.SetStateAction<SettingsType>>
+            }
+            isSaving={isSaving}
+            setIsSaving={setIsSaving}
+          />
+        )}
+      </section>
     </div>
   );
 };

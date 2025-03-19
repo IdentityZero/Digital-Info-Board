@@ -5,9 +5,13 @@ import { listMediaDisplaysApi } from "../../api/fixedContentRquests";
 
 type MediaDisplayProps = {
   initialIndex?: number;
+  slideDuration?: number;
 };
 
-const MediaDisplay = ({ initialIndex = 1 }: MediaDisplayProps) => {
+const MediaDisplay = ({
+  initialIndex = 1,
+  slideDuration = 5000,
+}: MediaDisplayProps) => {
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
@@ -38,7 +42,7 @@ const MediaDisplay = ({ initialIndex = 1 }: MediaDisplayProps) => {
   useEffect(() => {
     const interval = setInterval(() => {
       handleNext();
-    }, 3000);
+    }, slideDuration);
 
     return () => clearInterval(interval);
   }, [isTransitioning, currentIndex]);

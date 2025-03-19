@@ -14,11 +14,14 @@ export const listSystemSettingsApi = async (): Promise<SettingsType> => {
   }
 };
 
-export const updateSystemSettingsApi = async (
+export const updateSystemSettingsApi = async <K extends keyof SettingsType>(
   axiosInstance: AxiosInstance,
-  key: keyof SettingsType,
-  value: string | boolean
-) => {
+  key: K,
+  value: SettingsType[K]
+): Promise<Partial<Record<K, SettingsType[K]>>> => {
+  /**
+   * On success, it will only return the key you updated.
+   */
   try {
     const response = await axiosInstance.patch(
       SITE_SETTINGS_URL + `v1/?setting=${key}`,

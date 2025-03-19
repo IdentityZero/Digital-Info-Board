@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from django.db import models
 from django.utils import timezone
 
@@ -9,6 +11,9 @@ class Settings(models.Model):
     show_media_displays = models.BooleanField(default=True)
     show_weather_forecast = models.BooleanField(default=True)
     show_calendar = models.BooleanField(default=True)
+    organization_slide_duration = models.DurationField(default=timedelta(seconds=5))
+    media_displays_slide_duration = models.DurationField(default=timedelta(seconds=5))
+    upcoming_events_slide_duration = models.DurationField(default=timedelta(seconds=5))
 
     def save(self, *args, **kwargs):
         self.pk = 1

@@ -7,7 +7,7 @@ import { OrganizationMembersType } from "../../../types/FixedContentTypes";
 import { listOrgmembersApi } from "../../../api/fixedContentRquests";
 import LoadingMessage from "../../../components/LoadingMessage";
 
-const OrgMembers = () => {
+const OrgMembers = ({ slideDuration = 5000 }: { slideDuration?: number }) => {
   const [currentIndex, setCurrentIndex] = useState(1);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
@@ -57,7 +57,7 @@ const OrgMembers = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       handleNext();
-    }, 3000);
+    }, slideDuration);
 
     return () => clearInterval(interval);
   }, [isTransitioning, currentIndex]);

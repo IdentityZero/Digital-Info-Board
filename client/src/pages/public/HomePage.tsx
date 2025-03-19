@@ -9,6 +9,7 @@ import OrgMembers from "../../features/KioskDisplay/MainAside/OrgMembers";
 import MediaDisplay from "../../features/KioskDisplay/MediaDisplay";
 import WebDisplayEvents from "../../features/fixedContent/Events/WebDisplayEvents";
 import WebDisplayWeatherForecast from "../../features/fixedContent/WeatherForecast/WebDisplayWeatherForecast";
+import { convertDurationToSeconds } from "../../utils/utils";
 
 const HomePage = () => {
   // TODO: POSSIBILITY OF EMPTY ANNOUNCEMENT (The announcement has no body or type)
@@ -50,12 +51,24 @@ const HomePage = () => {
                 backgroundBlendMode: "overlay",
               }}
             >
-              <MediaDisplay />
+              <MediaDisplay
+                slideDuration={
+                  convertDurationToSeconds(
+                    settings.media_displays_slide_duration
+                  ) * 1000
+                }
+              />
             </div>
           )}
           {settings?.show_organization && (
             <div className=" min-w-[400px] max-w-[500px] rounded-lg shadow-xl overflow-hidden border mx-auto">
-              <OrgMembers />
+              <OrgMembers
+                slideDuration={
+                  convertDurationToSeconds(
+                    settings.organization_slide_duration
+                  ) * 1000
+                }
+              />
             </div>
           )}
         </div>

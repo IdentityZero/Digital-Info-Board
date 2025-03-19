@@ -22,6 +22,9 @@ class ListSettingsSerializer(serializers.ModelSerializer):
             "show_media_displays",
             "show_weather_forecast",
             "show_calendar",
+            "organization_slide_duration",
+            "media_displays_slide_duration",
+            "upcoming_events_slide_duration",
         ]
 
 
@@ -59,3 +62,21 @@ class ShowCalendarSerializer(serializers.ModelSerializer):
     class Meta:
         model = Settings
         fields = ["show_calendar"]
+
+
+class OrganizationSlideDurationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Settings
+        fields = ["organization_slide_duration"]
+
+
+class MediaDisplaysSlideDurationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Settings
+        fields = ["media_displays_slide_duration"]
+
+
+class UpcomingEventsSlideDurationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Settings
+        fields = ["upcoming_events_slide_duration"]
