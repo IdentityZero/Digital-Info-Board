@@ -52,6 +52,7 @@ const HomePage = () => {
               }}
             >
               <MediaDisplay
+                showNavigation
                 slideDuration={
                   convertDurationToSeconds(
                     settings.media_displays_slide_duration
