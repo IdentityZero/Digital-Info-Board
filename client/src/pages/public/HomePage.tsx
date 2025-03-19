@@ -64,6 +64,7 @@ const HomePage = () => {
           {settings?.show_organization && (
             <div className=" min-w-[400px] max-w-[500px] rounded-lg shadow-xl overflow-hidden border mx-auto">
               <OrgMembers
+                showNavigation
                 slideDuration={
                   convertDurationToSeconds(
                     settings.organization_slide_duration

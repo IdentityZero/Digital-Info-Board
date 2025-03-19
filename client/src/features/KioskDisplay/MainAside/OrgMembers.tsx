@@ -7,9 +7,19 @@ import { OrganizationMembersType } from "../../../types/FixedContentTypes";
 import { listOrgmembersApi } from "../../../api/fixedContentRquests";
 import LoadingMessage from "../../../components/LoadingMessage";
 
-const OrgMembers = ({ slideDuration = 5000 }: { slideDuration?: number }) => {
+type OrgMembersDisplayProps = {
+  slideDuration?: number;
+  showNavigation?: boolean;
+};
+
+const OrgMembers = ({
+  showNavigation = false,
+  slideDuration = 5000,
+}: OrgMembersDisplayProps) => {
   const [currentIndex, setCurrentIndex] = useState(1);
   const [isTransitioning, setIsTransitioning] = useState(false);
+
+  const [hoverShowNavigation, setHoverShowNavigation] = useState(false);
 
   const [orgMembers, setOrgMembers] = useState<OrganizationMembersType[]>([]);
 
@@ -23,6 +33,12 @@ const OrgMembers = ({ slideDuration = 5000 }: { slideDuration?: number }) => {
     ...chunkedItems,
     chunkedItems[0],
   ];
+
+  const handlePrev = () => {
+    if (isTransitioning) return;
+    setIsTransitioning(true);
+    setCurrentIndex((prevIndex) => prevIndex - 1);
+  };
 
   const handleNext = () => {
     if (isTransitioning) return;
@@ -63,13 +79,17 @@ const OrgMembers = ({ slideDuration = 5000 }: { slideDuration?: number }) => {
   }, [isTransitioning, currentIndex]);
 
   return (
-    <div className="w-full h-full relative border rounded-lg shadow-lg overflow-hidden py-2">
+    <div
+      className="w-full h-full relative border rounded-lg shadow-lg overflow-hidden py-2"
+      onMouseEnter={() => setHoverShowNavigation(true)}
+      onMouseLeave={() => setHoverShowNavigation(false)}
+    >
       <img
         src={logoLg}
         alt="logo"
         className="absolute opacity-5 h-full w-full object-contain object-center"
       />
-      <div className="z-[1] h-full w-full flex flex-col mt-2">
+      <div className="z-[1] h-full w-full flex flex-col mt-2 relative">
         <p className="text-center font-bold text-xl text-black">
           CPE Department
         </p>
@@ -93,6 +113,22 @@ const OrgMembers = ({ slideDuration = 5000 }: { slideDuration?: number }) => {
               </div>
             ))}
           </div>
+        )}
+        {hoverShowNavigation && showNavigation && (
+          <>
+            <button
+              onClick={handlePrev}
+              className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-gray-800 bg-opacity-50 text-white p-2 rounded-full hover:bg-gray-600 focus:outline-none"
+            >
+              &#8249;
+            </button>
+            <button
+              onClick={handleNext}
+              className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-gray-800 bg-opacity-50 text-white p-2 rounded-full hover:bg-gray-600 focus:outline-none"
+            >
+              &#8250;
+            </button>
+          </>
         )}
       </div>
     </div>
