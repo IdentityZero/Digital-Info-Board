@@ -65,11 +65,15 @@ function MenuItem({
   const [isChildrenDisplayed, setIsChildrenDisplayed] = useState(false);
 
   const handleLogoutClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    setIsChildrenDisplayed(!isChildrenDisplayed);
-    if (menu.label !== "log out") return;
-    const confirmLogout = window.confirm("Are you sure you want to logout?");
-    if (!confirmLogout) {
-      e.preventDefault();
+    if (menu.label === "log out") {
+      const confirmLogout = window.confirm("Are you sure you want to logout?");
+      if (!confirmLogout) {
+        e.preventDefault();
+      }
+      return;
+    }
+    if (menu.children && menu.children.length > 0) {
+      setIsChildrenDisplayed(!isChildrenDisplayed);
     }
   };
 
