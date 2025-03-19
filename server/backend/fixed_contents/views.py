@@ -31,10 +31,13 @@ class ListCreateOrgMembersApiView(generics.ListCreateAPIView):
 @api_view(["PUT"])
 @permission_classes([permissions.IsAuthenticated, IsAdmin])
 def update_org_priority(request):
+    """
+    Expects data as application/json
+    """
     data = request.data
     if not isinstance(data, list):
         return Response(
-            {"error": "Expected a list of objects", "success": False},
+            {"message": "Expected a list of objects", "success": False},
             status=status.HTTP_400_BAD_REQUEST,
         )
 
@@ -51,7 +54,7 @@ def update_org_priority(request):
         except models.OrganizationMembers.DoesNotExist:
             return Response(
                 {
-                    "error": f"ID no.{id} cannot be found. Please refresh the page to get latest data.",
+                    "message": f"ID no.{id} cannot be found. Please refresh the page to get latest data.",
                     "success": False,
                 },
                 status=status.HTTP_404_NOT_FOUND,
@@ -121,6 +124,53 @@ class ListCreateMediaDisplaysApiView(generics.ListCreateAPIView):
             return [permissions.AllowAny()]
         else:
             return [permissions.IsAuthenticated(), IsAdmin()]
+
+    def get_queryset(self):
+        qs = models.MediaDisplays.objects.all().order_by(
+            OrderBy(F("priority"), nulls_last=True)
+        )
+        return qs
+
+
+@api_view(["PUT"])
+@permission_classes([permissions.IsAuthenticated, IsAdmin])
+def update_media_displays_priority(request):
+    """
+    Expects data as application/json
+    """
+    data = request.data
+    print(data)
+    if not isinstance(data, list):
+        return Response(
+            {"message": "Expected a list of objects", "success": False},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    instances = []
+
+    for item in data:
+        id = item.get("id")
+
+        try:
+            obj = models.MediaDisplays.objects.get(id=id)
+            for key, value in item.items():
+                setattr(obj, key, value)
+            instances.append(obj)
+        except models.MediaDisplays.DoesNotExist:
+            return Response(
+                {
+                    "message": f"ID no.{id} cannot be found. Please refresh the page to get latest data.",
+                    "success": False,
+                },
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+    with transaction.atomic():
+        models.MediaDisplays.objects.bulk_update(instances, ["priority"])
+
+    return Response(
+        {"message": "Update successful", "success": True}, status=status.HTTP_200_OK
+    )
 
 
 class DeleteMediaDisplayApiView(generics.DestroyAPIView):

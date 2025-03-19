@@ -6,6 +6,7 @@ import { MediaDisplayType } from "../../../types/FixedContentTypes";
 import {
   deleteMediaDisplayApi,
   listPaginatedMediaDisplayApi,
+  updateMediaDisplaysPriorityApi,
 } from "../../../api/fixedContentRquests";
 import usePagination from "../../../hooks/usePagination";
 import LoadingMessage from "../../../components/LoadingMessage";
@@ -13,6 +14,8 @@ import Pagination from "../../../components/Pagination";
 import { useAuth } from "../../../context/AuthProvider";
 import useLoadingToast from "../../../hooks/useLoadingToast";
 import { Id } from "react-toastify";
+import { getChangedObj } from "../../../utils/utils";
+import axios from "axios";
 
 const MediaDisplaysPage = () => {
   const toastId = useRef<Id | null>(null);
@@ -46,7 +49,7 @@ const MediaDisplaysPage = () => {
 
   const addToList = (newMedia: MediaDisplayType) => {
     setMediaDisplayList((prev) => {
-      const updatedList = [newMedia, ...prev.results];
+      const updatedList = [...prev.results, newMedia];
       if (updatedList.length > pageSize) {
         updatedList.pop();
       }
@@ -79,6 +82,49 @@ const MediaDisplaysPage = () => {
     }
   };
 
+  const handleUpdatePriority = async (newPrioArr: MediaDisplayType[]) => {
+    const updatedPrioList = getChangedObj(
+      mediaDisplayList.results,
+      newPrioArr
+    ).map((medium) => ({ id: medium.id, priority: medium.priority }));
+
+    loading("Updating priority sequence. Please wait...");
+
+    try {
+      await updateMediaDisplaysPriorityApi(userApi, updatedPrioList);
+
+      update({
+        render: "Update successful",
+        type: "success",
+      });
+      setMediaDisplayList((prev) => ({ ...prev, results: newPrioArr }));
+    } catch (error) {
+      if (!axios.isAxiosError(error)) {
+        update({
+          render: "Unexpected error occured. Please try again.",
+          type: "error",
+        });
+        return;
+      }
+      console.log(error);
+
+      const err = error.response?.data;
+
+      if (!err) {
+        update({
+          render: "Unexpected error occured. Please try again.",
+          type: "error",
+        });
+        return;
+      }
+
+      update({
+        render: err.message || "Failed to save. Please try again.",
+        type: "error",
+      });
+    }
+  };
+
   useEffect(() => {
     fetchMediaDisplayList(page, pageSize);
   }, [page, pageSize]);
@@ -105,6 +151,7 @@ const MediaDisplaysPage = () => {
             <ListMediaDisplays
               media={mediaDisplayList.results}
               handleDelete={handleDelete}
+              handleUpdatePriority={handleUpdatePriority}
             />
           </>
         )}

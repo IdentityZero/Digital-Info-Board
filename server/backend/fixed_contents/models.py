@@ -39,3 +39,4 @@ class MediaDisplays(TimestampedModel):
         upload_to="media_displays",
         validators=[validate_file_name_length],
     )
+    priority = models.PositiveIntegerField(blank=True, null=True)

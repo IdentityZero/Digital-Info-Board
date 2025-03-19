@@ -18,6 +18,7 @@ export type MediaDisplayType = {
   file: string;
   file_size: number;
   type: "video" | "image";
+  priority: number;
 };
 
 export type CalendarEventType = {

@@ -45,10 +45,6 @@ const CreateMediaDisplay = ({ onSuccess }: CreateMediaDisplayProps) => {
 
     const formData = new FormData(e.currentTarget);
 
-    for (let [key, value] of formData.entries()) {
-      console.log(key, value);
-    }
-
     loading("Saving new media display. Please wait...");
 
     try {

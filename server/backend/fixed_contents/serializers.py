@@ -44,7 +44,7 @@ class MediaDisplaysSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MediaDisplays
-        fields = ["id", "name", "file", "file_size", "type"]
+        fields = ["id", "priority", "name", "file", "file_size", "type"]
 
     def get_file_size(self, obj):
 
@@ -60,3 +60,13 @@ class MediaDisplaysSerializer(serializers.ModelSerializer):
             return "video"
         else:
             return "image"
+
+    def create(self, validated_data):
+        priority_number = (
+            MediaDisplays.objects.aggregate(max_value=Max("priority"))["max_value"] + 1
+            or 0
+        )
+
+        inst = MediaDisplays.objects.create(**validated_data, priority=priority_number)
+
+        return inst

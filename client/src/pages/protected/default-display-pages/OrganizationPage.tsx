@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Id, toast } from "react-toastify";
+import { Id } from "react-toastify";
 import { FaExclamationCircle } from "react-icons/fa";
 
 import ClosableMessage from "../../../components/ClosableMessage";
@@ -20,7 +20,7 @@ import {
   listPaginatedOrgMembersApi,
   updateOrgMemberPriorityApi,
 } from "../../../api/fixedContentRquests";
-import { getChangedObj, isObjectEqual } from "../../../utils/utils";
+import { getChangedObj } from "../../../utils/utils";
 import axios from "axios";
 
 const OrganizationPage = () => {
@@ -96,11 +96,6 @@ const OrganizationPage = () => {
   const handleUpdatePriority = async (
     newPriorityArr: OrganizationMembersType[]
   ) => {
-    if (isObjectEqual(newPriorityArr, membersList.results)) {
-      toast("No changes were made", { type: "info" });
-      return;
-    }
-
     const updatedPrioList = getChangedObj(
       membersList.results,
       newPriorityArr

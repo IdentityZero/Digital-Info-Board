@@ -18,7 +18,7 @@ admin.site.register(UpcomingEvents, UpcomingEventsAdmin)
 
 
 class MediaDisplaysAdmin(admin.ModelAdmin):
-    list_display = ["id", "name", "file"]
+    list_display = ["id", "name", "priority", "file"]
 
 
 admin.site.register(MediaDisplays, MediaDisplaysAdmin)

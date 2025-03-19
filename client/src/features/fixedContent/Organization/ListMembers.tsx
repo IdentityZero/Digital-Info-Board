@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { FaTrash } from "react-icons/fa";
+
 import {
   DndContext,
   closestCenter,
@@ -17,9 +18,11 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { restrictToParentElement } from "@dnd-kit/modifiers";
+
 import IconWithTooltip from "../../../components/IconWithTooltip";
 import { OrganizationMembersType } from "../../../types/FixedContentTypes";
 import { Button } from "../../../components/ui";
+import { getChangedObj } from "../../../utils/utils";
 
 type ListMembersProps = {
   members: OrganizationMembersType[];
@@ -34,7 +37,6 @@ const ListMembers = ({
 }: ListMembersProps) => {
   const [items, setItems] = useState(members);
   const lowestPriority = Math.min(...items.map((item) => item.priority));
-  const [hasChange, setHasChange] = useState(false);
 
   useEffect(() => {
     setItems(members);
@@ -59,7 +61,6 @@ const ListMembers = ({
           priority: index + lowestPriority,
         }));
       });
-      setHasChange(true);
     }
   };
 
@@ -69,11 +70,12 @@ const ListMembers = ({
         <h2 className="text-xl font-semibold mb-4">
           Organization Members List
         </h2>
-        {hasChange && (
-          <Button type="button" onClick={() => handleUpdatePriority(items)}>
-            Update priority
-          </Button>
-        )}
+        {members.length === items.length &&
+          getChangedObj(members, items).length > 0 && (
+            <Button type="button" onClick={() => handleUpdatePriority(items)}>
+              Update priority
+            </Button>
+          )}
       </div>
       <DndContext
         sensors={sensors}
@@ -131,7 +133,7 @@ function SortableTableRow({ member, handleDelete }: SortableTableRowProps) {
 
   const style = {
     transform: CSS.Transform.toString(transform),
-    transition: transform ? transition : "none", // Only transition when moving
+    transition: transition,
   };
 
   return (
