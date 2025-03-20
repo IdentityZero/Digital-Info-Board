@@ -21,8 +21,6 @@ def send_notif_on_new_announcements(sender, instance, created, **kwargs):
     if instance.author.profile.is_admin:
         return
 
-    if created:
-        return
     creator = instance.author
     title = extract_react_quill_text(instance.title)
     message = f"Created a new Content waiting for approval{f' entitled {title}' if title else ''}. Check it out."

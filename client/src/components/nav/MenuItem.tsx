@@ -70,7 +70,7 @@ const MenuItem = ({
               e.preventDefault();
               setIsChildrenDisplayed(!isChildrenDisplayed);
             }}
-            className={`transition-transform transform h-full flex items-center cursor-pointer bg-black${
+            className={`transition-transform transform h-full flex items-center cursor-pointer ${
               isChildrenDisplayed ? "rotate-180" : "rotate-0"
             }`}
           >

@@ -76,6 +76,7 @@ import WeatherForecastSettingsPage from "./pages/protected/default-display-pages
 import CalendarContentsPageV2 from "./pages/protected/calendar-pages/CalendarContentsPageV2";
 // import CalendarContentsPage from "./pages/protected/calendar-pages/CalendarContentsPage";
 import CalendarSettingsPage from "./pages/protected/calendar-pages/CalendarSettingsPage";
+import NotificationsPage from "./pages/protected/NotificationsPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -105,6 +106,7 @@ const router = createBrowserRouter(
         }
       >
         <Route index element={<DashBoardPage />} />
+        <Route path="notifications" element={<NotificationsPage />} />
         <Route path="upload-content" element={<UploadContentPage />}>
           <Route index element={<CreateVideoContentPage />} />
           <Route path="video" element={<CreateVideoContentPage />} />

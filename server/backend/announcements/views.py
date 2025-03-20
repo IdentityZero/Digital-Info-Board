@@ -118,12 +118,6 @@ class ListCreateAllAnnouncementAPIView(generics.ListCreateAPIView):
 
         return found_data
 
-    def get_permissions(self):
-        if self.request.method == "POST":
-            self.permission_classes = [IsAuthenticated]
-
-        return super().get_permissions()
-
     def perform_create(self, serializer):
 
         if serializer.is_valid(raise_exception=True):
@@ -133,7 +127,7 @@ class ListCreateAllAnnouncementAPIView(generics.ListCreateAPIView):
         if self.request.method == "GET":
             return [AllowAny()]
         elif self.request.method == "POST":
-            return [IsAuthenticated(), IsAdmin()]
+            return [IsAuthenticated()]
         return super().get_permissions()
 
     def get_queryset(self):

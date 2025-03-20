@@ -51,6 +51,8 @@ const useNotifications = () => {
     } catch (error) {
       setError(error);
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
