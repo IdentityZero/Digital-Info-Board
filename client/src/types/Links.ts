@@ -6,4 +6,5 @@ export type MenuType = {
   icon?: IconType;
   adminOnly?: boolean;
   children?: MenuType[];
+  mobileOnly?: boolean;
 };

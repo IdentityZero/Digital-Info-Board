@@ -3,9 +3,6 @@ import { useEffect, useState } from "react";
 
 import { LINKS } from "../constants";
 import { LINKSV2 } from "../constants/linksv2";
-// import DashboardSidebar, {
-//   SidebarItem,
-// } from "../components/nav/DashboardSidebar";
 import { ToastContainer } from "react-toastify";
 
 import { useAuth } from "../context/AuthProvider";
@@ -15,6 +12,7 @@ import DashboardMobileSidebar from "../components/nav/DashboardMobileSidebar";
 import DashboardTopbar from "../components/nav/DashboardTopbar";
 
 import DashboardSidebarv2 from "../components/nav/DashboardSidebarv2";
+import DashboardMobileSidebarv2 from "../components/nav/DashboardMobileSidebarv2";
 
 const DashboardLayout = () => {
   const [backgroundImage, setBackgroundImage] = useState<string | null>(null);
@@ -37,17 +35,13 @@ const DashboardLayout = () => {
   return (
     <div className="flex min-h-screen max-w-screen-2xl lg:flex-row flex-col ">
       <div className="sticky min-w-fit top-0 h-screen bg-darkTeal z-50 text-white hover:overflow-y-auto hover:overflow-x-visible overflow-hidden custom-scrollbar max-lg:hidden">
-        <DashboardSidebarv2 menuData={USER_LINKS_V2} />
-        {/* <DashboardSidebar>
-          {USER_LINKS.map((link) => {
-            if (!user?.is_admin && link.adminOnly) return null;
-
-            return <SidebarItem key={link.label} link={link} />;
-          })}
-        </DashboardSidebar> */}
+        <DashboardSidebarv2
+          menuData={USER_LINKS_V2.filter((link) => !link.mobileOnly)}
+        />
       </div>
       <div className="lg:hidden flex">
-        <DashboardMobileSidebar links={USER_LINKS} />
+        {/* <DashboardMobileSidebar links={USER_LINKS} /> */}
+        <DashboardMobileSidebarv2 menuData={USER_LINKS_V2} />
       </div>
 
       <main className="flex-1 pl-0 max-w-full overflow-hidden">

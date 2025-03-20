@@ -1,4 +1,5 @@
 import {
+  FaBell,
   FaCalendar,
   FaCheck,
   FaCloud,
@@ -24,6 +25,12 @@ import { MenuType } from "../types/Links";
 
 export const LINKSV2: MenuType[] = [
   { label: "dashboard", to: "/dashboard", icon: FaThLarge },
+  {
+    label: "notifications",
+    to: "/dashboard/notifications",
+    icon: FaBell,
+    mobileOnly: true,
+  },
   {
     label: "current display",
     to: "/dashboard/current-display",
