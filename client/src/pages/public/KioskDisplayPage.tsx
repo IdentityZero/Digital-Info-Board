@@ -44,6 +44,9 @@ const KioskDisplayPage = () => {
     return <LoadingMessage message="Fetching contents..." />;
   }
 
+  const { show_upcoming_events, show_weather_forecast, show_media_displays } =
+    settings as SettingsType;
+
   return (
     <div className="w-full min-h-screen flex flex-col bg-[#1B0B7C] text-white">
       <header className="min-h-20 h-[5vh] max-h-[5%] flex items-center justify-center w-full">
@@ -58,9 +61,11 @@ const KioskDisplayPage = () => {
       </header>
 
       <main
-        className={`min-h-[700px] h-[64vh] max-h-[64%] flex ${
-          isPortrait ? "flex-row" : "flex-col"
-        }`}
+        className={`min-h-[700px] ${
+          show_upcoming_events || show_weather_forecast || show_media_displays
+            ? "h-[64vh]"
+            : "h-[87vh]"
+        } flex ${isPortrait ? "flex-row" : "flex-col"}`}
       >
         <div
           className={`${
