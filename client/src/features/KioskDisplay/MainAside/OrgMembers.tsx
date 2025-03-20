@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { logoLg } from "../../../assets";
 import { chunkArray } from "../../../utils/utils";
@@ -10,14 +10,19 @@ import LoadingMessage from "../../../components/LoadingMessage";
 type OrgMembersDisplayProps = {
   slideDuration?: number;
   showNavigation?: boolean;
+  useChunking?: boolean; // Variable content size based on container size
 };
 
 const OrgMembers = ({
   showNavigation = false,
   slideDuration = 5000,
+  useChunking = false,
 }: OrgMembersDisplayProps) => {
+  const containerRef = useRef<HTMLDivElement | null>(null);
+
   const [currentIndex, setCurrentIndex] = useState(1);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [chunkSize, setChunkSize] = useState(4);
 
   const [hoverShowNavigation, setHoverShowNavigation] = useState(false);
 
@@ -26,7 +31,7 @@ const OrgMembers = ({
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
 
-  const chunkedItems = chunkArray(orgMembers, 4);
+  const chunkedItems = chunkArray(orgMembers, chunkSize);
   const totalItems = chunkedItems.length;
   const extendedMembers = [
     chunkedItems[totalItems - 1],
@@ -48,9 +53,9 @@ const OrgMembers = ({
 
   const handleTransitionEnd = () => {
     setIsTransitioning(false);
-    if (currentIndex === 0) {
+    if (currentIndex <= 0) {
       setCurrentIndex(totalItems);
-    } else if (currentIndex === totalItems + 1) {
+    } else if (currentIndex >= totalItems + 1) {
       setCurrentIndex(1);
     }
   };
@@ -71,6 +76,15 @@ const OrgMembers = ({
   }, []);
 
   useEffect(() => {
+    if (!useChunking || !containerRef || !containerRef.current) return;
+    const height = containerRef.current?.offsetHeight - 50;
+    const cardMaxHeight = 80;
+    const computedChunkSize = Math.floor(height / cardMaxHeight) || 4;
+
+    setChunkSize(computedChunkSize);
+  }, [containerRef, containerRef.current?.offsetHeight]);
+
+  useEffect(() => {
     const interval = setInterval(() => {
       handleNext();
     }, slideDuration);
@@ -80,6 +94,7 @@ const OrgMembers = ({
 
   return (
     <div
+      ref={containerRef}
       className="w-full h-full relative border rounded-lg shadow-lg overflow-hidden py-2"
       onMouseEnter={() => setHoverShowNavigation(true)}
       onMouseLeave={() => setHoverShowNavigation(false)}
@@ -140,7 +155,7 @@ function CardContainer({ members }: { members: OrganizationMembersType[] }) {
   return (
     <div className="h-full w-full flex flex-col justify-evenly gap-2 overflow-hidden">
       {members.map((member) => (
-        <OrgCard member={member} />
+        <OrgCard member={member} key={member.id} />
       ))}
     </div>
   );
@@ -155,7 +170,7 @@ function OrgCard({ member }: { member: OrganizationMembersType }) {
         alt={member.name || "thumbnail"}
       />
       <div className="flex flex-col items-center bg-[#2f6dc1] w-full rounded-full text-white py-1">
-        <span className="text-sm font-semibold">
+        <span className="text-sm font-semibold text-center">
           {member.name || "Engr. Juan Dela Cruz"}
         </span>
         <span className="text-xs">{member.position || "No position"}</span>

@@ -6,6 +6,9 @@ import VideoPlayer from "../../features/KioskDisplay/VideoPlayer";
 import ImagePlayer from "../../features/KioskDisplay/ImagePlayer";
 import Footer from "../../features/KioskDisplay/Footer";
 import MainAside from "../../features/KioskDisplay/MainAside";
+import useSiteSettings from "../../hooks/useSiteSettings";
+import { SettingsType } from "../../types/SettingTypes";
+import { MdOutlineCampaign } from "react-icons/md";
 
 const KioskDisplayPage = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -16,6 +19,8 @@ const KioskDisplayPage = () => {
     textAnnouncementsAsText,
   } = useAnnouncementData();
   const [isPortrait, setIsPortrait] = useState(true);
+
+  const { settings, isLoading: IsSettingsLoading } = useSiteSettings();
 
   const handleNext = () => {
     if (currentIndex === mediaAnnouncements.length - 1) {
@@ -35,57 +40,95 @@ const KioskDisplayPage = () => {
     return () => clearInterval(interval);
   }, [currentIndex, mediaAnnouncements]);
 
-  if (isLoading) {
+  if (isLoading || IsSettingsLoading) {
     return <LoadingMessage message="Fetching contents..." />;
   }
 
   return (
     <div className="w-full min-h-screen flex flex-col bg-[#1B0B7C] text-white">
       <header className="min-h-20 h-[5vh] max-h-[5%] flex items-center justify-center w-full">
-        <DisplayQuillEditor
-          value={JSON.parse(mediaAnnouncements[currentIndex].title as string)}
-          withBackground={false}
-        />
+        {mediaAnnouncements.length > 0 ? (
+          <DisplayQuillEditor
+            value={JSON.parse(mediaAnnouncements[currentIndex].title as string)}
+            withBackground={false}
+          />
+        ) : (
+          <NoAnnouncement />
+        )}
       </header>
 
       <main
-        className={`min-h-[700px] h-[64vh] max-h-[64%] flex gap-2 ${
+        className={`min-h-[700px] h-[64vh] max-h-[64%] flex ${
           isPortrait ? "flex-row" : "flex-col"
         }`}
       >
         <div
           className={`${
-            isPortrait ? "w-[65.28%] h-full" : "w-full h-[60%]"
+            isPortrait
+              ? "min-w-[65.28%] flex-1 h-full"
+              : "w-full flex-1 min-h-[60%] h-full"
           }  bg-gray-400 flex items-center justify-center text-white text-lg  border border-white/20 rounded-2xl shadow-xl overflow-hidden`}
         >
-          {mediaAnnouncements[currentIndex].image_announcement &&
-            mediaAnnouncements[currentIndex].image_announcement.length > 0 && (
-              <ImagePlayer
-                images={mediaAnnouncements[currentIndex].image_announcement}
-                setIsPortrait={setIsPortrait}
-              />
-            )}
-          {mediaAnnouncements[currentIndex].video_announcement &&
-            mediaAnnouncements[currentIndex].video_announcement.length > 0 && (
-              <VideoPlayer
-                key={currentIndex}
-                videos={mediaAnnouncements[currentIndex].video_announcement}
-                setIsPortrait={setIsPortrait}
-              />
-            )}
+          {mediaAnnouncements.length > 0 ? (
+            <>
+              {mediaAnnouncements[currentIndex].image_announcement &&
+                mediaAnnouncements[currentIndex].image_announcement.length >
+                  0 && (
+                  <ImagePlayer
+                    images={mediaAnnouncements[currentIndex].image_announcement}
+                    setIsPortrait={setIsPortrait}
+                  />
+                )}
+              {mediaAnnouncements[currentIndex].video_announcement &&
+                mediaAnnouncements[currentIndex].video_announcement.length >
+                  0 && (
+                  <VideoPlayer
+                    key={currentIndex}
+                    videos={mediaAnnouncements[currentIndex].video_announcement}
+                    setIsPortrait={setIsPortrait}
+                  />
+                )}
+            </>
+          ) : (
+            <NoAnnouncement />
+          )}
         </div>
 
         <div
-          className={`${isPortrait ? "w-[34.72%]" : "w-full h-[40%]"} flex `}
+          className={`${
+            isPortrait
+              ? "max-w-[33%] px-2"
+              : `w-full max-h-[40%] p-2 ${
+                  (settings?.show_calendar ||
+                    settings?.show_media_displays ||
+                    settings?.show_organization) &&
+                  "h-full"
+                }`
+          } `}
         >
-          <MainAside isPortrait={isPortrait} />
+          <MainAside
+            isPortrait={isPortrait}
+            settings={settings as SettingsType}
+          />
         </div>
       </main>
 
       <footer className="h-[30%]">
-        <Footer headlines={textAnnouncementsAsText} />
+        <Footer
+          headlines={textAnnouncementsAsText}
+          settings={settings as SettingsType}
+        />
       </footer>
     </div>
   );
 };
 export default KioskDisplayPage;
+
+function NoAnnouncement() {
+  return (
+    <div className="flex gap-2 items-center justify-center ">
+      <MdOutlineCampaign className="w-12 h-12" />
+      <p className="text-xl font-semibold">There are no announcements</p>
+    </div>
+  );
+}

@@ -41,7 +41,6 @@ const ImagePlayer = ({ images, setIsPortrait }: ImagePlayerProps) => {
                 setIsPortrait(target.naturalHeight > target.naturalWidth);
               }}
             />
-            ;
           </div>
         ))}
       </div>

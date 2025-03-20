@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { addTotalDuration, convertDurationToSeconds } from "../../utils/utils";
 import { extractReactQuillText } from "../../utils/formatters";
 import { AnnouncementListType } from "../../types/AnnouncementTypes";
-import { listAnnouncementApi } from "../../api/announcementRequest";
+import { listActiveAnnouncementApi } from "../../api/announcementRequest";
 
 const useAnnouncementData = () => {
   const [announcementList, setAnnouncementList] =
@@ -25,7 +25,7 @@ const useAnnouncementData = () => {
       try {
         setIsLoading(true);
         setError(null);
-        const res_data = await listAnnouncementApi();
+        const res_data = await listActiveAnnouncementApi();
         setAnnouncementList(res_data);
         setMediaAnnouncements(
           structuredClone(

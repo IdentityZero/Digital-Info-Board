@@ -55,6 +55,21 @@ export const listAnnouncementApi = async (): Promise<AnnouncementListType> => {
   }
 };
 
+export const listActiveAnnouncementApi =
+  async (): Promise<AnnouncementListType> => {
+    try {
+      const response = await axios.get(
+        BASE_ENDPOINT + listCreateAllTypeAnnouncementEndpoint + "status/active/"
+      );
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        throw error;
+      }
+      throw new Error("An unexpected error occurred");
+    }
+  };
+
 export const listStatBasedAnnouncementApi = async (
   status: "active" | "inactive",
   page: number = 1,
