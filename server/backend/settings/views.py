@@ -24,7 +24,7 @@ class RetrieveUpdateSettingsApiView(generics.RetrieveUpdateAPIView):
     param_key = setting
     """
 
-    permission_classes = [permissions.IsAuthenticated, IsAdmin]
+    permission_classes = [permissions.IsAuthenticated]
 
     SERIALIZER_MAP = {
         "announcement_start": serializers.AnnouncementStartSerializer,
@@ -53,7 +53,7 @@ class RetrieveUpdateSettingsApiView(generics.RetrieveUpdateAPIView):
         if self.request.method == "GET":
             return [permissions.AllowAny()]
         elif self.request.method == "PATCH":
-            return [permissions.IsAuthenticated(), IsAdmin()]
+            return [permissions.IsAuthenticated()]
         return super().get_permissions()
 
     def get_serializer_class(self):

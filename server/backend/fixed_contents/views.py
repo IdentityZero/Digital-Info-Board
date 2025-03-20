@@ -19,7 +19,7 @@ class ListCreateOrgMembersApiView(generics.ListCreateAPIView):
         if self.request.method == "GET":
             return [permissions.AllowAny()]
         else:
-            return [permissions.IsAuthenticated(), IsAdmin()]
+            return [permissions.IsAuthenticated()]
 
     def get_queryset(self):
         qs = models.OrganizationMembers.objects.all().order_by(
@@ -29,7 +29,7 @@ class ListCreateOrgMembersApiView(generics.ListCreateAPIView):
 
 
 @api_view(["PUT"])
-@permission_classes([permissions.IsAuthenticated, IsAdmin])
+@permission_classes([permissions.IsAuthenticated])
 def update_org_priority(request):
     """
     Expects data as application/json
@@ -71,7 +71,7 @@ def update_org_priority(request):
 class DeleteOrganizationMembersApiView(generics.DestroyAPIView):
     serializer_class = serializers.OrganizationMembersSerializer
     queryset = models.OrganizationMembers.objects.all()
-    permission_classes = [permissions.IsAuthenticated, IsAdmin]
+    permission_classes = [permissions.IsAuthenticated]
 
 
 class ListCreateUpcomingEventApiView(generics.ListCreateAPIView):
@@ -82,7 +82,7 @@ class ListCreateUpcomingEventApiView(generics.ListCreateAPIView):
         if self.request.method == "GET":
             return [permissions.AllowAny()]
         else:
-            return [permissions.IsAuthenticated(), IsAdmin()]
+            return [permissions.IsAuthenticated()]
 
     def get_queryset(self):
         qs = models.UpcomingEvents.objects.all()
@@ -111,7 +111,7 @@ class ListCreateUpcomingEventApiView(generics.ListCreateAPIView):
 class DeleteUpcomingEventApiView(generics.DestroyAPIView):
     serializer_class = serializers.UpcomingEventsSerializer
     queryset = models.UpcomingEvents.objects.all()
-    permission_classes = [permissions.IsAuthenticated, IsAdmin]
+    permission_classes = [permissions.IsAuthenticated]
 
 
 class ListCreateMediaDisplaysApiView(generics.ListCreateAPIView):
@@ -123,7 +123,7 @@ class ListCreateMediaDisplaysApiView(generics.ListCreateAPIView):
         if self.request.method == "GET":
             return [permissions.AllowAny()]
         else:
-            return [permissions.IsAuthenticated(), IsAdmin()]
+            return [permissions.IsAuthenticated()]
 
     def get_queryset(self):
         qs = models.MediaDisplays.objects.all().order_by(
@@ -133,13 +133,12 @@ class ListCreateMediaDisplaysApiView(generics.ListCreateAPIView):
 
 
 @api_view(["PUT"])
-@permission_classes([permissions.IsAuthenticated, IsAdmin])
+@permission_classes([permissions.IsAuthenticated])
 def update_media_displays_priority(request):
     """
     Expects data as application/json
     """
     data = request.data
-    print(data)
     if not isinstance(data, list):
         return Response(
             {"message": "Expected a list of objects", "success": False},
@@ -176,4 +175,4 @@ def update_media_displays_priority(request):
 class DeleteMediaDisplayApiView(generics.DestroyAPIView):
     serializer_class = serializers.MediaDisplaysSerializer
     queryset = models.MediaDisplays.objects.all()
-    permission_classes = [permissions.IsAuthenticated, IsAdmin]
+    permission_classes = [permissions.IsAuthenticated]
