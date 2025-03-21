@@ -40,21 +40,6 @@ const updateVideoAnnouncementEndpoint = (announcement_id: string) => {
 
 const listVideoAnnouncementEndpoint = "announcements/v1/video/";
 
-export const listAnnouncementApi = async (): Promise<AnnouncementListType> => {
-  try {
-    const response = await axios.get(
-      BASE_ENDPOINT + listCreateAllTypeAnnouncementEndpoint
-    );
-
-    return response.data;
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw error;
-    }
-    throw new Error("An unexpected error occurred");
-  }
-};
-
 export const listActiveAnnouncementApi =
   async (): Promise<AnnouncementListType> => {
     try {

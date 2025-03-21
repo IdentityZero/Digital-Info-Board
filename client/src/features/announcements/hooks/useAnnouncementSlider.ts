@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { AnnouncementListType } from "../../../types/AnnouncementTypes";
-import { listAnnouncementApi } from "../../../api/announcementRequest";
+import { listActiveAnnouncementApi } from "../../../api/announcementRequest";
 import {
   addTotalDuration,
   convertDurationToSeconds,
@@ -25,7 +25,7 @@ const useAnnouncementSlider = () => {
       try {
         setIsLoading(true);
         setError(null);
-        const res_data = await listAnnouncementApi();
+        const res_data = await listActiveAnnouncementApi();
         setAnnouncements(res_data);
         setSliderItems(structuredClone(res_data));
         setSliderItemsForEdit(structuredClone(res_data));

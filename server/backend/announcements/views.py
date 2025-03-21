@@ -1,11 +1,11 @@
 import re
 from typing import Dict, Any, List
-
 import json
 
+from django.utils import timezone
+from django.db.models import OrderBy, F
 from rest_framework import generics, response, status, response, parsers
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from django.db.models import OrderBy, F
 
 from utils.pagination import CustomPageNumberPagination
 from utils.permissions import IsAdmin
@@ -145,18 +145,25 @@ class ListAnnouncementAPIViewStatusBased(generics.ListAPIView):
     def get_queryset(self):
         status = self.kwargs.get("status")
         active_status = True
+
+        now = timezone.now()
+
         if status == "active":
             active_status = True
         elif status == "inactive":
             active_status = False
+        elif status == "expired":
+            return Announcements.objects.filter(end_date__lt=now)
         elif status == "all":
             return Announcements.objects.all()
         else:
             return Announcements.objects.none()
 
-        qs = Announcements.objects.filter(is_active=active_status).order_by(
-            OrderBy(F("position"), nulls_last=True)
-        )
+        qs = Announcements.objects.filter(
+            is_active=active_status,
+            start_date__lte=now,
+            end_date__gte=now,
+        ).order_by(OrderBy(F("position"), nulls_last=True))
         return qs
 
 

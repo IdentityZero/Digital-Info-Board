@@ -238,3 +238,17 @@ export function getNextFiveHours<T>(data: T[]): T[] {
   }
   return data.slice(totalHours - 5, totalHours);
 }
+
+export function isNowWithinRange(
+  startDateStr: string,
+  endDateStr: string
+): boolean {
+  /**
+   * Checks if the date today is within the range of 2 dates
+   */
+  const now = new Date();
+  const startDate = new Date(startDateStr);
+  const endDate = new Date(endDateStr);
+
+  return now >= startDate && now <= endDate;
+}

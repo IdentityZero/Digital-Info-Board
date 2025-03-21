@@ -136,18 +136,18 @@ const CurrentDisplayPage = () => {
     toast.success("Updated Successfully.");
   };
 
-  if (!carouselIndex || !carouselStartInterval || isLoading || !announcements) {
+  if (!isLoading && announcements.length === 0) {
     return (
-      <div className="mt-4">
-        <LoadingMessage message="Loading and Syncing data..." />;
+      <div className="mt-4 text-center font-semibold text-lg">
+        Looks like we do not have Active Contents yet.
       </div>
     );
   }
 
-  if (!isLoading && announcements.length === 0) {
+  if (!carouselIndex || !carouselStartInterval || isLoading || !announcements) {
     return (
-      <div className="mt-4 text-center">
-        Looks like we do not have Active Contents yet.
+      <div className="mt-4">
+        <LoadingMessage message="Loading and Syncing data..." />
       </div>
     );
   }

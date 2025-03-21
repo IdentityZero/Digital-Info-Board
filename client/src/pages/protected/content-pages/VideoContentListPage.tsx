@@ -12,7 +12,7 @@ import {
   formatTimestamp,
   truncateStringVariableLen,
 } from "../../../utils/formatters";
-import { addTotalDuration } from "../../../utils/utils";
+import { addTotalDuration, isNowWithinRange } from "../../../utils/utils";
 import { useAuth } from "../../../context/AuthProvider";
 
 import { getListTypeInitState } from "../../../types/ListType";
@@ -103,7 +103,8 @@ const VideoContentListPage = () => {
             <th className="px-6 py-3">Start Date</th>
             <th className="px-6 py-3">End Date</th>
             <th className="px-6 py-3">Duration</th>
-            <th className="px-6 py-3">Active</th>
+            <th className="px-6 py-3">Approved</th>
+            <th className="px-6 py-3">Expired</th>
             <th className="px-6 py-3">Actions</th>
           </tr>
         </thead>
@@ -166,6 +167,15 @@ function TableRow({ announcement, handleDelete }: TableRowProps) {
             <FaCheckCircle className="text-green-500" />
           ) : (
             <FaTimesCircle className="text-red-500" />
+          )}
+        </span>
+      </td>
+      <td className="px-6 py-3">
+        <span className="flex justify-center">
+          {isNowWithinRange(announcement.start_date, announcement.end_date) ? (
+            <FaTimesCircle className="text-red-500" />
+          ) : (
+            <FaCheckCircle className="text-green-500" />
           )}
         </span>
       </td>
