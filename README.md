@@ -36,13 +36,13 @@
         EMAIL_HOST_PASSWORD=
         GAPI_JSON_CREDENTIALS_LOC=
         CALENDAR_ID=
+        VITE_WEATHER_API_KEY=
   7. ### CD to 'backend'
          cd backend
   8. ### Create database tables
          python manage.py migrate
-  10. ### Create a superuser. Remember your username and password you will use it later.
-          python manage.py createsuperuser
-      You can leave the email empty and bypass password validation
+  10. ### Run server
+          python manage.py runserver
   11. ### Setup is done
 ## Starting the Frontend
   1. ### Go back inside the folder where you can see the 3 files, cd to client
@@ -53,8 +53,4 @@
           npm run dev
   4. ### Go to browser and enter 'http://localhost:5173/'
   5. ### Create an account.
-     You won't be able to use your superuser unless you follow instructions on ['How to use Superuser that you created'](#how-to-use-the-superuser-that-you-created)
-## How to use the Superuser that you created
-  1. ### Go to 'http://localhost:8000/admin/' and login using that account
-  2. ### Under Users, go to User Profiles
-  3. ### Add a profile connected to that account
+
