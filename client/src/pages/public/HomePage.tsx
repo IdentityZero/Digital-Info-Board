@@ -10,6 +10,7 @@ import MediaDisplay from "../../features/KioskDisplay/MediaDisplay";
 import WebDisplayEvents from "../../features/fixedContent/Events/WebDisplayEvents";
 import WebDisplayWeatherForecast from "../../features/fixedContent/WeatherForecast/WebDisplayWeatherForecast";
 import { convertDurationToSeconds } from "../../utils/utils";
+import CalendarDisplay from "../../features/Calendar/v2/CalendarDisplay";
 
 const HomePage = () => {
   // TODO: POSSIBILITY OF EMPTY ANNOUNCEMENT (The announcement has no body or type)
@@ -60,7 +61,7 @@ const HomePage = () => {
             </div>
           )}
           {settings?.show_organization && (
-            <div className=" min-w-[400px] max-w-[500px] rounded-lg shadow-xl overflow-hidden border mx-auto">
+            <div className="min-w-[400px] max-w-[500px] rounded-lg shadow-xl overflow-hidden border mx-auto">
               <OrgMembers
                 showNavigation
                 slideDuration={
@@ -72,13 +73,9 @@ const HomePage = () => {
             </div>
           )}
         </div>
-        <div className="w-full">
-          {settings?.show_calendar && (
-            <iframe
-              className="w-full h-[600px] border-0"
-              src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=Asia%2FManila&showPrint=0&showTz=0&showTitle=0&showNav=0&showTabs=0&src=ZjE5NmZkNjhmNTM4NTk2NTQzOWI1ODk2MmM0OGY3N2RjMzRmNjY5ZTZiOTI4ZmMwMjZlNTMzYjg4YmMyNjhjYkBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&color=%237CB342&mode=MONTH"
-            ></iframe>
-          )}
+
+        <div className="w-full h-[600px]">
+          {settings?.show_calendar && <CalendarDisplay />}
         </div>
         <div className="w-full flex flex-col gap-x-20 gap-y-2 lg:flex-row items-center justify-center">
           {settings?.show_weather_forecast && (

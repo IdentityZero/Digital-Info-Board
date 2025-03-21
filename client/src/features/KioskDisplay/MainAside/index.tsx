@@ -1,8 +1,11 @@
 import { memo } from "react";
+
+import { convertDurationToSeconds } from "../../../utils/utils";
+
 import OrgMembers from "./OrgMembers";
 import MediaDisplay from "../MediaDisplay";
 import { SettingsType } from "../../../types/SettingTypes";
-import { convertDurationToSeconds } from "../../../utils/utils";
+import CalendarDisplay from "../../Calendar/v2/CalendarDisplay";
 
 type MainAsideProps = {
   isPortrait: boolean;
@@ -51,10 +54,7 @@ const MainAside = memo(({ isPortrait, settings }: MainAsideProps) => {
             isPortrait ? "w-full flex-1" : "h-full flex-1"
           } bg-white flex items-center justify-center text-gray-800 text-md bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-xl overflow-hidden`}
         >
-          <iframe
-            className="w-full h-full border-0"
-            src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=Asia%2FManila&showPrint=0&showTz=0&showTitle=0&showNav=0&showTabs=0&src=ZjE5NmZkNjhmNTM4NTk2NTQzOWI1ODk2MmM0OGY3N2RjMzRmNjY5ZTZiOTI4ZmMwMjZlNTMzYjg4YmMyNjhjYkBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&color=%237CB342&mode=MONTH"
-          ></iframe>
+          <CalendarDisplay />
         </div>
       )}
 
