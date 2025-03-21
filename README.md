@@ -32,6 +32,10 @@
         DB_HOST=localhost
         DB_PORT=3306
         SECRET_KEY= # This cannot be empty, put any large string value
+        EMAIL_HOST_USER=
+        EMAIL_HOST_PASSWORD=
+        GAPI_JSON_CREDENTIALS_LOC=
+        CALENDAR_ID=
   7. ### CD to 'backend'
          cd backend
   8. ### Create database tables
