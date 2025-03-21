@@ -54,7 +54,7 @@ class UserSerializer(serializers.ModelSerializer):
         return value
 
     def create(self, validated_data):
-        # TODO: When there is no active user, set active to True
+        has_no_user = Profile.objects.count() == 0
 
         user = User.objects.create_user(
             username=validated_data["username"],
@@ -62,10 +62,17 @@ class UserSerializer(serializers.ModelSerializer):
             first_name=validated_data["first_name"],
             last_name=validated_data["last_name"],
         )
+        # Sets first user as staff and super user and also an admin
+        user.is_staff = has_no_user
+        user.is_superuser = has_no_user
         user.save()
+
         profile_data = validated_data.pop("profile")
 
-        Profile.objects.create(user=user, **profile_data)
+        profile = Profile.objects.create(user=user, **profile_data)
+        profile.is_admin = has_no_user
+        profile.save()
+
         return user
 
     def update(self, instance, validated_data):

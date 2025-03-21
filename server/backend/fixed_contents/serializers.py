@@ -11,13 +11,16 @@ class OrganizationMembersSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def create(self, validated_data):
-        priority_number = (
-            OrganizationMembers.objects.aggregate(max_value=Max("priority"))[
-                "max_value"
-            ]
-            + 1
-            or 0
-        )
+        try:
+            priority_number = (
+                OrganizationMembers.objects.aggregate(max_value=Max("priority"))[
+                    "max_value"
+                ]
+                + 1
+                or 0
+            )
+        except TypeError:  # If max value is None
+            priority_number = 1
 
         inst = OrganizationMembers.objects.create(
             **validated_data, priority=priority_number
@@ -62,10 +65,14 @@ class MediaDisplaysSerializer(serializers.ModelSerializer):
             return "image"
 
     def create(self, validated_data):
-        priority_number = (
-            MediaDisplays.objects.aggregate(max_value=Max("priority"))["max_value"] + 1
-            or 0
-        )
+        try:
+            priority_number = (
+                MediaDisplays.objects.aggregate(max_value=Max("priority"))["max_value"]
+                + 1
+                or 0
+            )
+        except TypeError:  # max value is None
+            priority_number = 1
 
         inst = MediaDisplays.objects.create(**validated_data, priority=priority_number)
 

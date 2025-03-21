@@ -15,9 +15,9 @@ const HomePage = () => {
   // TODO: POSSIBILITY OF EMPTY ANNOUNCEMENT (The announcement has no body or type)
   const { announcements, isLoading, error } = useAnnouncementSlider();
 
-  const { settings } = useSiteSettings();
+  const { settings, isLoading: isSettingsLoading } = useSiteSettings();
 
-  if (isLoading) {
+  if (isLoading || isSettingsLoading) {
     return (
       <div className="mt-4">
         <LoadingMessage message="Loading..." />
@@ -29,15 +29,13 @@ const HomePage = () => {
     return <div className="mt-4 text-center">Unexpected error occured...</div>;
   }
 
-  if (announcements.length === 0) {
-    return (
-      <div className="mt-4 text-center">No announcements right now...</div>
-    );
-  }
-
   return (
     <div className="flex flex-col items-center justify-center">
-      <LiveAnnouncement />
+      {announcements.length === 0 ? (
+        <div className="mt-4 text-center">No announcements right now...</div>
+      ) : (
+        <LiveAnnouncement />
+      )}
       <section className="w-full flex flex-col gap-10 p-2 justify-center items-center mb-4">
         <div className="w-full flex flex-col gap-2 lg:flex-row">
           {settings?.show_media_displays && (

@@ -23,7 +23,7 @@ from .serializers import (
     ChangePasswordSerializer,
     InviteNewUserSerializer,
 )
-from .models import NewUserInvitation
+from .models import NewUserInvitation, Profile
 from utils.permissions import IsAdmin
 from utils.pagination import CustomPageNumberPagination
 
@@ -34,6 +34,9 @@ class CreateUserView(generics.CreateAPIView):
     permission_classes = [AllowAny]
 
     def create(self, request, *args, **kwargs):
+        if Profile.objects.count() == 0:
+            return super().create(request, *args, **kwargs)
+
         invitation_code = request.data.get("invitation_code")
 
         if not invitation_code:
