@@ -68,3 +68,11 @@
 }
 
 }
+
+.fc-header-toolbar {
+  margin-bottom: 4px !important; /* Reduce space below the toolbar in calendar*/
+}
+
+.fc-toolbar {
+  padding: 2px 0 !important; /* Reduce padding in toolbar */
+}

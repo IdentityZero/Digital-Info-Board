@@ -75,7 +75,14 @@ const HomePage = () => {
         </div>
 
         <div className="w-full h-[600px]">
-          {settings?.show_calendar && <CalendarDisplay />}
+          {settings?.show_calendar && (
+            <CalendarDisplay
+              showEvents
+              showGridControls
+              showNavigation
+              dayMaxEventRows={3}
+            />
+          )}
         </div>
         <div className="w-full flex flex-col gap-x-20 gap-y-2 lg:flex-row items-center justify-center">
           {settings?.show_weather_forecast && (
