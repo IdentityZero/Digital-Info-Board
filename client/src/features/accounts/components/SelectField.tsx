@@ -3,7 +3,6 @@ import { Errortext, Helptext } from "../../../components/ui";
 
 type SelectFieldProps = {
   labelText: string;
-  labelWidth?: string; // in Pixels
   children: React.ReactNode;
   error?: string | string[];
   helpText?: string | string[];
@@ -12,7 +11,6 @@ type SelectFieldProps = {
 const SelectField = ({
   error,
   labelText,
-  labelWidth = "200px",
   children,
   helpText,
   ...selectProps
@@ -21,9 +19,8 @@ const SelectField = ({
     <div>
       <div className="flex flex-row items-center rounded-md overflow-hidden">
         <label
-          className="bg-desaturatedBlueGray py-3 px-2 font-bold"
+          className="bg-desaturatedBlueGray py-3 px-2 font-bold w-[150px] lg:w-[180px]"
           htmlFor={labelText}
-          style={{ width: labelWidth }}
         >
           {labelText}
         </label>

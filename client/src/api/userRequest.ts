@@ -59,6 +59,46 @@ export const updateUserInformationApi = async (
   }
 };
 
+export const addUserEmailApi = async (
+  axiosInstance: AxiosInstance,
+  data: any
+) => {
+  try {
+    const response = await axiosInstance.post(
+      "users/v1/account/email/add/",
+      data
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw error;
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+export const verifyEmailCodeApi = async (
+  axiosInstance: AxiosInstance,
+  email: string,
+  code: string
+) => {
+  try {
+    const response = await axiosInstance.post(
+      "users/v1/account/email/verify/",
+      {
+        email: email,
+        code: code,
+      }
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw error;
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
 export const listInactiveUsersApi = async (axiosInstance: AxiosInstance) => {
   /**
    * Not in use. Remove this comment if will be used.

@@ -83,11 +83,15 @@ class UserSerializer(serializers.ModelSerializer):
             profile_data = validated_data.pop("profile")
 
         for attr, value in validated_data.items():
+            if attr == "email":
+                continue
+
             setattr(instance, attr, value)
 
         if profile_data is not None:
             profile_inst = instance.profile
             for attr, value in profile_data.items():
+                print(attr)
                 old_value = getattr(profile_inst, attr)
                 if old_value == value:
                     continue
@@ -97,6 +101,20 @@ class UserSerializer(serializers.ModelSerializer):
 
         instance.save()
         return instance
+
+
+class AddEmailSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+    def validate_email(self, value):
+        if User.objects.filter(email=value).exists():
+            raise serializers.ValidationError("This email is already in use.")
+        return value
+
+
+class VerifyEmailCodeSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    code = serializers.CharField(max_length=6)
 
 
 class SetActiveUserSerializer(serializers.ModelSerializer):

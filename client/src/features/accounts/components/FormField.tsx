@@ -11,7 +11,6 @@ type FormFieldProps = {
 function FormField({
   error = "",
   labelText,
-  labelWidth = "200px",
   helpText,
   ...inputProps
 }: FormFieldProps) {
@@ -26,9 +25,8 @@ function FormField({
         }`}
       >
         <label
-          className="px-2 font-bold flex flex-row items-center gap-2"
+          className="px-2 font-bold flex flex-row items-center gap-2 w-[150px] lg:w-[180px]"
           htmlFor={labelText}
-          style={{ width: labelWidth }}
         >
           {error && (
             <FaExclamationCircle className="text-red-500 bg-white rounded-full" />

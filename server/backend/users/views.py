@@ -1,3 +1,4 @@
+import random
 import re
 from typing import Dict, Any
 import socket
@@ -7,10 +8,11 @@ from django.http import JsonResponse
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
-from django.core.mail import EmailMessage
+from django.core.mail import EmailMessage, send_mail
+from django.core.cache import cache
 from email.utils import formataddr
 
-from rest_framework import generics, status, exceptions
+from rest_framework import generics, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.exceptions import PermissionDenied
@@ -22,10 +24,19 @@ from .serializers import (
     SetActiveUserSerializer,
     ChangePasswordSerializer,
     InviteNewUserSerializer,
+    AddEmailSerializer,
+    VerifyEmailCodeSerializer,
 )
 from .models import NewUserInvitation, Profile
 from utils.permissions import IsAdmin
 from utils.pagination import CustomPageNumberPagination
+
+FORMATTED_EMAIL_ADDRESS = formataddr(
+    (
+        "CpE MMSU Digital Info Board",
+        getattr(settings, "EMAIL_HOST_USER", "mmsucpe@gmail.com"),
+    )
+)
 
 
 class CreateUserView(generics.CreateAPIView):
@@ -188,6 +199,90 @@ class ChangePasswordView(generics.UpdateAPIView):
         return user
 
 
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def add_email(request):
+    serializer = AddEmailSerializer(data=request.data)
+
+    if serializer.is_valid(raise_exception=True):
+        user = request.user
+        email = serializer.validated_data["email"]
+
+        verification_code = str(random.randint(100000, 999999))
+        cache.set(f"email_verification_{user.id}", verification_code, timeout=600)
+
+        send_mail(
+            "Email Verification Code",
+            f"Dear {user.first_name},\n\n"
+            f"Your verification code is: {verification_code}\n\n"
+            f"This code is valid for 10 minutes. Please do not share it with anyone.\n\n"
+            f"If you did not request this code, please ignore this email.\n\n"
+            f"Best regards,\n"
+            f"CPE Department",
+            FORMATTED_EMAIL_ADDRESS,
+            [email],
+        )
+
+        return Response(
+            {
+                "message": "Verification code sent to your current email. You have 10 minutes before it expires."
+            },
+            status=status.HTTP_200_OK,
+        )
+
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def verify_email_code(request):
+    serializer = VerifyEmailCodeSerializer(data=request.data)
+
+    if serializer.is_valid():
+        user = request.user
+        email = serializer.validated_data["email"]
+        code = serializer.validated_data["code"]
+
+        stored_code = cache.get(f"email_verification_{user.id}")
+
+        if code != stored_code:
+            return Response(
+                {
+                    "message": "Invalid verification code.",
+                    "code": ["Invalid verification code."],
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        recipient_list = [email]
+
+        if user.email:
+            recipient_list.append(user.email)
+
+        user.email = email
+        user.save()
+
+        cache.delete(f"email_verification_{user.id}")
+
+        send_mail(
+            "Email Successfully Updated",
+            f"Dear user,\n\n"
+            f"We have successfully updated your email address to {email}.\n\n"
+            f"If you made this change, no further action is required.\n"
+            f"If you did not request this update, please contact our support team immediately.\n\n"
+            f"Best regards,\n"
+            f"CPE Department",
+            FORMATTED_EMAIL_ADDRESS,
+            recipient_list,
+        )
+
+        return Response(
+            {"message": "Email successfully updated."}, status=status.HTTP_200_OK
+        )
+
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 def send_email(code: str, to_email: str, url: str) -> None:
     subject = "Welcome to Computer Engineering - MMSU Digital Information Board"
     html_content = render_to_string(
@@ -195,13 +290,7 @@ def send_email(code: str, to_email: str, url: str) -> None:
         {"code": code, "host": url},
     )
 
-    from_email = formataddr(
-        (
-            "CpE MMSU Digital Info Board",
-            getattr(settings, "EMAIL_HOST_USER", "mmsucpe@gmail.com"),
-        )
-    )
-    email = EmailMessage(subject, html_content, from_email, [to_email])
+    email = EmailMessage(subject, html_content, FORMATTED_EMAIL_ADDRESS, [to_email])
     email.content_subtype = "html"
     email.send()
 

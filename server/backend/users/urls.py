@@ -3,6 +3,8 @@ from django.urls import path
 from .views import (
     CreateUserView,
     RetrieveUpdateUserView,
+    add_email,
+    verify_email_code,
     ListInactiveUserView,
     SetActiveUserView,
     ListAllUsersView,
@@ -17,6 +19,8 @@ from .views import (
 urlpatterns = [
     path("v1/", ListAllUsersView.as_view()),
     path("v1/create/", CreateUserView.as_view()),
+    path("v1/account/email/add/", add_email),
+    path("v1/account/email/verify/", verify_email_code),
     path("v1/account/<int:pk>/", RetrieveUpdateUserView.as_view()),
     path("v1/account/<int:pk>/change-password/", ChangePasswordView.as_view()),
     path("v1/account/<int:pk>/delete/", DeleteUserView.as_view()),

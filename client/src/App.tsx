@@ -56,6 +56,7 @@ import {
   ChangeMyPasswordPage,
   ChangeOthersPasswordPage,
   NewUsersPage,
+  AddUpdateEmailPage,
 } from "./pages/protected/account-pages";
 
 import VideoContentPage from "./pages/protected/content-pages/VideoContentPage";
@@ -159,6 +160,7 @@ const router = createBrowserRouter(
           <Route index element={<MyProfilePage />} />
           <Route path="my-profile" element={<MyProfilePage />} />
           <Route path="change-password" element={<ChangeMyPasswordPage />} />
+          <Route path="update-email" element={<AddUpdateEmailPage />} />
 
           <Route
             path="new-users"

@@ -99,7 +99,7 @@ const ChangePassword = () => {
         />
         <FormField
           error={updateErrors.password2}
-          labelText="Confirm New Password"
+          labelText="Confirm Password"
           id="confirm-new-password"
           value={confirmPassword}
           type="password"

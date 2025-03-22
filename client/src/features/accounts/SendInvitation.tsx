@@ -25,8 +25,6 @@ import {
 } from "./helpers";
 import axios from "axios";
 
-const labelTextWidth = "120px";
-
 type SendInvitationProps = {
   addInvitation?: (item: RetrieveUserInvitationType) => void;
 };
@@ -135,7 +133,6 @@ const SendInvitation = ({ addInvitation }: SendInvitationProps) => {
             <FormField
               labelText="Email"
               name="email"
-              labelWidth={labelTextWidth}
               value={formData.email}
               onChange={handleChange}
               required
@@ -152,7 +149,6 @@ const SendInvitation = ({ addInvitation }: SendInvitationProps) => {
             onChange={handleChange}
             required
             value={formData.role}
-            labelWidth={labelTextWidth}
             disabled={isSaving}
             error={error.role}
           >
@@ -170,7 +166,6 @@ const SendInvitation = ({ addInvitation }: SendInvitationProps) => {
             onChange={handleChange}
             required
             value={formData.position}
-            labelWidth={labelTextWidth}
             disabled={formData.role === "" || isSaving}
             error={error.position}
           >

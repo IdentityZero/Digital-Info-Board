@@ -4,6 +4,7 @@ import ViewProfilePage from "./ViewProfilePage";
 import ChangeMyPasswordPage from "./ChangeMyPasswordPage";
 import ChangeOthersPasswordPage from "./ChangeOthersPasswordPage";
 import NewUsersPage from "./NewUsersPage";
+import AddUpdateEmailPage from "./AddUpdateEmailPage";
 
 export {
   MyProfilePage,
@@ -12,4 +13,5 @@ export {
   ChangeMyPasswordPage,
   ChangeOthersPasswordPage,
   NewUsersPage,
+  AddUpdateEmailPage,
 };

@@ -184,6 +184,16 @@ const MyProfilePage = () => {
                   >
                     Change Password
                   </Link>
+                  <Link
+                    to={"update-email"}
+                    className={`py-2 px-8 rounded-full bg-cyanBlue hover:bg-cyanBlue-dark active:bg-cyanBlue-darker font-semibold ${
+                      saveLoading && "cursor-not-allowed"
+                    }`}
+                  >
+                    {userProfileForEdit.email === ""
+                      ? "Add email"
+                      : "Update Email"}
+                  </Link>
                   <button
                     className={`py-2 px-8 rounded-full bg-cyanBlue hover:bg-cyanBlue-dark active:bg-cyanBlue-darker font-semibold ${
                       saveLoading && "cursor-not-allowed"

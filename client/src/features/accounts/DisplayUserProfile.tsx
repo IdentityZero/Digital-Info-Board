@@ -128,7 +128,7 @@ const DisplayUserProfile = ({}) => {
         <div className="flex flex-row items-center rounded-md overflow-hidden">
           <label
             htmlFor="role"
-            className="w-[200px] bg-desaturatedBlueGray py-3 px-2 font-bold"
+            className="w-[150px] lg:w-[180px] bg-desaturatedBlueGray py-3 px-2 font-bold"
           >
             Role
           </label>
@@ -158,7 +158,7 @@ const DisplayUserProfile = ({}) => {
         <div className="flex flex-row items-center rounded-md overflow-hidden mb-4">
           <label
             htmlFor="position"
-            className="w-[200px] bg-desaturatedBlueGray py-3 px-2 font-bold"
+            className="w-[150px] lg:w-[180px] bg-desaturatedBlueGray py-3 px-2 font-bold"
           >
             Position
           </label>
