@@ -1,21 +1,46 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Errortext } from "../../components/ui";
 import { FaExclamationCircle } from "react-icons/fa";
 
 import { useMyProfilePageContext } from "../../pages/protected/account-pages/MyProfilePage";
 import { formatStringUnderscores } from "../../utils/formatters";
+import { useAuth } from "../../context/AuthProvider";
+import { Role } from "../../types/UserTypes";
+import { get_role_positions } from "../../constants";
 
 const DisplayUserProfile = ({}) => {
+  const { user } = useAuth();
+
   const {
     userProfileForEdit,
     setUserProfileForEdit,
     isLoading,
     updateErrors: errors,
   } = useMyProfilePageContext();
+  console.log(errors);
+  const [roleOptions, setRoleOptions] = useState<
+    Role["position"][] | undefined
+  >(undefined);
+
+  useEffect(() => {
+    if (!userProfileForEdit.profile.role) return;
+
+    setRoleOptions((_prev) => {
+      const options = get_role_positions(userProfileForEdit.profile.role);
+      setUserProfileForEdit({
+        ...userProfileForEdit,
+        profile: { ...userProfileForEdit.profile, position: options[0] },
+      });
+
+      return options;
+    });
+  }, [userProfileForEdit.profile.role]);
 
   const [newProfilePicURL, setNewProfilePicURL] = useState<string | null>(null);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     let inputName = e.target.name;
     if (!inputName.includes("profile")) {
       setUserProfileForEdit({
@@ -124,12 +149,26 @@ const DisplayUserProfile = ({}) => {
           <label className="w-[150px] xl:w-[180px] bg-desaturatedBlueGray py-3 px-2 font-bold">
             Role
           </label>
-          <input
-            type="text"
-            value={userProfileForEdit.profile.role}
-            className="flex-1 bg-gray-200 py-3 pl-2 cursor-not-allowed capitalize"
-            disabled
-          />
+          {user?.is_admin ? (
+            <select
+              name="profile.role"
+              id="role"
+              className="flex-1 bg-gray-200 py-3 pl-2 capitalize"
+              onChange={handleInputChange}
+              value={userProfileForEdit.profile.role}
+              disabled={isLoading}
+            >
+              <option value="student">Student</option>
+              <option value="faculty">Faculty</option>
+            </select>
+          ) : (
+            <input
+              type="text"
+              value={userProfileForEdit.profile.role}
+              className="flex-1 bg-gray-200 py-3 pl-2 cursor-not-allowed capitalize"
+              disabled
+            />
+          )}
         </div>
 
         {/* Position Field */}
@@ -137,12 +176,31 @@ const DisplayUserProfile = ({}) => {
           <label className="w-[150px] xl:w-[180px] bg-desaturatedBlueGray py-3 px-2 font-bold">
             Position
           </label>
-          <input
-            type="text"
-            value={formatStringUnderscores(userProfileForEdit.profile.position)}
-            className="flex-1 bg-gray-200 py-3 pl-2 cursor-not-allowed capitalize"
-            disabled
-          />
+          {user?.is_admin ? (
+            <select
+              name="profile.position"
+              id="position"
+              className="flex-1 bg-gray-200 py-3 pl-2 capitalize"
+              value={userProfileForEdit.profile.position}
+              onChange={handleInputChange}
+              disabled={isLoading}
+            >
+              {roleOptions?.map((position) => (
+                <option key={position} value={position}>
+                  {formatStringUnderscores(position)}
+                </option>
+              ))}
+            </select>
+          ) : (
+            <input
+              type="text"
+              value={formatStringUnderscores(
+                userProfileForEdit.profile.position
+              )}
+              className="flex-1 bg-gray-200 py-3 pl-2 cursor-not-allowed capitalize"
+              disabled
+            />
+          )}
         </div>
 
         {/* First Name Field */}
