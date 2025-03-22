@@ -2,15 +2,22 @@ import { jwtDecode } from "jwt-decode";
 import { ListType } from "./ListType";
 
 //#region: Student and All Student Positions should match
+// check apis.ts when editing roles and positions
 export type Student = {
   role: "student";
-  position: "president" | "vice_president" | "secretary" | "treasurer";
+  position:
+    | "president"
+    | "vice_president"
+    | "secretary"
+    | "treasurer"
+    | "public_information_officer";
 };
 export type AllStudentPositions = [
   "president",
   "vice_president",
   "secretary",
-  "treasurer"
+  "treasurer",
+  "public_information_officer"
 ];
 
 //#endregion

@@ -24,6 +24,7 @@ STUDENT_POSITIONS = [
     ("vice_president", "Vice President"),
     ("secretary", "Secretary"),
     ("treasurer", "Treasurer"),
+    ("public_information_officer", "Public Information Officer"),
 ]
 
 FACULTY_POSITIONS = [

@@ -7,7 +7,13 @@ import {
 } from "../types/UserTypes";
 
 const get_student_positions = (_role: Student["role"]): AllStudentPositions => {
-  return ["president", "vice_president", "secretary", "treasurer"];
+  return [
+    "president",
+    "vice_president",
+    "secretary",
+    "treasurer",
+    "public_information_officer",
+  ];
 };
 
 const get_faculty_positions = (_role: Faculty["role"]): AllFacultyPositions => {

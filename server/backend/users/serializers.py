@@ -61,6 +61,7 @@ class UserSerializer(serializers.ModelSerializer):
             password=validated_data["password"],
             first_name=validated_data["first_name"],
             last_name=validated_data["last_name"],
+            email=validated_data["email"],
         )
         # Sets first user as staff and super user and also an admin
         user.is_staff = has_no_user
