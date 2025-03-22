@@ -18,17 +18,21 @@ import { listCalendarEventsApi } from "../../../api/calendarRequest";
 import DisplayEvent from "./DisplayEvent";
 
 type CalendarDisplayProps = {
+  initialGridView?: string;
   showGridControls?: boolean;
   showNavigation?: boolean;
   showEvents?: boolean;
   dayMaxEventRows?: number;
+  showWeekends?: boolean;
 };
 
 const CalendarDisplay = ({
+  initialGridView = "dayGridMonth",
   showGridControls = false,
   showNavigation = false,
   dayMaxEventRows = 0,
   showEvents = false,
+  showWeekends = true,
 }: CalendarDisplayProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [hasFetchingError, setHasFetchingError] = useState(false);
@@ -76,12 +80,12 @@ const CalendarDisplay = ({
                 ? "dayGridMonth,timeGridWeek,timeGridDay"
                 : "",
             }}
-            initialView="dayGridMonth"
+            initialView={initialGridView}
             editable={false}
             selectable={true}
             selectMirror={true}
             dayMaxEvents={dayMaxEventRows}
-            weekends={true}
+            weekends={showWeekends}
             height="100%"
             initialEvents={events as EventSourceInput}
             eventContent={renderEventContent}

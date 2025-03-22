@@ -77,10 +77,12 @@ const HomePage = () => {
         <div className="w-full h-[600px]">
           {settings?.show_calendar && (
             <CalendarDisplay
-              showEvents
-              showGridControls
-              showNavigation
-              dayMaxEventRows={1}
+              initialGridView={settings.web_calendar_grid_type}
+              showEvents={settings.web_show_events}
+              showGridControls={settings.web_show_grid_controls}
+              showNavigation={settings.web_show_nav_controls}
+              dayMaxEventRows={settings.web_max_events}
+              showWeekends={settings.web_show_weekends}
             />
           )}
         </div>
