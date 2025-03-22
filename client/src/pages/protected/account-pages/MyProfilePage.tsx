@@ -177,7 +177,7 @@ const MyProfilePage = () => {
                 <DisplayUserProfile />
                 <div className="mt-2 w-full flex justify-end gap-2">
                   <Link
-                    to={"change-password"}
+                    to="/dashboard/account/my-profile/change-password"
                     className={`py-2 px-8 rounded-full bg-cyanBlue hover:bg-cyanBlue-dark active:bg-cyanBlue-darker font-semibold ${
                       saveLoading && "cursor-not-allowed"
                     }`}
@@ -185,7 +185,7 @@ const MyProfilePage = () => {
                     Change Password
                   </Link>
                   <Link
-                    to={"update-email"}
+                    to="/dashboard/account/my-profile/update-email"
                     className={`py-2 px-8 rounded-full bg-cyanBlue hover:bg-cyanBlue-dark active:bg-cyanBlue-darker font-semibold ${
                       saveLoading && "cursor-not-allowed"
                     }`}

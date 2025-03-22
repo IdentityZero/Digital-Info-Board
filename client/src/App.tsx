@@ -166,8 +166,14 @@ const router = createBrowserRouter(
         <Route path="account" element={<AccountSettingsPage />}>
           <Route index element={<MyProfilePage />} />
           <Route path="my-profile" element={<MyProfilePage />} />
-          <Route path="change-password" element={<ChangeMyPasswordPage />} />
-          <Route path="update-email" element={<AddUpdateEmailPage />} />
+          <Route
+            path="my-profile/change-password"
+            element={<ChangeMyPasswordPage />}
+          />
+          <Route
+            path="my-profile/update-email"
+            element={<AddUpdateEmailPage />}
+          />
 
           <Route
             path="new-users"

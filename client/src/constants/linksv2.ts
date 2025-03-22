@@ -138,6 +138,16 @@ export const LINKSV2: MenuType[] = [
         label: "my profile",
         to: "/dashboard/account/my-profile",
         icon: FaUser,
+        children: [
+          {
+            label: "change password",
+            to: "/dashboard/account/my-profile/change-password",
+          },
+          {
+            label: "update email",
+            to: "/dashboard/account/my-profile/update-email",
+          },
+        ],
       },
       {
         label: "new users",
