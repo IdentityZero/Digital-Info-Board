@@ -102,6 +102,7 @@ export type FullUserType = {
   username: string;
   last_name: string;
   first_name: string;
+  email?: string;
   is_active: boolean;
   profile: UserProfileType;
 };

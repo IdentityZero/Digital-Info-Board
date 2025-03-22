@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { Errortext } from "../../components/ui";
-import { FaExclamationCircle } from "react-icons/fa";
 
 import { useMyProfilePageContext } from "../../pages/protected/account-pages/MyProfilePage";
 import { formatStringUnderscores } from "../../utils/formatters";
 import { useAuth } from "../../context/AuthProvider";
 import { Role } from "../../types/UserTypes";
 import { get_role_positions } from "../../constants";
+import FormField from "./components/FormField";
 
 const DisplayUserProfile = ({}) => {
   const { user } = useAuth();
@@ -17,7 +17,6 @@ const DisplayUserProfile = ({}) => {
     isLoading,
     updateErrors: errors,
   } = useMyProfilePageContext();
-  console.log(errors);
   const [roleOptions, setRoleOptions] = useState<
     Role["position"][] | undefined
   >(undefined);
@@ -115,38 +114,22 @@ const DisplayUserProfile = ({}) => {
 
       <div className="flex-1 flex flex-col gap-2">
         {/* Username Field */}
-        <div>
-          <div
-            className={`flex flex-row items-center rounded-md overflow-hidden border-2 h-[48px] bg-desaturatedBlueGray ${
-              errors.username && "border-2 border-red-500"
-            }`}
-          >
-            <label
-              htmlFor="username"
-              className="w-[150px] xl:w-[180px] px-2 font-bold flex flex-row items-center gap-2"
-            >
-              {errors.username && (
-                <FaExclamationCircle className="text-red-500" />
-              )}
-              Username
-            </label>
-            <input
-              type="text"
-              id="username"
-              name="username"
-              value={userProfileForEdit.username}
-              className="flex-1 bg-gray-200 py-3 pl-2"
-              onChange={handleInputChange}
-              required
-              disabled={isLoading}
-            />
-          </div>
-          <Errortext text={errors.username} />
-        </div>
+        <FormField
+          error={errors.username}
+          labelText="Username"
+          value={userProfileForEdit.username}
+          name="username"
+          onChange={handleInputChange}
+          required
+          disabled={isLoading}
+        />
 
         {/* Role Field */}
         <div className="flex flex-row items-center rounded-md overflow-hidden">
-          <label className="w-[150px] xl:w-[180px] bg-desaturatedBlueGray py-3 px-2 font-bold">
+          <label
+            htmlFor="role"
+            className="w-[200px] bg-desaturatedBlueGray py-3 px-2 font-bold"
+          >
             Role
           </label>
           {user?.is_admin ? (
@@ -173,7 +156,10 @@ const DisplayUserProfile = ({}) => {
 
         {/* Position Field */}
         <div className="flex flex-row items-center rounded-md overflow-hidden mb-4">
-          <label className="w-[150px] xl:w-[180px] bg-desaturatedBlueGray py-3 px-2 font-bold">
+          <label
+            htmlFor="position"
+            className="w-[200px] bg-desaturatedBlueGray py-3 px-2 font-bold"
+          >
             Position
           </label>
           {user?.is_admin ? (
@@ -204,124 +190,60 @@ const DisplayUserProfile = ({}) => {
         </div>
 
         {/* First Name Field */}
-        <div>
-          <div
-            className={`flex flex-row items-center rounded-md overflow-hidden border-2 h-[48px] bg-desaturatedBlueGray ${
-              errors.first_name && "border-2 border-red-500"
-            }`}
-          >
-            <label
-              htmlFor="first-name"
-              className="w-[150px] xl:w-[180px] px-2 font-bold flex flex-row items-center gap-2"
-            >
-              {errors.first_name && (
-                <FaExclamationCircle className="text-red-500" />
-              )}
-              First Name
-            </label>
-            <input
-              type="text"
-              id="first-name"
-              name="first_name"
-              value={userProfileForEdit.first_name}
-              className="flex-1 bg-gray-200 h-full pl-2"
-              onChange={handleInputChange}
-              required
-              disabled={isLoading}
-            />
-          </div>
-          <Errortext text={errors.first_name} />
-        </div>
+        <FormField
+          error={errors.first_name}
+          labelText="First Name"
+          value={userProfileForEdit.first_name}
+          name="first_name"
+          onChange={handleInputChange}
+          required
+          disabled={isLoading}
+        />
 
         {/* Last Name Field */}
-        <div>
-          <div
-            className={`flex flex-row items-center rounded-md overflow-hidden border-2 h-[48px] bg-desaturatedBlueGray ${
-              errors.last_name && "border-2 border-red-500"
-            }`}
-          >
-            <label
-              htmlFor="last-name"
-              className="w-[150px] xl:w-[180px] px-2 font-bold flex flex-row items-center gap-2"
-            >
-              {errors.last_name && (
-                <FaExclamationCircle className="text-red-500" />
-              )}
-              Last Name
-            </label>
-            <input
-              type="text"
-              id="last-name"
-              name="last_name"
-              value={userProfileForEdit.last_name}
-              className="flex-1 bg-gray-200 h-full pl-2"
-              onChange={handleInputChange}
-              required
-              disabled={isLoading}
-            />
-          </div>
-          <Errortext text={errors.last_name} />
-        </div>
+        <FormField
+          error={errors.last_name}
+          labelText="Last Name"
+          value={userProfileForEdit.last_name}
+          name="last_name"
+          onChange={handleInputChange}
+          required
+          disabled={isLoading}
+        />
+
+        {/* Email */}
+        <FormField
+          type="email"
+          error={errors.email}
+          labelText="Email"
+          value={userProfileForEdit.email}
+          onChange={handleInputChange}
+          required
+          disabled
+        />
 
         {/* Id Number Field */}
-        <div>
-          <div
-            className={`flex flex-row items-center rounded-md overflow-hidden border-2 h-[48px] bg-desaturatedBlueGray ${
-              errors.profile.id_number && "border-2 border-red-500"
-            }`}
-          >
-            <label
-              htmlFor="id-number"
-              className="w-[150px] xl:w-[180px] px-2 font-bold flex flex-row items-center gap-2"
-            >
-              {errors.profile.id_number && (
-                <FaExclamationCircle className="text-red-500" />
-              )}
-              ID Number
-            </label>
-            <input
-              type="text"
-              id="id-number"
-              name="profile.id_number"
-              value={userProfileForEdit.profile.id_number}
-              className="flex-1 bg-gray-200 h-full pl-2"
-              onChange={handleInputChange}
-              required
-              disabled={isLoading}
-            />
-          </div>
-          <Errortext text={errors.profile.id_number} />
-        </div>
+        <FormField
+          error={errors.profile.id_number}
+          labelText="ID Number"
+          value={userProfileForEdit.profile.id_number}
+          name="profile.id_number"
+          onChange={handleInputChange}
+          required
+          disabled={isLoading}
+        />
 
         {/* Birthdate Field */}
-        <div>
-          <div
-            className={`flex flex-row items-center rounded-md overflow-hidden border-2 h-[48px] bg-desaturatedBlueGray ${
-              errors.profile.birthdate && "border-2 border-red-500"
-            }`}
-          >
-            <label
-              htmlFor="birthdate"
-              className="w-[150px] xl:w-[180px] px-2 font-bold flex flex-row items-center gap-2"
-            >
-              {errors.profile.birthdate && (
-                <FaExclamationCircle className="text-red-500" />
-              )}
-              Birthdate
-            </label>
-            <input
-              type="date"
-              id="birthdate"
-              name="profile.birthdate"
-              value={userProfileForEdit.profile.birthdate}
-              className="flex-1 bg-gray-200 h-full pl-2"
-              onChange={handleInputChange}
-              required
-              disabled={isLoading}
-            />
-          </div>
-          <Errortext text={errors.profile.birthdate} />
-        </div>
+        <FormField
+          type="date"
+          error={errors.profile.birthdate}
+          labelText="Birthdate"
+          value={userProfileForEdit.profile.birthdate}
+          name="profile.birthdate"
+          onChange={handleInputChange}
+          required
+          disabled={isLoading}
+        />
       </div>
     </div>
   );

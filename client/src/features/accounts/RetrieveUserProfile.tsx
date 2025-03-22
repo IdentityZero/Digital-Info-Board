@@ -318,6 +318,14 @@ const RetrieveUserProfile = ({ id }: RetrieveUserProfileProps) => {
           required
         />
 
+        <FormField
+          labelText="Email"
+          value={userData.email}
+          type="email"
+          name="email"
+          disabled
+        />
+
         {/* Id Number Field */}
         <FormField
           error={updateErrors.profile.id_number}

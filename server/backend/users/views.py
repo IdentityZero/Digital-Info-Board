@@ -10,7 +10,7 @@ from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
 from email.utils import formataddr
 
-from rest_framework import generics, status
+from rest_framework import generics, status, exceptions
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.exceptions import PermissionDenied
@@ -83,7 +83,12 @@ class RetrieveUpdateUserView(generics.RetrieveUpdateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_object(self):
+        user = self.request.user
         pk = self.kwargs.get("pk")
+
+        if user.id != pk and not user.profile.is_admin:
+            raise PermissionDenied("You are not allowed to access this data.")
+
         return get_object_or_404(User, id=pk)
 
     def update(self, request, *args, **kwargs):

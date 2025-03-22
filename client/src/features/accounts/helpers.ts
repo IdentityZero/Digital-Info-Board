@@ -4,6 +4,7 @@ export type UserInformationErrorT = {
   username: string | string[];
   last_name: string | string[];
   first_name: string | string[];
+  email: string | string[];
   profile: {
     id_number: string | string[];
     birthdate: string | string[];
@@ -11,10 +12,11 @@ export type UserInformationErrorT = {
   };
 };
 
-export const UserInformationErrorState = {
+export const UserInformationErrorState: UserInformationErrorT = {
   username: "",
   first_name: "",
   last_name: "",
+  email: "",
   profile: {
     id_number: "",
     birthdate: "",
