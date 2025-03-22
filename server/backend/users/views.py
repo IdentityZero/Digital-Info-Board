@@ -222,7 +222,10 @@ def reset_password(request):
 
     uid = urlsafe_base64_encode(force_bytes(user.pk))
     token = default_token_generator.make_token(user)
-    reset_url = f"http://localhost:5173/reset-password/{uid}/{token}/"
+    frontend_domain = getattr(
+        settings, "FRONTEND_DOMAIN", "http://localhost:5173"
+    ).rstrip("/")
+    reset_url = f"{frontend_domain}/reset-password/{uid}/{token}/"
 
     send_mail(
         "Password Reset Request",
@@ -375,7 +378,12 @@ class ListCreateUserInvitationView(generics.ListCreateAPIView):
         inst = serializer.save(inviter=self.request.user)
 
         try:
-            registration_url = self.request.build_absolute_uri("/")
+            frontend_domain = getattr(
+                settings, "FRONTEND_DOMAIN", "http://localhost:5173"
+            ).rstrip("/")
+            registration_url = f"{frontend_domain}/signup?ic={inst.code}"
+            print(frontend_domain)
+
             send_email(inst.code, inst.email, registration_url)
             inst.is_email_sent = True
             inst.save()
@@ -415,7 +423,11 @@ def resend_invitation_email(request, pk):
     inst = get_object_or_404(NewUserInvitation, id=pk)
 
     try:
-        registration_url = request.build_absolute_uri("/")
+        frontend_domain = getattr(
+            settings, "FRONTEND_DOMAIN", "http://localhost:5173"
+        ).rstrip("/")
+        registration_url = f"{frontend_domain}/signup?ic={inst.code}"
+        print(frontend_domain)
         send_email(inst.code, inst.email, registration_url)
         inst.is_email_sent = True
         inst.save()
