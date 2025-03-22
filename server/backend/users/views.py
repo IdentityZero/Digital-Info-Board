@@ -3,6 +3,7 @@ import re
 from typing import Dict, Any
 import socket
 
+from django.contrib.auth.tokens import default_token_generator
 from django.conf import settings
 from django.http import JsonResponse
 from django.contrib.auth.models import User
@@ -10,6 +11,8 @@ from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
 from django.core.mail import EmailMessage, send_mail
 from django.core.cache import cache
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes
 from email.utils import formataddr
 
 from rest_framework import generics, status
@@ -197,6 +200,66 @@ class ChangePasswordView(generics.UpdateAPIView):
             raise PermissionDenied("You can only change your own password.")
 
         return user
+
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
+def reset_password(request):
+    email = request.data.get("email")
+
+    if not email:
+        return Response(
+            {"message": "Email is required."}, status=status.HTTP_400_BAD_REQUEST
+        )
+
+    try:
+        user = User.objects.get(email=email)
+    except User.DoesNotExist:
+        return Response(
+            {"message": "User with this email does not exists."},
+            status=status.HTTP_404_NOT_FOUND,
+        )
+
+    uid = urlsafe_base64_encode(force_bytes(user.pk))
+    token = default_token_generator.make_token(user)
+    reset_url = f"http://localhost:5173/reset-password/{uid}/{token}/"
+
+    send_mail(
+        "Password Reset Request",
+        f"Click the link below to reset your password:\n{reset_url}",
+        FORMATTED_EMAIL_ADDRESS,
+        [email],
+    )
+
+    return Response({"message": "Password reset email sent"}, status=status.HTTP_200_OK)
+
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
+def confirm_reset_password(request, uidb64, token):
+    try:
+        uid = urlsafe_base64_decode(uidb64).decode()
+        user = User.objects.get(pk=uid)
+    except (User.DoesNotExist, ValueError):
+        return Response({"message": "Invalid user"}, status=status.HTTP_400_BAD_REQUEST)
+
+    if not default_token_generator.check_token(user, token):
+        return Response(
+            {"message": "Invalid or expired token"}, status=status.HTTP_400_BAD_REQUEST
+        )
+
+    new_password = request.data.get("password")
+    if not new_password:
+        return Response(
+            {"error": "Password is required"}, status=status.HTTP_400_BAD_REQUEST
+        )
+
+    user.set_password(new_password)
+    user.save()
+
+    return Response(
+        {"message": "Password has been reset successfully"}, status=status.HTTP_200_OK
+    )
 
 
 @api_view(["POST"])

@@ -19,6 +19,8 @@ import {
   AboutPage,
   ContactUsPage,
   KioskDisplayPage,
+  ForgotPasswordPage,
+  ResetPasswordPage,
 } from "./pages/public";
 
 import {
@@ -95,6 +97,11 @@ const router = createBrowserRouter(
         <Route path="signup" element={<SignUpPage />} />
         <Route path="about-us" element={<AboutPage />} />
         <Route path="contact" element={<ContactUsPage />} />
+        <Route path="forgot-password" element={<ForgotPasswordPage />} />
+        <Route
+          path="reset-password/:id/:token"
+          element={<ResetPasswordPage />}
+        />
       </Route>
       <Route path="kiosk" element={<KioskDisplayPage />} />
 

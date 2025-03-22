@@ -5,6 +5,8 @@ import HomePage from "./HomePage";
 import AboutPage from "./AboutPage";
 import ContactUsPage from "./ContactUsPage";
 import KioskDisplayPage from "./KioskDisplayPage";
+import ForgotPasswordPage from "./ForgotPasswordPage";
+import ResetPasswordPage from "./ResetPasswordPage";
 
 export {
   LoginPage,
@@ -14,4 +16,6 @@ export {
   AboutPage,
   ContactUsPage,
   KioskDisplayPage,
+  ForgotPasswordPage,
+  ResetPasswordPage,
 };

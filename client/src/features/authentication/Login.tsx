@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Input, Form } from "../../components/ui";
 import { useAuth } from "../../context/AuthProvider";
 
@@ -33,12 +34,12 @@ const Login = () => {
               placeholder="Enter password"
               required={true}
             />
-            <a
-              href="#"
+            <Link
+              to="/forgot-password"
               className="text-sm text-gray-400 focus:text-blue-500 hover:text-blue-500 hover:underline flex justify-end"
             >
               Forgot password?
-            </a>
+            </Link>
           </div>
           <button
             type="submit"

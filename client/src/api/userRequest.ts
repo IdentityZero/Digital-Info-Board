@@ -6,6 +6,7 @@ import {
   ListUserInvitationType,
   ListUserType,
 } from "../types/UserTypes";
+import { BASE_API_URL } from "../constants/urls";
 
 const retrieveUpdateUserInformationEndpoint = (id: string) => {
   return `users/v1/account/${id}/`;
@@ -49,6 +50,43 @@ export const updateUserInformationApi = async (
       {
         headers: { "Content-Type": "multipart/form-data" },
       }
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw error;
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+export const resetPasswordApi = async (email: string) => {
+  try {
+    const response = await axios.post(
+      "http://" + BASE_API_URL + "/users/v1/account/password-reset/",
+      { email: email }
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw error;
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+export const resetPasswordConfirmApi = async (
+  password: string,
+  id: string,
+  token: string
+) => {
+  try {
+    const response = await axios.post(
+      "http://" +
+        BASE_API_URL +
+        "/users/v1/account/password-reset-confirm/" +
+        `${id}/${token}/`,
+      { password: password }
     );
     return response.data;
   } catch (error) {
