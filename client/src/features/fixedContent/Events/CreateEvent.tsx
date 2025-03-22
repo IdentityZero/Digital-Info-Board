@@ -53,28 +53,30 @@ const CreateEvent = ({ onSuccess }: CreateEventProps) => {
     <form onSubmit={handleSubmit} ref={formRef}>
       <Accordion>
         <AccordionItem title="Add New Event" isOpenInit={false}>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Input
-              labelText="Event Name"
-              name="name"
-              placeholder="Event Name (e.g. Organization Election, Unigames 2025)"
-              required
-              maxLength={64}
-              helpText={["Up to 64 characters allowed."]}
-              disabled={isLoading}
-            />
-            <Input
-              type="date"
-              labelText="Event Date"
-              name="date"
-              required
-              disabled={isLoading}
-            />
-          </div>
-          <div className="mt-2">
-            <Button type="submit" disabled={isLoading}>
-              Submit
-            </Button>
+          <div className="bg-white p-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Input
+                labelText="Event Name"
+                name="name"
+                placeholder="Event Name (e.g. Organization Election, Unigames 2025)"
+                required
+                maxLength={64}
+                helpText={["Up to 64 characters allowed."]}
+                disabled={isLoading}
+              />
+              <Input
+                type="date"
+                labelText="Event Date"
+                name="date"
+                required
+                disabled={isLoading}
+              />
+            </div>
+            <div className="mt-2">
+              <Button type="submit" disabled={isLoading}>
+                Submit
+              </Button>
+            </div>
           </div>
         </AccordionItem>
       </Accordion>

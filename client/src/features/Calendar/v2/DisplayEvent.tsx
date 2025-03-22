@@ -16,6 +16,7 @@ const DisplayEvent = ({
 }: DisplayEventProps) => {
   return (
     <Modal
+      key={initialData?.id}
       isOpen={isOpen}
       title={initialData?.title}
       onClose={() => onCloseClick(false)}

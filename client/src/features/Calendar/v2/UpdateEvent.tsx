@@ -95,6 +95,7 @@ const UpdateEvent = ({
 
   return (
     <Modal
+      key={initialData.id}
       isOpen={isOpen}
       title="Update Event"
       onClose={() => onCloseClick(false)}

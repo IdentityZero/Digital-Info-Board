@@ -4,7 +4,7 @@ import { SettingsType } from "../types/SettingTypes";
 
 export const listSystemSettingsApi = async (): Promise<SettingsType> => {
   try {
-    const response = await axios.get(SITE_SETTINGS_URL + "v1/all/");
+    const response = await axios.get(SITE_SETTINGS_URL + "v1/");
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -14,19 +14,15 @@ export const listSystemSettingsApi = async (): Promise<SettingsType> => {
   }
 };
 
-export const updateSystemSettingsApi = async <K extends keyof SettingsType>(
+export const updateSystemSettingsApi = async (
   axiosInstance: AxiosInstance,
-  key: K,
-  value: SettingsType[K]
-): Promise<Partial<Record<K, SettingsType[K]>>> => {
+  data: any
+): Promise<SettingsType> => {
   /**
    * On success, it will only return the key you updated.
    */
   try {
-    const response = await axiosInstance.patch(
-      SITE_SETTINGS_URL + `v1/?setting=${key}`,
-      { [key]: value }
-    );
+    const response = await axiosInstance.patch(SITE_SETTINGS_URL + `v1/`, data);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {

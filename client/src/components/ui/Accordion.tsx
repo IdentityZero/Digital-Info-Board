@@ -40,7 +40,7 @@ export function AccordionItem({
           maxHeight: isOpen ? `${contentRef.current?.scrollHeight}px` : "0px",
         }}
       >
-        <div className="p-4 text-gray-700">{children}</div>
+        <div className="text-gray-700">{children}</div>
       </div>
     </div>
   );

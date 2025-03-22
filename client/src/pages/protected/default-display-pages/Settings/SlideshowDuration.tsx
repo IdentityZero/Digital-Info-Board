@@ -35,8 +35,6 @@ const SlideshowDuration = ({
     slideShowDurationErrInitState
   );
 
-  console.log(submitErrors);
-
   useEffect(() => {
     setSettingsCopy(settings);
     setSubmitErrors(slideShowDurationErrInitState);
@@ -57,11 +55,9 @@ const SlideshowDuration = ({
     try {
       setIsSaving(true);
       setSubmitErrors(slideShowDurationErrInitState);
-      const res_data = await updateSystemSettingsApi(
-        userApi,
-        componentKey,
-        settingsCopy[componentKey]
-      );
+      const res_data = await updateSystemSettingsApi(userApi, {
+        [componentKey]: settingsCopy[componentKey],
+      });
       update({
         render: "Update succesful.",
         type: "success",

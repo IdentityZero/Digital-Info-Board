@@ -80,7 +80,7 @@ const HomePage = () => {
               showEvents
               showGridControls
               showNavigation
-              dayMaxEventRows={3}
+              dayMaxEventRows={1}
             />
           )}
         </div>

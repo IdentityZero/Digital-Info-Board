@@ -64,8 +64,8 @@ const FullCalendarFeature = ({
 
   const handleEventClick = (eventInfo: EventClickArg) => {
     const eventData = eventInfo.event;
-    const targetEvent = eventInfo.view.calendar.getEventById(eventData.id);
-    setTargetEvent(targetEvent);
+    const eventTarget = eventInfo.view.calendar.getEventById(eventData.id);
+    setTargetEvent(eventTarget);
   };
 
   const handleDeleteSuccess = () => {

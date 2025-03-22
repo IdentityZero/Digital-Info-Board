@@ -73,7 +73,7 @@ const CreateMediaDisplay = ({ onSuccess }: CreateMediaDisplayProps) => {
     <form encType="multipart/form-data" onSubmit={handleSubmit} ref={formRef}>
       <Accordion>
         <AccordionItem title="Add New Media Display" isOpenInit={false}>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-white p-4">
             <div className="flex flex-col gap-2">
               <Input
                 labelText="Name"

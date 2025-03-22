@@ -13,70 +13,19 @@ class SettingsSerializer(serializers.ModelSerializer):
 
 
 class ListSettingsSerializer(serializers.ModelSerializer):
+    announcement_start = serializers.DateTimeField(read_only=True)
+
     class Meta:
         model = Settings
-        fields = [
-            "announcement_start",
-            "show_organization",
-            "show_upcoming_events",
-            "show_media_displays",
-            "show_weather_forecast",
-            "show_calendar",
-            "organization_slide_duration",
-            "media_displays_slide_duration",
-            "upcoming_events_slide_duration",
-        ]
+        fields = "__all__"
 
-
-class AnnouncementStartSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Settings
-        fields = ["announcement_start"]
-
-
-class ShowOrganizationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Settings
-        fields = ["show_organization"]
-
-
-class ShowUpcomingEventsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Settings
-        fields = ["show_upcoming_events"]
-
-
-class ShowMediaDisplaysSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Settings
-        fields = ["show_media_displays"]
-
-
-class ShowWeatherForecastSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Settings
-        fields = ["show_weather_forecast"]
-
-
-class ShowCalendarSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Settings
-        fields = ["show_calendar"]
-
-
-class OrganizationSlideDurationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Settings
-        fields = ["organization_slide_duration"]
-
-
-class MediaDisplaysSlideDurationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Settings
-        fields = ["media_displays_slide_duration"]
-
-
-class UpcomingEventsSlideDurationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Settings
-        fields = ["upcoming_events_slide_duration"]
+    def to_internal_value(self, data):
+        """
+        Prevents overwriting fields with null unless explicitly allowed.
+        """
+        for field, value in data.items():
+            if value is None:
+                raise serializers.ValidationError(
+                    {field: "This field cannot be set to null."}
+                )
+        return super().to_internal_value(data)

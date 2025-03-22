@@ -1,7 +1,7 @@
 import { NavLink, Outlet } from "react-router-dom";
 
 const LINKS = [
-  { label: "Calendar", url: "" },
+  { label: "Calendar", url: "calendar" },
   { label: "Settings", url: "settings" },
 ];
 

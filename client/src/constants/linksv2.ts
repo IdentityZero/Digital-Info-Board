@@ -116,7 +116,19 @@ export const LINKSV2: MenuType[] = [
       },
     ],
   },
-  { label: "calendar", to: "/dashboard/calendar", icon: FaCalendar },
+  {
+    label: "calendar",
+    to: "/dashboard/calendar",
+    icon: FaCalendar,
+    children: [
+      {
+        label: "calendar",
+        to: "/dashboard/calendar/calendar",
+        icon: FaCalendar,
+      },
+      { label: "settings", to: "/dashboard/calendar/settings", icon: FaCog },
+    ],
+  },
   {
     label: "profile",
     to: "/dashboard/account",

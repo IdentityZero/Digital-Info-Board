@@ -12,7 +12,7 @@ const CalendarCard = ({
   description,
 }: CalendarCardProps) => {
   return (
-    <div className="w-full h-full overflow-auto calendar-scrollbar">
+    <div className="w-full h-full overflow-x-hidden calendar-scrollbar max-w-[200px]">
       <p>
         <b>{time}</b> &nbsp; <i>{title}</i>
       </p>

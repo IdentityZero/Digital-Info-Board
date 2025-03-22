@@ -141,6 +141,7 @@ const router = createBrowserRouter(
         <Route path="calendar" element={<CalendarPage />}>
           {/* <Route index element={<CalendarContentsPage />} /> */}
           <Route index element={<CalendarContentsPageV2 />} />
+          <Route path="calendar" element={<CalendarContentsPageV2 />} />
           <Route path="settings" element={<CalendarSettingsPage />} />
         </Route>
 

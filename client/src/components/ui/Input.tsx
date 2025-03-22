@@ -16,7 +16,7 @@ const Input = ({ error, helpText, labelText, ...inputProps }: InputPropsv1) => {
   return (
     <div>
       <label
-        className="block text-gray-700 text-sm font-bold mb-2 capitalize"
+        className="block text-gray-700 text-sm font-bold mb-2 capitalize cursor-pointer"
         htmlFor={name}
       >
         {labelText}

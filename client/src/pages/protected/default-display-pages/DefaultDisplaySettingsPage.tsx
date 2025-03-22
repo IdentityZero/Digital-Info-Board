@@ -77,7 +77,7 @@ const DefaultDisplaySettingsPage = () => {
     loading("Saving updates. Please wait...");
     try {
       setIsSaving(true);
-      await updateSystemSettingsApi(userApi, componentKey, !isActivated);
+      await updateSystemSettingsApi(userApi, { [componentKey]: !isActivated });
       update({
         render: "Update succesful.",
         type: "success",
@@ -98,10 +98,9 @@ const DefaultDisplaySettingsPage = () => {
 
   return (
     <div className="w-full h-full flex flex-col gap-2">
-      {fixedContentMapName.map((content, index) => (
-        <>
+      {fixedContentMapName.map((content) => (
+        <div key={content.name}>
           <ActivationCard
-            key={index}
             title={content.name}
             componentKey={content.key}
             handlePreview={handlePreview}
@@ -116,7 +115,7 @@ const DefaultDisplaySettingsPage = () => {
           >
             <content.component />
           </Modal>
-        </>
+        </div>
       ))}
       <section>
         {settings && (
