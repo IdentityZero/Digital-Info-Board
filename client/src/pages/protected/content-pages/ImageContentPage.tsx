@@ -212,6 +212,22 @@ const ImageContentPage = () => {
     formRef.current.requestSubmit();
   };
 
+  if (imageAnnouncement?.image_announcement.length === 0) {
+    return (
+      <div className="mt-2 flex flex-col items-center justify-center">
+        <p>Data does not resemble as Image Content</p>
+        <Link to="/dashboard/contents/image">
+          <button
+            className={`flex flex-row items-center gap-2 px-8 py-1 rounded-full border border-black bg-lightBlue hover:bg-lightBlue-300 active:bg-lightBlue-500 `}
+          >
+            <FaArrowLeft />
+            Back to list
+          </button>
+        </Link>
+      </div>
+    );
+  }
+
   return (
     <div className="pt-5">
       <div className="w-full flex flex-row items-center justify-between">
