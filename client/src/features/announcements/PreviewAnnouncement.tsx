@@ -31,7 +31,7 @@ const PreviewAnnouncement = ({
         &times;
       </button>
       <div className="">
-        <DetailAnnouncement data={data} resetIndex index={0} indexOnPlay={0} />
+        <DetailAnnouncement data={data} index={0} indexOnPlay={0} />
       </div>
     </div>
   );

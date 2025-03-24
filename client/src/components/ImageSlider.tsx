@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 interface ImageSliderProps {
   images: string[];
   durations: number[];
+  play?: boolean;
   showDuration?: boolean;
   showArrows?: boolean;
-  reset?: boolean;
 }
 
 const ImageSlider: React.FC<ImageSliderProps> = ({
@@ -13,7 +13,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
   durations,
   showDuration = true,
   showArrows = true,
-  reset = false,
+  play = true,
 }) => {
   const [currentIndex, setCurrentIndex] = useState(1);
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -27,10 +27,10 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
   ];
 
   useEffect(() => {
-    if (reset) {
+    if (!play) {
       setCurrentIndex(1);
     }
-  }, [reset]);
+  }, [play]);
 
   const handlePrev = () => {
     if (isTransitioning) return;
@@ -54,12 +54,13 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
   };
 
   useEffect(() => {
+    if (!play) return;
     const interval = setInterval(() => {
       handleNext();
     }, extendedDurations[currentIndex]);
 
     return () => clearInterval(interval);
-  }, [isTransitioning, currentIndex]);
+  }, [isTransitioning, currentIndex, play]);
 
   return (
     <div className="relative w-full h-full mx-auto overflow-hidden">

@@ -90,12 +90,14 @@ const VideoSlider: React.FC<VideoSliderProps> = ({
   }, [currentIndex]);
 
   useEffect(() => {
+    if (stop) return;
+
     const interval = setInterval(() => {
       handleNext();
     }, extendedDurations[currentIndex]);
 
     return () => clearInterval(interval);
-  }, [isTransitioning, currentIndex]);
+  }, [isTransitioning, currentIndex, stop]);
 
   return (
     <div className="relative w-full h-full mx-auto overflow-hidden">

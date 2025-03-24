@@ -1,10 +1,13 @@
 import { useRef } from "react";
+
 import AuthorCard from "../../components/AuthorCard";
 import DisplayQuillEditor from "../../components/DisplayQuillEditor";
 import ImageSlider from "../../components/ImageSlider";
 import VideoSlider from "../../components/VideoSlider";
-import { AnnouncementRetrieveType } from "../../types/AnnouncementTypes";
+
 import { convertDurationToSeconds } from "../../utils/utils";
+
+import { AnnouncementRetrieveType } from "../../types/AnnouncementTypes";
 
 type AnnouncementThumbnailProps = {
   data: AnnouncementRetrieveType;
@@ -62,7 +65,7 @@ const AnnouncementThumbnail = ({
               durations={imageDurations as number[]}
               showDuration={false}
               showArrows={false}
-              reset={true}
+              play={false}
             />
           )}
         {videoUrls &&

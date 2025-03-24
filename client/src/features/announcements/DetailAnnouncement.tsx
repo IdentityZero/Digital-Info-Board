@@ -1,16 +1,17 @@
 import "react-quill/dist/quill.snow.css";
 
-import { type AnnouncementRetrieveType } from "../../types/AnnouncementTypes";
 import DisplayQuillEditor from "../../components/DisplayQuillEditor";
 import AuthorCard from "../../components/AuthorCard";
-import { convertDurationToSeconds } from "../../utils/utils";
 import ImageSlider from "../../components/ImageSlider";
 import VideoSlider from "../../components/VideoSlider";
+
+import { convertDurationToSeconds } from "../../utils/utils";
+
+import { type AnnouncementRetrieveType } from "../../types/AnnouncementTypes";
 
 type DetailAnnouncementProps = {
   data: AnnouncementRetrieveType;
   // This will come from the parent to control which one is playing in the sliders
-  resetIndex: boolean;
   index: number;
   indexOnPlay: number;
   videoCrossOrigin?: React.VideoHTMLAttributes<HTMLVideoElement>["crossOrigin"];
@@ -18,7 +19,6 @@ type DetailAnnouncementProps = {
 
 const DetailAnnouncement = ({
   data,
-  resetIndex,
   index,
   indexOnPlay,
   videoCrossOrigin,
@@ -71,7 +71,7 @@ const DetailAnnouncement = ({
                   durations={imageDurations as number[]}
                   showDuration={false}
                   showArrows={false}
-                  reset={resetIndex}
+                  play={index === indexOnPlay}
                 />
               </div>
             )}

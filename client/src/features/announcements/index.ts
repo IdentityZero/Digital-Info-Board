@@ -13,7 +13,6 @@ import RetrieveVideoAnnouncement from "./RetrieveVideoAnnouncement";
 import EditVideoAnnouncement from "./EditVideoAnnouncement";
 import PreviewAnnouncement from "./PreviewAnnouncement";
 import AnnouncementThumbnail from "./AnnouncementThumbnail";
-import DetailAnnouncementCurrDisplay from "./DetailAnnouncementCurrDisplay";
 import LiveAnnouncement from "./LiveAnnouncement";
 import AnnouncementCarousel from "./AnnouncementCarousel";
 import NoAnnouncementCard from "./NoAnnouncementCard";
@@ -34,7 +33,6 @@ export {
   EditVideoAnnouncement,
   PreviewAnnouncement,
   AnnouncementThumbnail,
-  DetailAnnouncementCurrDisplay,
   LiveAnnouncement,
   AnnouncementCarousel,
   NoAnnouncementCard,

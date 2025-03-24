@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+
 import { AnnouncementListType } from "../../types/AnnouncementTypes";
 import DetailAnnouncement from "./DetailAnnouncement";
 
@@ -117,7 +118,6 @@ const AnnouncementCarousel = ({
             <div className="w-full flex-shrink-0" key={index}>
               <DetailAnnouncement
                 data={announcement}
-                resetIndex={!isTransitioning}
                 index={index}
                 indexOnPlay={currentIndex}
               />
