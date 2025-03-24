@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { Id } from "react-toastify";
+import axios from "axios";
 
 import Button from "./components/Button";
 import FormField from "./components/FormField";
@@ -8,7 +9,6 @@ import { useAuth } from "../../context/AuthProvider";
 import useLoadingToast from "../../hooks/useLoadingToast";
 
 import { addUserEmailApi, verifyEmailCodeApi } from "../../api/userRequest";
-import axios from "axios";
 
 const AddEmail = () => {
   const toastId = useRef<Id | null>(null);
@@ -103,7 +103,7 @@ const AddEmail = () => {
 
   return (
     <div className="p-4 w-full mx-auto border rounded-lg shadow-md">
-      <h2 className="text-xl font-bold mb-4">Add Email</h2>
+      <h2 className="text-xl font-bold mb-4">Update Email</h2>
       <form
         className="flex flex-col gap-3"
         onSubmit={isCodeSent ? handleVerifyCode : handleSendCode}

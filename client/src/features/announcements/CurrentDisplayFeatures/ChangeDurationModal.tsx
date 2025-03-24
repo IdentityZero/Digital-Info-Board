@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import axios from "axios";
 import { Id } from "react-toastify";
 
 import Modal from "../../../components/ui/Modal";
@@ -51,6 +52,7 @@ const ChangeDurationModal = ({
   const { loading, update } = useLoadingToast(toastId);
 
   const [data, setData] = useState(structuredClone(announcementData));
+  const [error, setError] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const [videoDurations, setVideoDurations] = useState<string[]>([]);
@@ -111,18 +113,34 @@ const ChangeDurationModal = ({
     loading("Saving updates. Please wait...");
     try {
       setIsLoading(true);
-      const res_data = await updateFunction(userApi, data.id, updatedData);
+      await updateFunction(userApi, data.id, updatedData);
       update({
         render: "Update succesful. ",
         type: "success",
       });
-      console.log(res_data);
     } catch (error) {
+      if (!axios.isAxiosError(error)) {
+        update({
+          render: "Unexpected error occured. Please try again later.",
+          type: "error",
+        });
+        return;
+      }
+      const err = error.response?.data;
+      if (!err) {
+        update({
+          render: "Unexpected error occured. Please try again later.",
+          type: "error",
+        });
+        return;
+      }
+      console.log(err);
+
       update({
-        render: "Update unsuccessful. Please try again.",
-        type: "error",
+        render: "Update errors and try again.",
+        type: "warning",
       });
-      console.log(error);
+      setError(err);
     } finally {
       setIsLoading(false);
     }
@@ -139,6 +157,7 @@ const ChangeDurationModal = ({
         {/* Text */}
         {data.text_announcement && (
           <Input
+            error={error && error.text_announcement.duration}
             disabled={isLoading}
             labelText="Duration"
             required
@@ -178,6 +197,7 @@ const ChangeDurationModal = ({
                   </span>
                   <span className="flex-1 text-center">
                     <Input
+                      error={error && error.to_update[index]?.duration}
                       disabled={isLoading}
                       required
                       labelText=""
@@ -247,8 +267,7 @@ const ChangeDurationModal = ({
                         onChange={(e) =>
                           handleDurationChange(e.target.value, index, "video")
                         }
-                        // error={errors.to_update[index]?.duration}
-                        // disabled={isLoading}
+                        error={error && error.to_update[index]?.duration}
                         helpText={"Duration when being displayed. Starts in 0."}
                       />
                       <div className="mt-2">
