@@ -1,4 +1,5 @@
 import {
+  AnnouncementRetrieveType,
   ImageAnnouncementCreateType,
   VideoAnnouncementCreateType,
 } from "../types/AnnouncementTypes";
@@ -12,6 +13,20 @@ export function getLaterDate(timestamp1: string, timestamp2: string): string {
   }
 
   return date1 > date2 ? timestamp1 : timestamp2;
+}
+export function getAnnouncementType(
+  announcement: AnnouncementRetrieveType
+): "text" | "image" | "video" {
+  if (announcement.text_announcement) {
+    return "text";
+  } else if (
+    announcement.image_announcement &&
+    announcement.image_announcement.length > 0
+  ) {
+    return "image";
+  } else {
+    return "video";
+  }
 }
 
 export function isObjectEqual(obj1: any, obj2: any) {

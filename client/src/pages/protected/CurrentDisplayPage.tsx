@@ -1,17 +1,22 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+
 import { customCircle } from "../../assets";
 import DragAndDrop from "../../components/DragAndDrop";
 import LoadingMessage from "../../components/LoadingMessage";
-import { AnnouncementCarousel } from "../../features/announcements";
-import useAnnouncementSlider from "../../features/announcements/hooks/useAnnouncementSlider";
+
 import {
   calculateElapsedTime,
   findIndexByWeight,
   moveFirstToLast,
 } from "../../utils/utils";
-import { LIVE_ANNOUNCEMENT_URL } from "../../constants/urls";
+
+import useAnnouncementSlider from "../../features/announcements/hooks/useAnnouncementSlider";
 import useSiteSettings from "../../hooks/useSiteSettings";
+import { LIVE_ANNOUNCEMENT_URL } from "../../constants/urls";
+
+import ChangeTimeDuration from "../../features/announcements/CurrentDisplayFeatures/ChangeTimeDuration";
+import { AnnouncementCarousel } from "../../features/announcements";
 
 const CurrentDisplayPage = () => {
   const {
@@ -183,14 +188,22 @@ const CurrentDisplayPage = () => {
                     }
                     disabled={!isEditMode}
                   />
-                  <div className="flex flex-row justify-end px-6">
+                  <div className="flex flex-row justify-end px-6 gap-2">
                     {isEditMode ? (
-                      <button
-                        className={`px-8 rounded-full bg-cyanBlue hover:bg-cyanBlue-dark active:bg-cyanBlue-darker text-white border border-black font-semibold text-xs uppercase`}
-                        onClick={handleSave}
-                      >
-                        Save
-                      </button>
+                      <>
+                        <button
+                          className={`px-8 rounded-full bg-cyanBlue hover:bg-cyanBlue-dark active:bg-cyanBlue-darker text-white border border-black font-semibold text-xs uppercase`}
+                          onClick={handleSave}
+                        >
+                          Save
+                        </button>
+                        <button
+                          className={`px-8 rounded-full bg-cyanBlue hover:bg-cyanBlue-dark active:bg-cyanBlue-darker text-white border border-black font-semibold text-xs uppercase`}
+                          onClick={() => setIsEditMode(false)}
+                        >
+                          Cancel
+                        </button>
+                      </>
                     ) : (
                       <button
                         className={`px-8 rounded-full bg-cyanBlue hover:bg-cyanBlue-dark active:bg-cyanBlue-darker text-white border border-black font-semibold text-xs uppercase`}
@@ -206,30 +219,7 @@ const CurrentDisplayPage = () => {
           </div>
           <div className="px-5">
             <CustomTitleHolder text="Edit Context" />
-            <div className="w-full h-[250px] bg-darkTeal border border-black rounded-lg overflow-hidden px-4 py-6 flex flex-col justify-between">
-              <div className="flex flex-row gap-2 justify-between h-[150px] bg-yellowishBeige p-4">
-                <button
-                  className={`px-8 py-2 h-fit rounded-full bg-cyanBlue hover:bg-cyanBlue-dark active:bg-cyanBlue-darker text-white border border-black font-semibold text-xs uppercase`}
-                  type="submit"
-                >
-                  Change template
-                </button>
-                <button
-                  className={`px-8 py-2 h-fit rounded-full bg-cyanBlue hover:bg-cyanBlue-dark active:bg-cyanBlue-darker text-white border border-black font-semibold text-xs uppercase`}
-                  type="submit"
-                >
-                  Change Time Duration
-                </button>
-              </div>
-              <div className="flex flex-row justify-end px-6">
-                <button
-                  className={`px-8 rounded-full bg-cyanBlue hover:bg-cyanBlue-dark active:bg-cyanBlue-darker text-white border border-black font-semibold text-xs uppercase`}
-                  type="submit"
-                >
-                  Save
-                </button>
-              </div>
-            </div>
+            <ChangeTimeDuration sliderItems={sliderItems} />
           </div>
         </div>
       </div>

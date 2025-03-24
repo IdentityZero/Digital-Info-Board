@@ -7,7 +7,7 @@ import {
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
-import { restrictToHorizontalAxis } from "@dnd-kit/modifiers";
+import { restrictToParentElement } from "@dnd-kit/modifiers";
 import {
   arrayMove,
   defaultAnimateLayoutChanges,
@@ -17,7 +17,12 @@ import {
   useSortable,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { AnnouncementListType } from "../types/AnnouncementTypes";
+
+import {
+  AnnouncementListType,
+  AnnouncementRetrieveType,
+} from "../types/AnnouncementTypes";
+
 import { AnnouncementThumbnail } from "../features/announcements";
 
 type DragAndDropProps = {
@@ -25,6 +30,7 @@ type DragAndDropProps = {
   setItems: React.Dispatch<React.SetStateAction<AnnouncementListType>>;
   containerSize?: string;
   disabled?: boolean;
+  onThumbnailClick?: (data: AnnouncementRetrieveType) => void;
 };
 
 const DragAndDrop = ({
@@ -32,9 +38,10 @@ const DragAndDrop = ({
   setItems,
   disabled = false,
   containerSize = "100%",
+  onThumbnailClick,
 }: DragAndDropProps) => {
   const sensors = useSensors(
-    useSensor(PointerSensor),
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     })
@@ -45,7 +52,7 @@ const DragAndDrop = ({
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
-        modifiers={[restrictToHorizontalAxis]}
+        modifiers={[restrictToParentElement]}
         onDragEnd={handleDragEnd}
       >
         <SortableContext
@@ -64,7 +71,10 @@ const DragAndDrop = ({
                     index === 0 && "mr-3"
                   }`}
                 >
-                  <AnnouncementThumbnail data={item} />
+                  <AnnouncementThumbnail
+                    data={item}
+                    onClick={onThumbnailClick}
+                  />
                 </div>
               </DnDSortableItem>
             ))}

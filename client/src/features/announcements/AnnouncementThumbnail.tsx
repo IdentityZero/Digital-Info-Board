@@ -8,9 +8,13 @@ import { convertDurationToSeconds } from "../../utils/utils";
 
 type AnnouncementThumbnailProps = {
   data: AnnouncementRetrieveType;
+  onClick?: (data: AnnouncementRetrieveType) => void;
 };
 
-const AnnouncementThumbnail = ({ data }: AnnouncementThumbnailProps) => {
+const AnnouncementThumbnail = ({
+  data,
+  onClick,
+}: AnnouncementThumbnailProps) => {
   const container = useRef(null);
   const { text_announcement } = data;
 
@@ -30,52 +34,53 @@ const AnnouncementThumbnail = ({ data }: AnnouncementThumbnailProps) => {
   });
 
   return (
-    <>
-      <div className="w-[500px] h-[500px] bg-white shadow-lg rounded-lg border border-gray-200 mt-2 scale-[0.25] origin-top-left hover:!cursor-pointer">
-        <div className="h-fit">
-          <AuthorCard
-            image={data.author.profile.image}
-            name={data.author.first_name + " " + data.author.last_name}
-            role={data.author.profile.role}
-            position={data.author.profile.position}
+    <div
+      className="w-[500px] h-[500px] bg-white shadow-lg rounded-lg border border-gray-200 mt-2 scale-[0.25] origin-top-left hover:!cursor-pointer"
+      onClick={() => onClick && onClick(data)}
+    >
+      <div className="h-fit">
+        <AuthorCard
+          image={data.author.profile.image}
+          name={data.author.first_name + " " + data.author.last_name}
+          role={data.author.profile.role}
+          position={data.author.profile.position}
+        />
+      </div>
+      <div ref={container} className="h-[300px]">
+        {data.text_announcement && (
+          <DisplayQuillEditor
+            value={JSON.parse(text_announcement?.details as string)}
           />
-        </div>
-        <div ref={container} className="h-[300px]">
-          {data.text_announcement && (
-            <DisplayQuillEditor
-              value={JSON.parse(text_announcement?.details as string)}
+        )}
+
+        {imageUrls &&
+          imageDurations &&
+          data.image_announcement &&
+          data.image_announcement?.length > 0 && (
+            <ImageSlider
+              images={imageUrls as string[]}
+              durations={imageDurations as number[]}
+              showDuration={false}
+              showArrows={false}
+              reset={true}
             />
           )}
-
-          {imageUrls &&
-            imageDurations &&
-            data.image_announcement &&
-            data.image_announcement?.length > 0 && (
-              <ImageSlider
-                images={imageUrls as string[]}
-                durations={imageDurations as number[]}
-                showDuration={false}
-                showArrows={false}
-                reset={true}
-              />
-            )}
-          {videoUrls &&
-            videoDurations &&
-            data.video_announcement &&
-            data.video_announcement?.length > 0 && (
-              <VideoSlider
-                videos={videoUrls as string[]}
-                durations={videoDurations as number[]}
-                showDuration={false}
-                showArrows={false}
-                stop={true}
-                crossOrigin="anonymous"
-                showControls={false}
-              />
-            )}
-        </div>
+        {videoUrls &&
+          videoDurations &&
+          data.video_announcement &&
+          data.video_announcement?.length > 0 && (
+            <VideoSlider
+              videos={videoUrls as string[]}
+              durations={videoDurations as number[]}
+              showDuration={false}
+              showArrows={false}
+              stop={true}
+              crossOrigin="anonymous"
+              showControls={false}
+            />
+          )}
       </div>
-    </>
+    </div>
   );
 };
 export default AnnouncementThumbnail;
