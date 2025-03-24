@@ -40,8 +40,10 @@ const CalendarDisplay = ({
 
   const [targetEvent, setTargetEvent] = useState<EventApi | null>(null); // Will identify if update modal will show up
 
-  useEffect(() => {
-    const fetchCalendarEvents = async () => {
+  const fetchCalendarEvents = () => {
+    let delay = 1000;
+
+    const retryFetch = async () => {
       try {
         setIsLoading(true);
         setHasFetchingError(false);
@@ -49,13 +51,18 @@ const CalendarDisplay = ({
         setEvents(res_data);
       } catch (error) {
         setHasFetchingError(true);
+        delay = Math.min(delay * 2, 30000);
+        setTimeout(retryFetch, delay);
       } finally {
         setIsLoading(false);
       }
     };
+    retryFetch();
+  };
 
+  useEffect(() => {
     showEvents && fetchCalendarEvents();
-  }, []);
+  }, [showEvents]);
 
   const handleEventClick = (eventInfo: EventClickArg) => {
     const eventData = eventInfo.event;

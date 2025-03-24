@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 import { MediaDisplayType } from "../../types/FixedContentTypes";
 import { listMediaDisplaysApi } from "../../api/fixedContentRquests";
+import LoadingMessage from "../../components/LoadingMessage";
 
 type MediaDisplayProps = {
   initialIndex?: number;
@@ -20,6 +21,7 @@ const MediaDisplay = ({
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
 
   const [mediaDisplays, setMediaDisplays] = useState<MediaDisplayType[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const totalItems = mediaDisplays.length;
 
   const extendedMedia = [
@@ -67,19 +69,35 @@ const MediaDisplay = ({
     return () => clearInterval(interval);
   }, [isTransitioning, currentIndex]);
 
-  useEffect(() => {
-    const fetchMediaDisplays = async () => {
+  const fetchMediaDisplays = () => {
+    let delay = 1000;
+
+    const retryFetch = async () => {
       try {
+        setIsLoading(true);
         const res_data = await listMediaDisplaysApi();
         setMediaDisplays(res_data);
-      } catch (error) {}
+        setIsTransitioning(false);
+      } catch (error) {
+        delay = Math.min(delay * 2, 30000);
+        setTimeout(retryFetch, delay);
+      } finally {
+        setIsLoading(false);
+      }
     };
+
+    retryFetch();
+  };
+
+  useEffect(() => {
     fetchMediaDisplays();
   }, []);
 
   return (
     <div className="w-full h-full overflow-hidden relative">
-      {mediaDisplays.length === 0 ? (
+      {isLoading ? (
+        <LoadingMessage message="Loading..." />
+      ) : mediaDisplays.length === 0 ? (
         <div className="w-full h-full pt-4 text-center text-xl font-semibold">
           No displays to show
         </div>
@@ -115,6 +133,7 @@ const MediaDisplay = ({
           ))}
         </div>
       )}
+
       {showNavigation && (
         <>
           <button

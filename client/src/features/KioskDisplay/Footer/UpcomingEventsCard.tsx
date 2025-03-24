@@ -6,24 +6,30 @@ import { formatInputDate } from "../../../utils/formatters";
 
 const UpcomingEventsCard = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [hasError, setHasError] = useState(false);
 
   // Reload if error
 
   const [events, setEvents] = useState<UpcomingEventType[]>([]);
 
-  useEffect(() => {
-    const fetchEvents = async () => {
+  const fetchEvents = () => {
+    let delay = 1000;
+
+    const retryFetch = async () => {
       try {
         setIsLoading(true);
         const res_data = await listUpcomingEventsApi();
         setEvents(res_data);
       } catch (error) {
-        setHasError(true);
+        delay = Math.min(delay * 2, 30000);
+        setTimeout(retryFetch, delay);
       } finally {
         setIsLoading(false);
       }
     };
+    retryFetch();
+  };
+
+  useEffect(() => {
     fetchEvents();
   }, []);
 

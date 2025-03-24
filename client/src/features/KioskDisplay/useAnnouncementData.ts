@@ -20,12 +20,14 @@ const useAnnouncementData = () => {
   const [error, setError] = useState<any>(null);
   // const [isMediaLoading, setIsMediaLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchAnnouncements = async () => {
+  const fetchAnnouncements = () => {
+    let delay = 1000;
+
+    const retryFetch = async () => {
       try {
         setIsLoading(true);
-        setError(null);
         const res_data = await listActiveAnnouncementApi();
+
         setAnnouncementList(res_data);
         setMediaAnnouncements(
           structuredClone(
@@ -37,12 +39,22 @@ const useAnnouncementData = () => {
             res_data.filter((announcement) => announcement.text_announcement)
           )
         );
+
+        setError(null);
       } catch (error) {
         setError(error);
+
+        delay = Math.min(delay * 2, 30000);
+        setTimeout(retryFetch, delay);
       } finally {
         setIsLoading(false);
       }
     };
+
+    retryFetch(); // Start fetching immediately
+  };
+
+  useEffect(() => {
     fetchAnnouncements();
   }, []);
 

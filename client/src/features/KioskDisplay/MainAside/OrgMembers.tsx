@@ -29,7 +29,6 @@ const OrgMembers = ({
   const [orgMembers, setOrgMembers] = useState<OrganizationMembersType[]>([]);
 
   const [isLoading, setIsLoading] = useState(true);
-  const [hasError, setHasError] = useState(false);
 
   const chunkedItems = chunkArray(orgMembers, chunkSize);
   const totalItems = chunkedItems.length;
@@ -60,18 +59,26 @@ const OrgMembers = ({
     }
   };
 
-  useEffect(() => {
-    const fetchOrgMembers = async () => {
+  const fetchOrgMembers = () => {
+    let delay = 1000;
+
+    const retryFetch = async () => {
       try {
         setIsLoading(true);
         const res_data = await listOrgmembersApi();
         setOrgMembers(res_data);
+        setIsTransitioning(false);
       } catch (error) {
-        setHasError(true);
+        delay = Math.min(delay * 2, 30000);
+        setTimeout(retryFetch, delay);
       } finally {
         setIsLoading(false);
       }
     };
+    retryFetch();
+  };
+
+  useEffect(() => {
     fetchOrgMembers();
   }, []);
 

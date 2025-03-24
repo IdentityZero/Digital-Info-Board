@@ -1,26 +1,31 @@
 import { useEffect, useState } from "react";
+import { MdOutlineCampaign } from "react-icons/md";
+
 import DisplayQuillEditor from "../../components/DisplayQuillEditor";
 import LoadingMessage from "../../components/LoadingMessage";
+
 import useAnnouncementData from "../../features/KioskDisplay/useAnnouncementData";
+import useSiteSettings from "../../hooks/useSiteSettings";
+
 import VideoPlayer from "../../features/KioskDisplay/VideoPlayer";
 import ImagePlayer from "../../features/KioskDisplay/ImagePlayer";
+
 import Footer from "../../features/KioskDisplay/Footer";
 import MainAside from "../../features/KioskDisplay/MainAside";
-import useSiteSettings from "../../hooks/useSiteSettings";
 import { SettingsType } from "../../types/SettingTypes";
-import { MdOutlineCampaign } from "react-icons/md";
 
 const KioskDisplayPage = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const {
     mediaAnnouncements,
     mediaDurations,
-    isLoading,
+    isLoading: IsAnnouncementFetching,
+    error: hasAnnouncementFetchingError,
     textAnnouncementsAsText,
   } = useAnnouncementData();
   const [isPortrait, setIsPortrait] = useState(true);
 
-  const { settings, isLoading: IsSettingsLoading } = useSiteSettings();
+  const { settings } = useSiteSettings();
 
   const handleNext = () => {
     if (currentIndex === mediaAnnouncements.length - 1) {
@@ -40,7 +45,7 @@ const KioskDisplayPage = () => {
     return () => clearInterval(interval);
   }, [currentIndex, mediaAnnouncements]);
 
-  if (isLoading || IsSettingsLoading) {
+  if (!settings) {
     return <LoadingMessage message="Fetching contents..." />;
   }
 
@@ -55,6 +60,12 @@ const KioskDisplayPage = () => {
             value={JSON.parse(mediaAnnouncements[currentIndex].title as string)}
             withBackground={false}
           />
+        ) : IsAnnouncementFetching ? (
+          hasAnnouncementFetchingError ? (
+            <LoadingMessage message="Error fetching, retrying..." />
+          ) : (
+            <LoadingMessage message="Fetching Announcements" />
+          )
         ) : (
           <NoAnnouncement />
         )}
@@ -94,6 +105,12 @@ const KioskDisplayPage = () => {
                   />
                 )}
             </>
+          ) : IsAnnouncementFetching ? (
+            hasAnnouncementFetchingError ? (
+              <LoadingMessage message="Error fetching, retrying..." />
+            ) : (
+              <LoadingMessage message="Fetching Announcements" />
+            )
           ) : (
             <NoAnnouncement />
           )}
