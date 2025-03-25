@@ -1,29 +1,33 @@
 import { useEffect, useState } from "react";
-import { MdOutlineCampaign } from "react-icons/md";
 
 import DisplayQuillEditor from "../../components/DisplayQuillEditor";
 import LoadingMessage from "../../components/LoadingMessage";
 
-import useAnnouncementData from "../../features/KioskDisplay/useAnnouncementData";
 import useSiteSettings from "../../hooks/useSiteSettings";
+import { useRealtimeUpdate } from "../../context/RealtimeUpdate";
 
 import VideoPlayer from "../../features/KioskDisplay/VideoPlayer";
 import ImagePlayer from "../../features/KioskDisplay/ImagePlayer";
+import NoAnnouncementCard from "../../features/KioskDisplay/NoAnnouncementCard";
 
 import Footer from "../../features/KioskDisplay/Footer";
 import MainAside from "../../features/KioskDisplay/MainAside";
+
 import { SettingsType } from "../../types/SettingTypes";
 
 const KioskDisplayPage = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const {
-    mediaAnnouncements,
-    mediaDurations,
-    isLoading: IsAnnouncementFetching,
-    error: hasAnnouncementFetchingError,
-    textAnnouncementsAsText,
-  } = useAnnouncementData();
+
   const [isPortrait, setIsPortrait] = useState(true);
+  const {
+    announcement: {
+      mediaAnnouncements,
+      mediaDurations,
+      isLoading: IsAnnouncementFetching,
+      error: hasAnnouncementFetchingError,
+      textAnnouncementsAsText,
+    },
+  } = useRealtimeUpdate();
 
   const { settings } = useSiteSettings();
 
@@ -67,7 +71,7 @@ const KioskDisplayPage = () => {
             <LoadingMessage message="Fetching Announcements" />
           )
         ) : (
-          <NoAnnouncement />
+          <NoAnnouncementCard />
         )}
       </header>
 
@@ -112,7 +116,7 @@ const KioskDisplayPage = () => {
               <LoadingMessage message="Fetching Announcements" />
             )
           ) : (
-            <NoAnnouncement />
+            <NoAnnouncementCard />
           )}
         </div>
 
@@ -145,12 +149,3 @@ const KioskDisplayPage = () => {
   );
 };
 export default KioskDisplayPage;
-
-function NoAnnouncement() {
-  return (
-    <div className="flex gap-2 items-center justify-center ">
-      <MdOutlineCampaign className="w-12 h-12" />
-      <p className="text-xl font-semibold">There are no announcements</p>
-    </div>
-  );
-}

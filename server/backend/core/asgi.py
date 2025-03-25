@@ -15,6 +15,7 @@ from channels.auth import AuthMiddlewareStack
 import announcements.routing
 import field_devices.routing
 import notifications.routing
+import realtime_content_update.routing
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
 
@@ -26,6 +27,7 @@ application = ProtocolTypeRouter(
             announcements.routing.websocket_urlpatterns
             + field_devices.routing.websocket_urlpatterns
             + notifications.routing.websocket_urlpatterns
+            + realtime_content_update.routing.websocket_urlpatterns
         ),
     }
 )

@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 
-import { addTotalDuration, convertDurationToSeconds } from "../../utils/utils";
-import { extractReactQuillText } from "../../utils/formatters";
-import { AnnouncementListType } from "../../types/AnnouncementTypes";
-import { listActiveAnnouncementApi } from "../../api/announcementRequest";
+import {
+  addTotalDuration,
+  convertDurationToSeconds,
+} from "../../../utils/utils";
+import { extractReactQuillText } from "../../../utils/formatters";
+import { AnnouncementListType } from "../../../types/AnnouncementTypes";
+import { listActiveAnnouncementApi } from "../../../api/announcementRequest";
 
 const useAnnouncementData = () => {
   const [announcementList, setAnnouncementList] =

@@ -87,6 +87,7 @@ INSTALLED_APPS = [
     "field_devices",
     "custom_calendar",
     "own_calendar",
+    "realtime_content_update",
 ]
 
 MIDDLEWARE = [

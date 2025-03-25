@@ -80,6 +80,7 @@ import CalendarContentsPageV2 from "./pages/protected/calendar-pages/CalendarCon
 // import CalendarContentsPage from "./pages/protected/calendar-pages/CalendarContentsPage";
 import CalendarSettingsPage from "./pages/protected/calendar-pages/CalendarSettingsPage";
 import NotificationsPage from "./pages/protected/NotificationsPage";
+import KioskLayout from "./layouts/KioskLayout";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -103,7 +104,9 @@ const router = createBrowserRouter(
           element={<ResetPasswordPage />}
         />
       </Route>
-      <Route path="kiosk" element={<KioskDisplayPage />} />
+      <Route path="kiosk" element={<KioskLayout />}>
+        <Route index element={<KioskDisplayPage />} />
+      </Route>
 
       <Route
         path="dashboard"
