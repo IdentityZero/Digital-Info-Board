@@ -129,7 +129,7 @@ const SendInvitation = ({ addInvitation }: SendInvitationProps) => {
       <h2 className="text-xl font-semibold mb-4">Send Invitation</h2>
       <form onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-          <div className="col-span-2">
+          <div className="col-span-1 md:col-span-2">
             <FormField
               labelText="Email"
               name="email"

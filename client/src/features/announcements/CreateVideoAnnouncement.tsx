@@ -7,7 +7,7 @@ import axios from "axios";
 import { FaPlusCircle, FaTrashAlt } from "react-icons/fa";
 
 import QuillEditor, { isQuillValueEmpty } from "../../components/QuillEditor";
-import { Input, Form } from "../../components/ui";
+import { Input, Form, Errortext } from "../../components/ui";
 
 import { convertSecondsToDuration } from "../../utils/utils";
 import { useAuth } from "../../context/AuthProvider";
@@ -139,6 +139,7 @@ const CreateVideoAnnouncement = () => {
       toast.warning("Contents cannot be empty.");
       return;
     }
+    console.log(error);
 
     const fd = new FormData(e.currentTarget);
 
@@ -227,27 +228,23 @@ const CreateVideoAnnouncement = () => {
           placeholder="Create a title for your announcement"
           isTitle
         />
-        <div className="mt-2 flex flex-wrap gap-2">
-          <div className="basis-[calc(50%-0.5rem)]">
-            <Input
-              type="datetime-local"
-              name="start_date"
-              labelText="Start date"
-              required
-              disabled={loading}
-              error={error.start_date}
-            />
-          </div>
-          <div className="basis-[calc(50%-0.5rem)]">
-            <Input
-              type="datetime-local"
-              name="end_date"
-              labelText="End date"
-              required
-              disabled={loading}
-              error={error.end_date}
-            />
-          </div>
+        <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-2">
+          <Input
+            type="datetime-local"
+            name="start_date"
+            labelText="Start date"
+            required
+            disabled={loading}
+            error={error.start_date}
+          />
+          <Input
+            type="datetime-local"
+            name="end_date"
+            labelText="End date"
+            required
+            disabled={loading}
+            error={error.end_date}
+          />
         </div>
         <div className="w-full flex flex-col mt-5 ">
           <label
@@ -287,11 +284,14 @@ const CreateVideoAnnouncement = () => {
               const videoUrl = URL.createObjectURL(video.video as File);
 
               return (
-                <div key={index} className="flex flex-col mt-4">
-                  <div className="flex gap-4 ">
+                <div
+                  key={index}
+                  className="flex flex-col md:flex-row gap-2 mt-4 bg-white dark:bg-gray-800 border rounded-lg shadow-md p-4"
+                >
+                  <div>
                     <video
                       controls
-                      className="w-[500px] h-[280px] rounded-xl"
+                      className="w-[500px] h-[280px] rounded-xl object-contain mx-auto"
                       ref={(el) => {
                         if (el) {
                           el.onloadedmetadata = () => {
@@ -319,45 +319,50 @@ const CreateVideoAnnouncement = () => {
                       <source type={video_file.type} src={videoUrl} />
                       Your browser does not support the video tag.
                     </video>
-                    <div className="flex-1 flex flex-col justify-between">
-                      <div>
-                        <p className="font-bold">{video_file.name}</p>
-                        <p className="text-gray-500">
-                          {(video_file.size / (1024 * 1024)).toFixed(2)} MB
-                        </p>
-                        <p
-                          className="text-gray-500"
-                          // id={`duration-${video_file.name}-${video_file.size}`}
-                        >
-                          Video Duration: {videoDurations[index]} seconds
-                        </p>
-                      </div>
+                    {error.video_announcement[index]?.video && (
+                      <Errortext
+                        text={error.video_announcement[index]?.video}
+                      />
+                    )}
+                  </div>
+                  <div className="flex-1 flex flex-col justify-between">
+                    <div>
+                      <p className="font-bold">{video_file.name}</p>
+                      <p className="text-gray-500">
+                        {(video_file.size / (1024 * 1024)).toFixed(2)} MB
+                      </p>
+                      <p
+                        className="text-gray-500"
+                        // id={`duration-${video_file.name}-${video_file.size}`}
+                      >
+                        Video Duration: {videoDurations[index]} seconds
+                      </p>
+                    </div>
 
-                      <div className="flex items-center justify-between">
-                        <div className="w-64">
-                          <Input
-                            labelText="Display Duration"
-                            type="text"
-                            name={`image_announcement[${index}][duration]`}
-                            value={video.duration as string}
-                            onChange={(e) => handleDurationChange(e, index)}
-                            error={error.video_announcement[index]?.duration}
-                            disabled={loading}
-                            helpText={
-                              "Duration when being displayed. Starts in 0."
-                            }
-                          />
-                        </div>
-                        <button
-                          onClick={() => handleDeleteUpload(index)}
-                          className="bg-red-500 hover:bg-red-700 active:bg-red-800 p-2 rounded-lg flex gap-2 items-center text-white"
-                          type="button"
+                    <div className="flex items-center justify-between">
+                      <div className="min-w-64">
+                        <Input
+                          labelText="Display Duration"
+                          type="text"
+                          name={`image_announcement[${index}][duration]`}
+                          value={video.duration as string}
+                          onChange={(e) => handleDurationChange(e, index)}
+                          error={error.video_announcement[index]?.duration}
                           disabled={loading}
-                        >
-                          <FaTrashAlt />
-                          <span>Remove</span>
-                        </button>
+                          helpText={
+                            "Duration when being displayed. Starts in 0."
+                          }
+                        />
                       </div>
+                      <button
+                        onClick={() => handleDeleteUpload(index)}
+                        className="bg-red-500 hover:bg-red-700 active:bg-red-800 p-2 rounded-lg flex gap-2 items-center text-white"
+                        type="button"
+                        disabled={loading}
+                      >
+                        <FaTrashAlt />
+                        <span>Remove</span>
+                      </button>
                     </div>
                   </div>
                 </div>

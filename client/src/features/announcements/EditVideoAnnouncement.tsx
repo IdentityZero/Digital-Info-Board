@@ -1,6 +1,8 @@
 import ReactQuill from "react-quill";
+import { FaPlusCircle, FaTrashAlt } from "react-icons/fa";
+import { toast } from "react-toastify";
 
-import { Form, Input } from "../../components/ui";
+import { Errortext, Form, Input } from "../../components/ui";
 import QuillEditor from "../../components/QuillEditor";
 import {
   FullVideoAnnouncementType,
@@ -10,10 +12,8 @@ import {
   convertToDatetimeLocal,
   truncateStringVariableLen,
 } from "../../utils/formatters";
-import { FaPlusCircle, FaTrashAlt } from "react-icons/fa";
 import { forwardRef, useEffect, useState } from "react";
 import { UpdateVideoAnnouncementErrorT } from "./helpers";
-import { toast } from "react-toastify";
 
 type EditVideoAnnouncementProps = {
   videoAnnouncementData: FullVideoAnnouncementType;
@@ -167,41 +167,37 @@ const EditVideoAnnouncement = forwardRef<
           isTitle
         />
         <Form onSubmitFunc={submitFunc} ref={ref}>
-          <div className="flex flex-wrap gap-2">
-            <div className="basis-[calc(50%-0.5rem)]">
-              <Input
-                type="datetime-local"
-                value={convertToDatetimeLocal(videoAnnouncementData.start_date)}
-                onChange={(e) =>
-                  setVideoAnnouncementData({
-                    ...videoAnnouncementData,
-                    start_date: e.target.value,
-                  })
-                }
-                name="start_date"
-                labelText="Start date"
-                required
-                error={errors.start_date}
-                disabled={isLoading}
-              />
-            </div>
-            <div className="basis-[calc(50%-0.5rem)]">
-              <Input
-                type="datetime-local"
-                value={convertToDatetimeLocal(videoAnnouncementData.end_date)}
-                onChange={(e) =>
-                  setVideoAnnouncementData({
-                    ...videoAnnouncementData,
-                    end_date: e.target.value,
-                  })
-                }
-                name="end_date"
-                labelText="End date"
-                required
-                error={errors.end_date}
-                disabled={isLoading}
-              />
-            </div>
+          <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-2">
+            <Input
+              type="datetime-local"
+              value={convertToDatetimeLocal(videoAnnouncementData.start_date)}
+              onChange={(e) =>
+                setVideoAnnouncementData({
+                  ...videoAnnouncementData,
+                  start_date: e.target.value,
+                })
+              }
+              name="start_date"
+              labelText="Start date"
+              required
+              error={errors.start_date}
+              disabled={isLoading}
+            />
+            <Input
+              type="datetime-local"
+              value={convertToDatetimeLocal(videoAnnouncementData.end_date)}
+              onChange={(e) =>
+                setVideoAnnouncementData({
+                  ...videoAnnouncementData,
+                  end_date: e.target.value,
+                })
+              }
+              name="end_date"
+              labelText="End date"
+              required
+              error={errors.end_date}
+              disabled={isLoading}
+            />
           </div>
 
           {/* OLD VIDEOS */}
@@ -214,11 +210,14 @@ const EditVideoAnnouncement = forwardRef<
                 const video_file = video.video as string;
 
                 return (
-                  <div key={video.id} className="flex gap-4">
+                  <div
+                    key={video.id}
+                    className="flex flex-col md:flex-row gap-2 mt-4 bg-white dark:bg-gray-800 border rounded-lg shadow-md p-4"
+                  >
                     {/* Video Display */}
                     <video
                       controls
-                      className="w-[500px] h-[280px] rounded-xl"
+                      className="w-[500px] h-[280px] rounded-xl object-contain mx-auto"
                       ref={(el) => {
                         if (el) {
                           el.onloadedmetadata = () => {
@@ -252,7 +251,7 @@ const EditVideoAnnouncement = forwardRef<
 
                       {/* Duration Input */}
                       <div className="flex items-center justify-between">
-                        <div className="w-64">
+                        <div className="min-w-64">
                           <Input
                             labelText="Display Duration"
                             type="text"
@@ -307,25 +306,35 @@ const EditVideoAnnouncement = forwardRef<
                   const video_file = video.video as File;
                   const videoUrl = URL.createObjectURL(video.video as File);
                   return (
-                    <div key={index} className="flex gap-2 mt-2">
-                      <video
-                        controls
-                        className="w-[500px] h-[280px] rounded-xl"
-                        ref={(el) => {
-                          if (el) {
-                            el.onloadedmetadata = () => {
-                              const duration = el.duration.toFixed(2); // Get the duration in seconds
-                              setNewVideoDurations((prev) => [
-                                ...prev,
-                                duration,
-                              ]);
-                            };
-                          }
-                        }}
-                      >
-                        <source src={videoUrl} />
-                        Your browser does not support the video tag.
-                      </video>
+                    <div
+                      key={index}
+                      className="flex flex-col md:flex-row gap-2 mt-4 bg-white dark:bg-gray-800 border rounded-lg shadow-md p-4"
+                    >
+                      <div>
+                        <video
+                          controls
+                          className="w-[500px] h-[280px] rounded-xl object-contain mx-auto"
+                          ref={(el) => {
+                            if (el) {
+                              el.onloadedmetadata = () => {
+                                const duration = el.duration.toFixed(2); // Get the duration in seconds
+                                setNewVideoDurations((prev) => [
+                                  ...prev,
+                                  duration,
+                                ]);
+                              };
+                            }
+                          }}
+                        >
+                          <source src={videoUrl} />
+                          Your browser does not support the video tag.
+                        </video>
+                        {errors.video_announcement[index]?.video && (
+                          <Errortext
+                            text={errors.video_announcement[index]?.video}
+                          />
+                        )}
+                      </div>
 
                       <div className="flex-1 flex flex-col justify-between">
                         <div>

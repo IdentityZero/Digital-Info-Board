@@ -182,27 +182,23 @@ const CreateImageAnnouncement = () => {
             placeholder="Create a title for your announcement"
             isTitle
           />
-          <div className="mt-2 flex flex-wrap gap-2">
-            <div className="basis-[calc(50%-0.5rem)]">
-              <Input
-                type="datetime-local"
-                name="start_date"
-                labelText="Start date"
-                required
-                disabled={loading}
-                error={error.start_date}
-              />
-            </div>
-            <div className="basis-[calc(50%-0.5rem)]">
-              <Input
-                type="datetime-local"
-                name="end_date"
-                labelText="End date"
-                required
-                disabled={loading}
-                error={error.end_date}
-              />
-            </div>
+          <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-2">
+            <Input
+              type="datetime-local"
+              name="start_date"
+              labelText="Start date"
+              required
+              disabled={loading}
+              error={error.start_date}
+            />
+            <Input
+              type="datetime-local"
+              name="end_date"
+              labelText="End date"
+              required
+              disabled={loading}
+              error={error.end_date}
+            />
           </div>
           <div className="w-full flex flex-col mt-5 ">
             <label
@@ -225,20 +221,6 @@ const CreateImageAnnouncement = () => {
               Uploaded Images
             </h3>
             <div className="mt-2">
-              <div className="flex items-center justify-between gap-2 py-3 mb-2 border-t-2 border-b-2 border-gray-500">
-                <span className="font-semibold flex-1 w-[150px] text-center">
-                  Image
-                </span>
-                <span className="font-semibold flex-1 text-center">
-                  Image name
-                </span>
-                <span className="font-semibold flex-1 text-center">
-                  Duration (HH:MM:SS)
-                </span>
-                <span className="font-semibold flex-1 text-center">Size</span>
-                <span className="font-semibold flex-1 text-center">Delete</span>
-              </div>
-
               {images.length === 0 && (
                 <div className="w-full text-center">
                   No image uploaded yet...
@@ -250,13 +232,13 @@ const CreateImageAnnouncement = () => {
                 return (
                   <div
                     key={index}
-                    className="flex items-center justify-between gap-2 py-3 mb-2 border-t-2 border-b-2 border-gray-500"
+                    className="flex flex-col md:flex-row gap-2 mt-4 bg-white dark:bg-gray-800 border rounded-lg shadow-md p-4"
                   >
-                    <span className="flex-1">
+                    <div>
                       <img
                         src={URL.createObjectURL(image.image as File)}
                         alt={`Uploaded ${index}`}
-                        className={`w-[150px] h-auto m-[10px] ${
+                        className={`w-[500px] h-[280px] rounded-xl object-contain mx-auto ${
                           error.image_announcement[index]?.image &&
                           "border border-dashed border-red-600"
                         }`}
@@ -266,34 +248,38 @@ const CreateImageAnnouncement = () => {
                           text={error.image_announcement[index]?.image}
                         />
                       )}
-                    </span>
-                    <span className=" flex-1 text-center">
-                      {image_file.name}
-                    </span>
-                    <span className="flex-1 text-center">
-                      <Input
-                        labelText=""
-                        type="text"
-                        name={`image_announcement[${index}][duration]`}
-                        value={image.duration as string}
-                        onChange={(e) => handleDurationChange(e, index)}
-                        error={error.image_announcement[index]?.duration}
-                        disabled={loading}
-                      />
-                    </span>
-                    <span className="flex-1 text-center">
-                      {(image_file.size / (1024 * 1024)).toFixed(2)} MB
-                    </span>
-                    <span className="flex-1 text-center">
-                      <button
-                        onClick={() => handleDeleteUpload(index)}
-                        className="bg-red-500 hover:bg-red-700 p-2 rounded-full"
-                        type="button"
-                        disabled={loading}
-                      >
-                        <FaTrashAlt className="text-white" />
-                      </button>
-                    </span>
+                    </div>
+                    <div className="flex-1 flex flex-col justify-between">
+                      <div>
+                        <p className="font-bold">{image_file.name}</p>
+                        <p className="text-gray-500">
+                          {(image_file.size / (1024 * 1024)).toFixed(2)} MB
+                        </p>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <div className="min-w-64">
+                          <Input
+                            labelText="Display Duration"
+                            type="text"
+                            name={`image_announcement[${index}][duration]`}
+                            value={image.duration as string}
+                            onChange={(e) => handleDurationChange(e, index)}
+                            error={error.image_announcement[index]?.duration}
+                            disabled={loading}
+                          />
+                        </div>
+
+                        <button
+                          onClick={() => handleDeleteUpload(index)}
+                          className="bg-red-500 hover:bg-red-700 active:bg-red-800 p-2 rounded-lg flex gap-2 items-center text-white"
+                          type="button"
+                          disabled={loading}
+                        >
+                          <FaTrashAlt className="text-white" />
+                          <span>Remove</span>
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 );
               })}

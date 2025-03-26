@@ -154,61 +154,43 @@ const EditImageAnnouncement = forwardRef<
           isTitle
         />
         <Form onSubmitFunc={submitFunc} ref={ref}>
-          <div className="flex flex-wrap gap-2">
-            <div className="basis-[calc(50%-0.5rem)]">
-              <Input
-                type="datetime-local"
-                value={convertToDatetimeLocal(imageAnnouncement.start_date)}
-                onChange={(e) =>
-                  setImageAnnouncement({
-                    ...imageAnnouncement,
-                    start_date: e.target.value,
-                  })
-                }
-                name="start_date"
-                labelText="Start date"
-                required
-                error={errors.start_date}
-                disabled={isLoading}
-              />
-            </div>
-            <div className="basis-[calc(50%-0.5rem)]">
-              <Input
-                type="datetime-local"
-                value={convertToDatetimeLocal(imageAnnouncement.end_date)}
-                onChange={(e) =>
-                  setImageAnnouncement({
-                    ...imageAnnouncement,
-                    end_date: e.target.value,
-                  })
-                }
-                name="end_date"
-                labelText="End date"
-                required
-                error={errors.end_date}
-                disabled={isLoading}
-              />
-            </div>
+          <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-2">
+            <Input
+              type="datetime-local"
+              value={convertToDatetimeLocal(imageAnnouncement.start_date)}
+              onChange={(e) =>
+                setImageAnnouncement({
+                  ...imageAnnouncement,
+                  start_date: e.target.value,
+                })
+              }
+              name="start_date"
+              labelText="Start date"
+              required
+              error={errors.start_date}
+              disabled={isLoading}
+            />
+            <Input
+              type="datetime-local"
+              value={convertToDatetimeLocal(imageAnnouncement.end_date)}
+              onChange={(e) =>
+                setImageAnnouncement({
+                  ...imageAnnouncement,
+                  end_date: e.target.value,
+                })
+              }
+              name="end_date"
+              labelText="End date"
+              required
+              error={errors.end_date}
+              disabled={isLoading}
+            />
           </div>
           <div className="mt-2">
             <h3 className="bg-[#6e8ea4] px-5 py-2 text-xl font-bold">
               Uploaded Images
             </h3>
             <div className="mt-2">
-              <div className="flex items-center justify-between gap-2 py-3 mb-2 border-t-2 border-b-2 border-gray-500">
-                <span className="font-semibold flex-1 w-[150px] text-center">
-                  Image
-                </span>
-                <span className="font-semibold flex-1 text-center">
-                  Image name
-                </span>
-                <span className="font-semibold flex-1 text-center">
-                  Duration (HH:MM:SS)
-                </span>
-                <span className="font-semibold flex-1 text-center">Size</span>
-                <span className="font-semibold flex-1 text-center">Delete</span>
-              </div>
-
               {imageAnnouncement.image_announcement.length === 0 && (
                 <div className="w-full text-center">
                   No image uploaded yet...
@@ -220,41 +202,45 @@ const EditImageAnnouncement = forwardRef<
                 return (
                   <div
                     key={index}
-                    className="flex items-center justify-between gap-2 py-3 mb-2 border-t-2 border-b-2 border-gray-500"
+                    className="flex flex-col md:flex-row gap-2 mt-4 bg-white dark:bg-gray-800 border rounded-lg shadow-md p-4"
                   >
-                    <span className="flex-1">
-                      <img
-                        src={image_file}
-                        alt={`Uploaded ${index}`}
-                        className={`w-[150px] h-auto m-[10px]`}
-                      />
-                    </span>
-                    <span className=" flex-1 text-center">
-                      {image_file.split("/").pop()}
-                    </span>
-                    <span className="flex-1 text-center">
-                      <Input
-                        labelText=""
-                        type="text"
-                        name={`image_announcement[${index}][duration]`} // This does not matter
-                        value={image.duration as string}
-                        onChange={(e) => handleDurationChange(e, index)}
-                        error={errors.to_update[index]?.duration}
-                        disabled={isLoading}
-                      />
-                    </span>
-                    <span className="flex-1 text-center">
-                      {(image.file_size / (1024 * 1024)).toFixed(2)} MB
-                    </span>
-                    <span className="flex-1 text-center">
-                      <button
-                        onClick={() => handleDeleteImage(index)}
-                        className="bg-red-500 hover:bg-red-700 p-2 rounded-full"
-                        type="button"
-                      >
-                        <FaTrashAlt className="text-white" />
-                      </button>
-                    </span>
+                    <img
+                      src={image_file}
+                      alt={`Uploaded ${index}`}
+                      className={`w-[500px] h-[280px] rounded-xl object-contain mx-auto`}
+                    />
+                    <div className="flex-1 flex flex-col justify-between">
+                      <div>
+                        <p className="font-bold">
+                          {image_file.split("/").pop()}
+                        </p>
+                        <p className="text-gray-500">
+                          {(image.file_size / (1024 * 1024)).toFixed(2)} MB
+                        </p>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <div className="min-w-64">
+                          <Input
+                            labelText="Display Duration"
+                            type="text"
+                            name={`image_announcement[${index}][duration]`} // This does not matter
+                            value={image.duration as string}
+                            onChange={(e) => handleDurationChange(e, index)}
+                            error={errors.to_update[index]?.duration}
+                            disabled={isLoading}
+                          />
+                        </div>
+
+                        <button
+                          onClick={() => handleDeleteImage(index)}
+                          className="bg-red-500 hover:bg-red-700 active:bg-red-800 p-2 rounded-lg flex gap-2 items-center text-white"
+                          type="button"
+                        >
+                          <FaTrashAlt className="text-white" />
+                          <span>Remove</span>
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 );
               })}
@@ -280,13 +266,13 @@ const EditImageAnnouncement = forwardRef<
               return (
                 <div
                   key={index}
-                  className="flex items-center justify-between gap-2 py-3 mb-2 border-t-2 border-b-2 border-gray-500"
+                  className="flex flex-col md:flex-row gap-2 mt-4 bg-white dark:bg-gray-800 border rounded-lg shadow-md p-4"
                 >
-                  <span className="flex-1">
+                  <div>
                     <img
                       src={URL.createObjectURL(image.image as File)}
                       alt={`Uploaded ${index}`}
-                      className={`w-[150px] h-auto m-[10px] ${
+                      className={`w-[500px] h-[280px] rounded-xl object-contain mx-auto ${
                         errors.image_announcement[index]?.image &&
                         "border border-dashed border-red-600"
                       }`}
@@ -296,31 +282,39 @@ const EditImageAnnouncement = forwardRef<
                         text={errors.image_announcement[index]?.image}
                       />
                     )}
-                  </span>
-                  <span className=" flex-1 text-center">{image_file.name}</span>
-                  <span className="flex-1 text-center">
-                    <Input
-                      labelText=""
-                      type="text"
-                      name={`image_announcement[${index}][duration]`} // This does not matter
-                      value={image.duration as string}
-                      onChange={(e) => handleNewImageDurationChange(e, index)}
-                      error={errors.image_announcement[index]?.duration}
-                      disabled={isLoading}
-                    />
-                  </span>
-                  <span className="flex-1 text-center">
-                    {(image_file.size / (1024 * 1024)).toFixed(2)} MB
-                  </span>
-                  <span className="flex-1 text-center">
-                    <button
-                      onClick={() => handleDeleteNewUpload(index)}
-                      className="bg-red-500 hover:bg-red-700 p-2 rounded-full"
-                      type="button"
-                    >
-                      <FaTrashAlt className="text-white" />
-                    </button>
-                  </span>
+                  </div>
+                  <div className="flex-1 flex flex-col justify-between">
+                    <div>
+                      <p className="font-bold">{image_file.name}</p>
+                      <p className="text-gray-500">
+                        {(image_file.size / (1024 * 1024)).toFixed(2)} MB
+                      </p>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <div className="min-w-64">
+                        <Input
+                          labelText="Display Duration"
+                          type="text"
+                          name={`image_announcement[${index}][duration]`} // This does not matter
+                          value={image.duration as string}
+                          onChange={(e) =>
+                            handleNewImageDurationChange(e, index)
+                          }
+                          error={errors.image_announcement[index]?.duration}
+                          disabled={isLoading}
+                        />
+                      </div>
+
+                      <button
+                        onClick={() => handleDeleteNewUpload(index)}
+                        className="bg-red-500 hover:bg-red-700 active:bg-red-800 p-2 rounded-lg flex gap-2 items-center text-white"
+                        type="button"
+                      >
+                        <FaTrashAlt className="text-white" />
+                        <span>Remove</span>
+                      </button>
+                    </div>
+                  </div>
                 </div>
               );
             })}

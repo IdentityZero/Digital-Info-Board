@@ -87,31 +87,27 @@ const EditTextAnnouncement = forwardRef<
           readonly={isLoading}
         />
         <Form ref={ref} onSubmitFunc={submitFunc}>
-          <div className="mt-2 flex flex-wrap gap-2">
-            <div className="basis-[calc(50%-0.5rem)]">
-              <Input
-                type="datetime-local"
-                value={convertToDatetimeLocal(data.start_date)}
-                onChange={handleInputChange}
-                name="start_date"
-                labelText="Start date"
-                required
-                error={errors.start_date}
-                disabled={isLoading}
-              />
-            </div>
-            <div className="basis-[calc(50%-0.5rem)]">
-              <Input
-                type="datetime-local"
-                value={convertToDatetimeLocal(data.end_date)}
-                onChange={handleInputChange}
-                name="end_date"
-                labelText="End date"
-                required
-                error={errors.end_date}
-                disabled={isLoading}
-              />
-            </div>
+          <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-2">
+            <Input
+              type="datetime-local"
+              value={convertToDatetimeLocal(data.start_date)}
+              onChange={handleInputChange}
+              name="start_date"
+              labelText="Start date"
+              required
+              error={errors.start_date}
+              disabled={isLoading}
+            />
+            <Input
+              type="datetime-local"
+              value={convertToDatetimeLocal(data.end_date)}
+              onChange={handleInputChange}
+              name="end_date"
+              labelText="End date"
+              required
+              error={errors.end_date}
+              disabled={isLoading}
+            />
             <div className="basis-[calc(50%-0.5rem)]">
               <Input
                 type="string"

@@ -170,41 +170,35 @@ const CreateTextAnnouncement = () => {
           error={error.text_announcement.details}
           placeholder="Announcement Details..."
         />
-        <div className="mt-2 flex flex-wrap gap-2">
-          <div className="basis-[calc(50%-0.5rem)]">
-            <Input
-              type="datetime-local"
-              name="start_date"
-              labelText="Start date"
-              required
-              disabled={loading}
-              error={error.start_date}
-            />
-          </div>
-          <div className="basis-[calc(50%-0.5rem)]">
-            <Input
-              type="datetime-local"
-              name="end_date"
-              labelText="End date"
-              required
-              disabled={loading}
-              error={error.end_date}
-            />
-          </div>
-          <div className="basis-[calc(50%-0.5rem)]">
-            <Input
-              type="number"
-              name="duration"
-              labelText="Duration in seconds"
-              placeholder="Set empty for default (40 sec)"
-              helpText={[
-                "Duration for which announcement will be displayed.",
-                "Set empty for default (40 sec)",
-              ]}
-              disabled={loading}
-              error={error.text_announcement.duration}
-            />
-          </div>
+        <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-2">
+          <Input
+            type="datetime-local"
+            name="start_date"
+            labelText="Start date"
+            required
+            disabled={loading}
+            error={error.start_date}
+          />
+          <Input
+            type="datetime-local"
+            name="end_date"
+            labelText="End date"
+            required
+            disabled={loading}
+            error={error.end_date}
+          />
+          <Input
+            type="number"
+            name="duration"
+            labelText="Duration in seconds"
+            placeholder="Set empty for default (40 sec)"
+            helpText={[
+              "Duration for which announcement will be displayed.",
+              "Set empty for default (40 sec)",
+            ]}
+            disabled={loading}
+            error={error.text_announcement.duration}
+          />
         </div>
 
         <div className="w-full mt-2 flex justify-end">
