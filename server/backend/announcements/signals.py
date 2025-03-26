@@ -109,7 +109,7 @@ def send_update_on_created_announcements(
         async_to_sync(channel_layer.group_send)(
             "realtime_update",
             {
-                "type": "send.announcement.update",
+                "type": "send.update",
                 "content": "announcement",
                 "action": "create",
                 "content_id": instance.pk,
@@ -127,7 +127,7 @@ def send_update_on_deleted_announcements(sender, instance, *args, **kwargs):
     async_to_sync(channel_layer.group_send)(
         "realtime_update",
         {
-            "type": "send.announcement.update",
+            "type": "send.update",
             "content": "announcement",
             "action": "delete",
             "content_id": instance.pk,
@@ -166,7 +166,7 @@ def send_update_on_updated_announcements(
         async_to_sync(channel_layer.group_send)(
             "realtime_update",
             {
-                "type": "send.announcement.update",
+                "type": "send.update",
                 "content": "announcement",
                 "action": "update",
                 "content_id": instance.pk,
@@ -180,7 +180,7 @@ def send_update_on_updated_announcements(
         async_to_sync(channel_layer.group_send)(
             "realtime_update",
             {
-                "type": "send.announcement.update",
+                "type": "send.update",
                 "content": "announcement",
                 "action": "activate",
                 "content_id": instance.pk,
@@ -194,7 +194,7 @@ def send_update_on_updated_announcements(
         async_to_sync(channel_layer.group_send)(
             "realtime_update",
             {
-                "type": "send.announcement.update",
+                "type": "send.update",
                 "content": "announcement",
                 "action": "deactivate",
                 "content_id": instance.pk,

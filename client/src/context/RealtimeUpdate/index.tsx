@@ -41,6 +41,12 @@ type AnnouncementWsMessageTypes = {
   data: any;
 };
 
+type SettingsWsMessageTypes = {
+  content: "settings";
+  action: "update";
+  data: SettingsType;
+};
+
 const RealtimeUpdateContext = createContext<
   RealtimeUpdateContextType | undefined
 >(undefined);
@@ -53,9 +59,19 @@ export const RealtimeUpdateProvider = ({
   const announcement = useAnnouncementData();
   const settings = useSiteSettingsUpdatable();
 
-  const handleOnWsMessage = (data: AnnouncementWsMessageTypes) => {
+  const handleOnWsMessage = (
+    data: AnnouncementWsMessageTypes | SettingsWsMessageTypes
+  ) => {
     if (data.content === "announcement") {
       handleAnnouncementContent(data);
+    } else if (data.content === "settings") {
+      handleSettingsContent(data);
+    }
+  };
+
+  const handleSettingsContent = (data: SettingsWsMessageTypes) => {
+    if (data.action === "update") {
+      settings.setSettings(data.data);
     }
   };
 

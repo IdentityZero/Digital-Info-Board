@@ -27,7 +27,7 @@ class RelayContentUpdateConsumer(WebsocketConsumer):
     def receive(self, text_data=None, bytes_data=None):
         return
 
-    def send_announcement_update(self, event):
+    def send_update(self, event):
         event.pop("type")
         self.send(text_data=json.dumps(event))
 

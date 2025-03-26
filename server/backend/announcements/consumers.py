@@ -49,10 +49,12 @@ class LiveAnnouncementConsumer(WebsocketConsumer):
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name, {"type": "send.live.update", "message": message}
         )
+
+        # Settings to real time updates
         async_to_sync(self.channel_layer.group_send)(
             "realtime_update",
             {
-                "type": "send.announcement.update",
+                "type": "send.update",
                 "content": "announcement",
                 "action": "sequence_update",
                 "data": message,
