@@ -120,7 +120,7 @@ class ListCreateUpcomingEventApiView(generics.ListCreateAPIView):
         # Filter for active events if requested
         active = self.request.query_params.get("active")
         if active:
-            qs = qs.filter(date__gt=today)
+            qs = qs.filter(date__gte=today)
 
         return qs
 

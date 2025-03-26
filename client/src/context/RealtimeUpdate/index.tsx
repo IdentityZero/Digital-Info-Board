@@ -9,7 +9,11 @@ import useSiteSettingsUpdatable from "./useSiteSettingsUpdatable";
 import { AnnouncementListType } from "../../types/AnnouncementTypes";
 import { SettingsType } from "../../types/SettingTypes";
 import useOrgMembersData from "./useOrgMembersData";
-import { OrganizationMembersType } from "../../types/FixedContentTypes";
+import {
+  OrganizationMembersType,
+  UpcomingEventType,
+} from "../../types/FixedContentTypes";
+import useUpcomingEventsData from "./useUpcomingEventsData";
 
 type RealtimeUpdateContextType = {
   announcement: {
@@ -30,6 +34,10 @@ type RealtimeUpdateContextType = {
   };
   orgMembers: {
     orgMembers: OrganizationMembersType[];
+    isLoading: boolean;
+  };
+  events: {
+    events: UpcomingEventType[];
     isLoading: boolean;
   };
 };
@@ -60,6 +68,13 @@ type OrganizationWsMessageTypes = {
   data: any;
 };
 
+type UpcomingEventsWsMessageTypes = {
+  content: "upcoming_events";
+  action: "create" | "delete";
+  content_id: number;
+  data: any;
+};
+
 const RealtimeUpdateContext = createContext<
   RealtimeUpdateContextType | undefined
 >(undefined);
@@ -72,12 +87,14 @@ export const RealtimeUpdateProvider = ({
   const announcement = useAnnouncementData();
   const settings = useSiteSettingsUpdatable();
   const orgMembers = useOrgMembersData();
+  const events = useUpcomingEventsData();
 
   const handleOnWsMessage = (
     data:
       | AnnouncementWsMessageTypes
       | SettingsWsMessageTypes
       | OrganizationWsMessageTypes
+      | UpcomingEventsWsMessageTypes
   ) => {
     if (data.content === "announcement") {
       handleAnnouncementContent(data);
@@ -85,6 +102,16 @@ export const RealtimeUpdateProvider = ({
       handleSettingsContent(data);
     } else if (data.content === "organization") {
       handleOrganizationContent(data);
+    } else if (data.content === "upcoming_events") {
+      handleUpcomingEventsContent(data);
+    }
+  };
+
+  const handleUpcomingEventsContent = (data: UpcomingEventsWsMessageTypes) => {
+    if (data.action === "create") {
+      events.insertItem(data.data);
+    } else if (data.action === "delete") {
+      events.deleteItem(data.content_id);
     }
   };
 
@@ -128,6 +155,7 @@ export const RealtimeUpdateProvider = ({
         announcement,
         settings,
         orgMembers,
+        events,
       }}
     >
       {children}

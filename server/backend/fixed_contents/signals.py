@@ -1,13 +1,15 @@
 import os
+
+from django.utils import timezone
 from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
-from .models import OrganizationMembers, MediaDisplays
-from .serializers import OrganizationMembersSerializer
+from .models import OrganizationMembers, UpcomingEvents, MediaDisplays
+from .serializers import OrganizationMembersSerializer, UpcomingEventsSerializer
 
-from utils.utils import extract_react_quill_text, get_mock_request
+from utils.utils import get_mock_request
 
 
 @receiver(post_delete, sender=OrganizationMembers)
@@ -69,6 +71,43 @@ def send_updated_on_deleted_org_members(sender, instance, *args, **kwargs):
         {
             "type": "send.update",
             "content": "organization",
+            "action": "delete",
+            "content_id": instance.pk,
+        },
+    )
+
+
+@receiver(post_save, sender=UpcomingEvents)
+def send_update_on_created_upcoming_events(
+    sender, instance: UpcomingEvents, created, *args, **kwargs
+):
+    # If older, dont bother to send
+    if instance.date < timezone.now().date():
+        return
+
+    if created:
+        channel_layer = get_channel_layer()
+        serializer = UpcomingEventsSerializer(instance)
+        async_to_sync(channel_layer.group_send)(
+            "realtime_update",
+            {
+                "type": "send.update",
+                "content": "upcoming_events",
+                "action": "create",
+                "content_id": instance.pk,
+                "data": serializer.data,
+            },
+        )
+
+
+@receiver(post_delete, sender=UpcomingEvents)
+def send_update_on_deleted_upcoming_events(sender, instance, *args, **kwargs):
+    channel_layer = get_channel_layer()
+    async_to_sync(channel_layer.group_send)(
+        "realtime_update",
+        {
+            "type": "send.update",
+            "content": "upcoming_events",
             "action": "delete",
             "content_id": instance.pk,
         },

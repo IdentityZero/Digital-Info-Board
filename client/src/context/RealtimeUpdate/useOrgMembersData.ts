@@ -8,7 +8,6 @@ import { listOrgmembersApi } from "../../api/fixedContentRquests";
 const useOrgMembersData = () => {
   const [orgMembers, setOrgMembers] = useState<OrganizationMembersType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  console.log(orgMembers);
 
   const fetchOrgMembers = () => {
     let delay = 1000;

@@ -1,37 +1,11 @@
-import { useEffect, useState } from "react";
 import LoadingSpinner from "../../../components/LoadingSpinner";
-import { UpcomingEventType } from "../../../types/FixedContentTypes";
-import { listUpcomingEventsApi } from "../../../api/fixedContentRquests";
 import { formatInputDate } from "../../../utils/formatters";
+import { useRealtimeUpdate } from "../../../context/RealtimeUpdate";
 
 const UpcomingEventsCard = () => {
-  const [isLoading, setIsLoading] = useState(true);
-
-  // Reload if error
-
-  const [events, setEvents] = useState<UpcomingEventType[]>([]);
-
-  const fetchEvents = () => {
-    let delay = 1000;
-
-    const retryFetch = async () => {
-      try {
-        setIsLoading(true);
-        const res_data = await listUpcomingEventsApi();
-        setEvents(res_data);
-      } catch (error) {
-        delay = Math.min(delay * 2, 30000);
-        setTimeout(retryFetch, delay);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    retryFetch();
-  };
-
-  useEffect(() => {
-    fetchEvents();
-  }, []);
+  const {
+    events: { events, isLoading },
+  } = useRealtimeUpdate();
 
   return (
     <div className="relative flex flex-col items-center rounded-2xl shadow-lg h-full px-1 ">

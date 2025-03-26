@@ -28,7 +28,6 @@ const Footer = memo(({ headlines, settings }: FooterProps) => {
     "Do not wait to strike till the iron is hot, but make it hot by striking. – William Butler Yeats",
   ];
 
-  // Check if any of the following contents are showing
   return (
     <div className="w-full h-full">
       <div className="w-full flex flex-row gap-1 p-2 text-white text-md">
