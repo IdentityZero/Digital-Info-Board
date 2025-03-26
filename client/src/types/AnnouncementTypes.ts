@@ -25,6 +25,7 @@ export type AnnouncementCreateType = {
 
 export type BaseAnnouncementType = AnnouncementCreateType & {
   id: string;
+  position: number;
   last_modified: string;
   created_at: string;
   url?: string;

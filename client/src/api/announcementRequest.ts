@@ -27,7 +27,7 @@ const updateAnnouncementActiveStatusEndpoint = (id: string) => {
 
 const listTextAnnouncementEndpoint = "/announcements/v1/text/";
 const retrieveUpdateTextAnnouncementEndpoint = (announcement_id: string) => {
-  return `/announcements/v1/${announcement_id}/`;
+  return `${BASE_ENDPOINT}announcements/v1/${announcement_id}/`;
 };
 
 const listImageAnnouncementEndpoint = "announcements/v1/image/";

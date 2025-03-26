@@ -5,7 +5,11 @@ import json
 from django.utils import timezone
 from django.db.models import OrderBy, F
 from rest_framework import generics, response, status, response, parsers
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import (
+    AllowAny,
+    IsAuthenticated,
+    IsAuthenticatedOrReadOnly,
+)
 
 from utils.pagination import CustomPageNumberPagination
 from utils.permissions import IsAdmin
@@ -186,14 +190,12 @@ class RetrieveUpdateDestroyAnnouncementAPIView(generics.RetrieveUpdateDestroyAPI
     """
 
     serializer_class = RetrieveFullAnnouncementSerializer
-    permission_classes = [IsAuthenticated]
-
-    def update(self, request, *args, **kwargs):
-        return super().update(request, *args, **kwargs)
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
-        qs = Announcements.objects.filter(author=self.request.user)
-        return qs
+        if self.request.method in ["GET"]:
+            return Announcements.objects.all()
+        return Announcements.objects.filter(author=self.request.user)
 
 
 class RetrieveUpdateImageAnnouncementAPIView(generics.RetrieveUpdateAPIView):

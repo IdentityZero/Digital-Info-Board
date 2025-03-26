@@ -3,16 +3,17 @@ import LoadingMessage from "../../components/LoadingMessage";
 import AnnouncementCarousel from "./AnnouncementCarousel";
 import useAnnouncementSlider from "./hooks/useAnnouncementSlider";
 import { LIVE_ANNOUNCEMENT_URL } from "../../constants/urls";
-import { AnnouncementListType } from "../../types/AnnouncementTypes";
 import useSiteSettings from "../../hooks/useSiteSettings";
-import { calculateElapsedTime, findIndexByWeight } from "../../utils/utils";
+import {
+  calculateElapsedTime,
+  findIndexByWeight,
+  sortItemsByPosition,
+} from "../../utils/utils";
 
 type MessageType = {
   type: "new_position";
-  message: PositionedItem[];
+  message: { id: number; new_position: number }[];
 };
-
-type PositionedItem = { id: number; new_position: number };
 
 const LiveAnnouncement = () => {
   const { announcements, setAnnouncements, durations, isLoading, error } =
@@ -102,19 +103,3 @@ const LiveAnnouncement = () => {
   );
 };
 export default LiveAnnouncement;
-
-function sortItemsByPosition(
-  items: AnnouncementListType,
-  positions: PositionedItem[]
-): AnnouncementListType {
-  const positionMap = new Map<number, number>();
-
-  positions.forEach((pos) => positionMap.set(pos.id, pos.new_position));
-
-  return [...items].sort((a, b) => {
-    const posA = positionMap.get(Number(a.id)) ?? Infinity;
-    const posB = positionMap.get(Number(b.id)) ?? Infinity;
-
-    return posA - posB;
-  });
-}

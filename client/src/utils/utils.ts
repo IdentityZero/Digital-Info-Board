@@ -1,4 +1,5 @@
 import {
+  AnnouncementListType,
   AnnouncementRetrieveType,
   ImageAnnouncementCreateType,
   VideoAnnouncementCreateType,
@@ -266,4 +267,20 @@ export function isNowWithinRange(
   const endDate = new Date(endDateStr);
 
   return now >= startDate && now <= endDate;
+}
+
+export function sortItemsByPosition(
+  items: AnnouncementListType,
+  positions: { id: number; new_position: number }[]
+): AnnouncementListType {
+  const positionMap = new Map<number, number>();
+
+  positions.forEach((pos) => positionMap.set(pos.id, pos.new_position));
+
+  return [...items].sort((a, b) => {
+    const posA = positionMap.get(Number(a.id)) ?? Infinity;
+    const posB = positionMap.get(Number(b.id)) ?? Infinity;
+
+    return posA - posB;
+  });
 }

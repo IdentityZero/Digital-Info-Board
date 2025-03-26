@@ -1,15 +1,24 @@
 import os
 
+from django.conf import settings
+from django.http import HttpRequest
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
-from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
+from django.db.models.signals import post_save, post_delete, pre_save
 from django.contrib.auth.models import User
 
 from utils.utils import extract_react_quill_text
 
 from .models import Announcements, ImageAnnouncements, VideoAnnouncements
 from notifications.models import Notifications
+from .serializers import RetrieveFullAnnouncementSerializer
+
+
+def get_mock_request():
+    request = HttpRequest()
+    request.META["HTTP_HOST"] = "localhost:8000"
+    return request
 
 
 @receiver(post_save, sender=Announcements)
@@ -85,3 +94,110 @@ def delete_video_announcement_video(
 
     if os.path.isfile(instance.video.path):
         os.remove(instance.video.path)
+
+
+@receiver(post_save, sender=Announcements)
+def send_update_on_created_announcements(
+    sender, instance: Announcements, created, *args, **kwargs
+):
+    """
+    Send update on updated announcements through channels
+    """
+    channel_layer = get_channel_layer()
+
+    if created:
+        async_to_sync(channel_layer.group_send)(
+            "realtime_update",
+            {
+                "type": "send.announcement.update",
+                "content": "announcement",
+                "action": "create",
+                "content_id": instance.pk,
+            },
+        )
+
+
+@receiver(post_delete, sender=Announcements)
+def send_update_on_deleted_announcements(sender, instance, *args, **kwargs):
+    """
+    Send update on deleted announcements through channels
+    """
+
+    channel_layer = get_channel_layer()
+    async_to_sync(channel_layer.group_send)(
+        "realtime_update",
+        {
+            "type": "send.announcement.update",
+            "content": "announcement",
+            "action": "delete",
+            "content_id": instance.pk,
+        },
+    )
+
+
+@receiver(pre_save, sender=Announcements)
+def send_update_on_updated_announcements(
+    sender, instance: Announcements, *args, **kwargs
+):
+
+    if not instance.pk:
+        return
+
+    try:
+        old_instance: Announcements = sender.objects.get(pk=instance.pk)
+    except sender.DoesNotExist:
+        return
+
+    if not old_instance.is_active and not instance.is_active:
+        return
+
+    request = get_mock_request()
+    serializer = RetrieveFullAnnouncementSerializer(
+        instance, context={"request": request}
+    )
+    channel_layer = get_channel_layer()
+
+    # Sequence change. Will be handled differently. See Announcement consumers instead
+    if instance.position != old_instance.position:
+        return
+
+    # Updated data
+    if instance.is_active and old_instance.is_active:
+        async_to_sync(channel_layer.group_send)(
+            "realtime_update",
+            {
+                "type": "send.announcement.update",
+                "content": "announcement",
+                "action": "update",
+                "content_id": instance.pk,
+                "data": serializer.data,
+            },
+        )
+        return
+
+    # Activated
+    if instance.is_active and not old_instance.is_active:
+        async_to_sync(channel_layer.group_send)(
+            "realtime_update",
+            {
+                "type": "send.announcement.update",
+                "content": "announcement",
+                "action": "activate",
+                "content_id": instance.pk,
+                "data": serializer.data,
+            },
+        )
+        return
+
+    # Deactivated
+    if not instance.is_active and old_instance.is_active:
+        async_to_sync(channel_layer.group_send)(
+            "realtime_update",
+            {
+                "type": "send.announcement.update",
+                "content": "announcement",
+                "action": "deactivate",
+                "content_id": instance.pk,
+            },
+        )
+        return

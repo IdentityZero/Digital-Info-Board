@@ -27,8 +27,9 @@ class RelayContentUpdateConsumer(WebsocketConsumer):
     def receive(self, text_data=None, bytes_data=None):
         return
 
-    def send_announcement_updated(self, event):
-        raise NotImplementedError("This function is not implemented yet")
+    def send_announcement_update(self, event):
+        event.pop("type")
+        self.send(text_data=json.dumps(event))
 
     def disconnect(self, code):
         async_to_sync(self.channel_layer.group_discard)(

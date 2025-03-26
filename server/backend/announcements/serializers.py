@@ -248,20 +248,18 @@ class RetrieveFullAnnouncementSerializer(
         if "text_announcement" in validated_data:
             text_ann_data = validated_data.pop("text_announcement")
 
-        updated_ann = super().update(instance, validated_data)
-
         if (
             text_ann_data is not None
             and text_ann_data["details"] is not None
             and text_ann_data["details"] != ""
         ):
-            text_ann_inst = TextAnnouncements.objects.get(
-                announcement__id=updated_ann.id
-            )
+            text_ann_inst = TextAnnouncements.objects.get(announcement__id=instance.id)
             for field, value in text_ann_data.items():
                 setattr(text_ann_inst, field, value)
 
             text_ann_inst.save()
+
+        updated_ann = super().update(instance, validated_data)
 
         return updated_ann
 

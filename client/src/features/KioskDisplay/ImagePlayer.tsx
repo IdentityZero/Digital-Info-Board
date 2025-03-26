@@ -7,7 +7,11 @@ type ImagePlayerProps = {
   setIsPortrait: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const ImagePlayer = ({ images, setIsPortrait }: ImagePlayerProps) => {
+const ImagePlayer = ({
+  images: initialImages,
+  setIsPortrait,
+}: ImagePlayerProps) => {
+  const [images, _setImages] = useState(initialImages);
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const handleNext = () => {

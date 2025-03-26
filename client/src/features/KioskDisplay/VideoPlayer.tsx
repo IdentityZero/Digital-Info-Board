@@ -7,7 +7,11 @@ type VideoPlayerProps = {
   setIsPortrait: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const VideoPlayer = ({ videos, setIsPortrait }: VideoPlayerProps) => {
+const VideoPlayer = ({
+  videos: initialVideos,
+  setIsPortrait,
+}: VideoPlayerProps) => {
+  const [videos, _setVideos] = useState(initialVideos);
   const [currentIndex, setCurrentIndex] = useState(0);
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
 
@@ -24,6 +28,7 @@ const VideoPlayer = ({ videos, setIsPortrait }: VideoPlayerProps) => {
     resetAllVideos();
     if (currentIndex === videos.length - 1) {
       setCurrentIndex(0);
+      videoRefs.current[0]?.play();
       return;
     }
 

@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import DisplayQuillEditor from "../../components/DisplayQuillEditor";
 import LoadingMessage from "../../components/LoadingMessage";
 
-import useSiteSettings from "../../hooks/useSiteSettings";
 import { useRealtimeUpdate } from "../../context/RealtimeUpdate";
 
 import VideoPlayer from "../../features/KioskDisplay/VideoPlayer";
@@ -14,6 +13,8 @@ import Footer from "../../features/KioskDisplay/Footer";
 import MainAside from "../../features/KioskDisplay/MainAside";
 
 import { SettingsType } from "../../types/SettingTypes";
+
+const DELTA_FALLBACK_VALUE = JSON.stringify({ ops: [] });
 
 const KioskDisplayPage = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -26,22 +27,27 @@ const KioskDisplayPage = () => {
       isLoading: IsAnnouncementFetching,
       error: hasAnnouncementFetchingError,
       textAnnouncementsAsText,
+      setIdOnLock: setAnnouncementIdOnLock,
     },
+    settings: { settings },
   } = useRealtimeUpdate();
 
-  const { settings } = useSiteSettings();
+  // const { settings } = useSiteSettings();
 
   const handleNext = () => {
-    if (currentIndex === mediaAnnouncements.length - 1) {
+    if (currentIndex >= mediaAnnouncements.length - 1) {
       setCurrentIndex(0);
+      setAnnouncementIdOnLock(mediaAnnouncements[0].id);
       return;
     }
 
     setCurrentIndex((prevIndex) => prevIndex + 1);
+    setAnnouncementIdOnLock(mediaAnnouncements[currentIndex + 1].id);
   };
 
   useEffect(() => {
     if (mediaAnnouncements.length === 0) return;
+
     const interval = setInterval(() => {
       handleNext();
     }, mediaDurations[currentIndex] || 5000);
@@ -61,7 +67,11 @@ const KioskDisplayPage = () => {
       <header className="min-h-20 h-[5vh] max-h-[5%] flex items-center justify-center w-full">
         {mediaAnnouncements.length > 0 ? (
           <DisplayQuillEditor
-            value={JSON.parse(mediaAnnouncements[currentIndex].title as string)}
+            value={JSON.parse(
+              mediaAnnouncements[currentIndex]
+                ? (mediaAnnouncements[currentIndex].title as string)
+                : (DELTA_FALLBACK_VALUE as string)
+            )}
             withBackground={false}
           />
         ) : IsAnnouncementFetching ? (
@@ -91,23 +101,34 @@ const KioskDisplayPage = () => {
         >
           {mediaAnnouncements.length > 0 ? (
             <>
-              {mediaAnnouncements[currentIndex].image_announcement &&
-                mediaAnnouncements[currentIndex].image_announcement.length >
-                  0 && (
-                  <ImagePlayer
-                    images={mediaAnnouncements[currentIndex].image_announcement}
-                    setIsPortrait={setIsPortrait}
-                  />
-                )}
-              {mediaAnnouncements[currentIndex].video_announcement &&
-                mediaAnnouncements[currentIndex].video_announcement.length >
-                  0 && (
-                  <VideoPlayer
-                    key={currentIndex}
-                    videos={mediaAnnouncements[currentIndex].video_announcement}
-                    setIsPortrait={setIsPortrait}
-                  />
-                )}
+              {mediaAnnouncements[currentIndex] ? (
+                <>
+                  {mediaAnnouncements[currentIndex].image_announcement &&
+                    mediaAnnouncements[currentIndex].image_announcement.length >
+                      0 && (
+                      <ImagePlayer
+                        key={currentIndex}
+                        images={
+                          mediaAnnouncements[currentIndex].image_announcement
+                        }
+                        setIsPortrait={setIsPortrait}
+                      />
+                    )}
+                  {mediaAnnouncements[currentIndex].video_announcement &&
+                    mediaAnnouncements[currentIndex].video_announcement.length >
+                      0 && (
+                      <VideoPlayer
+                        key={currentIndex}
+                        videos={
+                          mediaAnnouncements[currentIndex].video_announcement
+                        }
+                        setIsPortrait={setIsPortrait}
+                      />
+                    )}
+                </>
+              ) : (
+                <LoadingMessage message="Restarting..." />
+              )}
             </>
           ) : IsAnnouncementFetching ? (
             hasAnnouncementFetchingError ? (
