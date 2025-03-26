@@ -5,12 +5,12 @@ import { mmsuBg } from "../../assets";
 import useSiteSettings from "../../hooks/useSiteSettings";
 
 import { LiveAnnouncement } from "../../features/announcements";
-import MediaDisplay from "../../features/KioskDisplay/MediaDisplay";
 import WebDisplayEvents from "../../features/fixedContent/Events/WebDisplayEvents";
 import WebDisplayWeatherForecast from "../../features/fixedContent/WeatherForecast/WebDisplayWeatherForecast";
 import { convertDurationToSeconds } from "../../utils/utils";
 import CalendarDisplay from "../../features/Calendar/v2/CalendarDisplay";
 import DisplayOrgMembers from "../../features/fixedContent/Organization/DisplayOrgMembers";
+import DisplayMediaDisplays from "../../features/fixedContent/MediaDisplays/DisplayMediaDisplays";
 
 const HomePage = () => {
   // TODO: POSSIBILITY OF EMPTY ANNOUNCEMENT (The announcement has no body or type)
@@ -50,7 +50,7 @@ const HomePage = () => {
                 backgroundBlendMode: "overlay",
               }}
             >
-              <MediaDisplay
+              <DisplayMediaDisplays
                 showNavigation
                 slideDuration={
                   convertDurationToSeconds(

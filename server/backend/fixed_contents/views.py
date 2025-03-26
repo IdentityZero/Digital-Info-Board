@@ -184,6 +184,20 @@ def update_media_displays_priority(request):
     with transaction.atomic():
         models.MediaDisplays.objects.bulk_update(instances, ["priority"])
 
+    updated_data = [
+        {"id": item["id"], "new_position": item["priority"]} for item in data
+    ]
+    channel_layer = get_channel_layer()
+    async_to_sync(channel_layer.group_send)(
+        "realtime_update",
+        {
+            "type": "send.update",
+            "content": "media_displays",
+            "action": "sequence_update",
+            "data": updated_data,
+        },
+    )
+
     return Response(
         {"message": "Update successful", "success": True}, status=status.HTTP_200_OK
     )

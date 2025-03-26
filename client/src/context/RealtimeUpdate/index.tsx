@@ -10,10 +10,12 @@ import { AnnouncementListType } from "../../types/AnnouncementTypes";
 import { SettingsType } from "../../types/SettingTypes";
 import useOrgMembersData from "./useOrgMembersData";
 import {
+  MediaDisplayType,
   OrganizationMembersType,
   UpcomingEventType,
 } from "../../types/FixedContentTypes";
 import useUpcomingEventsData from "./useUpcomingEventsData";
+import useMediaDisplaysData from "./useMediaDisplaysData";
 
 type RealtimeUpdateContextType = {
   announcement: {
@@ -38,6 +40,10 @@ type RealtimeUpdateContextType = {
   };
   events: {
     events: UpcomingEventType[];
+    isLoading: boolean;
+  };
+  mediaDisplays: {
+    mediaDisplays: MediaDisplayType[];
     isLoading: boolean;
   };
 };
@@ -75,6 +81,13 @@ type UpcomingEventsWsMessageTypes = {
   data: any;
 };
 
+type MediaDisplaysWsMessageTypes = {
+  content: "media_displays";
+  action: "create" | "delete" | "sequence_update";
+  content_id: number;
+  data: any;
+};
+
 const RealtimeUpdateContext = createContext<
   RealtimeUpdateContextType | undefined
 >(undefined);
@@ -88,6 +101,7 @@ export const RealtimeUpdateProvider = ({
   const settings = useSiteSettingsUpdatable();
   const orgMembers = useOrgMembersData();
   const events = useUpcomingEventsData();
+  const mediaDisplays = useMediaDisplaysData();
 
   const handleOnWsMessage = (
     data:
@@ -95,6 +109,7 @@ export const RealtimeUpdateProvider = ({
       | SettingsWsMessageTypes
       | OrganizationWsMessageTypes
       | UpcomingEventsWsMessageTypes
+      | MediaDisplaysWsMessageTypes
   ) => {
     if (data.content === "announcement") {
       handleAnnouncementContent(data);
@@ -104,6 +119,18 @@ export const RealtimeUpdateProvider = ({
       handleOrganizationContent(data);
     } else if (data.content === "upcoming_events") {
       handleUpcomingEventsContent(data);
+    } else if (data.content === "media_displays") {
+      handleMediaDisplaysContent(data);
+    }
+  };
+
+  const handleMediaDisplaysContent = (data: MediaDisplaysWsMessageTypes) => {
+    if (data.action === "create") {
+      mediaDisplays.insertItem(data.data);
+    } else if (data.action === "delete") {
+      mediaDisplays.deleteItem(data.content_id);
+    } else if (data.action === "sequence_update") {
+      mediaDisplays.updateSequence(data.data);
     }
   };
 
@@ -156,6 +183,7 @@ export const RealtimeUpdateProvider = ({
         settings,
         orgMembers,
         events,
+        mediaDisplays,
       }}
     >
       {children}

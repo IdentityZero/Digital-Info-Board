@@ -7,7 +7,11 @@ from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
 from .models import OrganizationMembers, UpcomingEvents, MediaDisplays
-from .serializers import OrganizationMembersSerializer, UpcomingEventsSerializer
+from .serializers import (
+    OrganizationMembersSerializer,
+    UpcomingEventsSerializer,
+    MediaDisplaysSerializer,
+)
 
 from utils.utils import get_mock_request
 
@@ -108,6 +112,38 @@ def send_update_on_deleted_upcoming_events(sender, instance, *args, **kwargs):
         {
             "type": "send.update",
             "content": "upcoming_events",
+            "action": "delete",
+            "content_id": instance.pk,
+        },
+    )
+
+
+@receiver(post_save, sender=MediaDisplays)
+def send_update_on_created_media_displays(sender, instance, created, *args, **kwargs):
+    if created:
+        channel_layer = get_channel_layer()
+        request = get_mock_request()
+        serializer = MediaDisplaysSerializer(instance, context={"request": request})
+        async_to_sync(channel_layer.group_send)(
+            "realtime_update",
+            {
+                "type": "send.update",
+                "content": "media_displays",
+                "action": "create",
+                "content_id": instance.pk,
+                "data": serializer.data,
+            },
+        )
+
+
+@receiver(post_delete, sender=MediaDisplays)
+def send_update_on_deleted_media_displays(sender, instance, *args, **kwargs):
+    channel_layer = get_channel_layer()
+    async_to_sync(channel_layer.group_send)(
+        "realtime_update",
+        {
+            "type": "send.update",
+            "content": "media_displays",
             "action": "delete",
             "content_id": instance.pk,
         },

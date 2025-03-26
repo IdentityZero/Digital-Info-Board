@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-
-import LoadingMessage from "../../components/LoadingMessage";
-import { useRealtimeUpdate } from "../../context/RealtimeUpdate";
+import { listMediaDisplaysApi } from "../../../api/fixedContentRquests";
+import { MediaDisplayType } from "../../../types/FixedContentTypes";
+import LoadingMessage from "../../../components/LoadingMessage";
 
 type MediaDisplayProps = {
   initialIndex?: number;
@@ -9,19 +9,21 @@ type MediaDisplayProps = {
   showNavigation?: boolean;
 };
 
-const MediaDisplay = ({
+const DisplayMediaDisplays = ({
   initialIndex = 1,
   slideDuration = 5000,
   showNavigation = false,
 }: MediaDisplayProps) => {
+  /**
+   * This is a copy of the MediaDiplays in kiosk mode but this does not support real time updates
+   */
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
 
-  const {
-    mediaDisplays: { mediaDisplays, isLoading },
-  } = useRealtimeUpdate();
+  const [mediaDisplays, setMediaDisplays] = useState<MediaDisplayType[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const totalItems = mediaDisplays.length;
 
   const extendedMedia = [
@@ -69,10 +71,29 @@ const MediaDisplay = ({
     return () => clearInterval(interval);
   }, [isTransitioning, currentIndex]);
 
+  const fetchMediaDisplays = () => {
+    let delay = 1000;
+
+    const retryFetch = async () => {
+      try {
+        setIsLoading(true);
+        const res_data = await listMediaDisplaysApi();
+        setMediaDisplays(res_data);
+        setIsTransitioning(false);
+      } catch (error) {
+        delay = Math.min(delay * 2, 30000);
+        setTimeout(retryFetch, delay);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    retryFetch();
+  };
+
   useEffect(() => {
-    // To rerun in case of error because it freezes
-    setIsTransitioning(false);
-  }, [mediaDisplays]);
+    fetchMediaDisplays();
+  }, []);
 
   return (
     <div className="w-full h-full overflow-hidden relative">
@@ -134,4 +155,4 @@ const MediaDisplay = ({
     </div>
   );
 };
-export default MediaDisplay;
+export default DisplayMediaDisplays;
