@@ -1,11 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 
-import { logoLg } from "../../../assets";
-import { chunkArray } from "../../../utils/utils";
-
 import { OrganizationMembersType } from "../../../types/FixedContentTypes";
+import { chunkArray } from "../../../utils/utils";
+import { listOrgmembersApi } from "../../../api/fixedContentRquests";
+import { logoLg } from "../../../assets";
 import LoadingMessage from "../../../components/LoadingMessage";
-import { useRealtimeUpdate } from "../../../context/RealtimeUpdate";
 
 type OrgMembersDisplayProps = {
   slideDuration?: number;
@@ -13,11 +12,14 @@ type OrgMembersDisplayProps = {
   useChunking?: boolean; // Variable content size based on container size
 };
 
-const OrgMembers = ({
+const DisplayOrgMembers = ({
   showNavigation = false,
   slideDuration = 5000,
   useChunking = false,
 }: OrgMembersDisplayProps) => {
+  /**
+   * This is a copy of the kiosk mode version. But this does not use real time update so we copied.
+   */
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   const [currentIndex, setCurrentIndex] = useState(1);
@@ -26,9 +28,9 @@ const OrgMembers = ({
 
   const [hoverShowNavigation, setHoverShowNavigation] = useState(false);
 
-  const {
-    orgMembers: { orgMembers, isLoading },
-  } = useRealtimeUpdate();
+  const [orgMembers, setOrgMembers] = useState<OrganizationMembersType[]>([]);
+
+  const [isLoading, setIsLoading] = useState(true);
 
   const chunkedItems = chunkArray(orgMembers, chunkSize);
   const totalItems = chunkedItems.length;
@@ -59,10 +61,28 @@ const OrgMembers = ({
     }
   };
 
+  const fetchOrgMembers = () => {
+    let delay = 1000;
+
+    const retryFetch = async () => {
+      try {
+        setIsLoading(true);
+        const res_data = await listOrgmembersApi();
+        setOrgMembers(res_data);
+        setIsTransitioning(false);
+      } catch (error) {
+        delay = Math.min(delay * 2, 30000);
+        setTimeout(retryFetch, delay);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    retryFetch();
+  };
+
   useEffect(() => {
-    // To rerun in case of error because it freezes
-    setIsTransitioning(false);
-  }, [orgMembers]);
+    fetchOrgMembers();
+  }, []);
 
   useEffect(() => {
     if (!useChunking || !containerRef || !containerRef.current) return;
@@ -138,7 +158,7 @@ const OrgMembers = ({
     </div>
   );
 };
-export default OrgMembers;
+export default DisplayOrgMembers;
 
 function CardContainer({ members }: { members: OrganizationMembersType[] }) {
   return (

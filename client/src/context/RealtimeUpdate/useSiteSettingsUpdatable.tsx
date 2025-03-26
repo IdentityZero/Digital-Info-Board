@@ -1,4 +1,4 @@
-import useSiteSettings from "../../../hooks/useSiteSettings";
+import useSiteSettings from "../../hooks/useSiteSettings";
 
 const useSiteSettingsUpdatable = () => {
   /**

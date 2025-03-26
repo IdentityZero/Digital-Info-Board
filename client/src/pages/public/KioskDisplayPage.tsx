@@ -32,8 +32,6 @@ const KioskDisplayPage = () => {
     settings: { settings },
   } = useRealtimeUpdate();
 
-  // const { settings } = useSiteSettings();
-
   const handleNext = () => {
     if (currentIndex >= mediaAnnouncements.length - 1) {
       setCurrentIndex(0);

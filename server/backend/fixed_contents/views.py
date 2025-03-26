@@ -1,4 +1,6 @@
 from django.db import transaction
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
 from rest_framework import generics, permissions, status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
@@ -62,6 +64,21 @@ def update_org_priority(request):
 
     with transaction.atomic():
         models.OrganizationMembers.objects.bulk_update(instances, ["priority"])
+
+    # change key names from priority to new_position
+    updated_data = [
+        {"id": item["id"], "new_position": item["priority"]} for item in data
+    ]
+    channel_layer = get_channel_layer()
+    async_to_sync(channel_layer.group_send)(
+        "realtime_update",
+        {
+            "type": "send.update",
+            "content": "organization",
+            "action": "sequence_update",
+            "data": updated_data,
+        },
+    )
 
     return Response(
         {"message": "Update successful", "success": True}, status=status.HTTP_200_OK

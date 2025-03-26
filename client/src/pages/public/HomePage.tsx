@@ -5,12 +5,12 @@ import { mmsuBg } from "../../assets";
 import useSiteSettings from "../../hooks/useSiteSettings";
 
 import { LiveAnnouncement } from "../../features/announcements";
-import OrgMembers from "../../features/KioskDisplay/MainAside/OrgMembers";
 import MediaDisplay from "../../features/KioskDisplay/MediaDisplay";
 import WebDisplayEvents from "../../features/fixedContent/Events/WebDisplayEvents";
 import WebDisplayWeatherForecast from "../../features/fixedContent/WeatherForecast/WebDisplayWeatherForecast";
 import { convertDurationToSeconds } from "../../utils/utils";
 import CalendarDisplay from "../../features/Calendar/v2/CalendarDisplay";
+import DisplayOrgMembers from "../../features/fixedContent/Organization/DisplayOrgMembers";
 
 const HomePage = () => {
   // TODO: POSSIBILITY OF EMPTY ANNOUNCEMENT (The announcement has no body or type)
@@ -62,7 +62,7 @@ const HomePage = () => {
           )}
           {settings?.show_organization && (
             <div className="min-w-[400px] max-w-[500px] rounded-lg shadow-xl overflow-hidden border mx-auto">
-              <OrgMembers
+              <DisplayOrgMembers
                 showNavigation
                 slideDuration={
                   convertDurationToSeconds(

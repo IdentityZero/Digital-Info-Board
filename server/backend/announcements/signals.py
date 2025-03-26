@@ -1,24 +1,17 @@
 import os
 
 from django.conf import settings
-from django.http import HttpRequest
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 from django.dispatch import receiver
 from django.db.models.signals import post_save, post_delete, pre_save
 from django.contrib.auth.models import User
 
-from utils.utils import extract_react_quill_text
+from utils.utils import extract_react_quill_text, get_mock_request
 
 from .models import Announcements, ImageAnnouncements, VideoAnnouncements
 from notifications.models import Notifications
 from .serializers import RetrieveFullAnnouncementSerializer
-
-
-def get_mock_request():
-    request = HttpRequest()
-    request.META["HTTP_HOST"] = "localhost:8000"
-    return request
 
 
 @receiver(post_save, sender=Announcements)
@@ -103,9 +96,9 @@ def send_update_on_created_announcements(
     """
     Send update on updated announcements through channels
     """
-    channel_layer = get_channel_layer()
 
     if created:
+        channel_layer = get_channel_layer()
         async_to_sync(channel_layer.group_send)(
             "realtime_update",
             {

@@ -1,21 +1,21 @@
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 import {
   addTotalDuration,
   convertDurationToSeconds,
   sortItemsByPosition,
-} from "../../../utils/utils";
-import { extractReactQuillText } from "../../../utils/formatters";
+} from "../../utils/utils";
+import { extractReactQuillText } from "../../utils/formatters";
 
 import {
   AnnouncementListType,
   AnnouncementRetrieveType,
-} from "../../../types/AnnouncementTypes";
+} from "../../types/AnnouncementTypes";
 import {
   listActiveAnnouncementApi,
   retrieveTextAnnouncementApi,
-} from "../../../api/announcementRequest";
-import axios from "axios";
+} from "../../api/announcementRequest";
 
 const useAnnouncementData = () => {
   const [announcementList, setAnnouncementList] =

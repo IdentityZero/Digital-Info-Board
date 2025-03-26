@@ -1,6 +1,8 @@
 import json
 from typing import Optional
 
+from django.http import HttpRequest
+
 
 def extract_react_quill_text(title: str) -> Optional[str]:
     """
@@ -31,3 +33,12 @@ def extract_react_quill_text(title: str) -> Optional[str]:
     extracted_title = "".join(attr["insert"] for attr in json_title)
 
     return extracted_title.strip()
+
+
+def get_mock_request():
+    """
+    Creates a request instance to give host
+    """
+    request = HttpRequest()
+    request.META["HTTP_HOST"] = "localhost:8000"
+    return request
