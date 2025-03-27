@@ -48,7 +48,7 @@ const KioskDisplayPage = () => {
 
     const interval = setInterval(() => {
       handleNext();
-    }, mediaDurations[currentIndex] || 5000);
+    }, mediaDurations[currentIndex] || 3000);
 
     return () => clearInterval(interval);
   }, [currentIndex, mediaAnnouncements]);

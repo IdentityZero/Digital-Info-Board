@@ -39,7 +39,6 @@ const useAnnouncementData = () => {
       try {
         setIsLoading(true);
         const res_data = await listActiveAnnouncementApi();
-
         setAnnouncementList(res_data);
 
         setError(null);
@@ -62,10 +61,16 @@ const useAnnouncementData = () => {
     );
   };
 
-  const updateItem = (id: string, updatedDate: AnnouncementRetrieveType) => {
-    setAnnouncementList((prev) =>
-      prev.map((item) => (item.id == id ? updatedDate : item))
-    );
+  const updateItem = (id: string, updatedData: AnnouncementRetrieveType) => {
+    const index = announcementList.findIndex((item) => item.id === id);
+
+    if (index === -1) {
+      insertItem(updatedData);
+    } else {
+      setAnnouncementList((prev) => {
+        return prev.map((item) => (item.id == id ? updatedData : item));
+      });
+    }
   };
 
   const fetchAndInsertItem = async (id: string) => {
@@ -95,6 +100,17 @@ const useAnnouncementData = () => {
   };
 
   const deleteItem = (id: string) => {
+    if (announcementList.length === 1) {
+      console.log("Deleting single");
+
+      setIdOnLock("");
+      setAnnouncementList([]);
+      setMediaAnnouncements([]);
+      setTextAnnouncements([]);
+      setTextAnnouncementsAsText([]);
+      return;
+    }
+
     setTimeout(() => {
       setIdOnLock((currentLock) => {
         if (currentLock === id) {
@@ -115,21 +131,39 @@ const useAnnouncementData = () => {
   // Copy to respective types
   useEffect(() => {
     if (announcementList.length === 0) return;
+    const today = new Date();
+
+    const filteredList = announcementList.filter(
+      (announcement) =>
+        new Date(announcement.end_date).getTime() > today.getTime()
+    );
 
     setMediaAnnouncements(
       structuredClone(
-        announcementList.filter(
-          (announcement) => !announcement.text_announcement
-        )
+        filteredList.filter((announcement) => !announcement.text_announcement)
       )
     );
+
     setTextAnnouncements(
       structuredClone(
-        announcementList.filter(
-          (announcement) => announcement.text_announcement
-        )
+        filteredList.filter((announcement) => announcement.text_announcement)
       )
     );
+
+    if (filteredList.length === 0) return;
+
+    const earliestToexpire = filteredList.reduce((earliest, announcement) => {
+      return new Date(announcement.end_date) < new Date(earliest.end_date)
+        ? announcement
+        : earliest;
+    }, filteredList[0]);
+
+    const duration =
+      new Date(earliestToexpire.end_date).getTime() - today.getTime();
+
+    setTimeout(() => {
+      deleteItem(earliestToexpire.id);
+    }, duration);
   }, [announcementList]);
 
   // Get string of text announcements
