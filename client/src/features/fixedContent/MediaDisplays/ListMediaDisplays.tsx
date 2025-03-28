@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { FaTrash } from "react-icons/fa";
+import { FaExclamationCircle, FaTrash } from "react-icons/fa";
+import { useLocation } from "react-router-dom";
 
 import {
   DndContext,
@@ -20,10 +21,11 @@ import { CSS } from "@dnd-kit/utilities";
 import { restrictToParentElement } from "@dnd-kit/modifiers";
 
 import IconWithTooltip from "../../../components/IconWithTooltip";
-
-import { MediaDisplayType } from "../../../types/FixedContentTypes";
-import { getChangedObj } from "../../../utils/utils";
+import ClosableMessage from "../../../components/ClosableMessage";
 import { Button } from "../../../components/ui";
+
+import { getChangedObj } from "../../../utils/utils";
+import { MediaDisplayType } from "../../../types/FixedContentTypes";
 
 type ListMediaDisplays = {
   media: MediaDisplayType[];
@@ -36,7 +38,12 @@ const ListMediaDisplays = ({
   handleDelete,
   handleUpdatePriority,
 }: ListMediaDisplays) => {
+  const { hash } = useLocation();
+  const targetId = hash.substring(1);
+
   const [items, setItems] = useState(media);
+  const idExists = items.some((item) => String(item.id) === targetId);
+
   const lowestPriority = Math.min(...items.map((item) => item.priority));
 
   useEffect(() => {
@@ -76,7 +83,17 @@ const ListMediaDisplays = ({
             </Button>
           )}
       </div>
-
+      {!idExists && targetId !== "" && (
+        <div className="mb-2">
+          <ClosableMessage
+            className="w-full flex flex-row items-center justify-between gap-4 bg-red-100 border border-red-400 rounded-lg shadow-md p-4"
+            icon={FaExclamationCircle}
+          >
+            It looks like the data you are looking for does not exist here. Try
+            looking at another page.
+          </ClosableMessage>
+        </div>
+      )}
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
@@ -106,6 +123,7 @@ const ListMediaDisplays = ({
               ) : (
                 items.map((medium) => (
                   <SortableTableRow
+                    isHighlighted={String(medium.id) == targetId}
                     medium={medium}
                     handleDelete={handleDelete}
                     key={medium.id}
@@ -123,10 +141,15 @@ export default ListMediaDisplays;
 
 type SortableTableRowProps = {
   medium: MediaDisplayType;
+  isHighlighted: boolean;
   handleDelete: (id: number) => void;
 };
 
-function SortableTableRow({ medium, handleDelete }: SortableTableRowProps) {
+function SortableTableRow({
+  medium,
+  isHighlighted = false,
+  handleDelete,
+}: SortableTableRowProps) {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: medium.id });
 
@@ -136,11 +159,16 @@ function SortableTableRow({ medium, handleDelete }: SortableTableRowProps) {
   };
   return (
     <tr
+      id={String(medium.id)}
       ref={setNodeRef}
       style={style}
       {...attributes}
       {...listeners}
-      className="border-b hover:bg-gray-100 dark:hover:bg-gray-800"
+      className={`border cursor-grab transition-shadow duration-200 ${
+        isHighlighted
+          ? "shadow-[0_0_10px_rgba(0,150,255,0.7)]"
+          : "hover:bg-gray-100 dark:hover:bg-gray-800"
+      }`}
     >
       <td className="p-2 border text-center">{medium.id}</td>
       <td className="p-2 border text-center">

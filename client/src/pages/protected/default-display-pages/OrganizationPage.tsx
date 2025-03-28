@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Id } from "react-toastify";
 import { FaExclamationCircle } from "react-icons/fa";
+import axios from "axios";
 
 import ClosableMessage from "../../../components/ClosableMessage";
 import Pagination from "../../../components/Pagination";
@@ -21,7 +22,6 @@ import {
   updateOrgMemberPriorityApi,
 } from "../../../api/fixedContentRquests";
 import { getChangedObj } from "../../../utils/utils";
-import axios from "axios";
 
 const OrganizationPage = () => {
   const toastId = useRef<Id | null>(null);
@@ -55,8 +55,6 @@ const OrganizationPage = () => {
   };
 
   const addNewMember = (newMember: OrganizationMembersType) => {
-    console.log("Runing add member");
-
     setMembersList((prev) => {
       const updatedList = [...prev.results, newMember];
 

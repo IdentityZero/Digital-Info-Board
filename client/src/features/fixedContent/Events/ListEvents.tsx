@@ -1,7 +1,11 @@
-import { FaTrash } from "react-icons/fa";
+import { FaExclamationCircle, FaTrash } from "react-icons/fa";
+import { useLocation } from "react-router-dom";
+
 import IconWithTooltip from "../../../components/IconWithTooltip";
-import { UpcomingEventType } from "../../../types/FixedContentTypes";
 import { formatInputDate } from "../../../utils/formatters";
+import ClosableMessage from "../../../components/ClosableMessage";
+
+import { UpcomingEventType } from "../../../types/FixedContentTypes";
 
 type ListEventsProps = {
   events: UpcomingEventType[];
@@ -9,9 +13,25 @@ type ListEventsProps = {
 };
 
 const ListEvents = ({ events, handleDelete }: ListEventsProps) => {
+  const { hash } = useLocation();
+  const targetId = hash.substring(1);
+
+  const idExists = events.some((item) => String(item.id) === targetId);
+
   return (
     <div className="overflow-x-auto p-2">
       <h2 className="text-xl font-semibold mb-4">Upcoming Events List</h2>
+      {!idExists && targetId !== "" && (
+        <div className="mb-2">
+          <ClosableMessage
+            className="w-full flex flex-row items-center justify-between gap-4 bg-red-100 border border-red-400 rounded-lg shadow-md p-4"
+            icon={FaExclamationCircle}
+          >
+            It looks like the data you are looking for does not exist here. Try
+            looking at another page.
+          </ClosableMessage>
+        </div>
+      )}
       <table className="min-w-full border rounded-lg">
         <thead className="bg-gray-200 dark:bg-gray-700">
           <tr>
@@ -31,8 +51,13 @@ const ListEvents = ({ events, handleDelete }: ListEventsProps) => {
           ) : (
             events.map((event) => (
               <tr
+                id={String(event.id)}
                 key={event.id}
-                className="border-b hover:bg-gray-100 dark:hover:bg-gray-800"
+                className={`border cursor-grab transition-shadow duration-200 ${
+                  String(event.id) === targetId
+                    ? "shadow-[0_0_10px_rgba(0,150,255,0.7)]"
+                    : "hover:bg-gray-100 dark:hover:bg-gray-800"
+                }`}
               >
                 <td className="p-2 border text-center">{event.id}</td>
                 <td className="p-2 border text-center">{event.name}</td>

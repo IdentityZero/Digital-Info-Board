@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { FaTrash } from "react-icons/fa";
+import { FaExclamationCircle, FaTrash } from "react-icons/fa";
+import { useLocation } from "react-router-dom";
 
 import {
   DndContext,
@@ -19,10 +20,13 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { restrictToParentElement } from "@dnd-kit/modifiers";
 
+import ClosableMessage from "../../../components/ClosableMessage";
 import IconWithTooltip from "../../../components/IconWithTooltip";
-import { OrganizationMembersType } from "../../../types/FixedContentTypes";
 import { Button } from "../../../components/ui";
+
 import { getChangedObj } from "../../../utils/utils";
+
+import { OrganizationMembersType } from "../../../types/FixedContentTypes";
 
 type ListMembersProps = {
   members: OrganizationMembersType[];
@@ -35,7 +39,12 @@ const ListMembers = ({
   handleDelete,
   handleUpdatePriority,
 }: ListMembersProps) => {
+  const { hash } = useLocation();
+  const targetId = hash.substring(1);
+
   const [items, setItems] = useState(members);
+  const idExists = items.some((item) => String(item.id) === targetId);
+
   const lowestPriority = Math.min(...items.map((item) => item.priority));
 
   useEffect(() => {
@@ -77,6 +86,17 @@ const ListMembers = ({
             </Button>
           )}
       </div>
+      {!idExists && targetId !== "" && (
+        <div className="mb-2">
+          <ClosableMessage
+            className="w-full flex flex-row items-center justify-between gap-4 bg-red-100 border border-red-400 rounded-lg shadow-md p-4"
+            icon={FaExclamationCircle}
+          >
+            It looks like the data you are looking for does not exist here. Try
+            looking at another page.
+          </ClosableMessage>
+        </div>
+      )}
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
@@ -107,6 +127,7 @@ const ListMembers = ({
               ) : (
                 items.map((member) => (
                   <SortableTableRow
+                    isHighlighted={String(member.id) == targetId}
                     key={member.id}
                     member={member}
                     handleDelete={handleDelete}
@@ -124,10 +145,15 @@ export default ListMembers;
 
 type SortableTableRowProps = {
   member: OrganizationMembersType;
+  isHighlighted: boolean;
   handleDelete: (id: number) => void;
 };
 
-function SortableTableRow({ member, handleDelete }: SortableTableRowProps) {
+function SortableTableRow({
+  member,
+  isHighlighted = false,
+  handleDelete,
+}: SortableTableRowProps) {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: member.id });
 
@@ -138,11 +164,16 @@ function SortableTableRow({ member, handleDelete }: SortableTableRowProps) {
 
   return (
     <tr
+      id={String(member.id)}
       ref={setNodeRef}
       style={style}
       {...attributes}
       {...listeners}
-      className="border hover:bg-gray-100 cursor-grab"
+      className={`border cursor-grab transition-shadow duration-200 ${
+        isHighlighted
+          ? "shadow-[0_0_10px_rgba(0,150,255,0.7)]"
+          : "hover:bg-gray-100 dark:hover:bg-gray-800"
+      }`}
     >
       <td className="p-2 border text-center">{member.id}</td>
       <td className="p-2 border text-center">
