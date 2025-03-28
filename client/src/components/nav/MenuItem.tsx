@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
 import { MenuType } from "../../types/Links";
 import { FaMinus, FaPlus } from "react-icons/fa";
-import MenuList from "./Menulist";
+import MenuList from "./MenuList";
 import { useState } from "react";
 
 const MenuItem = ({

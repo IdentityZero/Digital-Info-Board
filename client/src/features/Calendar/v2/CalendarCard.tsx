@@ -3,6 +3,7 @@ type CalendarCardProps = {
   time: string;
   location?: string;
   description?: string;
+  isHighlighted?: boolean;
 };
 
 const CalendarCard = ({
@@ -10,9 +11,14 @@ const CalendarCard = ({
   time,
   location,
   description,
+  isHighlighted = false,
 }: CalendarCardProps) => {
   return (
-    <div className="w-full h-full overflow-x-hidden calendar-scrollbar max-w-[200px]">
+    <div
+      className={`w-full h-full overflow-x-hidden calendar-scrollbar max-w-[200px] cursor-pointer p-2 rounded-lg transition-shadow duration-300 ${
+        isHighlighted ? "shadow-[0_0_15px_#FFD700]" : ""
+      }`}
+    >
       <p>
         <b>{time}</b> &nbsp; <i>{title}</i>
       </p>

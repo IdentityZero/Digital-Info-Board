@@ -1,4 +1,6 @@
 /**
+ * NOT IN USE
+ * 
  * Permission Rules
  *      Syntax:
  *          action:resource

@@ -3,7 +3,7 @@ import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 import { logo } from "../../assets";
 import { MenuType } from "../../types/Links";
-import MenuList from "./Menulist";
+import MenuList from "./MenuList";
 
 const DashboardSidebarv2 = ({ menuData }: { menuData: MenuType[] }) => {
   const [isExpanded, setIsExpanded] = useState(true);

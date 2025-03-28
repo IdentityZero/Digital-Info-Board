@@ -28,6 +28,7 @@ export const NOTIFICATION_REDIRECT = {
   media_sequence_update: "/dashboard/default-display/media",
 
   calendar_event_added: (id: number) => `/dashboard/calendar#${id}`,
+  calendar_event_updated: (id: number) => `/dashboard/calendar#${id}`,
   calendar_event_deleted: "/dashboard/calendar",
   calendar_settings_updated: "/dashboard/calendar/settings",
 } as const;
