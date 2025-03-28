@@ -91,7 +91,6 @@ class UserSerializer(serializers.ModelSerializer):
         if profile_data is not None:
             profile_inst = instance.profile
             for attr, value in profile_data.items():
-                print(attr)
                 old_value = getattr(profile_inst, attr)
                 if old_value == value:
                     continue

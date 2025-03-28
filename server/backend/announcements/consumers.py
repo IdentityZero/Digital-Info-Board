@@ -3,8 +3,10 @@ from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 from django.utils import timezone
 
-from .models import Announcements
+from notifications.utils import create_notification_for_admins
 from settings.models import Settings
+
+from .models import Announcements
 
 
 class LiveAnnouncementConsumer(WebsocketConsumer):
@@ -32,6 +34,7 @@ class LiveAnnouncementConsumer(WebsocketConsumer):
             }
         ID - ID of the announcement
         """
+
         data = json.loads(text_data)
         message = data["message"]
 
@@ -59,6 +62,13 @@ class LiveAnnouncementConsumer(WebsocketConsumer):
                 "action": "sequence_update",
                 "data": message,
             },
+        )
+
+        create_notification_for_admins(
+            created_by=None,
+            message="Sequence of the contents was updated. Check it out.",
+            action="announcement_sequence_update",
+            target_id=None,
         )
 
     def send_live_update(self, event):

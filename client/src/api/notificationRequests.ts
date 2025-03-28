@@ -1,5 +1,8 @@
 import axios, { AxiosInstance } from "axios";
-import { NotificationListType } from "../types/NotificationTypes";
+import {
+  NotificationListType,
+  NotificationType,
+} from "../types/NotificationTypes";
 // import { BASE_API_URL } from "../constants/urls";
 
 /**
@@ -15,6 +18,24 @@ export const listNotificationsApi = async (
 ): Promise<NotificationListType> => {
   try {
     const response = await axiosInstance.get(url);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw error;
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+export const markNotificationReadApi = async (
+  axiosInstance: AxiosInstance,
+  id: number
+): Promise<NotificationType> => {
+  try {
+    const response = await axiosInstance.patch(
+      `${listNotificationsEndpoint}status/${id}`,
+      { is_read: true }
+    );
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {

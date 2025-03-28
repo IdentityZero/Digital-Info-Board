@@ -18,6 +18,7 @@ class NotificationsSerializer(serializers.ModelSerializer):
             "created_at",
             "last_modified",
             "target_id",
+            "action",
         ]
 
 

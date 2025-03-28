@@ -32,27 +32,17 @@ class NotificationsConsumer(WebsocketConsumer):
     def receive(self, text_data=None, bytes_data=None):
         return
 
-        # data = json.loads(text_data)
+    def send_notification(self, event):
+        """
+        Event content must have this structure
+        data is mandatory
 
-        # if data["type"] == "notification":
+            "type": "send.notification", # STATIC
+            "data": serializer.data  # notification data
 
-        #     async_to_sync(self.channel_layer.group_send)(
-        #         self.room_group_name,
-        #         {"type": "send.notif", "message": data["message"]},
-        #     )
-
-    def send_notif(self, event):
-        if not "target_id" in event:
-            return
-
-        inst = Notifications.objects.get(id=event["target_id"])
-        serialized_data = NotificationsSerializer(inst).data
-
-        self.send(
-            text_data=json.dumps(
-                {"type": "notification", "notification": serialized_data}
-            )
-        )
+        """
+        event.pop("type")
+        self.send(text_data=json.dumps(event))
 
     def disconnect(self, code):
         async_to_sync(self.channel_layer.group_discard)(

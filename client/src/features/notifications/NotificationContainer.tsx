@@ -2,11 +2,14 @@ import { Link } from "react-router-dom";
 import { formatTimestamp } from "../../utils";
 import { NotificationType } from "../../types/NotificationTypes";
 import { logo } from "../../assets";
+import { getNotifRedirectPath } from "../../constants/notificationRedirect";
 
 function NotificationContainer({
   notification,
+  onClick,
 }: {
   notification: NotificationType;
+  onClick: (id: number, currentvalue: boolean) => void;
 }) {
   const { message, created_by, created_at, is_read } = notification;
 
@@ -14,12 +17,21 @@ function NotificationContainer({
     ? `${created_by.first_name} ${created_by.last_name}`
     : "System Generated";
 
+  const handleLinkClick = () => {
+    onClick(notification.id, notification.is_read);
+  };
+
   return (
     <Link
-      className={`w-[360px] p-4 rounded-xl shadow-lg flex items-center space-x-3 transition-all duration-300 ease-in-out cursor-pointer 
+      onClick={handleLinkClick}
+      className={`w-[360px] p-4 text-left rounded-xl shadow-lg flex items-center space-x-3 transition-all duration-300 ease-in-out cursor-pointer 
           bg-gray-700 hover:bg-gray-600
           `}
-      to={`/dashboard/permissions/inactive#${notification.target_id}`}
+      to={
+        notification.action
+          ? getNotifRedirectPath(notification.action, notification.target_id)
+          : "#"
+      }
     >
       <img
         src={created_by ? (created_by.profile.image as string) : logo}

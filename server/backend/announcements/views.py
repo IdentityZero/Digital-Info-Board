@@ -13,6 +13,7 @@ from rest_framework.permissions import (
 
 from utils.pagination import CustomPageNumberPagination
 from utils.permissions import IsAdmin
+from notifications.models import Notifications
 
 from .serializers import (
     CreateAnnouncementSerializer,
@@ -181,6 +182,54 @@ class UpdateAnnouncementActiveStatusAPIView(generics.RetrieveUpdateAPIView):
         else:
             qs = Announcements.objects.filter(author=self.request.user)
         return qs
+
+    def patch(self, request, *args, **kwargs):
+        response = super().patch(request, *args, **kwargs)
+
+        object = self.get_object()
+        user = self.request.user
+
+        if response.status_code in [200, 204] and user != object.author:
+            self.create_notifications(response.data["is_active"])
+
+        return response
+
+    def create_notifications(self, active_status: bool):
+        object = self.get_object()
+        user = self.request.user
+
+        type = None
+
+        if object.video_announcement.get_queryset().count() != 0:
+            type = "video"
+        elif object.image_announcement.get_queryset().count() != 0:
+            type = "image"
+        else:
+            type = "text"
+
+        DEACTIVATED_ACTION_MAP = {
+            "video": "video_announcement_deactivated",
+            "image": "image_announcement_deactivated",
+            "text": "text_announcement_deactivated",
+        }
+
+        action = (
+            "announcement_approved" if active_status else DEACTIVATED_ACTION_MAP[type]
+        )
+
+        message = (
+            f"Your announcement has been approved by {user.first_name} {user.last_name}. Watch it now."
+            if active_status
+            else f"Your announcement was deactivated by {user.first_name} {user.last_name}. Check it for now."
+        )
+
+        Notifications.objects.create(
+            user=object.author,
+            created_by=user,
+            action=action,
+            target_id=object.id,
+            message=message,
+        )
 
 
 class RetrieveUpdateDestroyAnnouncementAPIView(generics.RetrieveUpdateDestroyAPIView):

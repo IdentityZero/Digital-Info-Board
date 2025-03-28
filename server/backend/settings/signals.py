@@ -21,10 +21,14 @@ def populate_settings(sender, **kwargs):
 
 
 @receiver(post_save, sender=Settings)
-def send_update_on_updated_settings(sender, instance, created, **kwargs):
+def handle_settings_update(sender, instance, created, **kwargs):
     if created:
         return
 
+    send_update_on_updated_settings(instance)
+
+
+def send_update_on_updated_settings(instance):
     channel_layer = get_channel_layer()
     serializer = ListSettingsSerializer(instance)
     async_to_sync(channel_layer.group_send)(

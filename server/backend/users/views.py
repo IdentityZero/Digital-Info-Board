@@ -21,6 +21,7 @@ from rest_framework.response import Response
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.decorators import api_view, permission_classes
 
+from notifications.models import Notifications
 
 from .serializers import (
     UserSerializer,
@@ -119,6 +120,19 @@ class RetrieveUpdateUserView(generics.RetrieveUpdateAPIView):
 
         if getattr(instance, "_prefetched_objects_cache", None):
             instance._prefetched_objects_cache = {}
+
+        user: User = self.request.user
+        object: User = self.get_object()
+
+        # Create notification when updated by another user
+        if user != object:
+            Notifications.objects.create(
+                user=object,
+                created_by=user,
+                message=f"Admin {user.first_name} {user.last_name} updated your profile. Check it out.",
+                action="profile_update",
+                target_id=object.id,
+            )
 
         return Response(serializer.data)
 
@@ -382,7 +396,6 @@ class ListCreateUserInvitationView(generics.ListCreateAPIView):
                 settings, "FRONTEND_DOMAIN", "http://localhost:5173"
             ).rstrip("/")
             registration_url = f"{frontend_domain}/signup?ic={inst.code}"
-            print(frontend_domain)
 
             send_email(inst.code, inst.email, registration_url)
             inst.is_email_sent = True
@@ -427,7 +440,6 @@ def resend_invitation_email(request, pk):
             settings, "FRONTEND_DOMAIN", "http://localhost:5173"
         ).rstrip("/")
         registration_url = f"{frontend_domain}/signup?ic={inst.code}"
-        print(frontend_domain)
         send_email(inst.code, inst.email, registration_url)
         inst.is_email_sent = True
         inst.save()

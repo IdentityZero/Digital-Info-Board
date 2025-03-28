@@ -15,7 +15,9 @@ const AccountSettingsPage = () => {
               (isActive && location.pathname == "/dashboard/account") ||
               location.pathname ==
                 "/dashboard/account/my-profile/change-password" ||
-              location.pathname == "/dashboard/account/my-profile/update-email"
+              location.pathname ==
+                "/dashboard/account/my-profile/update-email" ||
+              location.pathname == "/dashboard/account/my-profile"
                 ? "font-bold bg-cyanBlue"
                 : "border-2 border-black bg-white"
             } `

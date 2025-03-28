@@ -28,6 +28,17 @@ class RelayContentUpdateConsumer(WebsocketConsumer):
         return
 
     def send_update(self, event):
+        """
+        Event content must have this structure
+        content and action are mandatory
+        content_id and data are optional
+
+            "type": "send.update", # STATIC
+            "content": "announcement",
+            "action": "update",
+            "content_id": instance.pk,
+            "data": serializer.data,
+        """
         event.pop("type")
         self.send(text_data=json.dumps(event))
 

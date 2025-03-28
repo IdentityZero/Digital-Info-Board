@@ -1,3 +1,4 @@
+import { NOTIFICATION_REDIRECT } from "../constants/notificationRedirect";
 import { FullUserType } from "./UserTypes";
 
 export type NotificationType = {
@@ -6,7 +7,7 @@ export type NotificationType = {
   message: string;
   is_read: boolean;
   created_at: string;
-  action?: "approve_announcement";
+  action?: keyof typeof NOTIFICATION_REDIRECT;
   target_id?: number;
 };
 

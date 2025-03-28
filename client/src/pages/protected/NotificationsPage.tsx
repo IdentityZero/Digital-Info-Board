@@ -1,12 +1,16 @@
+import { useNotificationContext } from "../../context/Notification";
 import NotificationsList from "../../features/notifications/NotificationsList";
-import useNotifications from "../../hooks/useNotifications";
 
 const NotificationsPage = () => {
-  const { notifications, handleLoadMore, isLoading } = useNotifications();
+  const { notifications, markNotificationRead, handleLoadMore, isLoading } =
+    useNotificationContext();
 
   return (
     <div className="w-full h-full">
-      <NotificationsList notifications={notifications.results} />
+      <NotificationsList
+        notifications={notifications.results}
+        onClick={markNotificationRead}
+      />
       {notifications.next ? (
         <button
           onClick={handleLoadMore}

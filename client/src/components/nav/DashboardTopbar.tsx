@@ -8,13 +8,15 @@ import { useAuth } from "../../context/AuthProvider";
 import { type FullUserType } from "../../types/UserTypes";
 import { retrieveUserInformation } from "../../api/userRequest";
 import Dropdown, { DropdownContext } from "../ui/Dropdown";
-import useNotifications from "../../hooks/useNotifications";
+
 import NotificationContainer from "../../features/notifications/NotificationContainer";
+import { useNotificationContext } from "../../context/Notification";
 
 const DashboardTopbar = () => {
   const location = useLocation();
   const { user, userApi } = useAuth();
-  const { notifications, handleLoadMore } = useNotifications();
+  const { notifications, markNotificationRead, handleLoadMore } =
+    useNotificationContext();
   const [fetchedUser, setFetchedUser] = useState<FullUserType | undefined>(
     undefined
   );
@@ -72,6 +74,7 @@ const DashboardTopbar = () => {
                       <NotificationContainer
                         key={notification.id}
                         notification={notification}
+                        onClick={markNotificationRead}
                       />
                     ))}
                     {notifications.next ? (
