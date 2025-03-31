@@ -41,6 +41,42 @@ export const createOrgMembersApi = async (
   }
 };
 
+export const retrieveOrgMemberApi = async (
+  axiosInstance: AxiosInstance,
+  id: number
+): Promise<OrganizationMembersType> => {
+  try {
+    const response = await axiosInstance.get(
+      FIXED_CONTENT_BASE_ENDPOINT + `v1/org-members/${id}/`
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw error;
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+export const updateOrgMemberApi = async (
+  axiosInstance: AxiosInstance,
+  id: number,
+  data: any
+): Promise<OrganizationMembersType> => {
+  try {
+    const response = await axiosInstance.patch(
+      FIXED_CONTENT_BASE_ENDPOINT + `v1/org-members/${id}/`,
+      data
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw error;
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
 export const listPaginatedOrgMembersApi = async (
   page: number = 1,
   page_size: number = 10

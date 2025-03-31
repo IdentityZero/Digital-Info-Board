@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FaExclamationCircle, FaTrash } from "react-icons/fa";
+import { FaExclamationCircle } from "react-icons/fa";
 import { useLocation } from "react-router-dom";
 
 import {
@@ -14,19 +14,18 @@ import {
   arrayMove,
   SortableContext,
   sortableKeyboardCoordinates,
-  useSortable,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
 import { restrictToParentElement } from "@dnd-kit/modifiers";
 
-import ClosableMessage from "../../../components/ClosableMessage";
-import IconWithTooltip from "../../../components/IconWithTooltip";
-import { Button } from "../../../components/ui";
+import ClosableMessage from "../../../../components/ClosableMessage";
+import { Button } from "../../../../components/ui";
 
-import { getChangedObj } from "../../../utils/utils";
+import { getChangedObj } from "../../../../utils/utils";
 
-import { OrganizationMembersType } from "../../../types/FixedContentTypes";
+import { OrganizationMembersType } from "../../../../types/FixedContentTypes";
+import SortableTableRow from "./SortableTableRow";
+import UpdateModal from "./UpdateModal";
 
 type ListMembersProps = {
   members: OrganizationMembersType[];
@@ -46,6 +45,12 @@ const ListMembers = ({
   const idExists = items.some((item) => String(item.id) === targetId);
 
   const lowestPriority = Math.min(...items.map((item) => item.priority));
+
+  const [targetUpdateId, setTargetUpdateId] = useState<number | null>(null);
+
+  const handleIDClick = (id: number) => {
+    setTargetUpdateId(id);
+  };
 
   useEffect(() => {
     setItems(members);
@@ -131,6 +136,7 @@ const ListMembers = ({
                     key={member.id}
                     member={member}
                     handleDelete={handleDelete}
+                    handleIDClick={handleIDClick}
                   />
                 ))
               )}
@@ -138,67 +144,13 @@ const ListMembers = ({
           </table>
         </SortableContext>
       </DndContext>
+      {targetUpdateId && (
+        <UpdateModal
+          id={targetUpdateId}
+          onClose={() => setTargetUpdateId(null)}
+        />
+      )}
     </div>
   );
 };
 export default ListMembers;
-
-type SortableTableRowProps = {
-  member: OrganizationMembersType;
-  isHighlighted: boolean;
-  handleDelete: (id: number) => void;
-};
-
-function SortableTableRow({
-  member,
-  isHighlighted = false,
-  handleDelete,
-}: SortableTableRowProps) {
-  const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id: member.id });
-
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition: transition,
-  };
-
-  return (
-    <tr
-      id={String(member.id)}
-      ref={setNodeRef}
-      style={style}
-      {...attributes}
-      {...listeners}
-      className={`border cursor-grab transition-shadow duration-200 ${
-        isHighlighted
-          ? "shadow-[0_0_10px_rgba(0,150,255,0.7)]"
-          : "hover:bg-gray-100 dark:hover:bg-gray-800"
-      }`}
-    >
-      <td className="p-2 border text-center">{member.id}</td>
-      <td className="p-2 border text-center">
-        {member.image ? (
-          <img
-            src={member.image}
-            alt={member.name}
-            className="w-10 h-10 rounded-full object-cover border mx-auto"
-          />
-        ) : (
-          <span className="text-gray-400">No Image</span>
-        )}
-      </td>
-      <td className="p-2 border">{member.name}</td>
-      <td className="p-2 border">{member.position}</td>
-      <td className="p-2 text-center">
-        <button onClick={() => handleDelete(member.id)} data-no-dnd={true}>
-          <IconWithTooltip
-            icon={FaTrash}
-            label="Delete"
-            iconClassName="text-xl text-red-600 hover:text-red-700 active:text-red-800 cursor-pointer"
-            labelClassName="p-1 px-2 rounded-md shadow-md bg-red-600 text-white text-center"
-          />
-        </button>
-      </td>
-    </tr>
-  );
-}

@@ -108,7 +108,7 @@ def update_org_priority(request):
     )
 
 
-class DeleteOrganizationMembersApiView(generics.DestroyAPIView):
+class DeleteUpdateOrganizationMembersApiView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.OrganizationMembersSerializer
     queryset = models.OrganizationMembers.objects.all()
     permission_classes = [permissions.IsAuthenticated]

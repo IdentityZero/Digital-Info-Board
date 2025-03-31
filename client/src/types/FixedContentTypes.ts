@@ -4,6 +4,8 @@ export type OrganizationMembersType = {
   position: string;
   image: string;
   priority: number;
+  created_at: string;
+  last_modified: string;
 };
 
 export type UpcomingEventType = {
