@@ -1,26 +1,26 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { Id } from "react-toastify";
 
 import Modal from "../../../../components/ui/Modal";
+import { Button, Input } from "../../../../components/ui";
 import LoadingMessage from "../../../../components/LoadingMessage";
-import { Button, Errortext, Input } from "../../../../components/ui";
 
 import { useAuth } from "../../../../context/AuthProvider";
 import useLoadingToast from "../../../../hooks/useLoadingToast";
 
+import { upcomingInitState } from "./helper";
+import { UpcomingEventType } from "../../../../types/FixedContentTypes";
 import {
-  retrieveOrgMemberApi,
-  updateOrgMemberApi,
+  retrieveUpcomingEventApi,
+  updateUpcomingEventApi,
 } from "../../../../api/fixedContentRquests";
-import { OrganizationMembersType } from "../../../../types/FixedContentTypes";
-import { orgMemberInitError } from "./helpers";
 
 type UpdateModalProps = {
   id: number;
   onClose: () => void;
   refreshList?: () => void;
-  onSuccess?: (data: OrganizationMembersType) => void;
+  onSuccess?: (data: UpcomingEventType) => void;
 };
 
 const UpdateModal = ({
@@ -30,27 +30,25 @@ const UpdateModal = ({
   onSuccess,
 }: UpdateModalProps) => {
   /**
-   * Used for Updating Organization members information
+   * Used for Updating Upcoming events information
    */
 
   const { userApi } = useAuth();
   const toastId = useRef<Id | null>(null);
   const { loading, update } = useLoadingToast(toastId);
 
-  const [newImage, setNewImage] = useState<string | null>(null);
-  const [orgMemberData, setOrgMemberData] =
-    useState<OrganizationMembersType | null>(null);
+  const [eventData, setEventData] = useState<UpcomingEventType | null>(null);
 
   const [isFetching, setIsFetching] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
-  const [error, setError] = useState(orgMemberInitError);
+  const [error, setError] = useState(upcomingInitState);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setIsFetching(true);
-        const res_data = await retrieveOrgMemberApi(userApi, id);
-        setOrgMemberData(res_data);
+        const res_data = await retrieveUpcomingEventApi(userApi, id);
+        setEventData(res_data);
       } catch (error) {
       } finally {
         setIsFetching(false);
@@ -62,19 +60,15 @@ const UpdateModal = ({
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!orgMemberData) return;
+    if (!eventData) return;
 
     const formData = new FormData(e.currentTarget);
-
-    if (!newImage) {
-      formData.delete("image");
-    }
     loading("Saving updates. Please wait...");
 
     try {
       setIsSaving(true);
-      setError(orgMemberInitError);
-      const res_data = await updateOrgMemberApi(userApi, id, formData);
+      setError(upcomingInitState);
+      const res_data = await updateUpcomingEventApi(userApi, id, formData);
       update({
         render: "Update successful",
         type: "success",
@@ -110,63 +104,22 @@ const UpdateModal = ({
     }
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files) return;
-    const file = e.target.files[0];
-
-    setNewImage(URL.createObjectURL(file));
-  };
-
   return (
     <Modal
       isOpen={!!id}
       onClose={onClose}
       size="xl"
-      title="Update Organization Member Info"
+      title="Update Upcoming Event Info"
     >
       {isFetching ? (
         <LoadingMessage message="Retrieving information..." />
-      ) : orgMemberData ? (
+      ) : eventData ? (
         <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-          <div className="relative flex flex-col items-center">
-            <label htmlFor="image-upload" className="cursor-pointer">
-              <img
-                src={newImage || orgMemberData.image}
-                alt={orgMemberData.name || "Organization Member"}
-                className="w-24 h-24 rounded-full object-cover mx-auto"
-              />
-              <p className="text-sm text-blue-500 hover:underline text-center mt-2">
-                Click to update
-              </p>
-            </label>
-            <input
-              type="file"
-              name="image"
-              id="image-upload"
-              className="sr-only"
-              accept="image/*"
-              onChange={handleImageChange}
-              disabled={isSaving}
-            />
-
-            {newImage && (
-              <button
-                type="button"
-                disabled={isSaving}
-                className="absolute top-0 right-0 text-gray-700 text-xs p-1 rounded-sm hover:bg-black/50 hover:text-white transition"
-                onClick={() => setNewImage(null)}
-              >
-                Reset image
-              </button>
-            )}
-            {error.image && <Errortext text={error.image} />}
-          </div>
-
           <Input
-            labelText="Name"
-            defaultValue={orgMemberData.name}
+            labelText="Event Name"
+            defaultValue={eventData.name}
             name="name"
-            placeholder="Full Name (e.g. Engr. Juan Dela Cruz, Maria Clara)"
+            placeholder="Event Name (e.g. Organization Election, Unigames 2025)"
             required
             maxLength={64}
             helpText={["Up to 64 characters allowed."]}
@@ -174,21 +127,13 @@ const UpdateModal = ({
             error={error.name}
           />
           <Input
-            labelText="Position"
-            defaultValue={orgMemberData.position}
-            name="position"
-            placeholder="Position (e.g. Department Chair, President)"
+            type="date"
+            defaultValue={eventData.date}
+            labelText="Event Date"
+            name="date"
             required
-            maxLength={32}
-            helpText={["Up to 32 characters allowed."]}
             disabled={isSaving}
-            error={error.position}
-          />
-          <input
-            type="hidden"
-            value={orgMemberData.last_modified}
-            name="last_modified"
-            disabled
+            error={error.date}
           />
           <Button disabled={isSaving} type="submit">
             Update

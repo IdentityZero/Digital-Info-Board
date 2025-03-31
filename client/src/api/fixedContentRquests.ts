@@ -17,6 +17,8 @@ const BASE_ENDPOINT = "http://" + BASE_API_URL + "/";
 
 const FIXED_CONTENT_BASE_ENDPOINT = BASE_ENDPOINT + "fixed-contents/";
 
+// #region Topic : Organization Members
+
 export const createOrgMembersApi = async (
   axiosInstance: AxiosInstance,
   data: FormData
@@ -146,6 +148,10 @@ export const deleteOrgMemberApi = async (
   }
 };
 
+// #endregion
+
+// #region Topic: Upcoming Events
+
 export const createUpcomingEventApi = async (
   axiosInstance: AxiosInstance,
   data: FormData
@@ -153,6 +159,42 @@ export const createUpcomingEventApi = async (
   try {
     const response = await axiosInstance.post(
       FIXED_CONTENT_BASE_ENDPOINT + "v1/upcoming-events/",
+      data
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw error;
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+export const retrieveUpcomingEventApi = async (
+  axiosInstance: AxiosInstance,
+  id: number
+): Promise<UpcomingEventType> => {
+  try {
+    const response = await axiosInstance.get(
+      FIXED_CONTENT_BASE_ENDPOINT + `v1/upcoming-events/${id}/`
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw error;
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+export const updateUpcomingEventApi = async (
+  axiosInstance: AxiosInstance,
+  id: number,
+  data: any
+): Promise<UpcomingEventType> => {
+  try {
+    const response = await axiosInstance.patch(
+      FIXED_CONTENT_BASE_ENDPOINT + `v1/upcoming-events/${id}/`,
       data
     );
     return response.data;
@@ -212,6 +254,10 @@ export const deleteUpcomingEventApi = async (
     throw new Error("An unexpected error occurred");
   }
 };
+
+// #endregion
+
+// #region Topic: Media Displays
 
 export const createMediaDisplayApi = async (
   axiosInstance: AxiosInstance,
@@ -303,3 +349,5 @@ export const deleteMediaDisplayApi = async (
     throw new Error("An unexpected error occurred");
   }
 };
+
+// #endregion

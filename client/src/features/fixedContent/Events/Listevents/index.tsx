@@ -1,22 +1,33 @@
 import { FaExclamationCircle, FaTrash } from "react-icons/fa";
 import { useLocation } from "react-router-dom";
 
-import IconWithTooltip from "../../../components/IconWithTooltip";
-import { formatInputDate } from "../../../utils/formatters";
-import ClosableMessage from "../../../components/ClosableMessage";
+import ClosableMessage from "../../../../components/ClosableMessage";
+import IconWithTooltip from "../../../../components/IconWithTooltip";
+import { formatInputDate } from "../../../../utils/formatters";
 
-import { UpcomingEventType } from "../../../types/FixedContentTypes";
+import { UpcomingEventType } from "../../../../types/FixedContentTypes";
+import { useState } from "react";
+import UpdateModal from "./UpdateModal";
 
 type ListEventsProps = {
   events: UpcomingEventType[];
   handleDelete: (id: number) => void;
+  handleUpdate: (updatedData: UpcomingEventType) => void;
+  handleRefresh: () => void;
 };
 
-const ListEvents = ({ events, handleDelete }: ListEventsProps) => {
+const ListEvents = ({
+  events,
+  handleDelete,
+  handleUpdate,
+  handleRefresh,
+}: ListEventsProps) => {
   const { hash } = useLocation();
   const targetId = hash.substring(1);
 
   const idExists = events.some((item) => String(item.id) === targetId);
+
+  const [targetUpdateId, setTargetUpdateId] = useState<number | null>(null);
 
   return (
     <div className="overflow-x-auto p-2">
@@ -59,7 +70,12 @@ const ListEvents = ({ events, handleDelete }: ListEventsProps) => {
                     : "hover:bg-gray-100 dark:hover:bg-gray-800"
                 }`}
               >
-                <td className="p-2 border text-center">{event.id}</td>
+                <td
+                  className="p-2 border text-center font-bold cursor-pointer underline"
+                  onClick={() => setTargetUpdateId(event.id)}
+                >
+                  {event.id}
+                </td>
                 <td className="p-2 border text-center">{event.name}</td>
                 <td className="p-2 border text-center">
                   {formatInputDate(event.date)}
@@ -83,6 +99,14 @@ const ListEvents = ({ events, handleDelete }: ListEventsProps) => {
           )}
         </tbody>
       </table>
+      {targetUpdateId && (
+        <UpdateModal
+          id={targetUpdateId}
+          onClose={() => setTargetUpdateId(null)}
+          onSuccess={handleUpdate}
+          refreshList={handleRefresh}
+        />
+      )}
     </div>
   );
 };

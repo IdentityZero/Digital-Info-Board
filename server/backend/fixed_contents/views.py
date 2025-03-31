@@ -178,7 +178,7 @@ class ListCreateUpcomingEventApiView(generics.ListCreateAPIView):
         return response
 
 
-class DeleteUpcomingEventApiView(generics.DestroyAPIView):
+class DeleteUpdateUpcomingEventApiView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.UpcomingEventsSerializer
     queryset = models.UpcomingEvents.objects.all()
     permission_classes = [permissions.IsAuthenticated]

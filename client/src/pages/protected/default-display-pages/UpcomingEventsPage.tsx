@@ -1,18 +1,23 @@
 import { useEffect, useRef, useState } from "react";
-import CreateEvent from "../../../features/fixedContent/Events/CreateEvent";
-import ListEvents from "../../../features/fixedContent/Events/ListEvents";
-import { getListTypeInitState, ListType } from "../../../types/ListType";
-import { UpcomingEventType } from "../../../types/FixedContentTypes";
+import { Id } from "react-toastify";
+
+import LoadingMessage from "../../../components/LoadingMessage";
+import Pagination from "../../../components/Pagination";
+
+import { useAuth } from "../../../context/AuthProvider";
 import usePagination from "../../../hooks/usePagination";
+import useLoadingToast from "../../../hooks/useLoadingToast";
+
+import { getListTypeInitState, ListType } from "../../../types/ListType";
+
+import { UpcomingEventType } from "../../../types/FixedContentTypes";
 import {
   deleteUpcomingEventApi,
   listPaginatedUpcomingEventsApi,
 } from "../../../api/fixedContentRquests";
-import LoadingMessage from "../../../components/LoadingMessage";
-import useLoadingToast from "../../../hooks/useLoadingToast";
-import { Id } from "react-toastify";
-import { useAuth } from "../../../context/AuthProvider";
-import Pagination from "../../../components/Pagination";
+
+import CreateEvent from "../../../features/fixedContent/Events/CreateEvent";
+import ListEvents from "../../../features/fixedContent/Events/ListEvents";
 
 const UpcomingEventsPage = () => {
   // Todo: Error state, loading state, add list, remove list on delete
@@ -81,6 +86,16 @@ const UpcomingEventsPage = () => {
     }
   };
 
+  const handleUpdate = (updatedData: UpcomingEventType) => {
+    setEventsList((prev) => {
+      const updatedList = prev.results.map((event) =>
+        event.id === updatedData.id ? updatedData : event
+      );
+
+      return { ...prev, results: updatedList };
+    });
+  };
+
   useEffect(() => {
     fetchEventsList(page, pageSize);
   }, [page, pageSize]);
@@ -102,6 +117,8 @@ const UpcomingEventsPage = () => {
             <ListEvents
               events={eventsList.results}
               handleDelete={handleDelete}
+              handleUpdate={handleUpdate}
+              handleRefresh={() => fetchEventsList(page, pageSize)}
             />
             <Pagination
               pageSize={pageSize}
