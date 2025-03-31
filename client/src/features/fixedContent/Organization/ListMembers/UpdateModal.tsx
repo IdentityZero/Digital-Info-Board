@@ -19,9 +19,10 @@ import { orgMemberInitError } from "./helpers";
 type UpdateModalProps = {
   id: number;
   onClose: () => void;
+  onSuccess?: (data: OrganizationMembersType) => void;
 };
 
-const UpdateModal = ({ id, onClose }: UpdateModalProps) => {
+const UpdateModal = ({ id, onClose, onSuccess }: UpdateModalProps) => {
   /**
    * Used for Updating Organization members information
    */
@@ -68,12 +69,12 @@ const UpdateModal = ({ id, onClose }: UpdateModalProps) => {
       setIsSaving(true);
       setError(orgMemberInitError);
       const res_data = await updateOrgMemberApi(userApi, id, formData);
-      console.log(res_data);
       update({
         render: "Update successful",
         type: "success",
       });
       onClose();
+      onSuccess && onSuccess(res_data);
     } catch (error) {
       if (!axios.isAxiosError(error)) {
         update({

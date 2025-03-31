@@ -134,6 +134,15 @@ const OrganizationPage = () => {
     }
   };
 
+  const handleUpdateMember = (updatedMember: OrganizationMembersType) => {
+    setMembersList((prev) => {
+      const updatedList = prev.results.map((member) =>
+        member.id === updatedMember.id ? updatedMember : member
+      );
+      return { ...prev, results: updatedList };
+    });
+  };
+
   useEffect(() => {
     fetchMembersList(page, pageSize);
   }, [page, pageSize]);
@@ -160,6 +169,7 @@ const OrganizationPage = () => {
               members={membersList.results}
               handleDelete={handleDelete}
               handleUpdatePriority={handleUpdatePriority}
+              handleUpdate={handleUpdateMember}
             />
             <Pagination
               pageSize={pageSize}

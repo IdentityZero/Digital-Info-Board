@@ -31,12 +31,14 @@ type ListMembersProps = {
   members: OrganizationMembersType[];
   handleDelete: (id: number) => void;
   handleUpdatePriority: (arr: OrganizationMembersType[]) => void;
+  handleUpdate: (data: OrganizationMembersType) => void;
 };
 
 const ListMembers = ({
   members,
   handleDelete,
   handleUpdatePriority,
+  handleUpdate,
 }: ListMembersProps) => {
   const { hash } = useLocation();
   const targetId = hash.substring(1);
@@ -148,6 +150,7 @@ const ListMembers = ({
         <UpdateModal
           id={targetUpdateId}
           onClose={() => setTargetUpdateId(null)}
+          onSuccess={handleUpdate}
         />
       )}
     </div>
