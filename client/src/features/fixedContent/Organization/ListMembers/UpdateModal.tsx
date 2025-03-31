@@ -19,10 +19,16 @@ import { orgMemberInitError } from "./helpers";
 type UpdateModalProps = {
   id: number;
   onClose: () => void;
+  refreshList?: () => void;
   onSuccess?: (data: OrganizationMembersType) => void;
 };
 
-const UpdateModal = ({ id, onClose, onSuccess }: UpdateModalProps) => {
+const UpdateModal = ({
+  id,
+  onClose,
+  refreshList,
+  onSuccess,
+}: UpdateModalProps) => {
   /**
    * Used for Updating Organization members information
    */
@@ -188,23 +194,25 @@ const UpdateModal = ({ id, onClose, onSuccess }: UpdateModalProps) => {
           </Button>
         </form>
       ) : (
-        <NotFound />
+        <NotFound refreshList={refreshList} />
       )}
     </Modal>
   );
 };
 export default UpdateModal;
 
-function NotFound() {
+function NotFound({ refreshList }: { refreshList?: () => void }) {
   return (
     <div className="p-6 text-center">
       <h2 className="text-2xl font-bold text-gray-800">Member Not Found</h2>
       <p className="text-gray-600 mt-2">
         Information about the member is not available.
       </p>
-      <div className="mt-2">
-        <Button>Refresh</Button>
-      </div>
+      {refreshList && (
+        <div className="mt-2">
+          <Button onClick={refreshList}>Refresh</Button>
+        </div>
+      )}
     </div>
   );
 }

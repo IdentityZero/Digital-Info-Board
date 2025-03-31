@@ -32,6 +32,7 @@ type ListMembersProps = {
   handleDelete: (id: number) => void;
   handleUpdatePriority: (arr: OrganizationMembersType[]) => void;
   handleUpdate: (data: OrganizationMembersType) => void;
+  handleRefresh: () => void;
 };
 
 const ListMembers = ({
@@ -39,6 +40,7 @@ const ListMembers = ({
   handleDelete,
   handleUpdatePriority,
   handleUpdate,
+  handleRefresh,
 }: ListMembersProps) => {
   const { hash } = useLocation();
   const targetId = hash.substring(1);
@@ -151,6 +153,7 @@ const ListMembers = ({
           id={targetUpdateId}
           onClose={() => setTargetUpdateId(null)}
           onSuccess={handleUpdate}
+          refreshList={handleRefresh}
         />
       )}
     </div>

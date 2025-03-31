@@ -170,6 +170,7 @@ const OrganizationPage = () => {
               handleDelete={handleDelete}
               handleUpdatePriority={handleUpdatePriority}
               handleUpdate={handleUpdateMember}
+              handleRefresh={() => fetchMembersList(page, pageSize)}
             />
             <Pagination
               pageSize={pageSize}
