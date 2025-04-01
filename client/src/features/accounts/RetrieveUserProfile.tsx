@@ -252,7 +252,7 @@ const RetrieveUserProfile = ({ id }: RetrieveUserProfileProps) => {
         {/* Role Field */}
         <div className="flex flex-row items-center rounded-md overflow-hidden">
           <label
-            className="w-[200px] bg-desaturatedBlueGray py-3 px-2 font-bold"
+            className=" w-[150px] lg:w-[180px] bg-desaturatedBlueGray py-3 px-2 font-bold"
             htmlFor="role"
           >
             Role
@@ -273,7 +273,7 @@ const RetrieveUserProfile = ({ id }: RetrieveUserProfileProps) => {
         {/* Position Field */}
         <div className="flex flex-row items-center rounded-md overflow-hidden">
           <label
-            className="w-[200px] bg-desaturatedBlueGray py-3 px-2 font-bold"
+            className=" w-[150px] lg:w-[180px] bg-desaturatedBlueGray py-3 px-2 font-bold"
             htmlFor="position"
           >
             Position
@@ -356,7 +356,7 @@ const RetrieveUserProfile = ({ id }: RetrieveUserProfileProps) => {
         <div className="flex flex-row items-center rounded-md overflow-hidden border-2 h-[48px] bg-desaturatedBlueGray">
           <label
             htmlFor="admin"
-            className="w-[200px] px-2 font-bold flex flex-row items-center gap-2"
+            className=" w-[150px] lg:w-[180px] px-2 font-bold flex flex-row items-center gap-2"
           >
             Is Admin
           </label>
@@ -377,7 +377,7 @@ const RetrieveUserProfile = ({ id }: RetrieveUserProfileProps) => {
         <div className="flex flex-row items-center rounded-md overflow-hidden border-2 h-[48px] bg-desaturatedBlueGray">
           <label
             htmlFor="active"
-            className="w-[200px] px-2 font-bold flex flex-row items-center gap-2"
+            className=" w-[150px] lg:w-[180px] px-2 font-bold flex flex-row items-center gap-2"
           >
             Is Active
           </label>
