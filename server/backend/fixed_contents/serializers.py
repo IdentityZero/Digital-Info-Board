@@ -50,10 +50,11 @@ class MediaDisplaysSerializer(serializers.ModelSerializer):
         fields = ["id", "priority", "name", "file", "file_size", "type"]
 
     def get_file_size(self, obj):
-
-        if obj.file and obj.file.size:
-            return obj.file.size
-        return None
+        try:
+            if obj.file and obj.file.size:
+                return obj.file.size
+        except:
+            return None
 
     def get_type(self, obj):
 

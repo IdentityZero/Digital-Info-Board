@@ -36,6 +36,12 @@ const useOrgMembersData = () => {
     setOrgMembers((prev) => [...prev, newItem]);
   };
 
+  const updateItem = (id: number, updatedItem: OrganizationMembersType) => {
+    setOrgMembers((prev) => {
+      return prev.map((item) => (item.id == id ? updatedItem : item));
+    });
+  };
+
   const deleteItem = (id: number) => {
     setOrgMembers((prev) => prev.filter((item) => item.id !== id));
   };
@@ -44,6 +50,13 @@ const useOrgMembersData = () => {
     fetchOrgMembers();
   }, []);
 
-  return { orgMembers, deleteItem, insertItem, updateSequence, isLoading };
+  return {
+    orgMembers,
+    deleteItem,
+    insertItem,
+    updateItem,
+    updateSequence,
+    isLoading,
+  };
 };
 export default useOrgMembersData;

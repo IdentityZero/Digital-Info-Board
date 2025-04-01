@@ -39,6 +39,12 @@ const useMediaDisplaysData = () => {
     setMediaDisplays((prev) => [...prev, newItem]);
   };
 
+  const updateItem = (id: number, updatedItem: MediaDisplayType) => {
+    setMediaDisplays((prev) => {
+      return prev.map((item) => (item.id == id ? updatedItem : item));
+    });
+  };
+
   const deleteItem = (id: number) => {
     setMediaDisplays((prev) => prev.filter((item) => item.id !== id));
   };
@@ -47,6 +53,13 @@ const useMediaDisplaysData = () => {
     fetchMediaDisplays();
   }, []);
 
-  return { mediaDisplays, insertItem, deleteItem, updateSequence, isLoading };
+  return {
+    mediaDisplays,
+    insertItem,
+    updateItem,
+    deleteItem,
+    updateSequence,
+    isLoading,
+  };
 };
 export default useMediaDisplaysData;

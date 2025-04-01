@@ -69,21 +69,21 @@ type SettingsWsMessageTypes = {
 
 type OrganizationWsMessageTypes = {
   content: "organization";
-  action: "create" | "delete" | "sequence_update";
+  action: "create" | "update" | "delete" | "sequence_update";
   content_id: number;
   data: any;
 };
 
 type UpcomingEventsWsMessageTypes = {
   content: "upcoming_events";
-  action: "create" | "delete";
+  action: "create" | "update" | "delete";
   content_id: number;
   data: any;
 };
 
 type MediaDisplaysWsMessageTypes = {
   content: "media_displays";
-  action: "create" | "delete" | "sequence_update";
+  action: "create" | "update" | "delete" | "sequence_update";
   content_id: number;
   data: any;
 };
@@ -131,6 +131,8 @@ export const RealtimeUpdateProvider = ({
       mediaDisplays.deleteItem(data.content_id);
     } else if (data.action === "sequence_update") {
       mediaDisplays.updateSequence(data.data);
+    } else if (data.action === "update") {
+      mediaDisplays.updateItem(data.content_id, data.data);
     }
   };
 
@@ -139,6 +141,8 @@ export const RealtimeUpdateProvider = ({
       events.insertItem(data.data);
     } else if (data.action === "delete") {
       events.deleteItem(data.content_id);
+    } else if (data.action === "update") {
+      events.updateItem(data.content_id, data.data);
     }
   };
 
@@ -149,6 +153,8 @@ export const RealtimeUpdateProvider = ({
       orgMembers.insertItem(data.data);
     } else if (data.action === "sequence_update") {
       orgMembers.updateSequence(data.data);
+    } else if (data.action === "update") {
+      orgMembers.updateItem(data.content_id, data.data);
     }
   };
 

@@ -1,8 +1,8 @@
-import os
-
 from django.dispatch import receiver
-from django.db.models.signals import pre_save, post_save
+from django.db.models.signals import pre_save, post_save, post_delete
 from django.contrib.auth.models import User
+
+from utils.signals import delete_old_file, delete_files_of_deleted_objects
 
 from .models import Profile, NewUserInvitation
 from notifications.models import Notifications
@@ -11,26 +11,15 @@ from notifications.models import Notifications
 # TODO add signal to ready
 @receiver(pre_save, sender=Profile)
 def delete_old_user_image(sender, instance, *args, **kwargs):
-    # Stop for newly created
-    if not instance.pk:
-        return
+    delete_old_file(sender, instance, "image", "profile_pics/profile.png")
 
-    try:
-        old_instance = sender.objects.get(pk=instance.pk)
-    except sender.DoesNotExist:
-        return
 
-    # Empty or equal to default
-    if not old_instance.image or old_instance.image == "profile_pics/profile.png":
-        return
+@receiver(post_delete, sender=Profile)
+def post_delete_users_signal(sender, instance, *args, **kwargs):
+    delete_files_of_deleted_objects(instance, "image", "profile_pics/profile.png")
 
-    new_image = instance.image
 
-    if old_instance.image == new_image:
-        return
-
-    if os.path.isfile(old_instance.image.path):
-        os.remove(old_instance.image.path)
+# TODO DELETE IMAGE OF DELETED USER
 
 
 @receiver(post_save, sender=User)

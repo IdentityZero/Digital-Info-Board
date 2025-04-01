@@ -1,10 +1,11 @@
-import os
-
 from django.utils import timezone
-from django.db.models.signals import post_delete, post_save
+
+from django.db.models.signals import post_delete, post_save, pre_save
 from django.dispatch import receiver
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
+
+from utils.signals import delete_old_file, delete_files_of_deleted_objects
 
 from .models import OrganizationMembers, UpcomingEvents, MediaDisplays
 from .serializers import (
@@ -15,56 +16,47 @@ from .serializers import (
 
 from utils.utils import get_mock_request
 
-
-@receiver(post_delete, sender=OrganizationMembers)
-def delete_old_org_member_image(sender, instance: OrganizationMembers, *args, **kwargs):
-    """
-    Delete images of deleted instances of Org members
-    """
-    if not instance.image or instance.image == "org_members/default.png":
-        return
-
-    if os.path.isfile(instance.image.path):
-        os.remove(instance.image.path)
-
-
-@receiver(post_delete, sender=MediaDisplays)
-def delete_media_file(sender, instance: MediaDisplays, *args, **kwargs):
-    """
-    Delete files of deleted MediaDisplays instances
-    """
-    if not instance.file:
-        return
-
-    if os.path.isfile(instance.file.path):
-        os.remove(instance.file.path)
+# region Topic: Organization Members
 
 
 @receiver(post_save, sender=OrganizationMembers)
-def send_update_on_created_org_members(sender, instance, created, *args, **kwargs):
+def post_save_org_members_signal(sender, instance, created, *args, **kwargs):
     """
-    Send update on CREATED Organiztion Members
+    Send update on CREATED OR UPDATED Organiztion Members
     """
-    if created:
-        channel_layer = get_channel_layer()
-        request = get_mock_request()
-        serializer = OrganizationMembersSerializer(
-            instance, context={"request": request}
-        )
-        async_to_sync(channel_layer.group_send)(
-            "realtime_update",
-            {
-                "type": "send.update",
-                "content": "organization",
-                "action": "create",
-                "content_id": instance.pk,
-                "data": serializer.data,
-            },
-        )
+
+    action = "create" if created else "update"
+
+    channel_layer = get_channel_layer()
+    request = get_mock_request()
+    serializer = OrganizationMembersSerializer(instance, context={"request": request})
+    async_to_sync(channel_layer.group_send)(
+        "realtime_update",
+        {
+            "type": "send.update",
+            "content": "organization",
+            "action": action,
+            "content_id": instance.pk,
+            "data": serializer.data,
+        },
+    )
+
+
+@receiver(pre_save, sender=OrganizationMembers)
+def pre_save_org_members_signal(sender, instance: OrganizationMembers, *args, **kwargs):
+    delete_old_file(sender, instance, "image", "org_members/default.png")
 
 
 @receiver(post_delete, sender=OrganizationMembers)
-def send_updated_on_deleted_org_members(sender, instance, *args, **kwargs):
+def post_delete_org_members_signal(sender, instance, *args, **kwargs):
+    """
+    DELETE org Members signal
+    """
+    send_update_on_delete_org_members(instance)
+    delete_files_of_deleted_objects(instance, "image", "org_members/default.png")
+
+
+def send_update_on_delete_org_members(instance: OrganizationMembers):
     """
     Send update on DELETED Organiztion Members
     """
@@ -81,27 +73,29 @@ def send_updated_on_deleted_org_members(sender, instance, *args, **kwargs):
     )
 
 
+# endregion
+
+# region Topic: Upcoming Events
+
+
 @receiver(post_save, sender=UpcomingEvents)
 def send_update_on_created_upcoming_events(
     sender, instance: UpcomingEvents, created, *args, **kwargs
 ):
-    # If older, dont bother to send
-    if instance.date < timezone.now().date():
-        return
+    action = "create" if created else "update"
 
-    if created:
-        channel_layer = get_channel_layer()
-        serializer = UpcomingEventsSerializer(instance)
-        async_to_sync(channel_layer.group_send)(
-            "realtime_update",
-            {
-                "type": "send.update",
-                "content": "upcoming_events",
-                "action": "create",
-                "content_id": instance.pk,
-                "data": serializer.data,
-            },
-        )
+    channel_layer = get_channel_layer()
+    serializer = UpcomingEventsSerializer(instance)
+    async_to_sync(channel_layer.group_send)(
+        "realtime_update",
+        {
+            "type": "send.update",
+            "content": "upcoming_events",
+            "action": action,
+            "content_id": instance.pk,
+            "data": serializer.data,
+        },
+    )
 
 
 @receiver(post_delete, sender=UpcomingEvents)
@@ -118,26 +112,46 @@ def send_update_on_deleted_upcoming_events(sender, instance, *args, **kwargs):
     )
 
 
+# endregion
+
+# region Topic: Media Displays
+
+
 @receiver(post_save, sender=MediaDisplays)
 def send_update_on_created_media_displays(sender, instance, created, *args, **kwargs):
-    if created:
-        channel_layer = get_channel_layer()
-        request = get_mock_request()
-        serializer = MediaDisplaysSerializer(instance, context={"request": request})
-        async_to_sync(channel_layer.group_send)(
-            "realtime_update",
-            {
-                "type": "send.update",
-                "content": "media_displays",
-                "action": "create",
-                "content_id": instance.pk,
-                "data": serializer.data,
-            },
-        )
+    """
+    Send update on CREATED OR UPDATED Media Displays
+    """
+
+    action = "create" if created else "update"
+
+    channel_layer = get_channel_layer()
+    request = get_mock_request()
+    serializer = MediaDisplaysSerializer(instance, context={"request": request})
+    async_to_sync(channel_layer.group_send)(
+        "realtime_update",
+        {
+            "type": "send.update",
+            "content": "media_displays",
+            "action": action,
+            "content_id": instance.pk,
+            "data": serializer.data,
+        },
+    )
+
+
+@receiver(pre_save, sender=MediaDisplays)
+def pre_save_media_displays_signal(sender, instance, *args, **kwargs):
+    delete_old_file(sender, instance, "file")
 
 
 @receiver(post_delete, sender=MediaDisplays)
-def send_update_on_deleted_media_displays(sender, instance, *args, **kwargs):
+def post_delete_media_displays_signal(sender, instance, *args, **kwargs):
+    send_update_on_deleted_media_displays(instance)
+    delete_files_of_deleted_objects(instance, "file")
+
+
+def send_update_on_deleted_media_displays(instance):
     channel_layer = get_channel_layer()
     async_to_sync(channel_layer.group_send)(
         "realtime_update",
@@ -148,3 +162,6 @@ def send_update_on_deleted_media_displays(sender, instance, *args, **kwargs):
             "content_id": instance.pk,
         },
     )
+
+
+# endregion
