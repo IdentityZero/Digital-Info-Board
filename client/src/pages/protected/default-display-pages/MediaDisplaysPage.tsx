@@ -1,6 +1,16 @@
 import { useEffect, useRef, useState } from "react";
-import CreateMediaDisplay from "../../../features/fixedContent/MediaDisplays/CreateMediaDisplay";
-import ListMediaDisplays from "../../../features/fixedContent/MediaDisplays/ListMediaDisplays";
+import axios from "axios";
+import { Id } from "react-toastify";
+
+import LoadingMessage from "../../../components/LoadingMessage";
+import Pagination from "../../../components/Pagination";
+
+import usePagination from "../../../hooks/usePagination";
+import { useAuth } from "../../../context/AuthProvider";
+import useLoadingToast from "../../../hooks/useLoadingToast";
+
+import { getChangedObj } from "../../../utils/utils";
+
 import { getListTypeInitState, ListType } from "../../../types/ListType";
 import { MediaDisplayType } from "../../../types/FixedContentTypes";
 import {
@@ -8,14 +18,9 @@ import {
   listPaginatedMediaDisplayApi,
   updateMediaDisplaysPriorityApi,
 } from "../../../api/fixedContentRquests";
-import usePagination from "../../../hooks/usePagination";
-import LoadingMessage from "../../../components/LoadingMessage";
-import Pagination from "../../../components/Pagination";
-import { useAuth } from "../../../context/AuthProvider";
-import useLoadingToast from "../../../hooks/useLoadingToast";
-import { Id } from "react-toastify";
-import { getChangedObj } from "../../../utils/utils";
-import axios from "axios";
+
+import ListMediaDisplays from "../../../features/fixedContent/MediaDisplays/ListMediaDisplays";
+import CreateMediaDisplay from "../../../features/fixedContent/MediaDisplays/CreateMediaDisplay";
 
 const MediaDisplaysPage = () => {
   const toastId = useRef<Id | null>(null);
@@ -125,6 +130,15 @@ const MediaDisplaysPage = () => {
     }
   };
 
+  const handleUpdateDisplay = (updatedDisplay: MediaDisplayType) => {
+    setMediaDisplayList((prev) => {
+      const updatedList = prev.results.map((medium) =>
+        medium.id === updatedDisplay.id ? updatedDisplay : medium
+      );
+      return { ...prev, results: updatedList };
+    });
+  };
+
   useEffect(() => {
     fetchMediaDisplayList(page, pageSize);
   }, [page, pageSize]);
@@ -152,6 +166,8 @@ const MediaDisplaysPage = () => {
               media={mediaDisplayList.results}
               handleDelete={handleDelete}
               handleUpdatePriority={handleUpdatePriority}
+              handleUpdate={handleUpdateDisplay}
+              handleRefresh={() => fetchMediaDisplayList(page, pageSize)}
             />
           </>
         )}

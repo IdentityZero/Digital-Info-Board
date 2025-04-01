@@ -1,38 +1,36 @@
 import { FaTrash } from "react-icons/fa";
+import IconWithTooltip from "../../../../components/IconWithTooltip";
+import { MediaDisplayType } from "../../../../types/FixedContentTypes";
+import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 
-import { useSortable } from "@dnd-kit/sortable";
-
-import IconWithTooltip from "../../../../components/IconWithTooltip";
-import { OrganizationMembersType } from "../../../../types/FixedContentTypes";
-
 type SortableTableRowProps = {
-  member: OrganizationMembersType;
+  medium: MediaDisplayType;
   isHighlighted: boolean;
   handleDelete: (id: number) => void;
   handleIDClick: (id: number) => void;
 };
 
 const SortableTableRow = ({
-  member,
+  medium,
   isHighlighted = false,
   handleDelete,
   handleIDClick,
 }: SortableTableRowProps) => {
   /**
-   * Sortable Table row for Org Members
+   * Sortable Table row for Media Displays
+   *
    */
   const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id: member.id });
+    useSortable({ id: medium.id });
 
   const style = {
     transform: CSS.Transform.toString(transform),
     transition: transition,
   };
-
   return (
     <tr
-      id={String(member.id)}
+      id={String(medium.id)}
       ref={setNodeRef}
       style={style}
       {...attributes}
@@ -45,30 +43,40 @@ const SortableTableRow = ({
     >
       <td
         className="p-2 border text-center font-bold underline cursor-pointer"
-        onClick={() => handleIDClick(member.id)}
+        onClick={() => handleIDClick(medium.id)}
       >
-        {member.id}
+        {medium.id}
       </td>
       <td className="p-2 border text-center">
-        {member.image ? (
-          <img
-            src={member.image}
-            alt={member.name}
-            className="w-10 h-10 rounded-full object-cover border mx-auto"
-          />
+        {medium.file ? (
+          medium.type === "image" ? (
+            <img
+              src={medium.file}
+              alt={medium.name}
+              className="max-h-[200px] max-w-[300px] mx-auto"
+            />
+          ) : (
+            <video
+              src={medium.file}
+              className="max-h-[200px] max-w-[300px] mx-auto"
+              controls
+            >
+              Not supported.
+            </video>
+          )
         ) : (
-          <span className="text-gray-400">No Image</span>
+          <span className="text-gray-400">No file</span>
         )}
       </td>
-      <td className="p-2 border">{member.name}</td>
-      <td className="p-2 border">{member.position}</td>
+      <td className="p-2 border">{medium.name}</td>
+
       <td className="p-2 text-center">
-        <button onClick={() => handleDelete(member.id)} data-no-dnd={true}>
+        <button className="w-fit h-fit" onClick={() => handleDelete(medium.id)}>
           <IconWithTooltip
             icon={FaTrash}
             label="Delete"
-            iconClassName="text-xl text-red-600 hover:text-red-700 active:text-red-800 cursor-pointer"
-            labelClassName="p-1 px-2 rounded-md shadow-md bg-red-600 text-white text-center"
+            iconClassName="text-xl text-btDanger hover:text-btDanger-hover active: active:text-btDanger-active cursor-pointer"
+            labelClassName="p-1 px-2 rounded-md shadow-md bg-btDanger text-white text-center"
           />
         </button>
       </td>

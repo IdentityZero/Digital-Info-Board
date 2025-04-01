@@ -150,9 +150,9 @@ export default UpdateModal;
 function NotFound({ refreshList }: { refreshList?: () => void }) {
   return (
     <div className="p-6 text-center">
-      <h2 className="text-2xl font-bold text-gray-800">Member Not Found</h2>
+      <h2 className="text-2xl font-bold text-gray-800">Event Not Found</h2>
       <p className="text-gray-600 mt-2">
-        Information about the member is not available.
+        Information about the event is not available.
       </p>
       {refreshList && (
         <div className="mt-2">

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FaExclamationCircle, FaTrash } from "react-icons/fa";
+import { FaExclamationCircle } from "react-icons/fa";
 import { useLocation } from "react-router-dom";
 
 import {
@@ -14,29 +14,32 @@ import {
   arrayMove,
   SortableContext,
   sortableKeyboardCoordinates,
-  useSortable,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
 import { restrictToParentElement } from "@dnd-kit/modifiers";
 
-import IconWithTooltip from "../../../components/IconWithTooltip";
-import ClosableMessage from "../../../components/ClosableMessage";
-import { Button } from "../../../components/ui";
+import ClosableMessage from "../../../../components/ClosableMessage";
+import { Button } from "../../../../components/ui";
 
-import { getChangedObj } from "../../../utils/utils";
-import { MediaDisplayType } from "../../../types/FixedContentTypes";
+import { getChangedObj } from "../../../../utils/utils";
+import { MediaDisplayType } from "../../../../types/FixedContentTypes";
+import SortableTableRow from "./SortableTableRow";
+import UpdateModal from "./UpdateModal";
 
 type ListMediaDisplays = {
   media: MediaDisplayType[];
   handleDelete: (id: number) => void;
   handleUpdatePriority: (arr: MediaDisplayType[]) => void;
+  handleUpdate: (data: MediaDisplayType) => void;
+  handleRefresh: () => void;
 };
 
 const ListMediaDisplays = ({
   media,
   handleDelete,
   handleUpdatePriority,
+  handleUpdate,
+  handleRefresh,
 }: ListMediaDisplays) => {
   const { hash } = useLocation();
   const targetId = hash.substring(1);
@@ -45,6 +48,12 @@ const ListMediaDisplays = ({
   const idExists = items.some((item) => String(item.id) === targetId);
 
   const lowestPriority = Math.min(...items.map((item) => item.priority));
+
+  const [targetUpdateId, setTargetUpdateId] = useState<number | null>(null);
+
+  const handleIDClick = (id: number) => {
+    setTargetUpdateId(id);
+  };
 
   useEffect(() => {
     setItems(media);
@@ -108,8 +117,8 @@ const ListMediaDisplays = ({
             <thead className="bg-gray-200 dark:bg-gray-700">
               <tr>
                 <th className="p-2 border">ID</th>
-                <th className="p-2 border">Name</th>
                 <th className="p-2 border">File</th>
+                <th className="p-2 border">Name</th>
                 <th className="p-2 border">Action</th>
               </tr>
             </thead>
@@ -127,6 +136,7 @@ const ListMediaDisplays = ({
                     medium={medium}
                     handleDelete={handleDelete}
                     key={medium.id}
+                    handleIDClick={handleIDClick}
                   />
                 ))
               )}
@@ -134,76 +144,15 @@ const ListMediaDisplays = ({
           </table>
         </SortableContext>
       </DndContext>
+      {targetUpdateId && (
+        <UpdateModal
+          id={targetUpdateId}
+          onClose={() => setTargetUpdateId(null)}
+          onSuccess={handleUpdate}
+          refreshList={handleRefresh}
+        />
+      )}
     </div>
   );
 };
 export default ListMediaDisplays;
-
-type SortableTableRowProps = {
-  medium: MediaDisplayType;
-  isHighlighted: boolean;
-  handleDelete: (id: number) => void;
-};
-
-function SortableTableRow({
-  medium,
-  isHighlighted = false,
-  handleDelete,
-}: SortableTableRowProps) {
-  const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id: medium.id });
-
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition: transition,
-  };
-  return (
-    <tr
-      id={String(medium.id)}
-      ref={setNodeRef}
-      style={style}
-      {...attributes}
-      {...listeners}
-      className={`border cursor-grab transition-shadow duration-200 ${
-        isHighlighted
-          ? "shadow-[0_0_10px_rgba(0,150,255,0.7)]"
-          : "hover:bg-gray-100 dark:hover:bg-gray-800"
-      }`}
-    >
-      <td className="p-2 border text-center">{medium.id}</td>
-      <td className="p-2 border text-center">
-        {medium.file ? (
-          medium.type === "image" ? (
-            <img
-              src={medium.file}
-              alt={medium.name}
-              className="max-h-[200px] max-w-[300px] mx-auto"
-            />
-          ) : (
-            <video
-              src={medium.file}
-              className="max-h-[200px] max-w-[300px] mx-auto"
-              controls
-            >
-              Not supported.
-            </video>
-          )
-        ) : (
-          <span className="text-gray-400">No file</span>
-        )}
-      </td>
-      <td className="p-2 border">{medium.name}</td>
-
-      <td className="p-2 text-center">
-        <button className="w-fit h-fit" onClick={() => handleDelete(medium.id)}>
-          <IconWithTooltip
-            icon={FaTrash}
-            label="Delete"
-            iconClassName="text-xl text-btDanger hover:text-btDanger-hover active: active:text-btDanger-active cursor-pointer"
-            labelClassName="p-1 px-2 rounded-md shadow-md bg-btDanger text-white text-center"
-          />
-        </button>
-      </td>
-    </tr>
-  );
-}

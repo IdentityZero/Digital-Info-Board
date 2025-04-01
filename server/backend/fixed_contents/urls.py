@@ -14,6 +14,8 @@ urlpatterns = [
         "v1/upcoming-events/<int:pk>/", views.DeleteUpdateUpcomingEventApiView.as_view()
     ),
     path("v1/media-displays/", views.ListCreateMediaDisplaysApiView.as_view()),
-    path("v1/media-displays/<int:pk>/", views.DeleteMediaDisplayApiView.as_view()),
+    path(
+        "v1/media-displays/<int:pk>/", views.DeleteUpdateMediaDisplayApiView.as_view()
+    ),
     path("v1/media-displays/priority-update/", views.update_media_displays_priority),
 ]

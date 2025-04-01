@@ -283,6 +283,42 @@ export const createMediaDisplayApi = async (
   }
 };
 
+export const retrieveMediaDisplayApi = async (
+  axiosInstance: AxiosInstance,
+  id: number
+): Promise<MediaDisplayType> => {
+  try {
+    const response = await axiosInstance.get(
+      FIXED_CONTENT_BASE_ENDPOINT + `v1/media-displays/${id}/`
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw error;
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+export const updateMediaDisplayApi = async (
+  axiosInstance: AxiosInstance,
+  id: number,
+  data: any
+): Promise<MediaDisplayType> => {
+  try {
+    const response = await axiosInstance.patch(
+      FIXED_CONTENT_BASE_ENDPOINT + `v1/media-displays/${id}/`,
+      data
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw error;
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
 export const listPaginatedMediaDisplayApi = async (
   page: number = 1,
   page_size: number = 10

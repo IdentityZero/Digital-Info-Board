@@ -290,7 +290,7 @@ def update_media_displays_priority(request):
     )
 
 
-class DeleteMediaDisplayApiView(generics.DestroyAPIView):
+class DeleteUpdateMediaDisplayApiView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.MediaDisplaysSerializer
     queryset = models.MediaDisplays.objects.all()
     permission_classes = [permissions.IsAuthenticated]
