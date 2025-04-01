@@ -1,4 +1,30 @@
 const AboutPage = () => {
+  const researchers = [
+    {
+      name: "Lea-Jane H. Cascayan",
+      role: "UI/UX Designer",
+      description:
+        "Focused on user experience research, wireframing, prototyping, and visual design",
+    },
+    {
+      name: "Noli Marc Castillo",
+      role: "Backend Developer and Data Management",
+      description: "Focused on backend development and database management.",
+    },
+    {
+      name: "Wistar M. Collado",
+      role: "Frontend Developer and UI/UX Designer",
+      description:
+        "Focused on designing and developing user interfaces, ensuring both usability and functionality",
+    },
+    {
+      name: "Maria Erika M. Alegre",
+      role: "Frontend Developer",
+      description:
+        "Focused on building and optimizing user interfaces with HTML, CSS, and JavaScript frameworks",
+    },
+  ];
+
   return (
     <div className="min-h-screen bg-gray-100 text-gray-900">
       {/* Hero Section */}
@@ -47,25 +73,20 @@ const AboutPage = () => {
       <div className="max-w-6xl mx-auto">
         <h2 className="text-3xl font-bold text-center mb-6">Our Researchers</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 px-6">
-          {[
-            "Lea-Jane H. Cascayan",
-            "Noli Marc Castillo",
-            "Wistar M. Collado",
-            "Maria Erika M. Alegre",
-          ].map((name, index) => (
+          {researchers.map((researcher, index) => (
             <div
               key={index}
               className="bg-white shadow-md rounded-lg p-4 text-center"
             >
               <img
                 src={`https://picsum.photos/150?random=${index + 1}`}
-                alt={name}
+                alt={researcher.name}
                 className="w-32 h-32 rounded-full mx-auto object-cover mb-4"
               />
-              <h3 className="text-xl font-bold">{name}</h3>
-              <p className="text-gray-600">Software Developer</p>
+              <h3 className="text-xl font-bold">{researcher.name}</h3>
+              <p className="text-gray-600">{researcher.role}</p>
               <p className="text-gray-500 text-sm mt-2">
-                Focused on backend development and database management.
+                {researcher.description}
               </p>
             </div>
           ))}
