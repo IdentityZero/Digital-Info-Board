@@ -1,7 +1,7 @@
 import { useLocation, Link } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { IconType } from "react-icons";
-import { FaUser, FaPowerOff, FaBell, FaSearch } from "react-icons/fa";
+import { FaUser, FaPowerOff, FaBell } from "react-icons/fa";
 
 import { extractUrlname } from "../../utils/formatters";
 import { useAuth } from "../../context/AuthProvider";
@@ -97,10 +97,6 @@ const DashboardTopbar = () => {
                 )}
               </ul>
             </Dropdown>
-
-            <div className="text-white bg-darkTeal p-3 rounded-full text-xl transition-transform duration-300 hover:scale-110">
-              <FaSearch />
-            </div>
           </div>
         </div>
       )}

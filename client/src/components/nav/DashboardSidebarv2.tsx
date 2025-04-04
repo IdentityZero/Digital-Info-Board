@@ -25,7 +25,7 @@ const DashboardSidebarv2 = ({ menuData }: { menuData: MenuType[] }) => {
           </p>
         </div>
         <button
-          className=" hover:bg-[#0B3536] rounded-lg p-1.5"
+          className=" hover:bg-gray-300 rounded-lg p-1.5"
           onClick={() => setIsExpanded(!isExpanded)}
         >
           {isExpanded ? <FaChevronLeft /> : <FaChevronRight />}

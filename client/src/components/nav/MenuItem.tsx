@@ -38,8 +38,8 @@ const MenuItem = ({
   return (
     <li className="relative group">
       <div
-        className={`w-full mb-2 flex h-14 flex-row items-center hover:bg-lightBlue-500 active:bg-lightBlue-600${
-          isItemActive && "font-bold bg-lightBlue"
+        className={`w-full mb-2 flex h-14 flex-row items-center hover:bg-[#B0D4FF] active:bg-[#70B8FF] ${
+          isItemActive && "font-bold bg-[#DCEEFF]"
         } ${
           isItemActive &&
           isChildrenDisplayed &&
