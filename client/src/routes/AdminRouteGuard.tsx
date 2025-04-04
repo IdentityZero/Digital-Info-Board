@@ -2,9 +2,9 @@ import { PropsWithChildren } from "react";
 import { useAuth } from "../context/AuthProvider";
 import { Link, Navigate } from "react-router-dom";
 
-type AdminRoutes = PropsWithChildren;
+type AdminRouteGuard = PropsWithChildren;
 
-const AdminRoutes = ({ children }: PropsWithChildren) => {
+const AdminRouteGuard = ({ children }: PropsWithChildren) => {
   const { user } = useAuth();
 
   if (!user) {
@@ -35,4 +35,4 @@ const AdminRoutes = ({ children }: PropsWithChildren) => {
 
   return <>{children}</>;
 };
-export default AdminRoutes;
+export default AdminRouteGuard;
