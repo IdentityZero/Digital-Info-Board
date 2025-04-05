@@ -173,7 +173,7 @@ class ListCreateUpcomingEventApiView(generics.ListCreateAPIView):
             )
             create_notification_for_admins(
                 self.request.user,
-                f"An upcoming event entitled, {response.data["name"]} on {formatted_date}, is added to Upcoming events default displays. Check it out",
+                f"An upcoming event entitled, {response.data['name']} on {formatted_date}, is added to Upcoming events default displays. Check it out",
                 action="upcoming_event_added",
                 target_id=response.data["id"],
             )
