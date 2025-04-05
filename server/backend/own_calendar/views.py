@@ -33,7 +33,7 @@ class ListCreateCalendarEventApiView(generics.ListCreateAPIView):
 
             create_notification_for_admins(
                 self.request.user,
-                f"Calendar event entitled, {response.data["title"]} on {start_date} to {end_date} is added. Check it out.",
+                f"Calendar event entitled, {response.data['title']} on {start_date} to {end_date} is added. Check it out.",
                 action="calendar_event_added",
                 target_id=response.data["id"],
             )
@@ -88,7 +88,7 @@ class UpdateDeleteCalendarEventApiView(generics.RetrieveUpdateDestroyAPIView):
 
         create_notification_for_admins(
             self.request.user,
-            f"Calendar event entitled, {response.data["title"]} on {start_date} to {end_date} is updated. Check it out.",
+            f"Calendar event entitled, {response.data['title']} on {start_date} to {end_date} is updated. Check it out.",
             action="calendar_event_updated",
             target_id=response.data["id"],
         )
