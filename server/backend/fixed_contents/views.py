@@ -1,6 +1,9 @@
 from datetime import datetime
+import requests
 
 from django.db import transaction
+from django.http import JsonResponse
+from django.conf import settings
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 from rest_framework import generics, permissions, status
@@ -307,3 +310,11 @@ class DeleteUpdateMediaDisplayApiView(generics.RetrieveUpdateDestroyAPIView):
             )
 
         return response
+
+
+def get_weather_data(request):
+    key = settings.VITE_WEATHER_API_KEY
+    URL = f"https://api.weatherapi.com/v1/forecast.json?key={key}&q=Laoag&days=5"
+    response = requests.get(URL)
+
+    return JsonResponse(response.json())

@@ -46,12 +46,9 @@ CSRF_TRUSTED_ORIGINS = [
     "http://localhost:5173",
 ]
 
-if not DEBUG:
-    raise NotImplementedError("Check for RESTFRAMEWORK BASIC AUTHENTICATION")
-
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework.authentication.BasicAuthentication",  # Remove this in production
+        "rest_framework.authentication.BasicAuthentication",
         "rest_framework_simplejwt.authentication.JWTAuthentication",
         "rest_framework.authentication.SessionAuthentication",
     ),
@@ -207,4 +204,7 @@ DEFAULT_FROM_EMAIL = os.getenv("EMAIL_HOST_USER")
 GOOGLE_CALENDAR_CREDENTIALS_LOC = os.getenv("GAPI_JSON_CREDENTIALS_LOC")
 GOOGLE_CALENDAR_ID = os.getenv("CALENDAR_ID")
 
-FRONTEND_DOMAIN = os.getenv("FRONTEND_DOMAIN")  # MUST CONTAIN PROTOCOL
+FRONTEND_DOMAIN = (
+    os.getenv("FRONTEND_DOMAIN") if DEBUG else ""
+)  # MUST CONTAIN PROTOCOL during debugging
+VITE_WEATHER_API_KEY = os.getenv("VITE_WEATHER_API_KEY")

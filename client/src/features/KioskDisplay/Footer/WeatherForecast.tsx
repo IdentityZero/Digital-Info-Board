@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import LoadingMessage from "../../../components/LoadingMessage";
 import { getNextFiveHours } from "../../../utils/utils";
 import {
   HourlyForecastType,
   WeatherForecastType,
 } from "../../../types/FixedContentTypes";
+import { getWeatherDataApi } from "../../../api/fixedContentRquests";
 
 const WeatherForecast = () => {
   const [weatherInfo, setWeatherInfo] = useState<
@@ -14,21 +14,16 @@ const WeatherForecast = () => {
   const [hourlyInfo, setHourlyInfo] = useState<HourlyForecastType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const key = import.meta.env.VITE_WEATHER_API_KEY;
-
-  const url = `https://api.weatherapi.com/v1/forecast.json?key=${key}&q=Laoag&days=5`;
-
   const fetchWeatherInfo = () => {
     let delay = 1000;
 
     const retryFetch = async () => {
       try {
         setIsLoading(true);
-        const res = await axios.get(url);
-        const data: WeatherForecastType = res.data;
+        const res_data: WeatherForecastType = await getWeatherDataApi();
 
-        setHourlyInfo(getNextFiveHours(data.forecast.forecastday[0].hour));
-        setWeatherInfo(data);
+        setHourlyInfo(getNextFiveHours(res_data.forecast.forecastday[0].hour));
+        setWeatherInfo(res_data);
       } catch (error) {
         delay = Math.min(delay * 2, 30000);
         setTimeout(retryFetch, delay);

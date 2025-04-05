@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
+
+import { getNextFiveHours } from "../../../utils/utils";
 import {
   HourlyForecastType,
   WeatherForecastType,
 } from "../../../types/FixedContentTypes";
-import axios from "axios";
-import { getNextFiveHours } from "../../../utils/utils";
+import { getWeatherDataApi } from "../../../api/fixedContentRquests";
 
 const WebDisplayWeatherForecast = () => {
   const [weatherInfo, setWeatherInfo] = useState<
@@ -12,18 +13,12 @@ const WebDisplayWeatherForecast = () => {
   >(undefined);
   const [hourlyInfo, setHourlyInfo] = useState<HourlyForecastType[]>([]);
 
-  const key = import.meta.env.VITE_WEATHER_API_KEY;
-
-  const url = `https://api.weatherapi.com/v1/forecast.json?key=${key}&q=Laoag&days=5`;
-
   useEffect(() => {
     const fetchWeatherInfo = async () => {
       try {
-        const res = await axios.get(url);
-        const data: WeatherForecastType = res.data;
-
-        setHourlyInfo(getNextFiveHours(data.forecast.forecastday[0].hour));
-        setWeatherInfo(data);
+        const res_data: WeatherForecastType = await getWeatherDataApi();
+        setHourlyInfo(getNextFiveHours(res_data.forecast.forecastday[0].hour));
+        setWeatherInfo(res_data);
       } catch (error) {}
     };
     fetchWeatherInfo();

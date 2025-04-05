@@ -387,3 +387,21 @@ export const deleteMediaDisplayApi = async (
 };
 
 // #endregion
+
+// #region Topic: Weather
+
+export const getWeatherDataApi = async () => {
+  try {
+    const response = await axios.get(
+      FIXED_CONTENT_BASE_ENDPOINT + "v1/weather-data/"
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw error;
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+// #endregion
