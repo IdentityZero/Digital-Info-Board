@@ -224,7 +224,7 @@ class ListCreateMediaDisplaysApiView(generics.ListCreateAPIView):
         if response.status_code in [200, 201]:
             create_notification_for_admins(
                 self.request.user,
-                f"New media display, {response.data["name"]}, is added to Media default displays. Check it out",
+                f"New media display, {response.data['name']}, is added to Media default displays. Check it out",
                 action="media_display_added",
                 target_id=response.data["id"],
             )
