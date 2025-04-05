@@ -40,7 +40,7 @@ class ListCreateOrgMembersApiView(generics.ListCreateAPIView):
         if response.status_code in [200, 201]:
             create_notification_for_admins(
                 self.request.user,
-                f"New member, {response.data["name"]} as {response.data["position"]}, is added to Organization default displays. Check it out",
+                f"New member, {response.data['name']} as {response.data['position']}, is added to Organization default displays. Check it out",
                 action="organization_member_added",
                 target_id=response.data["id"],
             )
