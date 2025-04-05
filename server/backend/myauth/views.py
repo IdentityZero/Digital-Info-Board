@@ -85,10 +85,10 @@ class CookieBasedTokenRefreshViewV1(TokenRefreshView):
 # TODO. DO THIS BETTER
 @csrf_exempt
 def delete_cookie_view(request):
-    if not settings.DEBUG:
-        raise NotImplementedError(
-            "Delete cookie is not good. I dont know why I cant delete the cookie"
-        )
+    # if not settings.DEBUG:
+    #     raise NotImplementedError(
+    #         "Delete cookie is not good. I dont know why I cant delete the cookie"
+    #     )
     response = HttpResponse("Cookie has been deleted!")
     response.set_cookie(
         key="token",
