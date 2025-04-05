@@ -17,7 +17,7 @@ import {
 } from "../../../api/fixedContentRquests";
 
 import CreateEvent from "../../../features/fixedContent/Events/CreateEvent";
-import ListEvents from "../../../features/fixedContent/Events/ListEvents";
+import ListEvents from "../../../features/fixedContent/Events/Listevents";
 
 const UpcomingEventsPage = () => {
   // Todo: Error state, loading state, add list, remove list on delete

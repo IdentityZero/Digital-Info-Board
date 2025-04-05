@@ -10,7 +10,7 @@ import KioskLayout from "../layouts/KioskLayout";
 import KioskDisplayPage from "../pages/public/KioskDisplayPage";
 import ProtectedRouteGuard from "./ProtectedRouteGuard";
 import DashboardLayout from "../layouts/DashboardLayout";
-import protectedRoutes from "./protectedRoutes";
+import protectedRoutes from "./ProtectedRoutes";
 import { NotFoundPage } from "../pages/public";
 
 const router = createBrowserRouter(
