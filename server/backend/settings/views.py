@@ -60,7 +60,7 @@ class RetrieveUpdateSettingsApiView(generics.RetrieveUpdateAPIView):
         if response.status_code in [200, 204]:
             create_notification_for_admins(
                 self.request.user,
-                f"{"Calendar" if is_calendar_settings_edited else "Default display"} settings was updated. Check it out.",
+                f"{'Calendar' if is_calendar_settings_edited else 'Default display'} settings was updated. Check it out.",
                 action,
             )
 
