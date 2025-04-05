@@ -21,14 +21,14 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
-    path("auth/", include("myauth.urls")),
-    path("users/", include("users.urls")),
-    path("announcements/", include("announcements.urls")),
-    path("fixed-contents/", include("fixed_contents.urls")),
-    path("settings/", include("settings.urls")),
-    path("notifications/", include("notifications.urls")),
-    path("calendar/", include("own_calendar.urls")),
+    path("api/admin/", admin.site.urls),
+    path("api/auth/", include("myauth.urls")),
+    path("api/users/", include("users.urls")),
+    path("api/announcements/", include("announcements.urls")),
+    path("api/fixed-contents/", include("fixed_contents.urls")),
+    path("api/settings/", include("settings.urls")),
+    path("api/notifications/", include("notifications.urls")),
+    path("api/calendar/", include("own_calendar.urls")),
 ]
 
 if settings.DEBUG:
