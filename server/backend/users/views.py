@@ -52,6 +52,7 @@ class CreateUserView(generics.CreateAPIView):
     permission_classes = [AllowAny]
 
     def create(self, request, *args, **kwargs):
+        # bypass if no users yet
         if Profile.objects.count() == 0:
             return super().create(request, *args, **kwargs)
 

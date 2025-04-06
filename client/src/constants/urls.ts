@@ -1,7 +1,7 @@
 const BASE_API_URL_VALUE = import.meta.env.VITE_API_BASE_URL;
 
-const protocol = BASE_API_URL_VALUE ? "ws://" : "wss://";
-const httpProtocol = BASE_API_URL_VALUE ? "http://" : "";
+const protocol = BASE_API_URL_VALUE ? "ws://" : "ws://";
+const httpProtocol = BASE_API_URL_VALUE ? "http://" : "http://";
 
 export const BASE_API_URL = BASE_API_URL_VALUE || window.location.host + "/api";
 
@@ -12,6 +12,7 @@ export const LIVE_CONTENT_UPDATE_URL =
   protocol + BASE_API_URL + "/ws/live-content-updates/";
 
 export const SITE_SETTINGS_URL = httpProtocol + BASE_API_URL + "/settings/";
+console.log("Site settings url: ", SITE_SETTINGS_URL);
 
 export const FIELD_DEVICES_URL = protocol + BASE_API_URL + "/ws/field-devices/";
 
