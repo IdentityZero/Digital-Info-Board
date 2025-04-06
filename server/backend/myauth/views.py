@@ -32,14 +32,12 @@ class TokenObtainPairViewV1(TokenObtainPairView):
 
         # raise NotImplementedError("Read more about this topic")
         response.set_cookie(
-            key="token",  # Name of the cookie
-            value=refresh,  # Value of the cookie
-            max_age=3600,  # Optional: cookie expiry in seconds (1 hour here)
-            httponly=True,  # Optional, prevents JS access
-            secure=True,  # For HTTPS environments
-            samesite=(
-                "Lax" if not settings.DEBUG else "None"
-            ),  # Adjust as needed, often for cross-site setups
+            key="token",
+            value=refresh,
+            max_age=3600,
+            httponly=True,
+            secure=False,
+            samesite=("Lax" if not settings.DEBUG else "None"),
         )
 
         return response
@@ -68,7 +66,7 @@ class CookieBasedTokenRefreshViewV1(TokenRefreshView):
                 value="",
                 max_age=5,
                 httponly=True,
-                secure=True,
+                secure=False,
                 samesite="Lax" if not settings.DEBUG else "None",
             )
             return response
@@ -97,7 +95,7 @@ def delete_cookie_view(request):
         value="",
         max_age=5,
         httponly=True,
-        secure=True,
+        secure=False,
         samesite="Lax" if not settings.DEBUG else "None",
     )
 
