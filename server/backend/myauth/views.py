@@ -34,7 +34,7 @@ class TokenObtainPairViewV1(TokenObtainPairView):
         response.set_cookie(
             key="token",
             value=refresh,
-            max_age=3600,
+            max_age=86400,
             httponly=True,
             secure=settings.DEBUG,
             samesite=("Lax" if not settings.DEBUG else "None"),
