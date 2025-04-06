@@ -26,7 +26,7 @@ export const updateSystemSettingsApi = async (
    * On success, it will only return the key you updated.
    */
   try {
-    const response = await axiosInstance.patch(SITE_SETTINGS_URL + `v1/`, data);
+    const response = await axiosInstance.patch(`settings/v1/`, data);
     return response.data;
   } catch (error) {
     showApiError("Update System Settings Error: ", error);

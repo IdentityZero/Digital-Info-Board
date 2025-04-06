@@ -36,7 +36,7 @@ class TokenObtainPairViewV1(TokenObtainPairView):
             value=refresh,
             max_age=3600,
             httponly=True,
-            secure=False,
+            secure=settings.DEBUG,
             samesite=("Lax" if not settings.DEBUG else "None"),
         )
 
@@ -66,7 +66,7 @@ class CookieBasedTokenRefreshViewV1(TokenRefreshView):
                 value="",
                 max_age=5,
                 httponly=True,
-                secure=False,
+                secure=settings.DEBUG,
                 samesite="Lax" if not settings.DEBUG else "None",
             )
             return response
@@ -95,7 +95,7 @@ def delete_cookie_view(request):
         value="",
         max_age=5,
         httponly=True,
-        secure=False,
+        secure=settings.DEBUG,
         samesite="Lax" if not settings.DEBUG else "None",
     )
 
