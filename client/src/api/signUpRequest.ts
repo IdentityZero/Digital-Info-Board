@@ -1,6 +1,7 @@
 import axios from "axios";
 import { BASE_API_URL } from "../constants/urls";
 import { RetrieveUserInvitationType } from "../types/UserTypes";
+import { showApiError } from "../utils/utils";
 
 export const createNewUserApi = async (user: {
   [k: string]: FormDataEntryValue;
@@ -17,6 +18,8 @@ export const createNewUserApi = async (user: {
     );
     return response.data;
   } catch (error) {
+    showApiError("Create New User Error: ", error);
+
     if (axios.isAxiosError(error)) {
       throw error;
     }
@@ -34,6 +37,7 @@ export const retrieveInvitationDetailsApi = async (
     );
     return response.data;
   } catch (error) {
+    showApiError("Retrieve Invitation Details Error: ", error);
     if (axios.isAxiosError(error)) {
       throw error;
     }

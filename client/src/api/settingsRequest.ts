@@ -1,4 +1,7 @@
 import axios, { AxiosInstance } from "axios";
+
+import { showApiError } from "../utils/utils";
+
 import { SITE_SETTINGS_URL } from "../constants/urls";
 import { SettingsType } from "../types/SettingTypes";
 
@@ -7,6 +10,7 @@ export const listSystemSettingsApi = async (): Promise<SettingsType> => {
     const response = await axios.get(SITE_SETTINGS_URL + "v1/");
     return response.data;
   } catch (error) {
+    showApiError("List System Settings Error: ", error);
     if (axios.isAxiosError(error)) {
       throw error;
     }
@@ -25,6 +29,7 @@ export const updateSystemSettingsApi = async (
     const response = await axiosInstance.patch(SITE_SETTINGS_URL + `v1/`, data);
     return response.data;
   } catch (error) {
+    showApiError("Update System Settings Error: ", error);
     if (axios.isAxiosError(error)) {
       throw error;
     }

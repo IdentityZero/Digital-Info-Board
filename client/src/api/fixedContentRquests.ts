@@ -8,6 +8,7 @@ import {
   UpcomingEventType,
   type OrganizationMembersType,
 } from "../types/FixedContentTypes";
+import { showApiError } from "../utils/utils";
 
 /**
  * BASE_ENDPOINT is only used when not using the users api
@@ -16,7 +17,6 @@ import {
 const BASE_ENDPOINT = "http://" + BASE_API_URL + "/";
 
 const FIXED_CONTENT_BASE_ENDPOINT = BASE_ENDPOINT + "fixed-contents/";
-
 // #region Topic : Organization Members
 
 export const createOrgMembersApi = async (
@@ -36,9 +36,8 @@ export const createOrgMembersApi = async (
 
     return response.data;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw error;
-    }
+    showApiError("Create Org Member Error:", error);
+    if (axios.isAxiosError(error)) throw error;
     throw new Error("An unexpected error occurred");
   }
 };
@@ -53,9 +52,8 @@ export const retrieveOrgMemberApi = async (
     );
     return response.data;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw error;
-    }
+    showApiError("Retrieve Org Member Error:", error);
+    if (axios.isAxiosError(error)) throw error;
     throw new Error("An unexpected error occurred");
   }
 };
@@ -72,9 +70,8 @@ export const updateOrgMemberApi = async (
     );
     return response.data;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw error;
-    }
+    showApiError("Update Org Member Error:", error);
+    if (axios.isAxiosError(error)) throw error;
     throw new Error("An unexpected error occurred");
   }
 };
@@ -90,9 +87,8 @@ export const listPaginatedOrgMembersApi = async (
     );
     return response.data;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw error;
-    }
+    showApiError("List Paginated Org Members Error:", error);
+    if (axios.isAxiosError(error)) throw error;
     throw new Error("An unexpected error occurred");
   }
 };
@@ -106,9 +102,8 @@ export const listOrgmembersApi = async (): Promise<
     );
     return response.data;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw error;
-    }
+    showApiError("List Active Org Members Error:", error);
+    if (axios.isAxiosError(error)) throw error;
     throw new Error("An unexpected error occurred");
   }
 };
@@ -118,15 +113,14 @@ export const updateOrgMemberPriorityApi = async (
   data: { id: number; priority: number }[]
 ) => {
   try {
-    const response = axiosInstance.put(
+    const response = await axiosInstance.put(
       FIXED_CONTENT_BASE_ENDPOINT + "v1/org-members/priority-update/",
       data
     );
-    return (await response).data;
+    return response.data;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw error;
-    }
+    showApiError("Update Org Member Priority Error:", error);
+    if (axios.isAxiosError(error)) throw error;
     throw new Error("An unexpected error occurred");
   }
 };
@@ -141,9 +135,8 @@ export const deleteOrgMemberApi = async (
     );
     return response.data;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw error;
-    }
+    showApiError("Delete Org Member Error:", error);
+    if (axios.isAxiosError(error)) throw error;
     throw new Error("An unexpected error occurred");
   }
 };
@@ -163,9 +156,8 @@ export const createUpcomingEventApi = async (
     );
     return response.data;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw error;
-    }
+    showApiError("Create Upcoming Event Error:", error);
+    if (axios.isAxiosError(error)) throw error;
     throw new Error("An unexpected error occurred");
   }
 };
@@ -180,9 +172,8 @@ export const retrieveUpcomingEventApi = async (
     );
     return response.data;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw error;
-    }
+    showApiError("Retrieve Upcoming Event Error:", error);
+    if (axios.isAxiosError(error)) throw error;
     throw new Error("An unexpected error occurred");
   }
 };
@@ -199,9 +190,8 @@ export const updateUpcomingEventApi = async (
     );
     return response.data;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw error;
-    }
+    showApiError("Update Upcoming Event Error:", error);
+    if (axios.isAxiosError(error)) throw error;
     throw new Error("An unexpected error occurred");
   }
 };
@@ -217,9 +207,8 @@ export const listPaginatedUpcomingEventsApi = async (
     );
     return response.data;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw error;
-    }
+    showApiError("List Paginated Upcoming Events Error:", error);
+    if (axios.isAxiosError(error)) throw error;
     throw new Error("An unexpected error occurred");
   }
 };
@@ -231,9 +220,8 @@ export const listUpcomingEventsApi = async (): Promise<UpcomingEventType[]> => {
     );
     return response.data;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw error;
-    }
+    showApiError("List Active Upcoming Events Error:", error);
+    if (axios.isAxiosError(error)) throw error;
     throw new Error("An unexpected error occurred");
   }
 };
@@ -248,9 +236,8 @@ export const deleteUpcomingEventApi = async (
     );
     return response.data;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw error;
-    }
+    showApiError("Delete Upcoming Event Error:", error);
+    if (axios.isAxiosError(error)) throw error;
     throw new Error("An unexpected error occurred");
   }
 };
@@ -276,9 +263,8 @@ export const createMediaDisplayApi = async (
 
     return response.data;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw error;
-    }
+    showApiError("Create Media Display Error:", error);
+    if (axios.isAxiosError(error)) throw error;
     throw new Error("An unexpected error occurred");
   }
 };
@@ -293,9 +279,8 @@ export const retrieveMediaDisplayApi = async (
     );
     return response.data;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw error;
-    }
+    showApiError("Retrieve Media Display Error:", error);
+    if (axios.isAxiosError(error)) throw error;
     throw new Error("An unexpected error occurred");
   }
 };
@@ -312,9 +297,8 @@ export const updateMediaDisplayApi = async (
     );
     return response.data;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw error;
-    }
+    showApiError("Update Media Display Error:", error);
+    if (axios.isAxiosError(error)) throw error;
     throw new Error("An unexpected error occurred");
   }
 };
@@ -330,9 +314,8 @@ export const listPaginatedMediaDisplayApi = async (
     );
     return response.data;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw error;
-    }
+    showApiError("List Paginated Media Displays Error:", error);
+    if (axios.isAxiosError(error)) throw error;
     throw new Error("An unexpected error occurred");
   }
 };
@@ -344,9 +327,8 @@ export const listMediaDisplaysApi = async (): Promise<MediaDisplayType[]> => {
     );
     return response.data;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw error;
-    }
+    showApiError("List Media Displays Error:", error);
+    if (axios.isAxiosError(error)) throw error;
     throw new Error("An unexpected error occurred");
   }
 };
@@ -356,15 +338,14 @@ export const updateMediaDisplaysPriorityApi = async (
   data: { id: number; priority: number }[]
 ) => {
   try {
-    const response = axiosInstance.put(
+    const response = await axiosInstance.put(
       FIXED_CONTENT_BASE_ENDPOINT + "v1/media-displays/priority-update/",
       data
     );
-    return (await response).data;
+    return response.data;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw error;
-    }
+    showApiError("Update Media Display Priority Error:", error);
+    if (axios.isAxiosError(error)) throw error;
     throw new Error("An unexpected error occurred");
   }
 };
@@ -379,9 +360,8 @@ export const deleteMediaDisplayApi = async (
     );
     return response.data;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw error;
-    }
+    showApiError("Delete Media Display Error:", error);
+    if (axios.isAxiosError(error)) throw error;
     throw new Error("An unexpected error occurred");
   }
 };
@@ -397,9 +377,8 @@ export const getWeatherDataApi = async () => {
     );
     return response.data;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw error;
-    }
+    showApiError("Get Weather Data Error:", error);
+    if (axios.isAxiosError(error)) throw error;
     throw new Error("An unexpected error occurred");
   }
 };

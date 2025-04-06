@@ -2,6 +2,7 @@ import axios, { AxiosInstance } from "axios";
 
 import { BASE_API_URL } from "../constants/urls";
 import { CalendarEventType } from "../types/FixedContentTypes";
+import { showApiError } from "../utils/utils";
 
 const BASE_ENDPOINT = "http://" + BASE_API_URL + "/";
 
@@ -18,6 +19,7 @@ export const createEventApi = async (
     );
     return response.data;
   } catch (error) {
+    showApiError("Create Event Error: ", error);
     if (axios.isAxiosError(error)) {
       throw error;
     }
@@ -36,6 +38,7 @@ export const createCalendarEventApi = async (
     );
     return response.data;
   } catch (error) {
+    showApiError("Create Calendar Event Error: ", error);
     if (axios.isAxiosError(error)) {
       throw error;
     }
@@ -48,6 +51,7 @@ export const listCalendarEventsApi = async (): Promise<CalendarEventType[]> => {
     const response = await axios.get(CALENDAR_BASE_ENDPOINT + "v1/");
     return response.data;
   } catch (error) {
+    showApiError("List Calendar Events Error: ", error);
     if (axios.isAxiosError(error)) {
       throw error;
     }
@@ -67,6 +71,7 @@ export const updateCalendarEventApi = async (
     );
     return response.data;
   } catch (error) {
+    showApiError("Update Calendar Event Error: ", error);
     if (axios.isAxiosError(error)) {
       throw error;
     }
@@ -84,6 +89,7 @@ export const deleteCalendarEventApi = async (
     );
     return response.data;
   } catch (error) {
+    showApiError("Delete Calendar Event Error: ", error);
     if (axios.isAxiosError(error)) {
       throw error;
     }

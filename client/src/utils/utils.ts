@@ -283,3 +283,12 @@ export function sortItemsByPosition<T extends { id: string | number }>(
     return posA - posB;
   });
 }
+
+export const showApiError = (message: string, error: any) => {
+  const VITE_SHOW_API_ERROR =
+    (import.meta.env.VITE_SHOW_API_ERROR ?? "false") === "true";
+
+  if (!VITE_SHOW_API_ERROR) return;
+
+  console.log(message, error);
+};

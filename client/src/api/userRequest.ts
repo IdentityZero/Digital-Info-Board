@@ -7,6 +7,7 @@ import {
   ListUserType,
 } from "../types/UserTypes";
 import { BASE_API_URL } from "../constants/urls";
+import { showApiError } from "../utils/utils";
 
 const retrieveUpdateUserInformationEndpoint = (id: string) => {
   return `users/v1/account/${id}/`;
@@ -31,6 +32,7 @@ export const retrieveUserInformation = async (
     );
     return response.data;
   } catch (error) {
+    showApiError("Retrieve User Information Error: ", error);
     if (axios.isAxiosError(error)) {
       throw error;
     }
@@ -53,6 +55,7 @@ export const updateUserInformationApi = async (
     );
     return response.data;
   } catch (error) {
+    showApiError("Update User Information Error: ", error);
     if (axios.isAxiosError(error)) {
       throw error;
     }
@@ -68,6 +71,7 @@ export const resetPasswordApi = async (email: string) => {
     );
     return response.data;
   } catch (error) {
+    showApiError("Reset Password Error: ", error);
     if (axios.isAxiosError(error)) {
       throw error;
     }
@@ -90,6 +94,7 @@ export const resetPasswordConfirmApi = async (
     );
     return response.data;
   } catch (error) {
+    showApiError("Reset Password Confirm Error: ", error);
     if (axios.isAxiosError(error)) {
       throw error;
     }
@@ -108,6 +113,7 @@ export const addUserEmailApi = async (
     );
     return response.data;
   } catch (error) {
+    showApiError("Add User Email Error: ", error);
     if (axios.isAxiosError(error)) {
       throw error;
     }
@@ -130,6 +136,7 @@ export const verifyEmailCodeApi = async (
     );
     return response.data;
   } catch (error) {
+    showApiError("Verify Email Code Error: ", error);
     if (axios.isAxiosError(error)) {
       throw error;
     }
@@ -138,13 +145,11 @@ export const verifyEmailCodeApi = async (
 };
 
 export const listInactiveUsersApi = async (axiosInstance: AxiosInstance) => {
-  /**
-   * Not in use. Remove this comment if will be used.
-   */
   try {
     const response = await axiosInstance.get(listInactiveUsersEndpoint);
     return response.data;
   } catch (error) {
+    showApiError("List Inactive Users Error: ", error);
     if (axios.isAxiosError(error)) {
       throw error;
     }
@@ -167,6 +172,7 @@ export const updateUserActiveStatusApi = async (
     );
     return response.data;
   } catch (error) {
+    showApiError("Update User Active Status Error: ", error);
     if (axios.isAxiosError(error)) {
       throw error;
     }
@@ -184,6 +190,7 @@ export const deleteUserApi = async (
     );
     return response.data;
   } catch (error) {
+    showApiError("Delete User Error: ", error);
     if (axios.isAxiosError(error)) {
       throw error;
     }
@@ -202,6 +209,7 @@ export const listAllUsersApi = async (
     );
     return response.data;
   } catch (error) {
+    showApiError("List All Users Error: ", error);
     if (axios.isAxiosError(error)) {
       throw error;
     }
@@ -224,6 +232,7 @@ export const updateUserPasswordApi = async (
     );
     return response.data;
   } catch (error) {
+    showApiError("Update User Password Error: ", error);
     if (axios.isAxiosError(error)) {
       throw error;
     }
@@ -242,6 +251,7 @@ export const createUserInvitationApi = async (
     );
     return response.data;
   } catch (error) {
+    showApiError("Create User Invitation Error: ", error);
     if (axios.isAxiosError(error)) {
       throw error;
     }
@@ -260,6 +270,7 @@ export const listUserInvitationsApi = async (
     );
     return response.data;
   } catch (error) {
+    showApiError("List User Invitations Error: ", error);
     if (axios.isAxiosError(error)) {
       throw error;
     }
@@ -277,6 +288,7 @@ export const deleteUserInvitationApi = async (
     );
     return response.data;
   } catch (error) {
+    showApiError("Delete User Invitation Error: ", error);
     if (axios.isAxiosError(error)) {
       throw error;
     }
@@ -294,6 +306,7 @@ export const resendUserInvitationApi = async (
     );
     return response.data;
   } catch (error) {
+    showApiError("Resend User Invitation Error: ", error);
     if (axios.isAxiosError(error)) {
       throw error;
     }

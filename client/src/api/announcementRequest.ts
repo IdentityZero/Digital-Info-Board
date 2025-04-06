@@ -7,6 +7,7 @@ import {
   type PaginatedAnnouncementListTypeV1,
 } from "../types/AnnouncementTypes";
 import { BASE_API_URL } from "../constants/urls";
+import { showApiError } from "../utils/utils";
 
 /**
  * BASE_ENDPOINT is only used when not using the users api
@@ -48,6 +49,7 @@ export const listActiveAnnouncementApi =
       );
       return response.data;
     } catch (error) {
+      showApiError("List Active Announcement Error: ", error);
       if (axios.isAxiosError(error)) {
         throw error;
       }
@@ -68,6 +70,7 @@ export const listStatBasedAnnouncementApi = async (
     );
     return response.data;
   } catch (error) {
+    showApiError("List Status-Based Announcement Error: ", error);
     if (axios.isAxiosError(error)) {
       throw error;
     }
@@ -79,12 +82,6 @@ export const createNewAllTypeAnnouncementApi = async (
   axiosInstance: AxiosInstance,
   data: any
 ) => {
-  /**
-   * This endpoint supports all types of Content
-   * Text
-   * Image
-   * Video
-   */
   try {
     const response = await axiosInstance.post(
       listCreateAllTypeAnnouncementEndpoint,
@@ -95,9 +92,9 @@ export const createNewAllTypeAnnouncementApi = async (
         },
       }
     );
-
     return response.data;
   } catch (error) {
+    showApiError("Create New All-Type Announcement Error: ", error);
     if (axios.isAxiosError(error)) {
       throw error;
     }
@@ -120,6 +117,7 @@ export const updateAnnouncementApi = async (
     );
     return response.data;
   } catch (error) {
+    showApiError("Update Announcement Error: ", error);
     if (axios.isAxiosError(error)) {
       throw error;
     }
@@ -138,6 +136,7 @@ export const listTextAnnouncementApi = async (
     );
     return response.data;
   } catch (error) {
+    showApiError("List Text Announcement Error: ", error);
     if (axios.isAxiosError(error)) {
       throw error;
     }
@@ -153,9 +152,9 @@ export const deleteTextAnnouncementApi = async (
     const response = await axiosInstance.delete(
       deleteRetrieveAnnouncementEndpoint(announcement_id)
     );
-
     return response.data;
   } catch (error) {
+    showApiError("Delete Text Announcement Error: ", error);
     if (axios.isAxiosError(error)) {
       throw error;
     }
@@ -173,6 +172,7 @@ export const retrieveTextAnnouncementApi = async (
     );
     return response.data;
   } catch (error) {
+    showApiError("Retrieve Text Announcement Error: ", error);
     if (axios.isAxiosError(error)) {
       throw error;
     }
@@ -195,6 +195,7 @@ export const updateTextAnnouncementApi = async (
     );
     return response.data;
   } catch (error) {
+    showApiError("Update Text Announcement Error: ", error);
     if (axios.isAxiosError(error)) {
       throw error;
     }
@@ -213,6 +214,7 @@ export const listImageAnnouncementApi = async (
     );
     return response.data;
   } catch (error) {
+    showApiError("List Image Announcement Error: ", error);
     if (axios.isAxiosError(error)) {
       throw error;
     }
@@ -228,9 +230,9 @@ export const deleteImageAnnouncementApi = async (
     const response = await axiosInstance.delete(
       deleteRetrieveAnnouncementEndpoint(announcement_id)
     );
-
     return response.data;
   } catch (error) {
+    showApiError("Delete Image Announcement Error: ", error);
     if (axios.isAxiosError(error)) {
       throw error;
     }
@@ -248,6 +250,7 @@ export const retrieveImageAnnouncementApi = async (
     );
     return response.data;
   } catch (error) {
+    showApiError("Retrieve Image Announcement Error: ", error);
     if (axios.isAxiosError(error)) {
       throw error;
     }
@@ -270,6 +273,7 @@ export const updateImageAnnouncementApi = async (
     );
     return response.data;
   } catch (error) {
+    showApiError("Update Image Announcement Error: ", error);
     if (axios.isAxiosError(error)) {
       throw error;
     }
@@ -288,6 +292,7 @@ export const listVideoAnnouncementApi = async (
     );
     return response.data;
   } catch (error) {
+    showApiError("List Video Announcement Error: ", error);
     if (axios.isAxiosError(error)) {
       throw error;
     }
@@ -303,9 +308,9 @@ export const deleteVideoAnnouncementApi = async (
     const response = await axiosInstance.delete(
       deleteRetrieveAnnouncementEndpoint(announcement_id)
     );
-
     return response.data;
   } catch (error) {
+    showApiError("Delete Video Announcement Error: ", error);
     if (axios.isAxiosError(error)) {
       throw error;
     }
@@ -323,6 +328,7 @@ export const retrieveVideoAnnouncementApi = async (
     );
     return response.data;
   } catch (error) {
+    showApiError("Retrieve Video Announcement Error: ", error);
     if (axios.isAxiosError(error)) {
       throw error;
     }
@@ -345,6 +351,7 @@ export const updateVideoAnnouncementApi = async (
     );
     return response.data;
   } catch (error) {
+    showApiError("Update Video Announcement Error: ", error);
     if (axios.isAxiosError(error)) {
       throw error;
     }

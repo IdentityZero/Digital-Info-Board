@@ -3,6 +3,7 @@ import {
   NotificationListType,
   NotificationType,
 } from "../types/NotificationTypes";
+import { showApiError } from "../utils/utils";
 // import { BASE_API_URL } from "../constants/urls";
 
 /**
@@ -20,6 +21,7 @@ export const listNotificationsApi = async (
     const response = await axiosInstance.get(url);
     return response.data;
   } catch (error) {
+    showApiError("List Notifications Error: ", error);
     if (axios.isAxiosError(error)) {
       throw error;
     }
@@ -38,6 +40,7 @@ export const markNotificationReadApi = async (
     );
     return response.data;
   } catch (error) {
+    showApiError("Mark Notification Read Error: ", error);
     if (axios.isAxiosError(error)) {
       throw error;
     }
