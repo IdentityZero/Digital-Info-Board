@@ -37,7 +37,9 @@ class TokenObtainPairViewV1(TokenObtainPairView):
             max_age=3600,  # Optional: cookie expiry in seconds (1 hour here)
             httponly=True,  # Optional, prevents JS access
             secure=True,  # For HTTPS environments
-            samesite="None",  # Adjust as needed, often for cross-site setups
+            samesite=(
+                "Lax" if not settings.DEBUG else "None"
+            ),  # Adjust as needed, often for cross-site setups
         )
 
         return response
@@ -67,7 +69,7 @@ class CookieBasedTokenRefreshViewV1(TokenRefreshView):
                 max_age=5,
                 httponly=True,
                 secure=True,
-                samesite="None",
+                samesite="Lax" if not settings.DEBUG else "None",
             )
             return response
 
@@ -96,7 +98,7 @@ def delete_cookie_view(request):
         max_age=5,
         httponly=True,
         secure=True,
-        samesite="None",
+        samesite="Lax" if not settings.DEBUG else "None",
     )
 
     return response
