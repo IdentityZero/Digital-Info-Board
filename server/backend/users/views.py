@@ -4,6 +4,7 @@ from typing import Dict, Any
 import socket
 
 from django.contrib.auth.tokens import default_token_generator
+from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from django.http import JsonResponse
 from django.contrib.auth.models import User
@@ -43,6 +44,7 @@ FORMATTED_EMAIL_ADDRESS = formataddr(
 )
 
 
+@csrf_exempt
 class CreateUserView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
