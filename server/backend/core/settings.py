@@ -46,17 +46,24 @@ CSRF_TRUSTED_ORIGINS = [
     "http://localhost:5173",
 ]
 
-REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": (
+
+if DEBUG:
+    DEFAULT_AUTH_CLASSES = [
         "rest_framework.authentication.BasicAuthentication",
         "rest_framework_simplejwt.authentication.JWTAuthentication",
         "rest_framework.authentication.SessionAuthentication",
-    ),
+    ]
+else:
+    DEFAULT_AUTH_CLASSES = [
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ]
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": DEFAULT_AUTH_CLASSES,
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",
     ],
 }
-
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
     "REFRESH_TOKEN_LIFETIME": timedelta(minutes=30),
