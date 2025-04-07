@@ -4,6 +4,7 @@ import { Button, Input } from "../../components/ui";
 import { resetPasswordApi } from "../../api/userRequest";
 import axios from "axios";
 import LoadingMessage from "../../components/LoadingMessage";
+import { FaCheckCircle, FaExclamationCircle } from "react-icons/fa";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -50,8 +51,15 @@ const ForgotPassword = () => {
         </p>
         {isLoading && <LoadingMessage message="Processing..." />}
         {!isLoading && message && (
-          <p className="text-green-600 text-sm text-center mb-4">{message}</p>
-        )}
+  <p
+    className={`text-sm text-center mb-4 flex items-center justify-center gap-2 ${
+      hasError ? 'text-red-600' : 'text-green-600'
+    }`}
+  >
+    {hasError ? <FaExclamationCircle className="text-lg" /> : <FaCheckCircle className="text-lg" />}
+    {message}
+  </p>
+)}
         <form
           onSubmit={handleSubmit}
           className="space-y-4 w-full flex flex-col"
