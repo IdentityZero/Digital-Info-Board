@@ -1,4 +1,5 @@
 import json
+import socket
 from typing import Optional
 
 from django.http import HttpRequest
@@ -36,12 +37,24 @@ def extract_react_quill_text(title: str) -> Optional[str]:
     return extracted_title.strip()
 
 
+def get_server_ip():
+    try:
+        # This connects to an external host and gets the IP used for that connection.
+        # Doesn't actually connect, just used to get the correct outbound IP.
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        ip = s.getsockname()[0]
+        s.close()
+        return ip
+    except Exception:
+        return "127.0.0.1"
+
+
 def get_mock_request():
     """
     Creates a request instance to give host
     """
     request = HttpRequest()
-    frontend_domain = getattr(settings, "FRONTEND_DOMAIN", "http://localhost:5173")
 
-    request.META["HTTP_HOST"] = frontend_domain
+    request.META["HTTP_HOST"] = "localhost:8000" if settings.DEBUG else get_server_ip()
     return request
