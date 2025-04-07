@@ -2,6 +2,7 @@ import json
 from typing import Optional
 
 from django.http import HttpRequest
+from django.conf import settings
 
 
 def extract_react_quill_text(title: str) -> Optional[str]:
@@ -40,5 +41,7 @@ def get_mock_request():
     Creates a request instance to give host
     """
     request = HttpRequest()
-    request.META["HTTP_HOST"] = "localhost:8000"
+    request.META["HTTP_HOST"] = frontend_domain = getattr(
+        settings, "FRONTEND_DOMAIN", "http://localhost:5173"
+    ).rstrip("/")
     return request
