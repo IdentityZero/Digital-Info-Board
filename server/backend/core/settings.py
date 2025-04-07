@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from datetime import timedelta
 from pathlib import Path
 import os
+import socket
 
 from dotenv import load_dotenv
 
@@ -212,7 +213,20 @@ DEFAULT_FROM_EMAIL = os.getenv("EMAIL_HOST_USER")
 GOOGLE_CALENDAR_CREDENTIALS_LOC = os.getenv("GAPI_JSON_CREDENTIALS_LOC")
 GOOGLE_CALENDAR_ID = os.getenv("CALENDAR_ID")
 
-FRONTEND_DOMAIN = (
-    os.getenv("FRONTEND_DOMAIN") if DEBUG else ""
-)  # MUST CONTAIN PROTOCOL during debugging
 VITE_WEATHER_API_KEY = os.getenv("VITE_WEATHER_API_KEY")
+
+
+def get_server_ip():
+    try:
+        # This connects to an external host and gets the IP used for that connection.
+        # Doesn't actually connect, just used to get the correct outbound IP.
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        ip = s.getsockname()[0]
+        s.close()
+        return ip
+    except Exception:
+        return "127.0.0.1"
+
+
+FRONTEND_DOMAIN = os.getenv("FRONTEND_DOMAIN") if DEBUG else f"http://{get_server_ip()}"
