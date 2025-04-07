@@ -41,7 +41,7 @@ def get_mock_request():
     Creates a request instance to give host
     """
     request = HttpRequest()
-    request.META["HTTP_HOST"] = getattr(
-        settings, "FRONTEND_DOMAIN", "http://localhost:5173"
-    ).rstrip("/")
+    frontend_domain = getattr(settings, "FRONTEND_DOMAIN", "http://localhost:5173")
+
+    request.META["HTTP_HOST"] = frontend_domain
     return request
