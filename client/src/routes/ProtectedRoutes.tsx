@@ -37,7 +37,6 @@ import DefaultDisplaySettingsPage from "../pages/protected/default-display-pages
 import OrganizationPage from "../pages/protected/default-display-pages/OrganizationPage";
 import UpcomingEventsPage from "../pages/protected/default-display-pages/UpcomingEventsPage";
 import MediaDisplaysPage from "../pages/protected/default-display-pages/MediaDisplaysPage";
-import WeatherForecastSettingsPage from "../pages/protected/default-display-pages/WeatherForecastSettingsPage";
 import {
   AddUpdateEmailPage,
   ChangeMyPasswordPage,
@@ -90,7 +89,6 @@ const ProtectedRoutes = (
       <Route path="organization" element={<OrganizationPage />} />
       <Route path="events" element={<UpcomingEventsPage />} />
       <Route path="media" element={<MediaDisplaysPage />} />
-      <Route path="forecast" element={<WeatherForecastSettingsPage />} />
     </Route>
     <Route path="account" element={<AccountSettingsPage />}>
       <Route index element={<MyProfilePage />} />
