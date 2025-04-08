@@ -43,7 +43,6 @@ const VideoPlayer = ({
     const video = document.createElement("video");
     video.src = currentVideo.video as string;
     const handleLoadedMetadata = () => {
-      console.log("Video dimensions:", video.videoWidth, video.videoHeight);
       setIsPortrait(video.videoHeight > video.videoWidth);
     };
 
