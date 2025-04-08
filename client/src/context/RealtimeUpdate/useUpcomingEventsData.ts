@@ -5,7 +5,6 @@ import { listUpcomingEventsApi } from "../../api/fixedContentRquests";
 const useUpcomingEventsData = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [events, setEvents] = useState<UpcomingEventType[]>([]);
-  console.log(events);
 
   const fetchEvents = () => {
     let delay = 1000;

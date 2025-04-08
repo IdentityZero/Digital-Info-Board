@@ -34,31 +34,40 @@ const ImagePlayer = ({
         className="flex transition-transform duration-500 h-full"
         style={{ transform: `translateX(-${currentIndex * 100}%)` }}
       >
-        {images.map((image, index) => (
-          <div key={index} className="relative w-full h-full flex-shrink-0">
-            {/* Blurred Background */}
-            <div
-              className="absolute inset-0 bg-center bg-cover scale-110 filter blur-xl"
-              style={{ backgroundImage: `url(${image.image})` }}
-            ></div>
+        {images.map((image, index) => {
+          const currentImage = images[currentIndex];
 
-            {/* Dark Overlay to improve readability */}
-            <div className="absolute inset-0 bg-black/30 z-0"></div>
+          if (index === currentIndex && currentImage) {
+            const img = new Image();
+            img.src = currentImage.image as string;
 
-            {/* Centered Foreground Image */}
-            <div className="relative z-10 w-full h-full flex items-center justify-center">
-              <img
-                src={image.image as string}
-                alt=""
-                className="max-w-full max-h-full object-contain"
-                onLoad={(e) => {
-                  const target = e.currentTarget;
-                  setIsPortrait(target.naturalHeight > target.naturalWidth);
-                }}
-              />
+            img.onload = () => {
+              setIsPortrait(img.naturalHeight > img.naturalWidth);
+            };
+          }
+
+          return (
+            <div key={index} className="relative w-full h-full flex-shrink-0">
+              {/* Blurred Background */}
+              <div
+                className="absolute inset-0 bg-center bg-cover scale-110 filter blur-xl"
+                style={{ backgroundImage: `url(${image.image})` }}
+              ></div>
+
+              {/* Dark Overlay to improve readability */}
+              <div className="absolute inset-0 bg-black/30 z-0"></div>
+
+              {/* Centered Foreground Image */}
+              <div className="relative z-10 w-full h-full flex items-center justify-center">
+                <img
+                  src={image.image as string}
+                  alt=""
+                  className="max-w-full max-h-full object-contain"
+                />
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
