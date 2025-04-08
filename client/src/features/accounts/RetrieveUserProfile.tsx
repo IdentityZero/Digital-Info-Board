@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { Id } from "react-toastify";
 import { FullUserType, Role } from "../../types/UserTypes";
 import {
   retrieveUserInformation,
@@ -13,9 +14,7 @@ import { UserInformationErrorState, UserInformationErrorT } from "./helpers";
 import axios from "axios";
 import { Errortext } from "../../components/ui";
 import FormField from "./components/FormField";
-import { Link } from "react-router-dom";
 import useLoadingToast from "../../hooks/useLoadingToast";
-import { Id } from "react-toastify";
 import ErrorMessage from "../../components/ErrorMessage";
 
 type RetrieveUserProfileProps = {
@@ -397,12 +396,6 @@ const RetrieveUserProfile = ({ id }: RetrieveUserProfileProps) => {
         </div>
 
         <div className="flex justify-end gap-2">
-          <Link
-            to="change-password"
-            className="py-2 px-8 rounded-full bg-cyanBlue hover:bg-cyanBlue-dark active:bg-cyanBlue-darker font-semibold"
-          >
-            Change Password
-          </Link>
           <button
             className={`py-2 px-8 rounded-full bg-cyanBlue hover:bg-cyanBlue-dark active:bg-cyanBlue-darker font-semibold ${
               isSaving && "cursor-not-allowed"

@@ -29,22 +29,34 @@ const ImagePlayer = ({
   }, [currentIndex]);
 
   return (
-    <div className="w-full h-full mx-auto overflow-hidden">
+    <div className="w-full h-full overflow-hidden">
       <div
-        className="flex transition-transform h-full duration-500"
+        className="flex transition-transform duration-500 h-full"
         style={{ transform: `translateX(-${currentIndex * 100}%)` }}
       >
         {images.map((image, index) => (
-          <div key={index} className="w-full h-full flex-shrink-0">
-            <img
-              src={image.image as string}
-              alt=""
-              className="w-full h-full object-contain"
-              onLoad={(e) => {
-                const target = e.currentTarget;
-                setIsPortrait(target.naturalHeight > target.naturalWidth);
-              }}
-            />
+          <div key={index} className="relative w-full h-full flex-shrink-0">
+            {/* Blurred Background */}
+            <div
+              className="absolute inset-0 bg-center bg-cover scale-110 filter blur-xl"
+              style={{ backgroundImage: `url(${image.image})` }}
+            ></div>
+
+            {/* Dark Overlay to improve readability */}
+            <div className="absolute inset-0 bg-black/30 z-0"></div>
+
+            {/* Centered Foreground Image */}
+            <div className="relative z-10 w-full h-full flex items-center justify-center">
+              <img
+                src={image.image as string}
+                alt=""
+                className="max-w-full max-h-full object-contain"
+                onLoad={(e) => {
+                  const target = e.currentTarget;
+                  setIsPortrait(target.naturalHeight > target.naturalWidth);
+                }}
+              />
+            </div>
           </div>
         ))}
       </div>

@@ -45,27 +45,40 @@ const VideoPlayer = ({
   }, [currentIndex]);
 
   return (
-    <div className="w-full h-full mx-auto overflow-hidden">
+    <div className="w-full h-full overflow-hidden">
       <div
-        className="flex transition-transform h-full duration-500"
+        className="flex transition-transform duration-500 h-full"
         style={{ transform: `translateX(-${currentIndex * 100}%)` }}
       >
         {videos.map((video, index) => (
-          <div key={index} className="w-full h-full flex-shrink-0">
+          <div key={index} className="relative w-full h-full flex-shrink-0">
+            {/* Blurred Background Video */}
             <video
-              controls
-              ref={(el) => (videoRefs.current[index] = el)}
-              className="w-auto h-full object-contain mx-auto"
-              autoPlay={index === 0}
-              onPlay={(el) => {
-                setIsPortrait(
-                  el.currentTarget.videoHeight > el.currentTarget.videoWidth
-                );
-              }}
-            >
-              <source src={video.video as string} />
-              Your browser does not support the video tag.
-            </video>
+              className="absolute inset-0 w-full h-full object-cover filter blur-xl scale-110 brightness-75"
+              src={video.video as string}
+              muted
+              autoPlay
+              loop
+              playsInline
+            />
+
+            {/* Foreground Video with controls */}
+            <div className="relative z-10 w-full h-full flex items-center justify-center">
+              <video
+                controls
+                ref={(el) => (videoRefs.current[index] = el)}
+                className="w-auto h-full object-contain mx-auto"
+                autoPlay={index === 0}
+                onPlay={(el) => {
+                  setIsPortrait(
+                    el.currentTarget.videoHeight > el.currentTarget.videoWidth
+                  );
+                }}
+              >
+                <source src={video.video as string} />
+                Your browser does not support the video tag.
+              </video>
+            </div>
           </div>
         ))}
       </div>

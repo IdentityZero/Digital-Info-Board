@@ -21,11 +21,11 @@ const Footer = memo(({ headlines, settings }: FooterProps) => {
   } = settings;
 
   const headlinesEmptyContiner = [
-    "Education is the most powerful weapon which you can use to change the world. – Nelson Mandela",
-    "The beautiful thing about learning is that no one can take it away from you. – B.B. King",
-    "Success is the sum of small efforts, repeated day in and day out. – Robert Collier",
-    "Your attitude, not your aptitude, will determine your altitude. – Zig Ziglar",
-    "Do not wait to strike till the iron is hot, but make it hot by striking. – William Butler Yeats",
+    "Education is the most powerful weapon which you can use to change the world. - Nelson Mandela",
+    "The beautiful thing about learning is that no one can take it away from you. - B.B. King",
+    "Success is the sum of small efforts, repeated day in and day out. - Robert Collier",
+    "Your attitude, not your aptitude, will determine your altitude. - Zig Ziglar",
+    "Do not wait to strike till the iron is hot, but make it hot by striking. - William Butler Yeats",
   ];
 
   return (

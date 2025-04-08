@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 import LoadingMessage from "../../components/LoadingMessage";
 import { useRealtimeUpdate } from "../../context/RealtimeUpdate";
+import { mmsuBg } from "../../assets";
 
 type MediaDisplayProps = {
   initialIndex?: number;
@@ -75,7 +76,16 @@ const MediaDisplay = ({
   }, [mediaDisplays]);
 
   return (
-    <div className="w-full h-full overflow-hidden relative">
+    <div
+      className="w-full h-full overflow-hidden relative"
+      style={{
+        backgroundImage: `url(${mmsuBg})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundColor: "rgba(255, 255, 255, 0.5)",
+        backgroundBlendMode: "overlay",
+      }}
+    >
       {isLoading ? (
         <LoadingMessage message="Loading..." />
       ) : mediaDisplays.length === 0 ? (
