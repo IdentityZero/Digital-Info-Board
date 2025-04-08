@@ -36,7 +36,6 @@ const InvitationList = ({
         type: "success",
       });
     } catch (error) {
-      console.log(error);
       update({
         render: "Failed to send email",
         type: "error",

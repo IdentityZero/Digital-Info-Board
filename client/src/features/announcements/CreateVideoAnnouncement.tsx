@@ -139,7 +139,6 @@ const CreateVideoAnnouncement = () => {
       toast.warning("Contents cannot be empty.");
       return;
     }
-    console.log(error);
 
     const fd = new FormData(e.currentTarget);
 

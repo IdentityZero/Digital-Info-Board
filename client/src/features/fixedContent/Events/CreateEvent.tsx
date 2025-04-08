@@ -38,8 +38,6 @@ const CreateEvent = ({ onSuccess }: CreateEventProps) => {
       });
       formRef.current?.reset();
     } catch (error) {
-      console.log(error);
-
       update({
         render: "Failed to save. Please try again.",
         type: "error",

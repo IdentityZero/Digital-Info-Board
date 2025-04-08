@@ -134,8 +134,6 @@ const ChangeDurationModal = ({
         });
         return;
       }
-      console.log(err);
-
       update({
         render: "Update errors and try again.",
         type: "warning",

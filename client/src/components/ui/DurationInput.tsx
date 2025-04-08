@@ -21,8 +21,6 @@ const DurationInput = ({
   const [value, setValue] = useState("00:00:40");
 
   const handleValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(Number(e.target.value));
-
     setValue(e.target.value);
   };
 

@@ -12,7 +12,6 @@ export const LIVE_CONTENT_UPDATE_URL =
   protocol + BASE_API_URL + "/ws/live-content-updates/";
 
 export const SITE_SETTINGS_URL = httpProtocol + BASE_API_URL + "/settings/";
-console.log("Site settings url: ", SITE_SETTINGS_URL);
 
 export const FIELD_DEVICES_URL = protocol + BASE_API_URL + "/ws/field-devices/";
 

@@ -112,8 +112,6 @@ const MediaDisplaysPage = () => {
         });
         return;
       }
-      console.log(error);
-
       const err = error.response?.data;
 
       if (!err) {

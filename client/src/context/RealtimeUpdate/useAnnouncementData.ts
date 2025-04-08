@@ -78,9 +78,7 @@ const useAnnouncementData = () => {
       const res_data = await retrieveTextAnnouncementApi(axios, id);
 
       insertItem(res_data);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const insertItem = (newItem: AnnouncementRetrieveType) => {
@@ -101,8 +99,6 @@ const useAnnouncementData = () => {
 
   const deleteItem = (id: string) => {
     if (announcementList.length === 1) {
-      console.log("Deleting single");
-
       setIdOnLock("");
       setAnnouncementList([]);
       setMediaAnnouncements([]);

@@ -57,8 +57,6 @@ export function isObjectEqual(obj1: any, obj2: any) {
 
 export function filterNullFromObject(obj: any): Record<string, any> {
   if (!obj) {
-    console.log(`${obj} cannot be null.`);
-
     return obj;
   }
 

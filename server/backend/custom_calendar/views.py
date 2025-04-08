@@ -31,8 +31,6 @@ def add_calendar_events(request):
             {"message": "Only POST requests are allowed", "success": False}, status=405
         )
 
-    print
-
     data = request.POST
 
     try:

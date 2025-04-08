@@ -89,8 +89,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       setUser(decodeUserJWT(response.data.access));
     } catch (error) {
-      console.log(error);
-
       if (error instanceof AxiosError) {
         if (error.request.response) {
           const msg = JSON.parse(error.request.response);
@@ -123,9 +121,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         );
         setError(null);
         setUser(null);
-      } catch (error) {
-        console.log("Error: ", error);
-      }
+      } catch (error) {}
     };
 
     startLogout();

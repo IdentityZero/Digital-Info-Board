@@ -75,7 +75,6 @@ const NotificationProvider = ({ children }: { children: React.ReactNode }) => {
         unread_count: prev.unread_count - 1,
       };
     });
-    console.log(res_data);
   };
 
   const handleOnWsMessage = (data: WsMessageType) => {

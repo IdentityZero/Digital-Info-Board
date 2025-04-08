@@ -58,8 +58,6 @@ const CreateMediaDisplay = ({ onSuccess }: CreateMediaDisplayProps) => {
       formRef.current?.reset();
       setFile(undefined);
     } catch (error) {
-      console.log(error);
-
       update({
         render: "Failed to save. Please try again.",
         type: "error",
