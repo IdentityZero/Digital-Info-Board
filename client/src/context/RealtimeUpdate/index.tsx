@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from "react";
+import React, { createContext, useContext, useState } from "react";
 
 import { LIVE_CONTENT_UPDATE_URL } from "../../constants/urls";
 
@@ -46,6 +46,7 @@ type RealtimeUpdateContextType = {
     mediaDisplays: MediaDisplayType[];
     isLoading: boolean;
   };
+  isReady: boolean;
 };
 
 type AnnouncementWsMessageTypes = {
@@ -103,6 +104,15 @@ export const RealtimeUpdateProvider = ({
   const events = useUpcomingEventsData();
   const mediaDisplays = useMediaDisplaysData();
 
+  const [isWsReady, setIsWsReady] = useState(false);
+
+  const isReady =
+    announcement.isReady &&
+    orgMembers.isReady &&
+    events.isReady &&
+    mediaDisplays.isReady &&
+    isWsReady;
+
   const handleOnWsMessage = (
     data:
       | AnnouncementWsMessageTypes
@@ -121,6 +131,9 @@ export const RealtimeUpdateProvider = ({
       handleUpcomingEventsContent(data);
     } else if (data.content === "media_displays") {
       handleMediaDisplaysContent(data);
+    } else {
+      // Connection established
+      setIsWsReady(true);
     }
   };
 
@@ -190,6 +203,7 @@ export const RealtimeUpdateProvider = ({
         orgMembers,
         events,
         mediaDisplays,
+        isReady,
       }}
     >
       {children}

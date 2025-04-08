@@ -7,6 +7,7 @@ import { sortItemsByPosition } from "../../utils/utils";
 const useMediaDisplaysData = () => {
   const [mediaDisplays, setMediaDisplays] = useState<MediaDisplayType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isReady, setIsReady] = useState(false);
 
   const fetchMediaDisplays = () => {
     let delay = 1000;
@@ -17,6 +18,7 @@ const useMediaDisplaysData = () => {
         const res_data = await listMediaDisplaysApi();
         setMediaDisplays(res_data);
         // setIsTransitioning(false);
+        setIsReady(true);
       } catch (error) {
         delay = Math.min(delay * 2, 30000);
         setTimeout(retryFetch, delay);
@@ -60,6 +62,7 @@ const useMediaDisplaysData = () => {
     deleteItem,
     updateSequence,
     isLoading,
+    isReady,
   };
 };
 export default useMediaDisplaysData;

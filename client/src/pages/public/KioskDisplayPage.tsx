@@ -30,6 +30,7 @@ const KioskDisplayPage = () => {
       setIdOnLock: setAnnouncementIdOnLock,
     },
     settings: { settings },
+    isReady,
   } = useRealtimeUpdate();
 
   const handleNext = () => {
@@ -53,7 +54,7 @@ const KioskDisplayPage = () => {
     return () => clearInterval(interval);
   }, [currentIndex, mediaAnnouncements]);
 
-  if (!settings) {
+  if (!settings || !isReady) {
     return <LoadingMessage message="Fetching contents..." />;
   }
 

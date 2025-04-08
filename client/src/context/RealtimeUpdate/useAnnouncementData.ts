@@ -30,6 +30,7 @@ const useAnnouncementData = () => {
   const [idOnLock, setIdOnLock] = useState<string>("");
 
   const [isLoading, setIsLoading] = useState(true);
+  const [isReady, setIsReady] = useState(false);
   const [error, setError] = useState<any>(null);
 
   const fetchAnnouncements = () => {
@@ -42,6 +43,7 @@ const useAnnouncementData = () => {
         setAnnouncementList(res_data);
 
         setError(null);
+        setIsReady(true);
       } catch (error) {
         setError(error);
 
@@ -218,6 +220,7 @@ const useAnnouncementData = () => {
     updateSequence,
     error,
     isLoading,
+    isReady,
   };
 };
 export default useAnnouncementData;

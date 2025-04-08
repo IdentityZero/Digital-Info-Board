@@ -8,6 +8,7 @@ import { listOrgmembersApi } from "../../api/fixedContentRquests";
 const useOrgMembersData = () => {
   const [orgMembers, setOrgMembers] = useState<OrganizationMembersType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isReady, setIsReady] = useState(false);
 
   const fetchOrgMembers = () => {
     let delay = 1000;
@@ -17,6 +18,7 @@ const useOrgMembersData = () => {
         setIsLoading(true);
         const res_data = await listOrgmembersApi();
         setOrgMembers(res_data);
+        setIsReady(true);
       } catch (error) {
         delay = Math.min(delay * 2, 30000);
         setTimeout(retryFetch, delay);
@@ -57,6 +59,7 @@ const useOrgMembersData = () => {
     updateItem,
     updateSequence,
     isLoading,
+    isReady,
   };
 };
 export default useOrgMembersData;

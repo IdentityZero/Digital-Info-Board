@@ -5,6 +5,7 @@ import { listUpcomingEventsApi } from "../../api/fixedContentRquests";
 const useUpcomingEventsData = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [events, setEvents] = useState<UpcomingEventType[]>([]);
+  const [isReady, setIsReady] = useState(false);
 
   const fetchEvents = () => {
     let delay = 1000;
@@ -14,6 +15,7 @@ const useUpcomingEventsData = () => {
         setIsLoading(true);
         const res_data = await listUpcomingEventsApi();
         setEvents(res_data);
+        setIsReady(true);
       } catch (error) {
         delay = Math.min(delay * 2, 30000);
         setTimeout(retryFetch, delay);
@@ -77,6 +79,6 @@ const useUpcomingEventsData = () => {
   useEffect(() => {
     fetchEvents();
   }, []);
-  return { events, insertItem, updateItem, deleteItem, isLoading };
+  return { events, insertItem, updateItem, deleteItem, isLoading, isReady };
 };
 export default useUpcomingEventsData;
