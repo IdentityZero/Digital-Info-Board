@@ -21,6 +21,17 @@ const ImagePlayer = ({
   };
 
   useEffect(() => {
+    const currentImage = images[currentIndex];
+
+    if (currentImage) {
+      const img = new Image();
+      img.src = currentImage.image as string;
+
+      img.onload = () => {
+        setIsPortrait(img.naturalHeight > img.naturalWidth);
+      };
+    }
+
     const interval = setInterval(() => {
       handleNext();
     }, convertDurationToSeconds(images[currentIndex].duration as string) * 1000 || 5000);
@@ -35,17 +46,6 @@ const ImagePlayer = ({
         style={{ transform: `translateX(-${currentIndex * 100}%)` }}
       >
         {images.map((image, index) => {
-          const currentImage = images[currentIndex];
-
-          if (index === currentIndex && currentImage) {
-            const img = new Image();
-            img.src = currentImage.image as string;
-
-            img.onload = () => {
-              setIsPortrait(img.naturalHeight > img.naturalWidth);
-            };
-          }
-
           return (
             <div key={index} className="relative w-full h-full flex-shrink-0">
               {/* Blurred Background */}
