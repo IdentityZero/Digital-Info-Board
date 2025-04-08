@@ -37,11 +37,31 @@ const VideoPlayer = ({
   };
 
   useEffect(() => {
+    const currentVideo = videos[currentIndex];
+
+    if (!currentVideo) return;
+    const video = document.createElement("video");
+    video.src = currentVideo.video as string;
+    const handleLoadedMetadata = () => {
+      console.log("Video dimensions:", video.videoWidth, video.videoHeight);
+      setIsPortrait(video.videoHeight > video.videoWidth);
+    };
+
+    video.addEventListener("loadedmetadata", handleLoadedMetadata);
+    video.load(); // Start loading metadata (dimensions)
+
+    return () =>
+      video.removeEventListener("loadedmetadata", handleLoadedMetadata);
+  }, [currentIndex]);
+
+  useEffect(() => {
     const interval = setInterval(() => {
       handleNext();
     }, convertDurationToSeconds(videos[currentIndex].duration) * 1000 || 5000);
 
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+    };
   }, [currentIndex]);
 
   return (
@@ -71,11 +91,11 @@ const VideoPlayer = ({
                 autoPlay={index === 0}
                 loop
                 playsInline
-                onPlay={(el) => {
-                  setIsPortrait(
-                    el.currentTarget.videoHeight > el.currentTarget.videoWidth
-                  );
-                }}
+                // onPlay={(el) => {
+                //   setIsPortrait(
+                //     el.currentTarget.videoHeight > el.currentTarget.videoWidth
+                //   );
+                // }}
               >
                 <source src={video.video as string} />
                 Your browser does not support the video tag.
