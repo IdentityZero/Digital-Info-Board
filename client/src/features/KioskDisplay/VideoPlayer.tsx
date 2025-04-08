@@ -69,6 +69,8 @@ const VideoPlayer = ({
                 ref={(el) => (videoRefs.current[index] = el)}
                 className="w-auto h-full object-contain mx-auto"
                 autoPlay={index === 0}
+                loop
+                playsInline
                 onPlay={(el) => {
                   setIsPortrait(
                     el.currentTarget.videoHeight > el.currentTarget.videoWidth
