@@ -11,14 +11,15 @@ import useLoadingToast from "../../../hooks/useLoadingToast";
 import { SettingsType } from "../../../types/SettingTypes";
 import { updateSystemSettingsApi } from "../../../api/settingsRequest";
 
-import OrgMembers from "../../../features/KioskDisplay/MainAside/OrgMembers";
-import UpcomingEventsCard from "../../../features/KioskDisplay/Footer/UpcomingEventsCard";
-import MediaDisplay from "../../../features/KioskDisplay/MediaDisplay";
-import WeatherForecast from "../../../features/KioskDisplay/Footer/WeatherForecast";
 import ActivationCard from "../../../features/fixedContent/Settings/ActivationCard";
-import CalendarCard from "../../../features/KioskDisplay/MainAside/CalendarCard";
 
 import SlideshowDuration from "./Settings/SlideshowDuration";
+
+import DisplayMediaDisplays from "../../../features/fixedContent/MediaDisplays/DisplayMediaDisplays";
+import CalendarDisplay from "../../../features/Calendar/v2/CalendarDisplay";
+import WebDisplayWeatherForecast from "../../../features/fixedContent/WeatherForecast/WebDisplayWeatherForecast";
+import DisplayOrgMembers from "../../../features/fixedContent/Organization/DisplayOrgMembers";
+import WebDisplayEvents from "../../../features/fixedContent/Events/WebDisplayEvents";
 
 type FixedContentMapType = {
   name: string;
@@ -26,24 +27,46 @@ type FixedContentMapType = {
   component: (args: any) => JSX.Element;
 };
 
+const CalendarDisplayWrapper = () => {
+  return (
+    <div className="w-full h-[600px]">
+      <CalendarDisplay
+        showEvents={true}
+        showGridControls={true}
+        showNavigation={true}
+        dayMaxEventRows={3}
+        showWeekends={true}
+      />
+    </div>
+  );
+};
+
+const OrgMemberDisplayWrapper = () => {
+  return <DisplayOrgMembers showNavigation slideDuration={5000} />;
+};
+
 const fixedContentMapName: FixedContentMapType[] = [
-  { name: "Organization", key: "show_organization", component: OrgMembers },
+  {
+    name: "Organization",
+    key: "show_organization",
+    component: OrgMemberDisplayWrapper,
+  },
   {
     name: "Upcoming Events",
     key: "show_upcoming_events",
-    component: UpcomingEventsCard,
+    component: WebDisplayEvents,
   },
   {
     name: "Media Displays",
     key: "show_media_displays",
-    component: MediaDisplay,
+    component: DisplayMediaDisplays,
   },
   {
     name: "Weather Forecast",
     key: "show_weather_forecast",
-    component: WeatherForecast,
+    component: WebDisplayWeatherForecast,
   },
-  { name: "Calendar", key: "show_calendar", component: CalendarCard },
+  { name: "Calendar", key: "show_calendar", component: CalendarDisplayWrapper },
 ];
 
 const DefaultDisplaySettingsPage = () => {
@@ -111,7 +134,7 @@ const DefaultDisplaySettingsPage = () => {
           <Modal
             isOpen={content.key === onPreview}
             onClose={() => setOnPreview(null)}
-            size="lg"
+            size="xl"
           >
             <content.component />
           </Modal>

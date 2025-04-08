@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
 
+import ErrorMessage from "../../../components/ErrorMessage";
+import LoadingMessage from "../../../components/LoadingMessage";
+
 import { getNextFiveHours } from "../../../utils/utils";
 import {
   HourlyForecastType,
@@ -13,13 +16,21 @@ const WebDisplayWeatherForecast = () => {
   >(undefined);
   const [hourlyInfo, setHourlyInfo] = useState<HourlyForecastType[]>([]);
 
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
+
   useEffect(() => {
     const fetchWeatherInfo = async () => {
       try {
+        setHasError(false);
         const res_data: WeatherForecastType = await getWeatherDataApi();
         setHourlyInfo(getNextFiveHours(res_data.forecast.forecastday[0].hour));
         setWeatherInfo(res_data);
-      } catch (error) {}
+      } catch (error) {
+        setHasError(true);
+      } finally {
+        setIsLoading(false);
+      }
     };
     fetchWeatherInfo();
   }, []);
@@ -33,6 +44,10 @@ const WebDisplayWeatherForecast = () => {
 
       {/* Divider */}
       <div className="w-5/6 h-0.5 bg-gray-300 my-3 relative z-10"></div>
+
+      {isLoading && <LoadingMessage message="Loading Weather Forecast..." />}
+
+      {hasError && <ErrorMessage />}
 
       {/* 3-Day Forecast */}
       <div className="flex flex-col items-center space-y-4 relative z-10 w-full">
