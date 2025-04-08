@@ -20,6 +20,7 @@ import CalendarDisplay from "../../../features/Calendar/v2/CalendarDisplay";
 import WebDisplayWeatherForecast from "../../../features/fixedContent/WeatherForecast/WebDisplayWeatherForecast";
 import DisplayOrgMembers from "../../../features/fixedContent/Organization/DisplayOrgMembers";
 import WebDisplayEvents from "../../../features/fixedContent/Events/WebDisplayEvents";
+import ErrorMessage from "../../../components/ErrorMessage";
 
 type FixedContentMapType = {
   name: string;
@@ -70,7 +71,7 @@ const fixedContentMapName: FixedContentMapType[] = [
 ];
 
 const DefaultDisplaySettingsPage = () => {
-  const { settings, isLoading, setSettings } = useSiteSettings();
+  const { settings, isLoading, setSettings, hasError } = useSiteSettings();
   const { userApi } = useAuth();
   const toastId = useRef<Id | null>(null);
   const { loading, update } = useLoadingToast(toastId);
@@ -79,6 +80,7 @@ const DefaultDisplaySettingsPage = () => {
 
   const [isSaving, setIsSaving] = useState(false);
 
+  // Leave this here
   if (!settings) {
     return isLoading ? (
       <LoadingMessage message="Fetching settings" />
@@ -118,6 +120,18 @@ const DefaultDisplaySettingsPage = () => {
       setIsSaving(false);
     }
   };
+
+  if (isLoading) {
+    return <LoadingMessage message="Fetching settings" />;
+  }
+
+  if (hasError) {
+    return (
+      <div className="p-4">
+        <ErrorMessage message="Something went wrong while fetching settings. Attempting to fetch again." />
+      </div>
+    );
+  }
 
   return (
     <div className="w-full h-full flex flex-col gap-2">

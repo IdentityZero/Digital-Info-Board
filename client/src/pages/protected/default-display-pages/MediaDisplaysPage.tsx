@@ -4,6 +4,7 @@ import { Id } from "react-toastify";
 
 import LoadingMessage from "../../../components/LoadingMessage";
 import Pagination from "../../../components/Pagination";
+import ErrorMessage from "../../../components/ErrorMessage";
 
 import usePagination from "../../../hooks/usePagination";
 import { useAuth } from "../../../context/AuthProvider";
@@ -152,7 +153,7 @@ const MediaDisplaysPage = () => {
         {isFetching ? (
           <LoadingMessage message="Fetching media displays" />
         ) : hasFetchingError ? (
-          <div className="w-full text-center">Error fetching media list</div>
+          <ErrorMessage message="Something went wrong while fetching Media Displays. Please try again." />
         ) : (
           <>
             <Pagination

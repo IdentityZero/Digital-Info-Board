@@ -12,6 +12,7 @@ import {
 import { listUserInvitationsApi } from "../../../api/userRequest";
 import usePagination from "../../../hooks/usePagination";
 import Pagination from "../../../components/Pagination";
+import ErrorMessage from "../../../components/ErrorMessage";
 
 const NewUsersPage = () => {
   const { userApi } = useAuth();
@@ -72,7 +73,7 @@ const NewUsersPage = () => {
           {isFetching ? (
             <LoadingMessage message="Loading invitations..." />
           ) : hasFetchingError ? (
-            <div>Unexpected error occured while fetching your invitations.</div>
+            <ErrorMessage message="Something went wrong while fetching your Invitations. Please try again." />
           ) : (
             <>
               <InvitationList

@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 
-import FullCalendarFeature from "../../../features/Calendar/v2/FullCalendarFeature";
+import LoadingMessage from "../../../components/LoadingMessage";
+import ErrorMessage from "../../../components/ErrorMessage";
+
 import { listCalendarEventsApi } from "../../../api/calendarRequest";
 import { CalendarEventType } from "../../../types/FixedContentTypes";
-import LoadingMessage from "../../../components/LoadingMessage";
+import FullCalendarFeature from "../../../features/Calendar/v2/FullCalendarFeature";
 
 const CalendarContentsPageV2 = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -31,7 +33,7 @@ const CalendarContentsPageV2 = () => {
       {isLoading ? (
         <LoadingMessage message="Fetching calendar events..." />
       ) : hasFetchingError ? (
-        <div>Unexpected error occured. Please try again.</div>
+        <ErrorMessage message="Something went wrong while fetching Calendar Events. Please try again." />
       ) : (
         <FullCalendarFeature initialEventsList={events} />
       )}

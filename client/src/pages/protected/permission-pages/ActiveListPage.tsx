@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 
 import LoadingMessage from "../../../components/LoadingMessage";
-import usePagination from "../../../hooks/usePagination";
+import ErrorMessage from "../../../components/ErrorMessage";
 import Pagination from "../../../components/Pagination";
+
+import usePagination from "../../../hooks/usePagination";
+
 import { getListTypeInitState } from "../../../types/ListType";
 import { listStatBasedAnnouncementApi } from "../../../api/announcementRequest";
 import {
@@ -61,8 +64,8 @@ const ActiveListPage = () => {
 
   if (hasError) {
     return (
-      <div className="mt-4 text-center">
-        Unexpected Error occured. Please try again.
+      <div className="p-4">
+        <ErrorMessage message="Something went wrong while fetching approved contents. Please try again." />
       </div>
     );
   }

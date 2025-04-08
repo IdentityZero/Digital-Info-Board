@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { customCircle } from "../../assets";
 import DragAndDrop from "../../components/DragAndDrop";
 import LoadingMessage from "../../components/LoadingMessage";
+import ErrorMessage from "../../components/ErrorMessage";
 
 import {
   calculateElapsedTime,
@@ -28,6 +29,7 @@ const CurrentDisplayPage = () => {
     setSliderItemsForEdit,
     isLoading,
     durations,
+    error,
   } = useAnnouncementSlider();
   const { settings } = useSiteSettings();
 
@@ -140,6 +142,14 @@ const CurrentDisplayPage = () => {
     setCurrentIndex(0);
     toast.success("Updated Successfully.");
   };
+
+  if (error) {
+    return (
+      <div className="mt-4 p-4">
+        <ErrorMessage message="There was an error fetching contents. Please try again." />
+      </div>
+    );
+  }
 
   if (!isLoading && announcements.length === 0) {
     return (

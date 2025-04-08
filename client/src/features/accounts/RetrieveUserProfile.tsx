@@ -16,6 +16,7 @@ import FormField from "./components/FormField";
 import { Link } from "react-router-dom";
 import useLoadingToast from "../../hooks/useLoadingToast";
 import { Id } from "react-toastify";
+import ErrorMessage from "../../components/ErrorMessage";
 
 type RetrieveUserProfileProps = {
   id: string;
@@ -66,9 +67,10 @@ const RetrieveUserProfile = ({ id }: RetrieveUserProfileProps) => {
     return <LoadingMessage message="Loading..." />;
   }
 
-  // # TODO: Improve
   if (!userData) {
-    return <div>Cannot find data...</div>;
+    return (
+      <ErrorMessage message="Something went wrong while fetching your User Information. Please try again." />
+    );
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

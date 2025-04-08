@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Id } from "react-toastify";
 
 import LoadingMessage from "../../../components/LoadingMessage";
+import ErrorMessage from "../../../components/ErrorMessage";
 import Pagination from "../../../components/Pagination";
 
 import { useAuth } from "../../../context/AuthProvider";
@@ -109,9 +110,7 @@ const UpcomingEventsPage = () => {
         {isFetching ? (
           <LoadingMessage message="Fetching upcoming events list" />
         ) : hasFetchingError ? (
-          <div className="w-full text-center">
-            Error fetching upcoming events
-          </div>
+          <ErrorMessage message="Something went wrong while fetching Upcoming Events. Please try again." />
         ) : (
           <>
             <ListEvents

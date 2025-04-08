@@ -6,6 +6,8 @@ import { FaCheckCircle, FaEye, FaTimesCircle, FaTrash } from "react-icons/fa";
 import IconWithTooltip from "../../../components/IconWithTooltip";
 import LoadingMessage from "../../../components/LoadingMessage";
 import useLoadingToast from "../../../hooks/useLoadingToast";
+import ErrorMessage from "../../../components/ErrorMessage";
+import Pagination from "../../../components/Pagination";
 
 import {
   extractReactQuillText,
@@ -26,7 +28,6 @@ import {
   AnnouncementRetrieveType,
 } from "../../../types/AnnouncementTypes";
 import { getListTypeInitState } from "../../../types/ListType";
-import Pagination from "../../../components/Pagination";
 
 const ImageContentListPage = () => {
   const { userApi } = useAuth();
@@ -87,7 +88,11 @@ const ImageContentListPage = () => {
   };
 
   if (hasLoadingError) {
-    return <div>Unexpected Error Occured. Try refreshing the page</div>;
+    return (
+      <div className="mt-4">
+        <ErrorMessage message="Something went wrong while fetching your contents. Please try again." />
+      </div>
+    );
   }
 
   if (isLoading) {

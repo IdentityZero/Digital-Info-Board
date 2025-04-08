@@ -4,6 +4,7 @@ import { Id } from "react-toastify";
 import LoadingMessage from "../../../components/LoadingMessage";
 import { Button, Input } from "../../../components/ui";
 import Accordion, { AccordionItem } from "../../../components/ui/Accordion";
+import ErrorMessage from "../../../components/ErrorMessage";
 import Checkbox from "../../../components/ui/Checkbox";
 
 import useSiteSettings from "../../../hooks/useSiteSettings";
@@ -16,7 +17,7 @@ const CalendarSettingsPage = () => {
   const { userApi } = useAuth();
   const toastId = useRef<Id | null>(null);
   const { loading, update } = useLoadingToast(toastId);
-  const { settings, isLoading } = useSiteSettings();
+  const { settings, isLoading, hasError } = useSiteSettings();
 
   const [isSaving, setIsSaving] = useState(false);
 
@@ -27,6 +28,16 @@ const CalendarSettingsPage = () => {
       <div className="text-center font-semibold text-lg">
         Unexpected error loading settings
       </div>
+    );
+  }
+
+  if (isLoading) {
+    return <LoadingMessage message="Fetching settings" />;
+  }
+
+  if (hasError) {
+    return (
+      <ErrorMessage message="Something went wrong while fetching Calendar Events. Attempting to fetch again." />
     );
   }
 

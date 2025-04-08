@@ -1,26 +1,29 @@
 import { createContext, useContext, useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
-import { FaExclamationTriangle } from "react-icons/fa";
+import { Id } from "react-toastify";
 // import { useBlocker } from "react-router-dom";
 import _ from "lodash";
 
-import { FullUserType } from "../../../types/UserTypes";
-// import { isObjectEqual } from "../../../utils/utils";
-import { useAuth } from "../../../context/AuthProvider";
+import ErrorMessage from "../../../components/ErrorMessage";
 import { Form } from "../../../components/ui";
+
 // import useBlockNavigation from "../../../hooks/useBlockNavigation";
+import { useAuth } from "../../../context/AuthProvider";
+import useLoadingToast from "../../../hooks/useLoadingToast";
+
+// import { isObjectEqual } from "../../../utils/utils";
+import {
+  UserInformationErrorState,
+  type UserInformationErrorT,
+} from "../../../features/accounts/helpers";
+
+import { FullUserType } from "../../../types/UserTypes";
 import {
   retrieveUserInformation,
   updateUserInformationApi,
 } from "../../../api/userRequest";
 import { DisplayUserProfile } from "../../../features/accounts/";
-import {
-  UserInformationErrorState,
-  type UserInformationErrorT,
-} from "../../../features/accounts/helpers";
-import { Link } from "react-router-dom";
-import { Id } from "react-toastify";
-import useLoadingToast from "../../../hooks/useLoadingToast";
 
 type MyProfilePageContextProps = {
   userProfileForEdit: FullUserType;
@@ -152,15 +155,7 @@ const MyProfilePage = () => {
           <div className="text-center text-xl">Loading your information...</div>
         )}
         {fetchError && (
-          <div className="flex flex-col items-center justify-center text-xl text-red-500">
-            <p className="flex flex-row items-center justify-center gap-2">
-              <span>
-                <FaExclamationTriangle />
-              </span>
-              There was an error loading your information.
-            </p>
-            <p>Please try again.</p>
-          </div>
+          <ErrorMessage message="Something went wrong while fetching your Profile Information. Please try again." />
         )}
         {userProfile && userProfileForEdit && (
           <>

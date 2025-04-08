@@ -4,11 +4,15 @@ import { Link } from "react-router-dom";
 import { Id } from "react-toastify";
 
 import LoadingMessage from "../../../components/LoadingMessage";
+import ErrorMessage from "../../../components/ErrorMessage";
 import IconWithTooltip from "../../../components/IconWithTooltip";
+import Pagination from "../../../components/Pagination";
 
 import useLoadingToast from "../../../hooks/useLoadingToast";
 import { useAuth } from "../../../context/AuthProvider";
 import usePagination from "../../../hooks/usePagination";
+
+import { isNowWithinRange } from "../../../utils/utils";
 import {
   extractReactQuillText,
   formatTimestamp,
@@ -24,8 +28,6 @@ import {
   AnnouncementRetrieveType,
 } from "../../../types/AnnouncementTypes";
 import { getListTypeInitState } from "../../../types/ListType";
-import Pagination from "../../../components/Pagination";
-import { isNowWithinRange } from "../../../utils/utils";
 
 const TextContentListPage = () => {
   const { userApi } = useAuth();
@@ -88,7 +90,11 @@ const TextContentListPage = () => {
   };
 
   if (hasLoadingError) {
-    return <div>Unexpected Error Occured. Try refreshing the page</div>;
+    return (
+      <div className="mt-4">
+        <ErrorMessage message="Something went wrong while fetching your contents. Please try again." />
+      </div>
+    );
   }
 
   if (isLoading) {

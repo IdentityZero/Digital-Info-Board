@@ -6,6 +6,7 @@ import axios from "axios";
 import ClosableMessage from "../../../components/ClosableMessage";
 import Pagination from "../../../components/Pagination";
 import LoadingMessage from "../../../components/LoadingMessage";
+import ErrorMessage from "../../../components/ErrorMessage";
 
 import { useAuth } from "../../../context/AuthProvider";
 import usePagination from "../../../hooks/usePagination";
@@ -162,7 +163,7 @@ const OrganizationPage = () => {
         {isFetching ? (
           <LoadingMessage message="Fetching members list" />
         ) : hasFetchingError ? (
-          <div className="w-full text-center">Error fetching members list</div>
+          <ErrorMessage message="Something went wrong while fetching Organization Members. Please try again." />
         ) : (
           <>
             <ListMembers

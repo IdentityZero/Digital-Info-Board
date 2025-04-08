@@ -13,6 +13,7 @@ import { type ListUserType, listUserInitState } from "../../types/UserTypes";
 import ProfileCard from "./components/ProfileCard";
 import usePagination from "../../hooks/usePagination";
 import Pagination from "../../components/Pagination";
+import ErrorMessage from "../../components/ErrorMessage";
 
 const ListAllUserProfiles = () => {
   const toastId = useRef<Id | null>(null);
@@ -53,7 +54,9 @@ const ListAllUserProfiles = () => {
   }
 
   if (hasError) {
-    return <div>Unexpected error occured. Please try again later.</div>;
+    return (
+      <ErrorMessage message="Something went wrong while fetching users list. Please try again." />
+    );
   }
 
   if (!hasError && !isLoading && usersList.results.length === 0) {

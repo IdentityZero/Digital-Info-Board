@@ -3,16 +3,19 @@ import { Id } from "react-toastify";
 import { Link } from "react-router-dom";
 import { FaCheckCircle, FaEye, FaTimesCircle, FaTrash } from "react-icons/fa";
 
+import ErrorMessage from "../../../components/ErrorMessage";
 import IconWithTooltip from "../../../components/IconWithTooltip";
 import LoadingMessage from "../../../components/LoadingMessage";
-import useLoadingToast from "../../../hooks/useLoadingToast";
 import Pagination from "../../../components/Pagination";
+
 import {
   extractReactQuillText,
   formatTimestamp,
   truncateStringVariableLen,
 } from "../../../utils/formatters";
 import { addTotalDuration, isNowWithinRange } from "../../../utils/utils";
+
+import useLoadingToast from "../../../hooks/useLoadingToast";
 import { useAuth } from "../../../context/AuthProvider";
 
 import { getListTypeInitState } from "../../../types/ListType";
@@ -59,7 +62,11 @@ const VideoContentListPage = () => {
   }, [page, pageSize]);
 
   if (hasLoadingError) {
-    return <div>Unexpected Error Occured. Try refreshing the page</div>;
+    return (
+      <div className="mt-4">
+        <ErrorMessage message="Something went wrong while fetching your contents. Please try again." />
+      </div>
+    );
   }
 
   if (isLoading) {

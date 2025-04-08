@@ -1,14 +1,18 @@
 import { useEffect, useState } from "react";
+
+import Pagination from "../../../components/Pagination";
+import ErrorMessage from "../../../components/ErrorMessage";
+import LoadingMessage from "../../../components/LoadingMessage";
+
+import usePagination from "../../../hooks/usePagination";
+
 import {
   AnnouncementRetrieveType,
   type PaginatedAnnouncementListTypeV1,
 } from "../../../types/AnnouncementTypes";
 import { ListInactiveAnnouncement } from "../../../features/announcements";
 import { listStatBasedAnnouncementApi } from "../../../api/announcementRequest";
-import LoadingMessage from "../../../components/LoadingMessage";
 import { getListTypeInitState } from "../../../types/ListType";
-import usePagination from "../../../hooks/usePagination";
-import Pagination from "../../../components/Pagination";
 
 const InActiveListPage = () => {
   const { page, setPage, pageSize, setPageSize } = usePagination(
@@ -61,8 +65,8 @@ const InActiveListPage = () => {
 
   if (hasError) {
     return (
-      <div className="mt-4 text-center">
-        Unexpected Error occured. Please try again.
+      <div className="p-4">
+        <ErrorMessage message="Something went wrong while fetching contents for approval. Please try again." />
       </div>
     );
   }
