@@ -45,8 +45,8 @@ const DetailAnnouncement = ({
       <div className="mb-4 w-full">
         <DisplayQuillEditor value={JSON.parse(title as string)} isTitle />
       </div>
-      <div className="flex-grow flex flex-col m-auto w-[80%] p-4 bg-white shadow-lg rounded-lg border border-gray-200 mt-2">
-        <div>
+      <div className="flex-grow flex flex-col m-auto w-full sm:w-[80%] p-4 bg-white shadow-lg rounded-lg border border-gray-200 mt-2">
+        <div className="mb-4">
           <AuthorCard
             image={data.author.profile.image}
             name={data.author.first_name + " " + data.author.last_name}

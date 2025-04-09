@@ -30,9 +30,9 @@ const WebDisplayEvents = () => {
   }, []);
 
   return (
-    <div className="relative flex flex-col items-center h-full px-4 py-6 bg-white text-black">
+    <div className="relative flex flex-col items-center h-full px-2 py-3 sm:px-3 sm:py-4 md:px-4 md:py-6 bg-white text-black">
       {/* Title */}
-      <div className="text-3xl font-mono font-bold relative z-10">
+      <div className="text-xl sm:text-2xl md:text-3xl font-mono font-bold relative z-10">
         📅 Upcoming Events
       </div>
 
@@ -47,7 +47,10 @@ const WebDisplayEvents = () => {
       ) : (
         <div className="flex flex-col items-center space-y-4 relative z-10">
           {events.map((event, index) => (
-            <div key={index} className="text-center text-lg">
+            <div
+              key={index}
+              className="text-center text-sm md:text-base lg:text-lg"
+            >
               <div className="font-bold tracking-wide text-black">
                 {event.name}
               </div>

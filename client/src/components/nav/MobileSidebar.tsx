@@ -41,7 +41,7 @@ const MobileSidebar = ({ links }: MobileSidebarProps) => {
           isExpanded ? "translate-x-0" : "-translate-x-full"
         } transition-transform duration-300 z-50`}
       >
-        <div className="p-6 bg-white h-full w-[400px]">
+        <div className="p-6 bg-white h-full max-w-[400px]">
           <div className="flex flex-row justify-between items-center">
             <img src={logo} alt="Logo" className="w-12 h-12" />
             <button className="t text-xl mb-4" onClick={handleToggle}>

@@ -35,7 +35,7 @@ const AboutPage = () => {
           className="w-full h-[400px] object-cover"
         />
         <div className="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-          <h1 className="text-4xl md:text-6xl font-bold text-white">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white text-center">
             Department of Computer Engineering
           </h1>
         </div>
@@ -43,7 +43,9 @@ const AboutPage = () => {
 
       {/* Project Description */}
       <div className="max-w-4xl mx-auto text-center py-12 px-6">
-        <h2 className="text-3xl font-bold mb-4">About Our Project</h2>
+        <h2 className="text-3xl sm:text-4xl font-bold mb-4">
+          About Our Project
+        </h2>
         <p className="text-lg text-gray-700">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus
           imperdiet, nulla et dictum interdum, nisi lorem egestas odio, vitae
@@ -52,14 +54,14 @@ const AboutPage = () => {
       </div>
 
       {/* Research Adviser */}
-      <div className="max-w-4xl mx-auto bg-white shadow-md rounded-lg overflow-hidden flex flex-col md:flex-row items-center p-6 mb-12">
+      <div className="max-w-4xl mx-auto bg-white shadow-md rounded-lg overflow-hidden flex flex-col sm:flex-row items-center p-6 mb-12">
         <img
           src="https://picsum.photos/200"
           alt="Research Adviser"
-          className="w-48 h-48 rounded-full object-cover mb-4 md:mb-0 md:mr-6"
+          className="w-48 h-48 rounded-full object-cover mb-4 sm:mb-0 sm:mr-6"
         />
         <div>
-          <h3 className="text-2xl font-bold">Dr. John Doe</h3>
+          <h3 className="text-2xl sm:text-3xl font-bold">Dr. John Doe</h3>
           <p className="text-gray-700">Research Adviser</p>
           <p className="text-gray-600 mt-2">
             Dr. Doe is an expert in embedded systems, artificial intelligence,
@@ -71,8 +73,10 @@ const AboutPage = () => {
 
       {/* Researchers Section */}
       <div className="max-w-6xl mx-auto">
-        <h2 className="text-3xl font-bold text-center mb-6">Our Researchers</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 px-6">
+        <h2 className="text-3xl sm:text-4xl font-bold text-center mb-6">
+          Our Researchers
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-6">
           {researchers.map((researcher, index) => (
             <div
               key={index}
@@ -83,7 +87,9 @@ const AboutPage = () => {
                 alt={researcher.name}
                 className="w-32 h-32 rounded-full mx-auto object-cover mb-4"
               />
-              <h3 className="text-xl font-bold">{researcher.name}</h3>
+              <h3 className="text-xl sm:text-2xl font-bold">
+                {researcher.name}
+              </h3>
               <p className="text-gray-600">{researcher.role}</p>
               <p className="text-gray-500 text-sm mt-2">
                 {researcher.description}

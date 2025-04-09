@@ -37,7 +37,7 @@ const HomePage = () => {
       ) : (
         <LiveAnnouncement />
       )}
-      <section className="w-full flex flex-col gap-10 p-2 justify-center items-center mb-4">
+      <section className="w-full flex flex-col gap-10 p-1 justify-center items-center mb-4">
         <div className="w-full flex flex-col gap-2 lg:flex-row">
           {settings?.show_media_displays && (
             <div
@@ -61,7 +61,7 @@ const HomePage = () => {
             </div>
           )}
           {settings?.show_organization && (
-            <div className="min-w-[400px] max-w-[500px] rounded-lg shadow-xl overflow-hidden border mx-auto">
+            <div className="w-full max-w-[500px] rounded-lg shadow-xl overflow-hidden border mx-auto">
               <DisplayOrgMembers
                 showNavigation
                 slideDuration={

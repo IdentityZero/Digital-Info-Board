@@ -162,7 +162,7 @@ export default DisplayOrgMembers;
 
 function CardContainer({ members }: { members: OrganizationMembersType[] }) {
   return (
-    <div className="h-full w-full flex flex-col justify-evenly gap-2 overflow-hidden">
+    <div className="flex flex-col gap-y-2 overflow-hidden">
       {members.map((member) => (
         <OrgCard member={member} key={member.id} />
       ))}
@@ -172,17 +172,18 @@ function CardContainer({ members }: { members: OrganizationMembersType[] }) {
 
 function OrgCard({ member }: { member: OrganizationMembersType }) {
   return (
-    <div className="flex items-center space-x-2 px-4">
+    <div className="flex items-center gap-x-2 p-1 sm:px-4">
       <img
-        className="w-16 h-16 rounded-full object-cover"
+        className="w-16 h-16 aspect-square rounded-full object-cover object-center"
         src={member.image}
         alt={member.name || "thumbnail"}
       />
-      <div className="flex flex-col items-center bg-[#2f6dc1] w-full rounded-full text-white py-1">
-        <span className="text-sm font-semibold text-center">
+
+      <div className="w-full flex flex-col items-center bg-[#2f6dc1] rounded-full text-white py-1">
+        <p className="text-sm font-semibold text-center ">
           {member.name || "Engr. Juan Dela Cruz"}
-        </span>
-        <span className="text-xs">{member.position || "No position"}</span>
+        </p>
+        <p className="text-xs">{member.position || "No position"}</p>
       </div>
     </div>
   );

@@ -9,14 +9,14 @@ const ContactUsPage = () => {
           className="w-full h-[400px] object-cover"
         />
         <div className="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-          <h1 className="text-4xl md:text-6xl font-bold text-white">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white">
             Contact Us
           </h1>
         </div>
       </div>
 
       {/* Contact Form & Details */}
-      <div className="max-w-6xl mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-2 gap-12">
+      <div className="max-w-6xl mx-auto px-6 py-12 grid grid-cols-1 sm:grid-cols-2 gap-12">
         {/* Contact Details */}
         <div className="bg-white shadow-lg rounded-lg p-6">
           <h2 className="text-3xl font-bold mb-4">Get In Touch</h2>

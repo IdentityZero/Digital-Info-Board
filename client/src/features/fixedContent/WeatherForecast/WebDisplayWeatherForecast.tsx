@@ -36,9 +36,9 @@ const WebDisplayWeatherForecast = () => {
   }, []);
 
   return (
-    <div className="relative flex flex-col items-center h-full px-4 py-6 bg-white text-black">
+    <div className="relative flex flex-col items-center h-full px-2 py-3 sm:px-3 sm:py-4 md:px-4 md:py-6 bg-white text-black">
       {/* Title */}
-      <div className="text-3xl font-mono font-bold relative z-10">
+      <div className="text-xl sm:text-2xl md:text-3xl font-mono font-bold relative z-10">
         🌦️ Weather Forecast
       </div>
 
@@ -68,7 +68,7 @@ const WebDisplayWeatherForecast = () => {
                 key={index}
                 className="flex flex-row items-center justify-evenly w-[80%] p-2 bg-gray-100 rounded-lg border border-gray-300"
               >
-                <span className="font-semibold text-sm ">
+                <span className="font-semibold text-sm md:text-base lg:text-lg">
                   {formattedDay}, {formattedDate}
                 </span>
                 <img
