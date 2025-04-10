@@ -1,15 +1,46 @@
-import { FaExclamationCircle } from "react-icons/fa";
-import ClosableMessage from "../../components/ClosableMessage";
 import { useEffect, useState } from "react";
+import {
+  FaCheckCircle,
+  FaExclamationCircle,
+  FaTimesCircle,
+} from "react-icons/fa";
+
+import ClosableMessage from "../../components/ClosableMessage";
+
+import useWebsocket from "../../hooks/useWebsocket";
+
 import { FIELD_DEVICES_URL } from "../../constants/urls";
 
+type WsMessageType = {
+  type: "connection_established" | "rpi_is_on";
+  message: string;
+};
+
 const SettingsPage = () => {
-  const [socket, setSocket] = useState<WebSocket | null>(null);
+  const [isDeviceConnected, setIsDeviceConnected] = useState(false);
+
+  const { sendMessage, isConnectionOpen } = useWebsocket(
+    FIELD_DEVICES_URL,
+    handleOnWsMessage
+  );
 
   useEffect(() => {
-    const ws = new WebSocket(FIELD_DEVICES_URL);
-    setSocket(ws);
-  }, []);
+    if (!isConnectionOpen) {
+      setIsDeviceConnected;
+    }
+  }, [isConnectionOpen]);
+
+  function handleOnWsMessage(data: WsMessageType) {
+    if (data.type === "connection_established") {
+      sendMessage({ type: "ask_rpi_on", message: "Is Raspberry Pi on?" });
+    } else if (data.type === "rpi_is_on") {
+      setIsDeviceConnected(true);
+    }
+  }
+
+  const handleRetryDeviceConnection = () => {
+    sendMessage({ type: "ask_rpi_on", message: "Is Raspberry Pi on?" });
+  };
 
   const handleShutdown = () => {
     const shutdownConf = window.confirm(
@@ -17,9 +48,8 @@ const SettingsPage = () => {
     );
 
     if (!shutdownConf) return;
-    socket?.send(
-      JSON.stringify({ type: "shutdown_rpi", message: "shutdown_rpi" })
-    );
+
+    sendMessage({ type: "shutdown_rpi", message: "shutdown_rpi" });
   };
 
   return (
@@ -43,6 +73,43 @@ const SettingsPage = () => {
           <h2 className="w-full bg-cyanBlue p-3 font-bold text-center">
             Main Control
           </h2>
+
+          {/* Status Indicators */}
+          <div className="flex justify-between px-5 pt-5 text-sm font-medium">
+            {/* User to Server */}
+            <div className="flex items-center space-x-2">
+              {isConnectionOpen ? (
+                <FaCheckCircle className="text-green-500" />
+              ) : (
+                <FaTimesCircle className="text-red-500" />
+              )}
+              <span>User Connection</span>
+            </div>
+
+            {/* Server to RPI */}
+            <div className="flex items-center space-x-2">
+              {isDeviceConnected && isConnectionOpen ? (
+                <FaCheckCircle className="text-green-500" />
+              ) : (
+                <FaTimesCircle className="text-red-500" />
+              )}
+              <span>RPI Connection</span>
+            </div>
+          </div>
+
+          {/* Retry Button */}
+          {(!isDeviceConnected || !isConnectionOpen) && (
+            <div className="flex justify-end px-5 mt-2">
+              <button
+                onClick={handleRetryDeviceConnection}
+                className="text-sm text-blue-600 hover:underline"
+              >
+                Retry RPI Connection
+              </button>
+            </div>
+          )}
+
+          {/* Shutdown Button */}
           <div className="w-full flex p-5 justify-center">
             <button
               className="text-center py-3 px-10 bg-btDanger rounded-full uppercase font-bold"
@@ -52,6 +119,7 @@ const SettingsPage = () => {
             </button>
           </div>
         </div>
+
         <div className="bg-white border border-black w-full md:w-2/3 lg:w-1/2 mx-auto">
           <h2 className="w-full bg-cyanBlue p-3 font-bold text-center">
             Individual Modules
