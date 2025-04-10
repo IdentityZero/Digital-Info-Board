@@ -26,7 +26,9 @@ export function AccordionItem({
         onClick={() => setIsOpen(!isOpen)}
         type="button"
       >
-        <span className="font-medium">{title}</span>
+        <span className="font-medium text-sm sm:text-base md:text-lg">
+          {title}
+        </span>
         <FaChevronDown
           className={`transition-transform ${
             isOpen ? "rotate-180" : "rotate-0"

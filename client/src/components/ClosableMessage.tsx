@@ -33,7 +33,7 @@ const ClosableMessage = ({
 
   return (
     <div className={`${classes}`}>
-      <div className="flex flex-row items-center gap-2">
+      <div className="flex flex-row items-center gap-2 text-sm sm:text-base">
         <span>{Icon && <Icon />}</span>
         {children}
       </div>

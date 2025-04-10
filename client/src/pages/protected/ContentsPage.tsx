@@ -34,8 +34,8 @@ const ContentsPage = () => {
     return "video";
   };
   return (
-    <div className="p-5">
-      <div className="w-full flex items-center justify-between">
+    <div>
+      <div className="px-2 pt-2 md:px-5 md:pt-5 w-full flex flex-col sm:flex-row items-start gap-y-2 justify-between">
         <SideDropdown
           buttonContent={<DropdownContainer label={get_type_location()} />}
         >
@@ -59,7 +59,7 @@ const ContentsPage = () => {
           <Button>Upload {get_type_location()} content</Button>
         </Link>
       </div>
-      <div>
+      <div className="px-5">
         <Outlet />
       </div>
     </div>

@@ -173,7 +173,7 @@ const CurrentDisplayPage = () => {
         Now Playing!
       </h1>
       <div className="flex flex-row max-xl:flex-col h-full">
-        <div className="w-1/2 max-xl:w-full h-full p-4">
+        <div className="w-1/2 max-xl:w-full h-full">
           <div className="w-full h-full border-[6px] border-darkTeal rounded-md overflow-hidden">
             {carouselIndex && (
               <AnnouncementCarousel
@@ -186,9 +186,9 @@ const CurrentDisplayPage = () => {
           </div>
         </div>
         <div className="w-1/2 max-xl:w-full h-full">
-          <div className="px-5">
+          <div className="xl:px-5">
             <CustomTitleHolder text="Up next" />
-            <div className="w-full h-[250px] bg-darkTeal border border-black rounded-lg overflow-hidden px-4 py-6 flex flex-col justify-between">
+            <div className="w-full h-[180px] bg-darkTeal border border-black rounded-lg overflow-hidden px-4 py-6 flex flex-col justify-between">
               {announcements && (
                 <>
                   <DragAndDrop
@@ -227,8 +227,8 @@ const CurrentDisplayPage = () => {
               )}
             </div>
           </div>
-          <div className="px-5">
-            <CustomTitleHolder text="Edit Context" />
+          <div className="xl:px-5">
+            <CustomTitleHolder text="Change Time Duration" />
             <ChangeTimeDuration sliderItems={sliderItems} />
           </div>
         </div>

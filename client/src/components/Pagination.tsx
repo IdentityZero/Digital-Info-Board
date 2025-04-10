@@ -25,11 +25,13 @@ const Pagination = ({
   setPage,
 }: PaginationProps) => {
   return (
-    <div className="flex justify-end items-center gap-8 mt-4">
+    <div className="flex flex-col sm:flex-row justify-end items-center gap-4 sm:gap-8 mt-4">
       <div className="flex items-center gap-2">
-        <label htmlFor="itemsPerPage">Items:</label>
+        <label htmlFor="itemsPerPage" className="text-sm sm:text-base">
+          Items:
+        </label>
         <select
-          className="px-2 py-1 border rounded"
+          className="px-2 py-1 border rounded text-sm sm:text-base"
           value={pageSize}
           onChange={(e) => {
             setPageSize(Number(e.target.value));
@@ -46,17 +48,17 @@ const Pagination = ({
 
       <div className="flex items-center gap-2">
         <button
-          className="px-3 py-1 bg-gray-300 rounded disabled:opacity-50"
+          className="px-3 py-1 bg-gray-300 rounded disabled:opacity-50 text-sm sm:text-base"
           onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
           disabled={page === 1}
         >
           Previous
         </button>
-        <span>
+        <span className="text-sm sm:text-base">
           Page {page} of {totalPages}
         </span>
         <button
-          className="px-3 py-1 bg-gray-300 rounded disabled:opacity-50"
+          className="px-3 py-1 bg-gray-300 rounded disabled:opacity-50 text-sm sm:text-base"
           onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
           disabled={page === totalPages}
         >

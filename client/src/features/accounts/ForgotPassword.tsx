@@ -43,23 +43,28 @@ const ForgotPassword = () => {
   return (
     <div className="w-full max-w-md p-6 shadow-lg bg-white rounded-2xl">
       <div>
-        <h2 className="text-2xl font-semibold text-center mb-4">
+        <h2 className="text-xl sm:text-2xl font-semibold text-center mb-4 sm:mb-6">
           Forgot Password
         </h2>
+
         <p className="text-sm text-gray-600 text-center mb-6">
           Enter your email address to receive a password reset link.
         </p>
         {isLoading && <LoadingMessage message="Processing..." />}
         {!isLoading && message && (
-  <p
-    className={`text-sm text-center mb-4 flex items-center justify-center gap-2 ${
-      hasError ? 'text-red-600' : 'text-green-600'
-    }`}
-  >
-    {hasError ? <FaExclamationCircle className="text-lg" /> : <FaCheckCircle className="text-lg" />}
-    {message}
-  </p>
-)}
+          <p
+            className={`text-sm text-center mb-4 flex items-center justify-center gap-2 ${
+              hasError ? "text-red-600" : "text-green-600"
+            }`}
+          >
+            {hasError ? (
+              <FaExclamationCircle className="text-lg" />
+            ) : (
+              <FaCheckCircle className="text-lg" />
+            )}
+            {message}
+          </p>
+        )}
         <form
           onSubmit={handleSubmit}
           className="space-y-4 w-full flex flex-col"

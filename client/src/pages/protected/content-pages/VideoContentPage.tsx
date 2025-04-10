@@ -225,93 +225,91 @@ const VideoContentPage = () => {
   }
 
   return (
-    <div>
-      <div className="pt-5">
-        <div className="w-full flex flex-row items-center justify-between">
-          <Link to="/dashboard/contents/video">
-            <button
-              className="flex flex-row items-center gap-2 px-8 py-1 rounded-full border border-black bg-lightBlue hover:bg-lightBlue-300 active:bg-lightBlue-500"
-              disabled={deleteLoading || saveLoading}
-            >
-              <FaArrowLeft />
-              Back
-            </button>
-          </Link>
-          <div className="flex flex-row items-center gap-4">
-            {isEditMode ? (
-              <>
-                <button
-                  className="flex flex-row items-center gap-2 px-6 py-1 rounded-full border border-black bg-blue-500 text-white hover:bg-blue-600 active:bg-blue-700"
-                  onClick={handleSaveButton}
-                  disabled={deleteLoading || saveLoading}
-                >
-                  <FaSave />
-                  {saveLoading ? "Saving..." : "Save"}
-                </button>
-                <button
-                  className="flex flex-row items-center gap-2 px-6 py-1 rounded-full border border-black bg-gray-500 text-white hover:bg-gray-600 active:bg-gray-700"
-                  onClick={handleCancel}
-                  disabled={deleteLoading || saveLoading}
-                >
-                  <FaTimes />
-                  Cancel
-                </button>
-              </>
-            ) : (
-              <>
-                <button
-                  className="flex flex-row items-center gap-2 px-6 py-1 rounded-full border border-black bg-green-500 text-white hover:bg-green-600 active:bg-green-700"
-                  onClick={() => setIsEditMode(true)}
-                  disabled={deleteLoading || saveLoading}
-                >
-                  <FaEdit />
-                  Edit
-                </button>
-                <button
-                  className="flex flex-row items-center gap-2 px-6 py-1 rounded-full border border-black bg-red-500 text-white hover:bg-red-600 active:bg-red-700"
-                  onClick={handleDelete}
-                  disabled={deleteLoading || saveLoading}
-                >
-                  <FaTrashAlt />
-                  {deleteLoading ? "Deleting..." : "Delete"}
-                </button>
-              </>
-            )}
-          </div>
+    <div className="pt-5">
+      <div className="w-full flex flex-col sm:flex-row items-start justify-between gap-y-2">
+        <Link to="/dashboard/contents/video">
+          <button
+            className="flex flex-row items-center gap-2 px-8 py-1 rounded-full border border-black bg-lightBlue hover:bg-lightBlue-300 active:bg-lightBlue-500"
+            disabled={deleteLoading || saveLoading}
+          >
+            <FaArrowLeft />
+            Back
+          </button>
+        </Link>
+        <div className="flex flex-row items-center gap-4">
+          {isEditMode ? (
+            <>
+              <button
+                className="flex flex-row items-center gap-2 px-6 py-1 rounded-full border border-black bg-blue-500 text-white hover:bg-blue-600 active:bg-blue-700"
+                onClick={handleSaveButton}
+                disabled={deleteLoading || saveLoading}
+              >
+                <FaSave />
+                {saveLoading ? "Saving..." : "Save"}
+              </button>
+              <button
+                className="flex flex-row items-center gap-2 px-6 py-1 rounded-full border border-black bg-gray-500 text-white hover:bg-gray-600 active:bg-gray-700"
+                onClick={handleCancel}
+                disabled={deleteLoading || saveLoading}
+              >
+                <FaTimes />
+                Cancel
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                className="flex flex-row items-center gap-2 px-6 py-1 rounded-full border border-black bg-green-500 text-white hover:bg-green-600 active:bg-green-700"
+                onClick={() => setIsEditMode(true)}
+                disabled={deleteLoading || saveLoading}
+              >
+                <FaEdit />
+                Edit
+              </button>
+              <button
+                className="flex flex-row items-center gap-2 px-6 py-1 rounded-full border border-black bg-red-500 text-white hover:bg-red-600 active:bg-red-700"
+                onClick={handleDelete}
+                disabled={deleteLoading || saveLoading}
+              >
+                <FaTrashAlt />
+                {deleteLoading ? "Deleting..." : "Delete"}
+              </button>
+            </>
+          )}
         </div>
+      </div>
 
-        {fetchLoading && <LoadingMessage message="Loading..." />}
-        {fetchError && <div>{fetchError}</div>}
+      {fetchLoading && <LoadingMessage message="Loading..." />}
+      {fetchError && <div>{fetchError}</div>}
 
-        {/* Set up to avoid rerendering and refetching files */}
+      {/* Set up to avoid rerendering and refetching files */}
 
-        {videoAnnouncement && videoAnnouncementForEdit && (
-          <div className={`${isEditMode ? "block" : "hidden"}`}>
-            <EditVideoAnnouncement
-              videoAnnouncementData={videoAnnouncementForEdit}
-              setVideoAnnouncementData={setVideoAnnouncementForEdit}
-              newVideos={newVideos}
-              setNewVideos={setNewVideos}
-              submitFunc={handleSave}
-              ref={formRef}
-              errors={saveErrors}
-              setErrors={setSaveErrors}
-              isLoading={deleteLoading || saveLoading}
+      {videoAnnouncement && videoAnnouncementForEdit && (
+        <div className={`${isEditMode ? "block" : "hidden"}`}>
+          <EditVideoAnnouncement
+            videoAnnouncementData={videoAnnouncementForEdit}
+            setVideoAnnouncementData={setVideoAnnouncementForEdit}
+            newVideos={newVideos}
+            setNewVideos={setNewVideos}
+            submitFunc={handleSave}
+            ref={formRef}
+            errors={saveErrors}
+            setErrors={setSaveErrors}
+            isLoading={deleteLoading || saveLoading}
+          />
+        </div>
+      )}
+      {videoAnnouncement &&
+        videoAnnouncementForEdit &&
+        !deleteLoading &&
+        !saveLoading && (
+          <div className={`${isEditMode ? "hidden" : "block"}`}>
+            <RetrieveVideoAnnouncement
+              videoAnnouncementData={videoAnnouncement}
+              stopSlider={isEditMode}
             />
           </div>
         )}
-        {videoAnnouncement &&
-          videoAnnouncementForEdit &&
-          !deleteLoading &&
-          !saveLoading && (
-            <div className={`${isEditMode ? "hidden" : "block"}`}>
-              <RetrieveVideoAnnouncement
-                videoAnnouncementData={videoAnnouncement}
-                stopSlider={isEditMode}
-              />
-            </div>
-          )}
-      </div>
     </div>
   );
 };

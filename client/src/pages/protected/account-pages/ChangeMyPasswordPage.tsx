@@ -2,13 +2,10 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../../../context/AuthProvider";
 import { ChangePassword } from "../../../features/accounts";
 import { FaArrowLeft } from "react-icons/fa";
+import ErrorMessage from "../../../components/ErrorMessage";
 
 const ChangeMyPasswordPage = () => {
   const { user } = useAuth();
-
-  if (!user) {
-    return <div className="p-4 mt-2">Cannot find data</div>;
-  }
 
   return (
     <div className="p-4 mt-2 flex flex-col gap-4">
@@ -19,7 +16,7 @@ const ChangeMyPasswordPage = () => {
         <FaArrowLeft />
         Back to Profile
       </Link>
-      <ChangePassword />
+      {!user ? <ErrorMessage /> : <ChangePassword />}
     </div>
   );
 };

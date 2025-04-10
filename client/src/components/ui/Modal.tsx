@@ -33,7 +33,7 @@ const Modal: React.FC<ModalProps> = ({
       >
         <div className="flex justify-between items-center mb-4">
           {title && (
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+            <h2 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white">
               {title}
             </h2>
           )}

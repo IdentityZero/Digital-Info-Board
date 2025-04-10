@@ -23,43 +23,50 @@ const SettingsPage = () => {
   };
 
   return (
-    <div className="min-h-[calc(100vh-80px)] flex flex-col gap-8 items-center justify-center">
-      <ClosableMessage
-        className="w-full flex flex-row items-center justify-between pr-5 p-2 bg-[#305ab3] font-bold"
-        icon={FaExclamationCircle}
-      >
-        You can shutdown or restart rpi for bulletin board and portal
-      </ClosableMessage>
-      <ClosableMessage
-        className="w-full flex flex-row items-center justify-between pr-5 p-2 bg-[#305ab3] font-bold"
-        icon={FaExclamationCircle}
-      >
-        Shut down bulletin before portal
-      </ClosableMessage>
-      <div className="bg-white border border-black w-full">
-        <h2 className="w-full bg-cyanBlue p-3 font-bold text-center">
-          Main Control
-        </h2>
-        <div className="w-full flex p-5 justify-center">
-          <button
-            className="text-center py-3 px-10 bg-btDanger rounded-full uppercase font-bold"
-            onClick={handleShutdown}
-          >
-            Shutdown
-          </button>
+    <div className="min-h-[calc(100vh-80px)] flex flex-col gap-8 items-center ">
+      <div className="space-y-2 w-full">
+        <ClosableMessage
+          className="w-full flex flex-row items-center justify-between pr-5 p-2 bg-[#305ab3] font-bold"
+          icon={FaExclamationCircle}
+        >
+          You can shutdown or restart rpi for bulletin board and portal
+        </ClosableMessage>
+        <ClosableMessage
+          className="w-full flex flex-row items-center justify-between pr-5 p-2 bg-[#305ab3] font-bold"
+          icon={FaExclamationCircle}
+        >
+          Shut down bulletin before portal
+        </ClosableMessage>
+      </div>
+      <div className="w-full flex-1 space-y-8">
+        <div className="bg-white border border-black w-full md:w-2/3 lg:w-1/2 mx-auto">
+          <h2 className="w-full bg-cyanBlue p-3 font-bold text-center">
+            Main Control
+          </h2>
+          <div className="w-full flex p-5 justify-center">
+            <button
+              className="text-center py-3 px-10 bg-btDanger rounded-full uppercase font-bold"
+              onClick={handleShutdown}
+            >
+              Shutdown
+            </button>
+          </div>
+        </div>
+        <div className="bg-white border border-black w-full md:w-2/3 lg:w-1/2 mx-auto">
+          <h2 className="w-full bg-cyanBlue p-3 font-bold text-center">
+            Individual Modules
+          </h2>
+          <div className="w-full flex p-5 justify-center">
+            <button className="text-center py-3 px-10 bg-cyanBlue rounded-full uppercase font-bold">
+              Control Options
+            </button>
+          </div>
         </div>
       </div>
-      <div className="bg-white border border-black w-full">
-        <h2 className="w-full bg-cyanBlue p-3 font-bold text-center">
-          Individual Modules
-        </h2>
-        <div className="w-full flex p-5 justify-center">
-          <button className="text-center py-3 px-10 bg-cyanBlue rounded-full uppercase font-bold">
-            Control Options
-          </button>
-        </div>
+
+      <div className="text-center text-sm mb-8">
+        Copyright @ CpE Digital Infoboard Portal 2025
       </div>
-      <div>Copyright @ CpE Digital Infoboard Portal 2025</div>
     </div>
   );
 };

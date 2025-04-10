@@ -1,12 +1,19 @@
 import { useEffect, useState } from "react";
 import { Errortext } from "../../components/ui";
 
-import { useMyProfilePageContext } from "../../pages/protected/account-pages/MyProfilePage";
-import { formatStringUnderscores } from "../../utils/formatters";
+import FormField from "./components/FormField";
+import SelectField from "./components/SelectField";
+import Button from "./components/Button";
+
 import { useAuth } from "../../context/AuthProvider";
 import { Role } from "../../types/UserTypes";
 import { get_role_positions } from "../../constants";
-import FormField from "./components/FormField";
+import {
+  capitalizeWords,
+  formatStringUnderscores,
+} from "../../utils/formatters";
+
+import { useMyProfilePageContext } from "../../pages/protected/account-pages/MyProfilePage";
 
 const DisplayUserProfile = ({}) => {
   const { user } = useAuth();
@@ -90,7 +97,7 @@ const DisplayUserProfile = ({}) => {
               : (userProfileForEdit.profile.image as string)
           }
           alt="Your Profile"
-          className={`w-[300px] h-[300px] object-cover rounded-full ${
+          className={`w-[250px] h-[250px] md:w-[280px] md:h-[280px] lg:w-[300px] lg:h-[300px] aspect-square object-cover rounded-full ${
             errors.profile.image && "border-4 border-red-500"
           }`}
         />
@@ -104,11 +111,8 @@ const DisplayUserProfile = ({}) => {
           onChange={handleNewProfilePicChange}
           disabled={isLoading}
         />
-        <label
-          htmlFor="profile-change-prof-pic"
-          className="py-2 px-8 rounded-full bg-cyanBlue hover:bg-cyanBlue-dark active:bg-cyanBlue-darker font-semibold cursor-pointer"
-        >
-          Change Profile
+        <label htmlFor="profile-change-prof-pic">
+          <Button text="Change Profile" />
         </label>
       </div>
 
@@ -125,69 +129,52 @@ const DisplayUserProfile = ({}) => {
         />
 
         {/* Role Field */}
-        <div className="flex flex-row items-center rounded-md overflow-hidden">
-          <label
-            htmlFor="role"
-            className="w-[150px] lg:w-[180px] bg-desaturatedBlueGray py-3 px-2 font-bold"
+        {user?.is_admin ? (
+          <SelectField
+            labelText="Role"
+            name="profile.role"
+            onChange={handleInputChange}
+            required
+            value={userProfileForEdit.profile.role}
+            disabled={isLoading}
           >
-            Role
-          </label>
-          {user?.is_admin ? (
-            <select
-              name="profile.role"
-              id="role"
-              className="flex-1 bg-gray-200 py-3 pl-2 capitalize"
-              onChange={handleInputChange}
-              value={userProfileForEdit.profile.role}
-              disabled={isLoading}
-            >
-              <option value="student">Student</option>
-              <option value="faculty">Faculty</option>
-            </select>
-          ) : (
-            <input
-              type="text"
-              value={userProfileForEdit.profile.role}
-              className="flex-1 bg-gray-200 py-3 pl-2 cursor-not-allowed capitalize"
-              disabled
-            />
-          )}
-        </div>
+            <option value="student">Student</option>
+            <option value="faculty">Faculty</option>
+          </SelectField>
+        ) : (
+          <FormField
+            labelText="Role"
+            value={capitalizeWords(userProfileForEdit.profile.role)}
+            required
+            disabled
+          />
+        )}
 
         {/* Position Field */}
-        <div className="flex flex-row items-center rounded-md overflow-hidden mb-4">
-          <label
-            htmlFor="position"
-            className="w-[150px] lg:w-[180px] bg-desaturatedBlueGray py-3 px-2 font-bold"
+
+        {user?.is_admin ? (
+          <SelectField
+            labelText="Position"
+            name="profile.position"
+            onChange={handleInputChange}
+            required
+            value={userProfileForEdit.profile.position}
+            disabled={isLoading}
           >
-            Position
-          </label>
-          {user?.is_admin ? (
-            <select
-              name="profile.position"
-              id="position"
-              className="flex-1 bg-gray-200 py-3 pl-2 capitalize"
-              value={userProfileForEdit.profile.position}
-              onChange={handleInputChange}
-              disabled={isLoading}
-            >
-              {roleOptions?.map((position) => (
-                <option key={position} value={position}>
-                  {formatStringUnderscores(position)}
-                </option>
-              ))}
-            </select>
-          ) : (
-            <input
-              type="text"
-              value={formatStringUnderscores(
-                userProfileForEdit.profile.position
-              )}
-              className="flex-1 bg-gray-200 py-3 pl-2 cursor-not-allowed capitalize"
-              disabled
-            />
-          )}
-        </div>
+            {roleOptions?.map((position) => (
+              <option key={position} value={position}>
+                {formatStringUnderscores(position)}
+              </option>
+            ))}
+          </SelectField>
+        ) : (
+          <FormField
+            labelText="Role"
+            value={formatStringUnderscores(userProfileForEdit.profile.position)}
+            required
+            disabled
+          />
+        )}
 
         {/* First Name Field */}
         <FormField

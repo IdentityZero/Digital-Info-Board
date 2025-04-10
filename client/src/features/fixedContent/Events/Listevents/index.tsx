@@ -31,7 +31,9 @@ const ListEvents = ({
 
   return (
     <div className="overflow-x-auto p-2">
-      <h2 className="text-xl font-semibold mb-4">Upcoming Events List</h2>
+      <h2 className="font-semibold text-sm sm:text-base md:text-lg mb-4">
+        Upcoming Events List
+      </h2>
       {!idExists && targetId !== "" && (
         <div className="mb-2">
           <ClosableMessage
@@ -43,7 +45,7 @@ const ListEvents = ({
           </ClosableMessage>
         </div>
       )}
-      <table className="min-w-full border rounded-lg">
+      <table className="min-w-full border rounded-lg text-sm sm:text-base">
         <thead className="bg-gray-200 dark:bg-gray-700">
           <tr>
             <th className="p-2 border">ID</th>
@@ -76,8 +78,10 @@ const ListEvents = ({
                 >
                   {event.id}
                 </td>
-                <td className="p-2 border text-center">{event.name}</td>
-                <td className="p-2 border text-center">
+                <td className="p-2 border text-center whitespace-nowrap">
+                  {event.name}
+                </td>
+                <td className="p-2 border text-center whitespace-nowrap">
                   {formatInputDate(event.date)}
                 </td>
 

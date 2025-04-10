@@ -1,8 +1,11 @@
 import { FaArrowLeft } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import AddEmail from "../../../features/accounts/AddEmail";
+import { useAuth } from "../../../context/AuthProvider";
+import ErrorMessage from "../../../components/ErrorMessage";
 
 const AddUpdateEmailPage = () => {
+  const { user } = useAuth();
   return (
     <div className="p-4 mt-2 flex flex-col gap-4">
       <Link
@@ -12,7 +15,7 @@ const AddUpdateEmailPage = () => {
         <FaArrowLeft />
         Back to Profile
       </Link>
-      <AddEmail />
+      {!user ? <ErrorMessage /> : <AddEmail />}
     </div>
   );
 };

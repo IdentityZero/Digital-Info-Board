@@ -168,7 +168,7 @@ const CreateImageAnnouncement = () => {
   };
 
   return (
-    <div className="p-3">
+    <div className="p-2 md:p-3">
       <Form onSubmitFunc={handleSubmit}>
         <div className="flex flex-col gap-2">
           <QuillEditor
@@ -235,6 +235,7 @@ const CreateImageAnnouncement = () => {
                     className="flex flex-col md:flex-row gap-2 mt-4 bg-white dark:bg-gray-800 border rounded-lg shadow-md p-4"
                   >
                     <div>
+                      {/* Image File */}
                       <img
                         src={URL.createObjectURL(image.image as File)}
                         alt={`Uploaded ${index}`}
@@ -243,20 +244,26 @@ const CreateImageAnnouncement = () => {
                           "border border-dashed border-red-600"
                         }`}
                       />
+
+                      {/* Error Text */}
                       {error.image_announcement[index]?.image && (
                         <Errortext
                           text={error.image_announcement[index]?.image}
                         />
                       )}
                     </div>
+
+                    {/* File Meta Data */}
                     <div className="flex-1 flex flex-col justify-between">
-                      <div>
-                        <p className="font-bold">{image_file.name}</p>
+                      <div className="text-sm sm:text-base">
+                        <p className="font-bold truncate w-full">
+                          {image_file.name}
+                        </p>
                         <p className="text-gray-500">
                           {(image_file.size / (1024 * 1024)).toFixed(2)} MB
                         </p>
                       </div>
-                      <div className="flex items-center justify-between">
+                      <div className="flex max-md:flex-col max-md:items-start items-center gap-2 justify-between">
                         <div className="min-w-64">
                           <Input
                             labelText="Display Duration"
@@ -271,7 +278,7 @@ const CreateImageAnnouncement = () => {
 
                         <button
                           onClick={() => handleDeleteUpload(index)}
-                          className="bg-red-500 hover:bg-red-700 active:bg-red-800 p-2 rounded-lg flex gap-2 items-center text-white"
+                          className="bg-red-500 hover:bg-red-700 active:bg-red-800 p-2 rounded-lg flex gap-2 items-center text-white md:mt-7"
                           type="button"
                           disabled={loading}
                         >

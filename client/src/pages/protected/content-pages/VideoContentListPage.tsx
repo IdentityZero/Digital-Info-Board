@@ -101,36 +101,38 @@ const VideoContentListPage = () => {
   };
 
   return (
-    <div className="mt-5 w-full overflow-x-auto">
-      <table className="border w-full overflow-x-auto border-gray-200 shadow-md rounded-lg">
-        <thead>
-          <tr className="bg-gray-100 text-left">
-            <th className="px-6 py-3">ID</th>
-            <th className="px-6 py-3">Title</th>
-            <th className="px-6 py-3">Start Date</th>
-            <th className="px-6 py-3">End Date</th>
-            <th className="px-6 py-3">Duration</th>
-            <th className="px-6 py-3">Approved</th>
-            <th className="px-6 py-3">Expired</th>
-            <th className="px-6 py-3">Actions</th>
-          </tr>
-        </thead>
+    <div className="w-full mt-5">
+      <div className="overflow-x-auto">
+        <table className="border w-full overflow-x-auto border-gray-200 shadow-md rounded-lg">
+          <thead>
+            <tr className="bg-gray-100 text-left text-sm sm:text-base">
+              <th className="px-4 py-2 sm:px-6 sm:py-3">ID</th>
+              <th className="px-4 py-2 sm:px-6 sm:py-3">Title</th>
+              <th className="px-4 py-2 sm:px-6 sm:py-3">Start Date</th>
+              <th className="px-4 py-2 sm:px-6 sm:py-3">End Date</th>
+              <th className="px-4 py-2 sm:px-6 sm:py-3">Duration</th>
+              <th className="px-4 py-2 sm:px-6 sm:py-3">Approved</th>
+              <th className="px-4 py-2 sm:px-6 sm:py-3">Expired</th>
+              <th className="px-4 py-2 sm:px-6 sm:py-3">Actions</th>
+            </tr>
+          </thead>
 
-        <tbody className="overflow-x-scroll ">
-          {announcements.results.map((announcement) => (
-            <TableRow
-              announcement={announcement}
-              handleDelete={handleDelete}
-              key={announcement.id}
-            />
-          ))}
-        </tbody>
-      </table>
-      {announcements.results.length === 0 && (
-        <div className="w-full text-center mt-2">
-          <h2 className="font-semibold">No contents can be shown.</h2>
-        </div>
-      )}
+          <tbody className="overflow-x-scroll ">
+            {announcements.results.map((announcement) => (
+              <TableRow
+                announcement={announcement}
+                handleDelete={handleDelete}
+                key={announcement.id}
+              />
+            ))}
+          </tbody>
+        </table>
+        {announcements.results.length === 0 && (
+          <div className="w-full text-center mt-2">
+            <h2 className="font-semibold">No contents can be shown.</h2>
+          </div>
+        )}
+      </div>
       <Pagination
         pageSize={pageSize}
         page={page}
@@ -150,25 +152,32 @@ type TableRowProps = {
 
 function TableRow({ announcement, handleDelete }: TableRowProps) {
   return (
-    <tr className="border-t hover:bg-gray-50" key={announcement.id}>
-      <td className="px-6 py-3 font-bold hover:underline">
+    <tr
+      className="border-t hover:bg-gray-50 text-sm sm:text-base"
+      key={announcement.id}
+    >
+      <td className="px-4 py-2 sm:px-6 sm:py-3 font-bold hover:underline">
         <Link to={`/dashboard/contents/video/${announcement.id}`}>
           {announcement.id}{" "}
         </Link>
       </td>
-      <td className="px-6 py-3">
+      <td className="px-4 py-2 sm:px-6 sm:py-3">
         {truncateStringVariableLen(
           extractReactQuillText(announcement.title as string)
         )}
       </td>
 
-      <td className="px-6 py-3">{formatTimestamp(announcement.start_date)}</td>
-      <td className="px-6 py-3">{formatTimestamp(announcement.end_date)}</td>
-      <td className="px-6 py-3">
+      <td className="px-4 py-2 sm:px-6 sm:py-3">
+        {formatTimestamp(announcement.start_date)}
+      </td>
+      <td className="px-4 py-2 sm:px-6 sm:py-3">
+        {formatTimestamp(announcement.end_date)}
+      </td>
+      <td className="px-4 py-2 sm:px-6 sm:py-3">
         {announcement.video_announcement &&
           addTotalDuration(announcement.video_announcement)}
       </td>
-      <td className="px-6 py-3">
+      <td className="px-4 py-2 sm:px-6 sm:py-3">
         <span className="flex justify-center">
           {announcement.is_active ? (
             <FaCheckCircle className="text-green-500" />
@@ -177,7 +186,7 @@ function TableRow({ announcement, handleDelete }: TableRowProps) {
           )}
         </span>
       </td>
-      <td className="px-6 py-3">
+      <td className="px-4 py-2 sm:px-6 sm:py-3">
         <span className="flex justify-center">
           {isNowWithinRange(announcement.start_date, announcement.end_date) ? (
             <FaTimesCircle className="text-red-500" />
@@ -186,8 +195,8 @@ function TableRow({ announcement, handleDelete }: TableRowProps) {
           )}
         </span>
       </td>
-      <td className="px-6 py-3">
-        <div className="flex flex-row gap-2">
+      <td className="px-4 py-2 sm:px-6 sm:py-3">
+        <div className="flex flex-row gap-2 text-base">
           <span>
             <Link to={`/dashboard/contents/video/${announcement.id}`}>
               <IconWithTooltip

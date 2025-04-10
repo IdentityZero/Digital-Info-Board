@@ -69,6 +69,9 @@
 
 }
 
+
+/* #region Topic: Full Calendar override css */
+
 .fc-header-toolbar {
   margin-bottom: 4px !important; /* Reduce space below the toolbar in calendar*/
 }
@@ -76,3 +79,59 @@
 .fc-toolbar {
   padding: 2px 0 !important; /* Reduce padding in toolbar */
 }
+
+.fc-toolbar-chunk h2 {
+  font-size: 1rem !important;
+}
+
+.fc-toolbar-chunk button {
+  font-size: 0.625rem !important; 
+  padding: 0.25rem 0.4rem !important; 
+}
+
+
+@media (min-width: 640px) {
+  .fc-toolbar-chunk h2 {
+    font-size: 1.125rem !important; 
+  }
+
+  .fc-toolbar-chunk button {
+    font-size: 0.75rem !important; 
+    padding: 0.3rem 0.45rem !important; 
+  }
+  
+}
+
+@media (min-width: 768px) {
+  .fc-toolbar-chunk h2 {
+    font-size: 1.25rem!important; 
+  }
+
+  .fc-toolbar-chunk button {
+    font-size: 0.875rem !important; 
+    padding: 0.35rem 0.55rem !important; 
+}
+
+}
+
+@media (min-width: 1024px) {
+  .fc-toolbar-chunk h2 {
+    font-size: 1.5rem !important; 
+  }
+
+  .fc-toolbar-chunk button {
+    font-size: 1rem !important; 
+    padding: 0.4rem 0.65rem !important; 
+  }
+
+}
+
+@media (min-width: 1280px) {
+  .fc-toolbar-chunk h2 {
+    font-size: 1.75rem !important; 
+  }
+}
+
+
+
+/* #endregion */

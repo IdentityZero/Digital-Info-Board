@@ -8,10 +8,7 @@ import {
   FullVideoAnnouncementType,
   VideoAnnouncementCreateType,
 } from "../../types/AnnouncementTypes";
-import {
-  convertToDatetimeLocal,
-  truncateStringVariableLen,
-} from "../../utils/formatters";
+import { convertToDatetimeLocal } from "../../utils/formatters";
 import { forwardRef, useEffect, useState } from "react";
 import { UpdateVideoAnnouncementErrorT } from "./helpers";
 
@@ -168,6 +165,7 @@ const EditVideoAnnouncement = forwardRef<
         />
         <Form onSubmitFunc={submitFunc} ref={ref}>
           <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-2">
+            {/* Dates */}
             <Input
               type="datetime-local"
               value={convertToDatetimeLocal(videoAnnouncementData.start_date)}
@@ -205,16 +203,17 @@ const EditVideoAnnouncement = forwardRef<
             <h3 className="bg-[#6e8ea4] px-5 py-2 text-xl font-bold">
               Uploaded Videos
             </h3>
-            <div className="flex flex-col gap-4 mt-2">
-              {videoAnnouncementData.video_announcement.map((video, index) => {
-                const video_file = video.video as string;
 
-                return (
-                  <div
-                    key={video.id}
-                    className="flex flex-col md:flex-row gap-2 mt-4 bg-white dark:bg-gray-800 border rounded-lg shadow-md p-4"
-                  >
-                    {/* Video Display */}
+            {videoAnnouncementData.video_announcement.map((video, index) => {
+              const video_file = video.video as string;
+
+              return (
+                <div
+                  key={video.id}
+                  className="flex flex-col md:flex-row gap-2 mt-4 bg-white dark:bg-gray-800 border rounded-lg shadow-md p-4"
+                >
+                  {/* Video Display */}
+                  <div>
                     <video
                       controls
                       className="w-[500px] h-[280px] rounded-xl object-contain mx-auto"
@@ -230,56 +229,52 @@ const EditVideoAnnouncement = forwardRef<
                       <source src={video.video as string} />
                       Your browser does not support the video tag.
                     </video>
+                  </div>
 
-                    <div className="flex-1 flex flex-col justify-between">
-                      {/* Details */}
-                      <div>
-                        <p className="font-bold">
-                          {truncateStringVariableLen(
-                            video_file.split("/").pop() as string,
-                            50,
-                            50
-                          )}
-                        </p>
-                        <p className="text-gray-500">
-                          {(video.file_size / (1024 * 1024)).toFixed(2)} MB
-                        </p>
-                        <p className="text-gray-500">
-                          Video Duration: {oldVideoDurations[index]} seconds
-                        </p>
-                      </div>
+                  <div className="flex-1 flex flex-col justify-between">
+                    {/* Details */}
+                    <div className="text-sm sm:text-base">
+                      <p className="font-bold truncate w-full">
+                        {video_file.split("/").pop()}
+                      </p>
+                      <p className="text-gray-500">
+                        {(video.file_size / (1024 * 1024)).toFixed(2)} MB
+                      </p>
+                      <p className="text-gray-500">
+                        Video Duration: {oldVideoDurations[index]} seconds
+                      </p>
+                    </div>
 
-                      {/* Duration Input */}
-                      <div className="flex items-center justify-between">
-                        <div className="min-w-64">
-                          <Input
-                            labelText="Display Duration"
-                            type="text"
-                            name={`video_announcement[${index}][duration]`} // This does not matter
-                            value={video.duration as string}
-                            onChange={(e) => handleDurationChange(e, index)}
-                            error={errors.to_update[index]?.duration}
-                            disabled={isLoading}
-                            helpText={
-                              "Duration when being displayed. Starts in 0."
-                            }
-                          />
-                        </div>
-                        <button
-                          onClick={() => handleDeleteVideo(index)}
-                          className="bg-red-500 hover:bg-red-700 active:bg-red-800 p-2 rounded-lg flex gap-2 items-center text-white"
-                          type="button"
+                    {/* Duration Input */}
+                    <div className="flex max-md:flex-col max-md:items-start items-center gap-2 justify-between">
+                      <div className="min-w-64">
+                        <Input
+                          labelText="Display Duration"
+                          type="text"
+                          name={`video_announcement[${index}][duration]`} // This does not matter
+                          value={video.duration as string}
+                          onChange={(e) => handleDurationChange(e, index)}
+                          error={errors.to_update[index]?.duration}
                           disabled={isLoading}
-                        >
-                          <FaTrashAlt />
-                          <span>Remove</span>
-                        </button>
+                          helpText={
+                            "Duration when being displayed. Starts in 0."
+                          }
+                        />
                       </div>
+                      <button
+                        onClick={() => handleDeleteVideo(index)}
+                        className="bg-red-500 hover:bg-red-700 active:bg-red-800 p-2 rounded-lg flex gap-2 items-center text-white mt-1.5"
+                        type="button"
+                        disabled={isLoading}
+                      >
+                        <FaTrashAlt />
+                        <span>Remove</span>
+                      </button>
                     </div>
                   </div>
-                );
-              })}
-            </div>
+                </div>
+              );
+            })}
           </div>
 
           {/* NEW VIDEOS */}
@@ -301,6 +296,8 @@ const EditVideoAnnouncement = forwardRef<
                 accept="video/mp4, video/mov, video/avi"
                 disabled={isLoading}
               />
+
+              {/* New Videos */}
               {!rerenderTrigger &&
                 newVideos.map((video, index) => {
                   const video_file = video.video as File;
@@ -337,9 +334,9 @@ const EditVideoAnnouncement = forwardRef<
                       </div>
 
                       <div className="flex-1 flex flex-col justify-between">
-                        <div>
-                          <p className="font-bold">
-                            {truncateStringVariableLen(video_file.name, 50, 50)}
+                        <div className="text-sm sm:text-base">
+                          <p className="font-bold truncate w-full">
+                            {video_file.name}
                           </p>
                           <p className="text-gray-500">
                             {(video_file.size / (1024 * 1024)).toFixed(2)} MB
@@ -349,8 +346,8 @@ const EditVideoAnnouncement = forwardRef<
                           </p>
                         </div>
 
-                        <div className="flex items-center justify-between">
-                          <div className="w-64">
+                        <div className="flex max-md:flex-col max-md:items-start items-center gap-2 justify-between">
+                          <div className="min-w-64">
                             <Input
                               labelText="Display Duration"
                               type="text"
@@ -368,7 +365,7 @@ const EditVideoAnnouncement = forwardRef<
                           </div>
                           <button
                             onClick={() => handleNewVideoDelete(index)}
-                            className="bg-red-500 hover:bg-red-700 active:bg-red-800 p-2 rounded-lg flex gap-2 items-center text-white"
+                            className="bg-red-500 hover:bg-red-700 active:bg-red-800 p-2 rounded-lg flex gap-2 items-center text-white mt-1.5"
                             type="button"
                             disabled={isLoading}
                           >

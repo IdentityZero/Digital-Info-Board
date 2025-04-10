@@ -157,3 +157,29 @@ export function formatDateTimeLocalPST(date: Date): string {
   const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
   return localDate.toISOString().slice(0, 16);
 }
+
+function capitalizeWord(str: string): string {
+  /**
+   * Capitalizes the first letter of a string and converts the rest to lowercase.
+   *
+   * @param str - The input string to capitalize.
+   * @returns A new string with the first letter capitalized.
+   */
+  if (!str) return "";
+
+  // Convert first character to uppercase and the rest to lowercase
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+}
+
+/**
+ * Capitalizes the first letter of every word in a sentence.
+ *
+ * @param str - The input sentence as a string.
+ * @returns A new string with each word capitalized.
+ */
+export function capitalizeWords(str: string): string {
+  return str
+    .split(" ")
+    .map((word) => capitalizeWord(word))
+    .join(" ");
+}

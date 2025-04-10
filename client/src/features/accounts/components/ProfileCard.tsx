@@ -2,6 +2,8 @@ import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 import IconWithTooltip from "../../../components/IconWithTooltip";
+import Button from "./Button";
+
 import { formatStringUnderscores } from "../../../utils/formatters";
 import { FullUserType } from "../../../types/UserTypes";
 
@@ -18,97 +20,89 @@ function ProfileCard({
 }: ProfileCardProps) {
   return (
     <div key={user.id} className="w-full flex flex-col border border-black p-2">
-      <p className="text-lg font-semibold capitalize w-full bg-cyanBlue p-4 rounded-full flex items-center gap-2">
+      <p className="text-sm sm:text-base font-semibold capitalize w-full bg-cyanBlue p-2 sm:p-3 rounded-full flex items-center gap-2">
         {user.profile.is_admin && (
           <IconWithTooltip
             icon={FaCheckCircle}
             label="This user is an admin."
-            labelClassName="bg-gray-800 text-white text-sm py-1 px-2 rounded shadow-md whitespace-nowrap z-50"
+            labelClassName="bg-gray-800 text-white text-xs py-0.5 px-1.5 rounded shadow-md whitespace-nowrap z-50"
           />
         )}
-        {user.first_name + " " + user.last_name}{" "}
+        {user.first_name + " " + user.last_name}
       </p>
-      <div className="w-full flex flex-row p-4 gap-4">
-        <div className="w-1/5">
+
+      <div className="w-full flex flex-col md:flex-row p-3 gap-3">
+        {/* Profile Image */}
+        <div className="w-full md:w-[120px] flex justify-center">
           <img
             src={user.profile.image as string}
             alt={`${user.username}'s Profile`}
-            className="w-[150px] h-[150px] rounded-full border m-auto"
+            className="w-[100px] h-[100px] rounded-full border"
           />
         </div>
 
-        <div className="p-6 w-2/5">
-          <div className="flex justify-between items-center">
-            <span className="text-gray-600 font-medium">Username:</span>
-            <span className="text-black font-bold capitalize">
-              {user.username}
-            </span>
-          </div>
-          <div className="flex justify-between items-center">
-            <span className="text-gray-600 font-medium">ID Number:</span>
-            <span className="text-black font-bold capitalize">
-              {user.profile.id_number}
-            </span>
-          </div>
-          <div className="flex justify-between items-center">
-            <span className="text-gray-600 font-medium">Role:</span>
-            <span className="text-black font-bold capitalize">
-              {user.profile.role}
-            </span>
-          </div>
-          <div className="flex justify-between items-center">
-            <span className="text-gray-600 font-medium">Position:</span>
-            <span className="text-black font-bold capitalize">
-              {formatStringUnderscores(user.profile.position)}
-            </span>
-          </div>
-          <div className="flex justify-between items-center">
-            <span className="text-gray-600 font-medium">
-              Account Activated:
-            </span>
-            <span className="text-black font-bold capitalize">
-              {user.is_active ? (
-                <FaCheckCircle className="text-green-500" />
+        {/* User Info */}
+        <div className="w-full md:flex-1 px-0 sm:px-2 space-y-2 text-sm">
+          {[
+            { label: "Username:", value: user.username },
+            { label: "ID Number:", value: user.profile.id_number },
+            { label: "Role:", value: user.profile.role },
+            {
+              label: "Position:",
+              value: formatStringUnderscores(user.profile.position),
+            },
+            {
+              label: "Account Activated:",
+              value: user.is_active ? (
+                <FaCheckCircle className="text-green-500 text-base" />
               ) : (
-                <FaTimesCircle className="text-red-500" />
-              )}
-            </span>
-          </div>
-          <div className="flex justify-between items-center">
-            <span className="text-gray-600 font-medium">Admin:</span>
-            <span className="text-black font-bold capitalize">
-              {user.profile.is_admin ? (
-                <FaCheckCircle className="text-green-500" />
+                <FaTimesCircle className="text-red-500 text-base" />
+              ),
+            },
+            {
+              label: "Admin:",
+              value: user.profile.is_admin ? (
+                <FaCheckCircle className="text-green-500 text-base" />
               ) : (
-                <FaTimesCircle className="text-red-500" />
-              )}
-            </span>
-          </div>
+                <FaTimesCircle className="text-red-500 text-base" />
+              ),
+            },
+          ].map((item, index) => (
+            <div
+              key={index}
+              className="flex justify-between items-center gap-1"
+            >
+              <span className="text-gray-600">{item.label}</span>
+              <span className="text-black font-medium capitalize text-right">
+                {item.value}
+              </span>
+            </div>
+          ))}
         </div>
       </div>
 
-      <div className="mt-2 w-full flex justify-end gap-2">
-        <Link
-          to={`${user.id}`}
-          className="py-2 px-16 max-sm:px-6 rounded-full bg-cyanBlue hover:bg-cyanBlue-dark active:bg-cyanBlue-darker font-semibold "
-          type="button"
-        >
-          View
-        </Link>
-        <button
-          className="py-2 px-16 max-sm:px-6 rounded-full  bg-btSecondary hover:bg-btSecondary-hover active:bg-btSecondary-active font-semibold "
-          type="button"
-          onClick={() => handleActivation(user.id, !user.is_active)}
-        >
-          {user.is_active ? "Deactivate" : "Activate"}
-        </button>
-        <button
-          className="py-2 px-16 max-sm:px-6 rounded-full bg-btDanger hover:bg-btDanger-hover active:bg-btDanger-active font-semibold "
-          type="button"
-          onClick={() => handleDelete(user.id)}
-        >
-          Delete
-        </button>
+      <div className="mt-2 w-full flex flex-col sm:flex-row justify-end gap-2">
+        <div className="w-full sm:w-auto">
+          <Link to={`${user.id}`}>
+            <Button text="View" type="button" />
+          </Link>
+        </div>
+        <div className="w-full sm:w-auto">
+          <Button
+            text={user.is_active ? "Deactivate" : "Activate"}
+            variant="secondary"
+            type="button"
+            onClick={() => handleActivation(user.id, !user.is_active)}
+          />
+        </div>
+        <div className="w-full sm:w-auto">
+          <Button
+            text="Delete"
+            variant="danger"
+            type="button"
+            onClick={() => handleDelete(user.id)}
+          />
+        </div>
       </div>
     </div>
   );

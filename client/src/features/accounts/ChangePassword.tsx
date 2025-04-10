@@ -7,6 +7,7 @@ import { ChangePasswordErrorState } from "./helpers";
 import FormField from "./components/FormField";
 import { Id } from "react-toastify";
 import useLoadingToast from "../../hooks/useLoadingToast";
+import Button from "./components/Button";
 
 const ChangePassword = () => {
   const toastId = useRef<Id | null>(null);
@@ -71,7 +72,10 @@ const ChangePassword = () => {
 
   return (
     <div className="p-4 w-full mx-auto border rounded-lg shadow-md">
-      <h2 className="text-xl font-bold mb-4">Change Password</h2>
+      <h2 className="text-base sm:text-lg md:text-xl font-bold mb-4">
+        Change Password
+      </h2>
+
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
         <FormField
           error={updateErrors.old_password}
@@ -110,15 +114,11 @@ const ChangePassword = () => {
           placeholder="Confirm New Password"
         />
 
-        <button
+        <Button
+          text={isSaving ? "Saving..." : "Change Password"}
           type="submit"
-          className={`py-2 px-8 rounded-full bg-cyanBlue hover:bg-cyanBlue-dark active:bg-cyanBlue-darker font-semibold ${
-            isSaving && "cursor-not-allowed"
-          }`}
           disabled={isSaving}
-        >
-          {isSaving ? "Saving..." : "Change Password"}
-        </button>
+        />
       </form>
     </div>
   );

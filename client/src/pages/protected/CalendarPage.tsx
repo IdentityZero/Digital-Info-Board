@@ -14,7 +14,7 @@ const CalendarPage = () => {
             key={index}
             to={link.url}
             className={({ isActive }) =>
-              `font-bold text-xl text-center p-2 ${
+              `font-bold text-base md:text-lg lg:text-xl text-center p-2 ${
                 isActive ? "bg-cyanBlue" : "bg-white border-2 border-black"
               }`
             }

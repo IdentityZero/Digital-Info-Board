@@ -25,7 +25,7 @@ const CreateVideoContentPage = () => {
         <h3 className="bg-[#ececec] px-5 py-3 text-xl font-bold">
           Banner videos
         </h3>
-        <div className="p-3">
+        <div className="md:p-3">
           <CreateVideoAnnouncement />
         </div>
       </div>

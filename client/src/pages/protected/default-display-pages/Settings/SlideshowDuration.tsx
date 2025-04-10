@@ -90,7 +90,7 @@ const SlideshowDuration = ({
 
   return (
     <div className="w-full bg-white border border-black p-2">
-      <p className="bg-cyanBlue p-2 rounded-full font-semibold text-lg">
+      <p className="bg-cyanBlue p-2 rounded-full font-semibold text-sm sm:text-base md:text-lg">
         Slide show Durations
       </p>
       <div className="mt-2 px-2">

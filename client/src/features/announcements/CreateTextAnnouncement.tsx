@@ -145,7 +145,7 @@ const CreateTextAnnouncement = () => {
   };
 
   return (
-    <div>
+    <div className="p-2 md:p-3">
       <Form onSubmitFunc={handleFormSubmit}>
         <QuillEditor
           id="text-title"

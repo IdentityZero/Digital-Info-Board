@@ -4,10 +4,7 @@ import { Id } from "react-toastify";
 
 import Modal from "../../../components/ui/Modal";
 import { Button, Input } from "../../../components/ui";
-import {
-  extractReactQuillText,
-  truncateStringVariableLen,
-} from "../../../utils/formatters";
+import { extractReactQuillText } from "../../../utils/formatters";
 
 import { useAuth } from "../../../context/AuthProvider";
 import useLoadingToast from "../../../hooks/useLoadingToast";
@@ -181,24 +178,27 @@ const ChangeDurationModal = ({
               return (
                 <div
                   key={index}
-                  className="flex items-center justify-between gap-2 py-3 mb-2 border-t-2 border-b-2 border-gray-500"
+                  className="flex flex-col items-start gap-4 py-4 mb-4 border-t-2 border-b-2 border-gray-300 hover:bg-gray-50 transition-colors duration-300"
                 >
-                  <span className="flex-1">
+                  <div className="flex justify-center">
                     <img
                       src={image_file}
                       alt={`Uploaded ${index}`}
-                      className="w-[150px] h-[150px] object-contain"
+                      className="w-[120px] h-[120px] sm:w-[150px] sm:h-[150px] md:w-[180px] md:h-[180px] object-contain rounded-lg shadow-md"
                     />
-                  </span>
-                  <span className=" flex-1 text-center">
+                  </div>
+
+                  <span className="text-sm sm:text-base md:text-lg font-semibold text-gray-800 truncate w-full">
                     {image_file.split("/").pop()}
                   </span>
-                  <span className="flex-1 text-center">
+
+                  {/* Duration Input */}
+                  <div className="w-full mt-2">
                     <Input
                       error={error && error.to_update[index]?.duration}
                       disabled={isLoading}
                       required
-                      labelText=""
+                      labelText="Duration"
                       type="text"
                       name={`image_announcement[${index}][duration]`} // This does not matter
                       value={image.duration as string}
@@ -206,7 +206,7 @@ const ChangeDurationModal = ({
                         handleDurationChange(e.target.value, index, "image")
                       }
                     />
-                  </span>
+                  </div>
                 </div>
               );
             })}
@@ -220,11 +220,14 @@ const ChangeDurationModal = ({
               const video_file = video.video as string;
 
               return (
-                <div key={video.id} className="flex gap-4">
+                <div
+                  key={video.id}
+                  className="flex flex-col items-start gap-4 py-4 mb-4 border-t-2 border-b-2 border-gray-300 hover:bg-gray-50 transition-colors duration-300"
+                >
                   {/* Video Display */}
                   <video
                     controls
-                    className="w-[150px] h-[150px] object-contain"
+                    className="w-[120px] h-[120px] sm:w-[150px] sm:h-[150px] md:w-[180px] md:h-[180px] object-contain rounded-lg shadow-md"
                     ref={(el) => {
                       if (el) {
                         el.onloadedmetadata = () => {
@@ -241,20 +244,14 @@ const ChangeDurationModal = ({
                     Your browser does not support the video tag.
                   </video>
 
-                  <div className="flex-1 flex flex-col justify-between">
+                  <div className="flex-1 flex flex-col justify-between w-full">
                     {/* Details */}
-                    <div>
-                      <p className="font-bold">
-                        {truncateStringVariableLen(
-                          video_file.split("/").pop() as string,
-                          45,
-                          45
-                        )}
-                      </p>
-                    </div>
+                    <p className="text-sm sm:text-base md:text-lg font-semibold text-gray-800 truncate w-full overflow-hidden">
+                      {video_file.split("/").pop()}
+                    </p>
 
                     {/* Duration Input */}
-                    <div className="flex items-center justify-between">
+                    <div className="flex max-md:flex-col max-md:items-start items-center justify-between">
                       <Input
                         disabled={isLoading}
                         required
@@ -270,6 +267,7 @@ const ChangeDurationModal = ({
                       />
                       <div className="mt-2">
                         <Button
+                          type="button"
                           disabled={isLoading}
                           onClick={() => {
                             if (videoDurations.length === 0) return;

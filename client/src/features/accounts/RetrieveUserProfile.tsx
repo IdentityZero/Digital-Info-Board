@@ -1,21 +1,27 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Id } from "react-toastify";
+import axios from "axios";
+import _ from "lodash";
+
+import { Errortext } from "../../components/ui";
+import FormField from "./components/FormField";
+import Button from "./components/Button";
+import LoadingMessage from "../../components/LoadingMessage";
+import ErrorMessage from "../../components/ErrorMessage";
+import SelectField from "./components/SelectField";
+
+import { formatStringUnderscores } from "../../utils/formatters";
+import { get_role_positions } from "../../constants/api";
+
+import useLoadingToast from "../../hooks/useLoadingToast";
+import { useAuth } from "../../context/AuthProvider";
+
 import { FullUserType, Role } from "../../types/UserTypes";
 import {
   retrieveUserInformation,
   updateUserInformationApi,
 } from "../../api/userRequest";
-import { useAuth } from "../../context/AuthProvider";
-import LoadingMessage from "../../components/LoadingMessage";
-import { formatStringUnderscores } from "../../utils/formatters";
-import { get_role_positions } from "../../constants/api";
-import _ from "lodash";
 import { UserInformationErrorState, UserInformationErrorT } from "./helpers";
-import axios from "axios";
-import { Errortext } from "../../components/ui";
-import FormField from "./components/FormField";
-import useLoadingToast from "../../hooks/useLoadingToast";
-import ErrorMessage from "../../components/ErrorMessage";
 
 type RetrieveUserProfileProps = {
   id: string;
@@ -216,7 +222,9 @@ const RetrieveUserProfile = ({ id }: RetrieveUserProfileProps) => {
               : (userData.profile.image as string)
           }
           alt="Your Profile"
-          className="w-[300px] h-[300px] object-cover rounded-full"
+          className={`w-[250px] h-[250px] md:w-[280px] md:h-[280px] lg:w-[300px] lg:h-[300px] aspect-square object-cover rounded-full ${
+            updateErrors.profile.image && "border-4 border-red-500"
+          }`}
         />
         <Errortext text={updateErrors.profile.image} />
         <input
@@ -228,11 +236,8 @@ const RetrieveUserProfile = ({ id }: RetrieveUserProfileProps) => {
           onChange={handleNewProfilePicChange}
           disabled={isSaving}
         />
-        <label
-          htmlFor="profile-change-prof-pic"
-          className="py-2 px-8 rounded-full bg-cyanBlue hover:bg-cyanBlue-dark active:bg-cyanBlue-darker font-semibold cursor-pointer"
-        >
-          Change Profile
+        <label htmlFor="profile-change-prof-pic">
+          <Button text="Change Profile" />
         </label>
       </div>
 
@@ -241,7 +246,6 @@ const RetrieveUserProfile = ({ id }: RetrieveUserProfileProps) => {
         <FormField
           error={updateErrors.username}
           labelText="Username"
-          id="username"
           value={userData.username}
           type="text"
           name="username"
@@ -251,54 +255,37 @@ const RetrieveUserProfile = ({ id }: RetrieveUserProfileProps) => {
         />
 
         {/* Role Field */}
-        <div className="flex flex-row items-center rounded-md overflow-hidden">
-          <label
-            className=" w-[150px] lg:w-[180px] bg-desaturatedBlueGray py-3 px-2 font-bold"
-            htmlFor="role"
-          >
-            Role
-          </label>
-          <select
-            name="profile.role"
-            id="role"
-            className="flex-1 bg-gray-200 py-3 pl-2 capitalize"
-            onChange={handleSelectChange}
-            value={selectedRole}
-            disabled={isSaving}
-          >
-            <option value="student">Student</option>
-            <option value="faculty">Faculty</option>
-          </select>
-        </div>
+        <SelectField
+          labelText="Role"
+          name="profile.role"
+          onChange={handleSelectChange}
+          required
+          value={selectedRole}
+          disabled={isSaving}
+        >
+          <option value="student">Student</option>
+          <option value="faculty">Faculty</option>
+        </SelectField>
 
         {/* Position Field */}
-        <div className="flex flex-row items-center rounded-md overflow-hidden">
-          <label
-            className=" w-[150px] lg:w-[180px] bg-desaturatedBlueGray py-3 px-2 font-bold"
-            htmlFor="position"
-          >
-            Position
-          </label>
-          <select
-            name="profile.position"
-            id="position"
-            className="flex-1 bg-gray-200 py-3 pl-2 capitalize"
-            value={userData.profile.position}
-            onChange={handleSelectChange}
-            disabled={isSaving}
-          >
-            {roleOptions?.map((position) => (
-              <option key={position} value={position}>
-                {formatStringUnderscores(position)}
-              </option>
-            ))}
-          </select>
-        </div>
+        <SelectField
+          labelText="Position"
+          name="profile.position"
+          onChange={handleSelectChange}
+          required
+          value={userData.profile.position}
+          disabled={isLoading}
+        >
+          {roleOptions?.map((position) => (
+            <option key={position} value={position}>
+              {formatStringUnderscores(position)}
+            </option>
+          ))}
+        </SelectField>
 
         {/* First Name Field */}
         <FormField
           labelText="First Name"
-          id="first-name"
           value={userData.first_name}
           type="text"
           name="first_name"
@@ -310,7 +297,6 @@ const RetrieveUserProfile = ({ id }: RetrieveUserProfileProps) => {
         {/* Last Name Field */}
         <FormField
           labelText="Last Name"
-          id="last-name"
           value={userData.last_name}
           type="text"
           name="last_name"
@@ -331,7 +317,6 @@ const RetrieveUserProfile = ({ id }: RetrieveUserProfileProps) => {
         <FormField
           error={updateErrors.profile.id_number}
           labelText="ID Number"
-          id="id-number"
           value={userData.profile.id_number}
           type="text"
           name="profile.id_number"
@@ -344,7 +329,6 @@ const RetrieveUserProfile = ({ id }: RetrieveUserProfileProps) => {
         <FormField
           error={updateErrors.profile.birthdate}
           labelText="Birthdate"
-          id="birthdate"
           value={userData.profile.birthdate}
           type="date"
           name="profile.birthdate"
@@ -354,46 +338,24 @@ const RetrieveUserProfile = ({ id }: RetrieveUserProfileProps) => {
         />
 
         {/* Admin Field */}
-        <div className="flex flex-row items-center rounded-md overflow-hidden border-2 h-[48px] bg-desaturatedBlueGray">
-          <label
-            htmlFor="admin"
-            className=" w-[150px] lg:w-[180px] px-2 font-bold flex flex-row items-center gap-2"
-          >
-            Is Admin
-          </label>
-          <div className="flex-1 bg-gray-200 h-full pl-2">
-            <input
-              type="checkbox"
-              checked={userData.profile.is_admin}
-              className="h-full"
-              id="admin"
-              name="profile.is_admin"
-              onChange={handleInputChange}
-              disabled={isSaving}
-            />
-          </div>
-        </div>
+        <FormField
+          labelText="Is Admin"
+          type="checkbox"
+          checked={userData.profile.is_admin}
+          name="profile.is_admin"
+          onChange={handleInputChange}
+          disabled={isSaving}
+        />
 
         {/* Active Field */}
-        <div className="flex flex-row items-center rounded-md overflow-hidden border-2 h-[48px] bg-desaturatedBlueGray">
-          <label
-            htmlFor="active"
-            className=" w-[150px] lg:w-[180px] px-2 font-bold flex flex-row items-center gap-2"
-          >
-            Is Active
-          </label>
-          <div className="flex-1 bg-gray-200 h-full pl-2">
-            <input
-              type="checkbox"
-              checked={userData.is_active}
-              className="h-full"
-              id="active"
-              name="is_active"
-              onChange={handleInputChange}
-              disabled={isSaving}
-            />
-          </div>
-        </div>
+        <FormField
+          labelText="Is Active"
+          type="checkbox"
+          checked={userData.is_active}
+          name="is_active"
+          onChange={handleInputChange}
+          disabled={isSaving}
+        />
 
         <div className="flex justify-end gap-2">
           <button

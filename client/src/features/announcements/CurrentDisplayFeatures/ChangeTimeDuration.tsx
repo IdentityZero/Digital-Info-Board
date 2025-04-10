@@ -23,13 +23,8 @@ const ChangeTimeDuration = ({ sliderItems }: ChangeTimeDurationProps) => {
   };
 
   return (
-    <div className="w-full h-[250px] bg-darkTeal border border-black rounded-lg overflow-hidden px-4 py-6 flex flex-col justify-between">
-      {/* Title Placeholder */}
-      <div className="text-white font-bold text-lg px-4">
-        Change Time Duration
-      </div>
-
-      <div className="flex flex-row gap-2 justify-between h-[150px] p-4">
+    <div className="w-full h-[180px] bg-darkTeal border border-black rounded-lg overflow-hidden px-4 py-6 flex flex-col justify-between">
+      <div className="flex flex-row gap-2 justify-between h-[150px]">
         <DragAndDrop
           items={items}
           setItems={setItems}

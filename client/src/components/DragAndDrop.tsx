@@ -67,7 +67,7 @@ const DragAndDrop = ({
             {items.map((item, index) => (
               <DnDSortableItem key={item.id} id={item.id} editMode={!disabled}>
                 <div
-                  className={`bg-yellowishBeige w-[120px] h-[120px] rounded-xl touch-none mb-1.5 overflow-hidden ${
+                  className={`bg-yellowishBeige w-[80px] h-[80px] sm:w-[100px] sm:h-[100px] md:w-[120px] md:h-[120px] rounded-xl touch-none mb-1.5 overflow-hidden ${
                     index === 0 && "mr-3"
                   }`}
                 >

@@ -30,7 +30,7 @@ const DashboardLayout = () => {
 
   return (
     <NotificationProvider>
-      <div className="flex min-h-screen max-w-screen-2xl lg:flex-row flex-col ">
+      <div className="flex min-h-screen max-w-screen-2xl mx-auto lg:flex-row flex-col">
         <div className="sticky min-w-fit top-0 h-screen bg-[#F8F9FA] text-black z-50 hover:overflow-y-auto hover:overflow-x-visible overflow-hidden custom-scrollbar max-lg:hidden">
           <DashboardSidebarv2
             menuData={USER_LINKS_V2.filter((link) => !link.mobileOnly)}

@@ -24,6 +24,7 @@ import {
   updateUserInformationApi,
 } from "../../../api/userRequest";
 import { DisplayUserProfile } from "../../../features/accounts/";
+import Button from "../../../features/accounts/components/Button";
 
 type MyProfilePageContextProps = {
   userProfileForEdit: FullUserType;
@@ -170,33 +171,33 @@ const MyProfilePage = () => {
             >
               <Form onSubmitFunc={handleFormUpdate}>
                 <DisplayUserProfile />
-                <div className="mt-2 w-full flex justify-end gap-2">
+                <div className="mt-2 w-full flex flex-col sm:flex-row justify-end items-stretch sm:items-center gap-2 sm:gap-4">
                   <Link
                     to="/dashboard/account/my-profile/change-password"
-                    className={`py-2 px-8 rounded-full bg-cyanBlue hover:bg-cyanBlue-dark active:bg-cyanBlue-darker font-semibold ${
-                      saveLoading && "cursor-not-allowed"
-                    }`}
+                    className="w-full sm:w-auto"
                   >
-                    Change Password
+                    <Button text="Change Password" disabled={saveLoading} />
                   </Link>
                   <Link
                     to="/dashboard/account/my-profile/update-email"
-                    className={`py-2 px-8 rounded-full bg-cyanBlue hover:bg-cyanBlue-dark active:bg-cyanBlue-darker font-semibold ${
-                      saveLoading && "cursor-not-allowed"
-                    }`}
+                    className="w-full sm:w-auto"
                   >
-                    {userProfileForEdit.email === ""
-                      ? "Add email"
-                      : "Update Email"}
+                    <Button
+                      text={
+                        userProfileForEdit.email === ""
+                          ? "Add Email"
+                          : "Update Email"
+                      }
+                      disabled={saveLoading}
+                    />
                   </Link>
-                  <button
-                    className={`py-2 px-8 rounded-full bg-cyanBlue hover:bg-cyanBlue-dark active:bg-cyanBlue-darker font-semibold ${
-                      saveLoading && "cursor-not-allowed"
-                    }`}
-                    type="submit"
-                  >
-                    {saveLoading ? "Saving" : "Update"}
-                  </button>
+                  <div className="w-full sm:w-auto">
+                    <Button
+                      type="submit"
+                      text={saveLoading ? "Saving" : "Update"}
+                      disabled={saveLoading}
+                    />
+                  </div>
                 </div>
               </Form>
             </MyProfilePageContext.Provider>

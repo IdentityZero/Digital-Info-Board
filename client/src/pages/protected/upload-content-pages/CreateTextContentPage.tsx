@@ -19,7 +19,7 @@ const CreateTextContentPage = () => {
         <h3 className="bg-cyanBlue px-5 py-3 mt-0 text-xl text-center">
           Announcements
         </h3>
-        <div className="p-3">
+        <div className="md:p-3">
           <CreateTextAnnouncement />
         </div>
       </div>

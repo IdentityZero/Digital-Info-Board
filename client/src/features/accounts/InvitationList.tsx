@@ -71,8 +71,10 @@ const InvitationList = ({
 
   return (
     <div className="overflow-x-auto p-2">
-      <h2 className="text-xl font-semibold mb-4">Invitations Sent</h2>
-      <table className="min-w-full border rounded-lg">
+      <h2 className="text-base sm:text-lg md:text-xl font-bold mb-4">
+        Invitations Sent
+      </h2>
+      <table className="min-w-full border rounded-lg text-sm sm:text-base">
         <thead className="bg-gray-200 dark:bg-gray-700">
           <tr>
             <th className="p-2 border">ID</th>
@@ -98,9 +100,13 @@ const InvitationList = ({
                 className="border-b hover:bg-gray-100 dark:hover:bg-gray-800"
               >
                 <td className="p-2 border">{invitation.id}</td>
-                <td className="p-2 border">{invitation.email}</td>
-                <td className="p-2 border capitalize">{invitation.role}</td>
-                <td className="p-2 border">
+                <td className="p-2 border whitespace-nowrap">
+                  {invitation.email}
+                </td>
+                <td className="p-2 border capitalize whitespace-nowrap">
+                  {invitation.role}
+                </td>
+                <td className="p-2 border whitespace-nowrap">
                   {formatStringUnderscores(invitation.position)}
                 </td>
                 <td className="p-2 border">

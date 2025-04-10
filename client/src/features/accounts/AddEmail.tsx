@@ -103,7 +103,10 @@ const AddEmail = () => {
 
   return (
     <div className="p-4 w-full mx-auto border rounded-lg shadow-md">
-      <h2 className="text-xl font-bold mb-4">Update Email</h2>
+      <h2 className="text-base sm:text-lg md:text-xl font-bold mb-4">
+        Update Email
+      </h2>
+
       <form
         className="flex flex-col gap-3"
         onSubmit={isCodeSent ? handleVerifyCode : handleSendCode}

@@ -214,7 +214,7 @@ const CreateVideoAnnouncement = () => {
   };
 
   return (
-    <div className="p-3">
+    <div className="p-2 md:p-3">
       <Form onSubmitFunc={handleSubmit}>
         <QuillEditor
           id="image-title"
@@ -277,6 +277,7 @@ const CreateVideoAnnouncement = () => {
             />
             <p className="relative z-10">{uploadProgress.toFixed(2)}%</p>
           </div>
+
           {!rerenderTrigger &&
             videos.map((video, index) => {
               const video_file = video.video as File;
@@ -288,6 +289,7 @@ const CreateVideoAnnouncement = () => {
                   className="flex flex-col md:flex-row gap-2 mt-4 bg-white dark:bg-gray-800 border rounded-lg shadow-md p-4"
                 >
                   <div>
+                    {/* Video File */}
                     <video
                       controls
                       className="w-[500px] h-[280px] rounded-xl object-contain mx-auto"
@@ -318,15 +320,21 @@ const CreateVideoAnnouncement = () => {
                       <source type={video_file.type} src={videoUrl} />
                       Your browser does not support the video tag.
                     </video>
+
+                    {/* Error Text */}
                     {error.video_announcement[index]?.video && (
                       <Errortext
                         text={error.video_announcement[index]?.video}
                       />
                     )}
                   </div>
+
+                  {/* Meta data */}
                   <div className="flex-1 flex flex-col justify-between">
-                    <div>
-                      <p className="font-bold">{video_file.name}</p>
+                    <div className="text-sm sm:text-base">
+                      <p className="font-bold truncate w-full">
+                        {video_file.name}
+                      </p>
                       <p className="text-gray-500">
                         {(video_file.size / (1024 * 1024)).toFixed(2)} MB
                       </p>
@@ -338,7 +346,8 @@ const CreateVideoAnnouncement = () => {
                       </p>
                     </div>
 
-                    <div className="flex items-center justify-between">
+                    {/* Duration */}
+                    <div className="flex max-md:flex-col max-md:items-start items-center gap-2 justify-between">
                       <div className="min-w-64">
                         <Input
                           labelText="Display Duration"
@@ -355,7 +364,7 @@ const CreateVideoAnnouncement = () => {
                       </div>
                       <button
                         onClick={() => handleDeleteUpload(index)}
-                        className="bg-red-500 hover:bg-red-700 active:bg-red-800 p-2 rounded-lg flex gap-2 items-center text-white"
+                        className="bg-red-500 hover:bg-red-700 active:bg-red-800 p-2 rounded-lg flex gap-2 items-center text-white mt-1.5"
                         type="button"
                         disabled={loading}
                       >

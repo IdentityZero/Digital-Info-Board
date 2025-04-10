@@ -68,7 +68,7 @@ const SortableTableRow = ({
           <span className="text-gray-400">No file</span>
         )}
       </td>
-      <td className="p-2 border">{medium.name}</td>
+      <td className="p-2 border whitespace-nowrap">{medium.name}</td>
 
       <td className="p-2 text-center">
         <button className="w-fit h-fit" onClick={() => handleDelete(medium.id)}>

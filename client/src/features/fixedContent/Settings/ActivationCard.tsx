@@ -22,14 +22,14 @@ const ActivationCard = ({
 }: CardProps) => {
   return (
     <div className="w-full bg-white border border-black p-2">
-      <p className="bg-cyanBlue p-2 rounded-full font-semibold text-lg">
+      <p className="bg-cyanBlue p-2 rounded-full font-semibold text-sm sm:text-base md:text-lg">
         {title || "No title"}
       </p>
       <div className="mt-2 flex justify-end gap-2">
         <button
           className="bg-cyanBlue py-2 px-4 rounded-full font-semibold text-white 
                  transition-colors disabled:bg-gray-400 disabled:text-gray-200 
-                 disabled:cursor-not-allowed hover:bg-cyan-600"
+                 disabled:cursor-not-allowed hover:bg-cyan-600 text-sm sm:text-base md:text-lg"
           onClick={() => handlePreview(componentKey)}
           disabled={isLoading}
         >
@@ -38,7 +38,7 @@ const ActivationCard = ({
         <button
           className="bg-cyanBlue py-2 px-4 rounded-full font-semibold text-white 
                  transition-colors disabled:bg-gray-400 disabled:text-gray-200 
-                 disabled:cursor-not-allowed hover:bg-cyan-600"
+                 disabled:cursor-not-allowed hover:bg-cyan-600 text-sm sm:text-base md:text-lg"
           onClick={() => handleActivation(isActivated, componentKey)}
           disabled={isLoading}
         >

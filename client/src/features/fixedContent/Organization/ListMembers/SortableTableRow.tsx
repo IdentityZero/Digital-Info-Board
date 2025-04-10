@@ -60,8 +60,8 @@ const SortableTableRow = ({
           <span className="text-gray-400">No Image</span>
         )}
       </td>
-      <td className="p-2 border">{member.name}</td>
-      <td className="p-2 border">{member.position}</td>
+      <td className="p-2 border whitespace-nowrap">{member.name}</td>
+      <td className="p-2 border whitespace-nowrap">{member.position}</td>
       <td className="p-2 text-center">
         <button onClick={() => handleDelete(member.id)} data-no-dnd={true}>
           <IconWithTooltip

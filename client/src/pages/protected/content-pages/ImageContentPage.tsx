@@ -230,7 +230,7 @@ const ImageContentPage = () => {
 
   return (
     <div className="pt-5">
-      <div className="w-full flex flex-row items-center justify-between">
+      <div className="w-full flex flex-col sm:flex-row items-start justify-between gap-y-2">
         <Link to="/dashboard/contents/image">
           <button
             className={`flex flex-row items-center gap-2 px-8 py-1 rounded-full border border-black bg-lightBlue hover:bg-lightBlue-300 active:bg-lightBlue-500 ${

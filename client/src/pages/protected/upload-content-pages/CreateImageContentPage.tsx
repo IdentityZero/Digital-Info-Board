@@ -24,7 +24,7 @@ const CreateImageContentPage = () => {
         <h3 className="bg-[#ececec] px-5 py-3 text-xl font-bold">
           Banner images
         </h3>
-        <div>
+        <div className="md:p-3">
           <CreateImageAnnouncement />
         </div>
       </div>

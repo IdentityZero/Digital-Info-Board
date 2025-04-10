@@ -85,7 +85,7 @@ const ListMembers = ({
   return (
     <div className="overflow-x-auto p-4 bg-white">
       <div className="flex items-center justify-between mb-2">
-        <h2 className="text-xl font-semibold mb-4">
+        <h2 className="font-semibold text-sm sm:text-base md:text-lg mb-4">
           Organization Members List
         </h2>
         {members.length === items.length &&
@@ -116,7 +116,7 @@ const ListMembers = ({
           items={items.map((item) => item.id)}
           strategy={verticalListSortingStrategy}
         >
-          <table className="w-full border-collapse border border-gray-300">
+          <table className="w-full border-collapse border border-gray-300 text-sm sm:text-base">
             <thead className="bg-gray-200">
               <tr>
                 <th className="p-2 border">ID</th>
