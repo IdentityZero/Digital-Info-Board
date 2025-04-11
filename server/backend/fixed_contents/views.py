@@ -1,5 +1,6 @@
 from datetime import datetime
 import requests
+import httpx
 
 from django.db import transaction
 from django.http import JsonResponse
@@ -312,9 +313,10 @@ class DeleteUpdateMediaDisplayApiView(generics.RetrieveUpdateDestroyAPIView):
         return response
 
 
-def get_weather_data(request):
+async def get_weather_data(request):
     key = settings.VITE_WEATHER_API_KEY
     URL = f"https://api.weatherapi.com/v1/forecast.json?key={key}&q=Laoag&days=5"
-    response = requests.get(URL)
+    async with httpx.AsyncClient() as client:
+        response = await client.get(URL)
 
     return JsonResponse(response.json())

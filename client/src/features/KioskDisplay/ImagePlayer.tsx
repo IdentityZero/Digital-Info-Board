@@ -61,7 +61,7 @@ const ImagePlayer = ({
               <div className="relative z-10 w-full h-full flex items-center justify-center">
                 <img
                   src={image.image as string}
-                  alt=""
+                  alt={image.image as string}
                   className="max-w-full max-h-full object-contain"
                 />
               </div>

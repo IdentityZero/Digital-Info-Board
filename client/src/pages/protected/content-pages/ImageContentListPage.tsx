@@ -102,7 +102,7 @@ const ImageContentListPage = () => {
   return (
     <div className="w-full mt-5">
       <div className="overflow-x-auto">
-        <table className="border border-gray-200 shadow-md rounded-lg">
+        <table className="w-full border border-gray-200 shadow-md rounded-lg">
           <thead>
             <tr className="bg-gray-100 text-left text-sm sm:text-base">
               <th className="px-4 py-2 sm:px-6 sm:py-3">ID</th>
