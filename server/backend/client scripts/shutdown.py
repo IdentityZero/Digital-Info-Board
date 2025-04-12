@@ -3,18 +3,20 @@ import os
 import asyncio
 import websockets
 
+URI = "ws://localhost:8000/api/ws/field-devices/"
+
 
 def shutdown_device():
     if os.name == "nt":
-        os.system("shutdown /s /t 1")
+        pass
+        # os.system("shutdown /s /t 1")
     elif os.name == "posix":
         os.system("sudo sleep 10 && sudo shutdown -h now")
 
 
 async def connect_to_websocket():
-    uri = "ws://localhost:8001/api/ws/field-devices/"
 
-    async with websockets.connect(uri) as websocket:
+    async with websockets.connect(URI) as websocket:
         await websocket.send(
             json.dumps({"type": "rpi_reply_on", "message": "Raspberry Pi is On."})
         )
