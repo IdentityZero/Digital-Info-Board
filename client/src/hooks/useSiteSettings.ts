@@ -34,6 +34,6 @@ const useSiteSettings = () => {
     fetchSettings();
   }, []);
 
-  return { settings, setSettings, isLoading, hasError };
+  return { fetchSettings, settings, setSettings, isLoading, hasError };
 };
 export default useSiteSettings;

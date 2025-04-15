@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { UpcomingEventType } from "../../types/FixedContentTypes";
 import { listUpcomingEventsApi } from "../../api/fixedContentRquests";
 
@@ -76,9 +76,17 @@ const useUpcomingEventsData = () => {
     setEvents((prev) => prev.filter((item) => item.id !== id));
   };
 
-  useEffect(() => {
-    fetchEvents();
-  }, []);
-  return { events, insertItem, updateItem, deleteItem, isLoading, isReady };
+  // useEffect(() => {
+  //   fetchEvents();
+  // }, []);
+  return {
+    fetchEvents,
+    events,
+    insertItem,
+    updateItem,
+    deleteItem,
+    isLoading,
+    isReady,
+  };
 };
 export default useUpcomingEventsData;

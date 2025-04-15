@@ -4,8 +4,8 @@ const useSiteSettingsUpdatable = () => {
   /**
    * Created a new file in case of possible changes
    */
-  const { settings, isLoading, setSettings } = useSiteSettings();
+  const { fetchSettings, settings, isLoading, setSettings } = useSiteSettings();
 
-  return { settings, isLoading, setSettings };
+  return { fetchSettings, settings, isLoading, setSettings };
 };
 export default useSiteSettingsUpdatable;

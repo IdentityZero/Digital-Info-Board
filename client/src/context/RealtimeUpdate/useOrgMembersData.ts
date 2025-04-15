@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { sortItemsByPosition } from "../../utils/utils";
 
@@ -48,11 +48,12 @@ const useOrgMembersData = () => {
     setOrgMembers((prev) => prev.filter((item) => item.id !== id));
   };
 
-  useEffect(() => {
-    fetchOrgMembers();
-  }, []);
+  // useEffect(() => {
+  //   fetchOrgMembers();
+  // }, []);
 
   return {
+    fetchOrgMembers,
     orgMembers,
     deleteItem,
     insertItem,

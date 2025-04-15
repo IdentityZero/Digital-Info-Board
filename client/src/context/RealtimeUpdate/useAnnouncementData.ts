@@ -122,9 +122,9 @@ const useAnnouncementData = () => {
   };
 
   // Fetch
-  useEffect(() => {
-    fetchAnnouncements();
-  }, []);
+  // useEffect(() => {
+  //   fetchAnnouncements();
+  // }, []);
 
   // Copy to respective types
   useEffect(() => {
@@ -206,6 +206,7 @@ const useAnnouncementData = () => {
   });
 
   return {
+    fetchAnnouncements,
     announcementList,
     idOnLock,
     setIdOnLock,

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 import { LIVE_CONTENT_UPDATE_URL } from "../../constants/urls";
 
@@ -193,7 +193,19 @@ export const RealtimeUpdateProvider = ({
     }
   };
 
-  useWebsocket(LIVE_CONTENT_UPDATE_URL, handleOnWsMessage);
+  const { isConnectionOpen } = useWebsocket(
+    LIVE_CONTENT_UPDATE_URL,
+    handleOnWsMessage
+  );
+
+  useEffect(() => {
+    if (!isConnectionOpen) return;
+    announcement.fetchAnnouncements();
+    mediaDisplays.fetchMediaDisplays();
+    settings.fetchSettings();
+    orgMembers.fetchOrgMembers();
+    events.fetchEvents();
+  }, [isConnectionOpen]);
 
   return (
     <RealtimeUpdateContext.Provider

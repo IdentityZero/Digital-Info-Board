@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { MediaDisplayType } from "../../types/FixedContentTypes";
 import { listMediaDisplaysApi } from "../../api/fixedContentRquests";
@@ -51,11 +51,12 @@ const useMediaDisplaysData = () => {
     setMediaDisplays((prev) => prev.filter((item) => item.id !== id));
   };
 
-  useEffect(() => {
-    fetchMediaDisplays();
-  }, []);
+  // useEffect(() => {
+  //   fetchMediaDisplays();
+  // }, []);
 
   return {
+    fetchMediaDisplays,
     mediaDisplays,
     insertItem,
     updateItem,

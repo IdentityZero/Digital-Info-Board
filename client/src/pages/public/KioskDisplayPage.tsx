@@ -18,8 +18,8 @@ const DELTA_FALLBACK_VALUE = JSON.stringify({ ops: [] });
 
 const KioskDisplayPage = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-
   const [isPortrait, setIsPortrait] = useState(true);
+
   const {
     announcement: {
       mediaAnnouncements,
