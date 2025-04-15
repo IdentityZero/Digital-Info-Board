@@ -30,13 +30,13 @@ const Footer = memo(({ headlines, settings }: FooterProps) => {
 
   return (
     <div className="w-full h-full">
-      <div className="w-full flex flex-row gap-1 p-2 text-white text-md">
+      <div className="w-full h-[calc(100%-6.5rem)] flex flex-row gap-1 p-2 text-white text-md">
         {/* Weather Forecast */}
         {show_weather_forecast && (
           <div
             className="relative flex-1 flex flex-col items-center justify-between 
          bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-xl 
-         text-white text-center h-[350px] max-h-[350px] overflow-hidden"
+         text-white text-center max-h-full overflow-hidden"
           >
             <WeatherForecast />
           </div>
@@ -47,7 +47,7 @@ const Footer = memo(({ headlines, settings }: FooterProps) => {
           <div
             className="relative flex-1 flex flex-col items-center justify-between 
           bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-xl 
-          text-white text-center h-[350px] max-h-[350px] overflow-hidden"
+          text-white text-center max-h-full overflow-hidden"
           >
             {/* <DateTimeCard /> */}
             <UpcomingEventsCard />
@@ -56,7 +56,7 @@ const Footer = memo(({ headlines, settings }: FooterProps) => {
 
         {/* Facts */}
         {show_media_displays && (
-          <div className="flex-1 flex items-center justify-center  h-[350px] max-h-[350px] bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-xl overflow-hidden">
+          <div className="flex-1 flex items-center justify-center max-h-full bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-xl overflow-hidden">
             <MediaDisplay
               slideDuration={
                 convertDurationToSeconds(media_displays_slide_duration) * 1000

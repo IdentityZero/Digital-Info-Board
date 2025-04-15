@@ -94,7 +94,7 @@ const MediaDisplay = ({
         </div>
       ) : (
         <div
-          className={`flex transition-transform h-full w-full ${
+          className={`flex transition-transform h-full max-h-full w-full ${
             isTransitioning ? "duration-500" : "duration-0"
           }`}
           style={{ transform: `translateX(-${currentIndex * 100}%)` }}

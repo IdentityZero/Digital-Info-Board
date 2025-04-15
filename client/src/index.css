@@ -72,6 +72,17 @@
 
 /* #region Topic: Full Calendar override css */
 
+.kiosk .fc-daygrid-day-frame {
+  height: 32px;
+}
+
+
+.kiosk .fc-daygrid-day-events {
+  height: 0px;
+  width: 0px;
+}
+
+
 .fc-header-toolbar {
   margin-bottom: 4px !important; /* Reduce space below the toolbar in calendar*/
 }

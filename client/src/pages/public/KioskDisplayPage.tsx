@@ -62,8 +62,8 @@ const KioskDisplayPage = () => {
     settings as SettingsType;
 
   return (
-    <div className="w-full min-h-screen flex flex-col bg-[#1B0B7C] text-white">
-      <header className="min-h-20 h-[5vh] max-h-[5%] flex items-center justify-center w-full">
+    <div className="w-full h-screen flex flex-col bg-[#1B0B7C] text-white overflow-hidden">
+      <header className="h-[5vh] flex items-center justify-center w-full">
         {mediaAnnouncements.length > 0 ? (
           <DisplayQuillEditor
             value={JSON.parse(
@@ -85,11 +85,11 @@ const KioskDisplayPage = () => {
       </header>
 
       <main
-        className={`min-h-[700px] ${
+        className={`${
           show_upcoming_events || show_weather_forecast || show_media_displays
-            ? "h-[64vh]"
+            ? "h-[63vh]"
             : "h-[87vh]"
-        } flex ${isPortrait ? "flex-row" : "flex-col"}`}
+        } flex-1 flex ${isPortrait ? "flex-row gap-2" : "flex-col"}`}
       >
         <div
           className={`${
@@ -143,11 +143,15 @@ const KioskDisplayPage = () => {
         <div
           className={`${
             isPortrait
-              ? "max-w-[33%] px-2"
+              ? `${
+                  settings.show_calendar || settings.show_organization
+                    ? "w-[33%]"
+                    : "max-w-[33%]"
+                }`
               : `w-full max-h-[40%] p-2 ${
-                  (settings?.show_calendar ||
-                    settings?.show_media_displays ||
-                    settings?.show_organization) &&
+                  (settings.show_calendar ||
+                    settings.show_media_displays ||
+                    settings.show_organization) &&
                   "h-full"
                 }`
           } `}
@@ -159,7 +163,13 @@ const KioskDisplayPage = () => {
         </div>
       </main>
 
-      <footer className="h-[30%]">
+      <footer
+        className={`${
+          show_upcoming_events || show_weather_forecast || show_media_displays
+            ? "h-[30vh]"
+            : "h-28"
+        }`}
+      >
         <Footer
           headlines={textAnnouncementsAsText}
           settings={settings as SettingsType}

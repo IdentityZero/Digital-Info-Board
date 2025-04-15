@@ -51,7 +51,7 @@ const MainAside = memo(({ isPortrait, settings }: MainAsideProps) => {
       {show_calendar && (
         <div
           className={`${
-            isPortrait ? "w-full flex-1" : "h-full flex-1"
+            isPortrait ? "w-full flex-1 " : "h-full flex-1"
           } bg-white flex items-center justify-center text-gray-800 text-md bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-xl overflow-hidden`}
         >
           <CalendarDisplay

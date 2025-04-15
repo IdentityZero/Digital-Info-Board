@@ -71,7 +71,7 @@ const CalendarDisplay = ({
   };
 
   return (
-    <div className="w-full h-full bg-white">
+    <div className="w-full h-full bg-white kiosk">
       {isLoading ? (
         <LoadingMessage message="Fetching calendar events..." />
       ) : hasFetchingError ? (
