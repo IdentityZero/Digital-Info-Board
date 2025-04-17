@@ -11,14 +11,13 @@ const CreateVideoContentPage = () => {
           className="w-full flex flex-row items-center justify-between pr-5 p-2 bg-[#f0d68d] font-bold"
           icon={FaExclamationCircle}
         >
-          This is where you can manage which videos will be shown on the board.
+          Max of 5 videos at a time.
         </ClosableMessage>
         <ClosableMessage
           className="w-full flex flex-row items-center justify-between pr-5 p-2 bg-[#f0d68d] font-bold"
           icon={FaExclamationCircle}
         >
-          There is a mininum of only 5 videos uploaded at a time. File type
-          allowed MP4, AVI and MOV.
+          Each video should not exceed 200MB.
         </ClosableMessage>
       </div>
       <div className="mt-2">

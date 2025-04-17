@@ -18,6 +18,7 @@ import {
 } from "../../types/AnnouncementTypes";
 import { createNewAllTypeAnnouncementApi } from "../../api/announcementRequest";
 import { CreateImageAnnouncementErrorState } from "./helpers";
+import { MAX_IMAGE_SIZE } from "../../constants/api";
 
 const CreateImageAnnouncement = () => {
   const toastId = useRef<Id | null>(null);
@@ -58,6 +59,12 @@ const CreateImageAnnouncement = () => {
 
     if (isDuplicate) {
       toast.warning("This image is already uploaded");
+      e.target.value = "";
+      return;
+    }
+
+    if (file.size > MAX_IMAGE_SIZE) {
+      toast.warning("File size exceeds 10MB. Upload aborted.");
       e.target.value = "";
       return;
     }

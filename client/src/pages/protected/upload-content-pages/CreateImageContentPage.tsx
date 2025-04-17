@@ -8,16 +8,10 @@ const CreateImageContentPage = () => {
     <>
       <div className="flex gap-2 flex-col">
         <ClosableMessage
-          className="w-full flex flex-row items-center justify-between pr-5 p-2 bg-[#305ab3] font-bold"
-          icon={FaExclamationCircle}
-        >
-          This is where you can manage which images will be shown on the board.
-        </ClosableMessage>
-        <ClosableMessage
           className="w-full flex flex-row items-center justify-between pr-5 p-2 bg-[#6e8ea4] font-bold"
           icon={FaExclamationCircle}
         >
-          File type allowed JPG, JPEG, JFIF, PNG and GIF.
+          Each image should not exceed 10MB.
         </ClosableMessage>
       </div>
       <div className="mt-2">

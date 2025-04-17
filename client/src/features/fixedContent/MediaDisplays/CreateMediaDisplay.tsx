@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { FaUpload } from "react-icons/fa";
-import { Id } from "react-toastify";
+import { Id, toast } from "react-toastify";
 
 import { Button, Input } from "../../../components/ui";
 import Accordion, { AccordionItem } from "../../../components/ui/Accordion";
@@ -10,6 +10,7 @@ import { useAuth } from "../../../context/AuthProvider";
 
 import { createMediaDisplayApi } from "../../../api/fixedContentRquests";
 import { MediaDisplayType } from "../../../types/FixedContentTypes";
+import { MAX_IMAGE_SIZE, MAX_VIDEO_SIZE } from "../../../constants/api";
 
 type CreateMediaDisplayProps = {
   onSuccess?: (newDisplay: MediaDisplayType) => void;
@@ -30,7 +31,19 @@ const CreateMediaDisplay = ({ onSuccess }: CreateMediaDisplayProps) => {
     const file = e.target.files[0];
 
     if (!file.type.includes("image/") && !file.type.includes("video/")) {
-      alert("Unsupported file type");
+      toast.warn("Unsupported file type. Please try another file.");
+      return;
+    }
+
+    if (file.size > MAX_VIDEO_SIZE && file.type.includes("video/")) {
+      toast.warning("File size exceeds 200MB. Upload aborted.");
+      e.target.value = "";
+      return;
+    }
+
+    if (file.size > MAX_IMAGE_SIZE && file.type.includes("image/")) {
+      toast.warning("File size exceeds 10MB. Upload aborted.");
+      e.target.value = "";
       return;
     }
 

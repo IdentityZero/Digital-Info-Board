@@ -11,6 +11,7 @@ import {
 import { convertToDatetimeLocal } from "../../utils/formatters";
 import { UpdateImageAnnouncementErrorT } from "./helpers";
 import { toast } from "react-toastify";
+import { MAX_IMAGE_SIZE } from "../../constants/api";
 
 type EditImageAnnouncementProps = {
   imageAnnouncement: FullImageAnnouncementType;
@@ -110,6 +111,12 @@ const EditImageAnnouncement = forwardRef<
 
       if (isDuplicate) {
         toast.warn("This image is already uploaded.");
+        e.target.value = "";
+        return;
+      }
+
+      if (file.size > MAX_IMAGE_SIZE) {
+        toast.warning("File size exceeds 10MB. Upload aborted.");
         e.target.value = "";
         return;
       }

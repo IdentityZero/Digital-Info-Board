@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { Id } from "react-toastify";
+import { Id, toast } from "react-toastify";
 
 import { Button, Input } from "../../../components/ui";
 import Accordion, { AccordionItem } from "../../../components/ui/Accordion";
@@ -10,6 +10,7 @@ import useLoadingToast from "../../../hooks/useLoadingToast";
 import { createOrgMembersApi } from "../../../api/fixedContentRquests";
 import { OrganizationMembersType } from "../../../types/FixedContentTypes";
 import { FaUpload } from "react-icons/fa";
+import { MAX_IMAGE_SIZE } from "../../../constants/api";
 
 type CreateMemberProps = {
   onSuccess?: (newMember: OrganizationMembersType) => void;
@@ -28,6 +29,12 @@ const CreateMember = ({ onSuccess }: CreateMemberProps) => {
   const handleImageOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
     const file = e.target.files[0];
+
+    if (file.size > MAX_IMAGE_SIZE) {
+      toast.warning("File size exceeds 10MB. Upload aborted.");
+      e.target.value = "";
+      return;
+    }
 
     setImage(URL.createObjectURL(file));
   };

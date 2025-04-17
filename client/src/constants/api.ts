@@ -36,3 +36,6 @@ export const get_role_positions = (
     return [];
   }
 };
+
+export const MAX_IMAGE_SIZE = 10485760; // 10MB
+export const MAX_VIDEO_SIZE = 209715200; // 200MB

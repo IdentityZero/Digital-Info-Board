@@ -1,9 +1,10 @@
+import { toast } from "react-toastify";
+
 import { useEffect, useState } from "react";
 import { Errortext } from "../../components/ui";
 
 import FormField from "./components/FormField";
 import SelectField from "./components/SelectField";
-import Button from "./components/Button";
 
 import { useAuth } from "../../context/AuthProvider";
 import { Role } from "../../types/UserTypes";
@@ -14,6 +15,7 @@ import {
 } from "../../utils/formatters";
 
 import { useMyProfilePageContext } from "../../pages/protected/account-pages/MyProfilePage";
+import { MAX_IMAGE_SIZE } from "../../constants/api";
 
 const DisplayUserProfile = ({}) => {
   const { user } = useAuth();
@@ -73,6 +75,13 @@ const DisplayUserProfile = ({}) => {
       e.target.files.length > 0
     ) {
       const file = e.target.files[0];
+
+      if (file.size > MAX_IMAGE_SIZE) {
+        toast.warning("File size exceeds 10MB. Upload aborted.");
+        e.target.value = "";
+        return;
+      }
+
       if (file) {
         setUserProfileForEdit({
           ...userProfileForEdit,
@@ -111,8 +120,13 @@ const DisplayUserProfile = ({}) => {
           onChange={handleNewProfilePicChange}
           disabled={isLoading}
         />
-        <label htmlFor="profile-change-prof-pic">
-          <Button text="Change Profile" />
+        <label
+          htmlFor="profile-change-prof-pic"
+          className="py-2 px-4 sm:px-6 md:px-8 text-sm sm:text-base rounded-full font-semibold text-black
+                  bg-cyanBlue hover:bg-cyanBlue-dark active:bg-cyanBlue-darker
+                  disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed w-full sm:w-auto cursor-pointer"
+        >
+          Change Profile
         </label>
       </div>
 

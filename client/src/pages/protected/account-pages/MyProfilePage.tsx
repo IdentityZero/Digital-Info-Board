@@ -176,7 +176,11 @@ const MyProfilePage = () => {
                     to="/dashboard/account/my-profile/change-password"
                     className="w-full sm:w-auto"
                   >
-                    <Button text="Change Password" disabled={saveLoading} />
+                    <Button
+                      text="Change Password"
+                      disabled={saveLoading}
+                      type="button"
+                    />
                   </Link>
                   <Link
                     to="/dashboard/account/my-profile/update-email"
@@ -188,6 +192,7 @@ const MyProfilePage = () => {
                           ? "Add Email"
                           : "Update Email"
                       }
+                      type="button"
                       disabled={saveLoading}
                     />
                   </Link>

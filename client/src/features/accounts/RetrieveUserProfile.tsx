@@ -1,17 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Id } from "react-toastify";
+import { Id, toast } from "react-toastify";
 import axios from "axios";
 import _ from "lodash";
 
 import { Errortext } from "../../components/ui";
 import FormField from "./components/FormField";
-import Button from "./components/Button";
 import LoadingMessage from "../../components/LoadingMessage";
 import ErrorMessage from "../../components/ErrorMessage";
 import SelectField from "./components/SelectField";
 
 import { formatStringUnderscores } from "../../utils/formatters";
-import { get_role_positions } from "../../constants/api";
+import { get_role_positions, MAX_IMAGE_SIZE } from "../../constants/api";
 
 import useLoadingToast from "../../hooks/useLoadingToast";
 import { useAuth } from "../../context/AuthProvider";
@@ -142,6 +141,19 @@ const RetrieveUserProfile = ({ id }: RetrieveUserProfileProps) => {
       e.target.files.length > 0
     ) {
       const file = e.target.files[0];
+
+      if (!file.type.includes("image/")) {
+        toast.warning("Unsupported file type. Please try another file.");
+        e.target.value = "";
+        return;
+      }
+
+      if (file.size > MAX_IMAGE_SIZE) {
+        toast.warning("File size exceeds 10MB. Upload aborted.");
+        e.target.value = "";
+        return;
+      }
+
       if (file) {
         setUserData({
           ...userData,
@@ -236,8 +248,13 @@ const RetrieveUserProfile = ({ id }: RetrieveUserProfileProps) => {
           onChange={handleNewProfilePicChange}
           disabled={isSaving}
         />
-        <label htmlFor="profile-change-prof-pic">
-          <Button text="Change Profile" />
+        <label
+          htmlFor="profile-change-prof-pic"
+          className="py-2 px-4 sm:px-6 md:px-8 text-sm sm:text-base rounded-full font-semibold text-black
+                  bg-cyanBlue hover:bg-cyanBlue-dark active:bg-cyanBlue-darker
+                  disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed w-full sm:w-auto cursor-pointer"
+        >
+          Change Profile
         </label>
       </div>
 

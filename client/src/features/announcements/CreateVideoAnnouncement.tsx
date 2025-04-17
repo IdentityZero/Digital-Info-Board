@@ -22,6 +22,7 @@ import {
   CreateVideoAnnouncementErrorState,
   VideoAnnouncementErrorT,
 } from "./helpers";
+import { MAX_VIDEO_SIZE } from "../../constants/api";
 
 const CreateVideoAnnouncement = () => {
   const toastId = useRef<Id | null>(null);
@@ -83,6 +84,12 @@ const CreateVideoAnnouncement = () => {
 
     if (isDuplicate) {
       toast.warning("This video is already uploaded");
+      e.target.value = "";
+      return;
+    }
+
+    if (file.size > MAX_VIDEO_SIZE) {
+      toast.warning("File size exceeds 200MB. Upload aborted.");
       e.target.value = "";
       return;
     }

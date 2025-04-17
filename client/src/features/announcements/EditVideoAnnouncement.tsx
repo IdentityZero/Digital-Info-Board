@@ -11,6 +11,7 @@ import {
 import { convertToDatetimeLocal } from "../../utils/formatters";
 import { forwardRef, useEffect, useState } from "react";
 import { UpdateVideoAnnouncementErrorT } from "./helpers";
+import { MAX_VIDEO_SIZE } from "../../constants/api";
 
 type EditVideoAnnouncementProps = {
   videoAnnouncementData: FullVideoAnnouncementType;
@@ -123,6 +124,13 @@ const EditVideoAnnouncement = forwardRef<
         e.target.value = "";
         return;
       }
+
+      if (file.size > MAX_VIDEO_SIZE) {
+        toast.warning("File size exceeds 200MB. Upload aborted.");
+        e.target.value = "";
+        return;
+      }
+
       setNewVideos((prev) => [...prev, { video: file, duration: "00:00:40" }]);
       e.target.value = "";
     };
