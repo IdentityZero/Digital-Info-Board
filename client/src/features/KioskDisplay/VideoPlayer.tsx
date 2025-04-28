@@ -15,6 +15,8 @@ const VideoPlayer = ({
   const [currentIndex, setCurrentIndex] = useState(0);
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
 
+  const [backgroundImage, setBackgroundImage] = useState("");
+
   const resetAllVideos = () => {
     videoRefs.current.forEach((video) => {
       if (video) {
@@ -36,22 +38,26 @@ const VideoPlayer = ({
     videoRefs.current[currentIndex + 1]?.play();
   };
 
-  useEffect(() => {
+  const captureBackground = () => {
     const currentVideo = videos[currentIndex];
 
     if (!currentVideo) return;
-    const video = document.createElement("video");
-    video.src = currentVideo.video as string;
-    const handleLoadedMetadata = () => {
-      setIsPortrait(video.videoHeight > video.videoWidth);
-    };
+    const video = document.getElementById(
+      `${currentIndex}`
+    ) as HTMLVideoElement;
 
-    video.addEventListener("loadedmetadata", handleLoadedMetadata);
-    video.load(); // Start loading metadata (dimensions)
+    if (!video) return;
 
-    return () =>
-      video.removeEventListener("loadedmetadata", handleLoadedMetadata);
-  }, [currentIndex]);
+    const canvas = document.createElement("canvas");
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    ctx.drawImage(video, 0, 0);
+    const dataUrl = canvas.toDataURL("image/png");
+    setBackgroundImage(dataUrl);
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -67,34 +73,36 @@ const VideoPlayer = ({
     <div className="w-full h-full overflow-hidden">
       <div
         className="flex transition-transform duration-500 h-full"
-        style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+        style={{
+          transform: `translateX(-${currentIndex * 100}%)`,
+        }}
       >
         {videos.map((video, index) => (
           <div key={index} className="relative w-full h-full flex-shrink-0">
-            {/* Blurred Background Video */}
-            <video
+            <div
               className="absolute inset-0 w-full h-full object-cover filter blur-xl scale-110 brightness-75"
-              src={video.video as string}
-              muted
-              autoPlay
-              loop
-              playsInline
+              style={{
+                backgroundImage: backgroundImage
+                  ? `url(${backgroundImage})`
+                  : undefined,
+              }}
             />
-
-            {/* Foreground Video with controls */}
-            <div className="relative z-10 w-full h-full flex items-center justify-center">
+            <div className="relative z-10 w-full h-full flex items-center justify-center ">
               <video
+                id={`${index}`}
+                crossOrigin="anonymous"
                 controls
                 ref={(el) => (videoRefs.current[index] = el)}
                 className="w-auto h-full object-contain mx-auto"
                 autoPlay={index === 0}
                 loop
                 playsInline
-                // onPlay={(el) => {
-                //   setIsPortrait(
-                //     el.currentTarget.videoHeight > el.currentTarget.videoWidth
-                //   );
-                // }}
+                onPlay={(el) => {
+                  setIsPortrait(
+                    el.currentTarget.videoHeight > el.currentTarget.videoWidth
+                  );
+                  captureBackground();
+                }}
               >
                 <source src={video.video as string} />
                 Your browser does not support the video tag.
