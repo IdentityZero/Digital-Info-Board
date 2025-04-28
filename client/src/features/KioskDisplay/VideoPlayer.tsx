@@ -39,24 +39,26 @@ const VideoPlayer = ({
   };
 
   const captureBackground = () => {
-    const currentVideo = videos[currentIndex];
+    setTimeout(() => {
+      const currentVideo = videos[currentIndex];
 
-    if (!currentVideo) return;
-    const video = document.getElementById(
-      `${currentIndex}`
-    ) as HTMLVideoElement;
+      if (!currentVideo) return;
+      const video = document.getElementById(
+        `${currentIndex}`
+      ) as HTMLVideoElement;
 
-    if (!video) return;
+      if (!video) return;
 
-    const canvas = document.createElement("canvas");
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+      const canvas = document.createElement("canvas");
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
 
-    ctx.drawImage(video, 0, 0);
-    const dataUrl = canvas.toDataURL("image/png");
-    setBackgroundImage(dataUrl);
+      ctx.drawImage(video, 0, 0);
+      const dataUrl = canvas.toDataURL("image/png");
+      setBackgroundImage(dataUrl);
+    }, 1000); // 1000 ms = 1 second
   };
 
   useEffect(() => {
