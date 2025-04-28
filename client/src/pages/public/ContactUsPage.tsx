@@ -1,10 +1,12 @@
+import { cpeBg } from "../../assets";
+
 const ContactUsPage = () => {
   return (
     <div className="min-h-screen bg-gray-100 text-gray-900">
       {/* Header Section */}
       <div className="relative">
         <img
-          src="https://picsum.photos/1200/400"
+          src={cpeBg}
           alt="Contact Us"
           className="w-full h-[400px] object-cover"
         />
@@ -29,10 +31,7 @@ const ContactUsPage = () => {
               <strong>📍 Address:</strong> Marcos Ave, Paoay, 2902 Ilocos Norte
             </p>
             <p className="text-lg">
-              <strong>📞 Phone:</strong> +1 234 567 890
-            </p>
-            <p className="text-lg">
-              <strong>✉️ Email:</strong> contact@example.com
+              <strong>✉️ Email:</strong> boarddib@gmail.com
             </p>
           </div>
         </div>

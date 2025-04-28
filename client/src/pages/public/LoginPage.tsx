@@ -17,9 +17,9 @@ const LoginPage = () => {
             </h2>
 
             <p className="max-w-xl mt-3 text-gray-300">
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit. In autem
-              ipsa, nulla laboriosam dolores, repellendus perferendis libero
-              suscipit nam temporibus molestiae
+              Transforming the Computer Engineering Department’s digital board
+              into a dynamic, interactive hub for announcements, schedules, and
+              updates — making information sharing smarter and faster.
             </p>
           </div>
         </div>
