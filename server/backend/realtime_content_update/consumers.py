@@ -39,5 +39,10 @@ class RelayContentUpdateConsumer(AsyncWebsocketConsumer):
         event.pop("type")
         await self.send(text_data=json.dumps(event))
 
+    async def refresh_page(self, event):
+        await self.send(
+            text_data=json.dumps({"content": "refresh_page", "action": "refresh"})
+        )
+
     async def disconnect(self, code):
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)

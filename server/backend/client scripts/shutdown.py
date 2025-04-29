@@ -14,6 +14,13 @@ def shutdown_device():
         os.system("sudo sleep 10 && sudo shutdown -h now")
 
 
+def restart_device():
+    if os.name == "nt":
+        pass
+    elif os.name == "posix":
+        os.system("sudo sleep 10 && sudo reboot")
+
+
 async def connect_to_websocket():
 
     async with websockets.connect(URI) as websocket:
@@ -25,6 +32,8 @@ async def connect_to_websocket():
 
             if "shutdown_rpi" in response:
                 shutdown_device()
+            elif "restart_rpi" in response:
+                restart_device()
             elif "ask_rpi_on" in response:
                 await websocket.send(
                     json.dumps(

@@ -89,6 +89,10 @@ type MediaDisplaysWsMessageTypes = {
   data: any;
 };
 
+type RefreshPageType = {
+  content: "refresh_page";
+};
+
 const RealtimeUpdateContext = createContext<
   RealtimeUpdateContextType | undefined
 >(undefined);
@@ -120,6 +124,7 @@ export const RealtimeUpdateProvider = ({
       | OrganizationWsMessageTypes
       | UpcomingEventsWsMessageTypes
       | MediaDisplaysWsMessageTypes
+      | RefreshPageType
   ) => {
     if (data.content === "announcement") {
       handleAnnouncementContent(data);
@@ -131,6 +136,8 @@ export const RealtimeUpdateProvider = ({
       handleUpcomingEventsContent(data);
     } else if (data.content === "media_displays") {
       handleMediaDisplaysContent(data);
+    } else if (data.content === "refresh_page") {
+      window.location.reload();
     } else {
       // Connection established
       setIsWsReady(true);

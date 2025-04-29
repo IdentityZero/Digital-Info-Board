@@ -41,8 +41,6 @@ const KioskDisplayPage = () => {
     isReady,
   } = useRealtimeUpdate();
 
-  console.log(mediaAnnouncements);
-
   const handleNext = () => {
     if (currentIndex >= mediaAnnouncements.length - 1) {
       setCurrentIndex(0);

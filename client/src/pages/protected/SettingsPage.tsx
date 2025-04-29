@@ -16,6 +16,8 @@ type WsMessageType = {
   message: string;
 };
 
+type ButtonTypes = "refresh" | "restart" | "shutdown";
+
 const SettingsPage = () => {
   const [isDeviceConnected, setIsDeviceConnected] = useState(false);
 
@@ -42,14 +44,18 @@ const SettingsPage = () => {
     sendMessage({ type: "ask_rpi_on", message: "Is Raspberry Pi on?" });
   };
 
-  const handleShutdown = () => {
-    const shutdownConf = window.confirm(
-      "Are you sure you want to shutdown the RPI?"
-    );
+  const handleButtonClick = (type: ButtonTypes) => {
+    const conf = window.confirm(`Are you sure you want to ${type} the RPI?`);
 
-    if (!shutdownConf) return;
+    if (!conf) return;
 
-    sendMessage({ type: "shutdown_rpi", message: "shutdown_rpi" });
+    if (type === "shutdown") {
+      sendMessage({ type: "shutdown_rpi", message: "shutdown_rpi" });
+    } else if (type === "restart") {
+      sendMessage({ type: "restart_rpi", message: "restart_rpi" });
+    } else if (type === "refresh") {
+      sendMessage({ type: "refresh_rpi", message: "refresh_rpi" });
+    }
   };
 
   return (
@@ -110,23 +116,24 @@ const SettingsPage = () => {
           )}
 
           {/* Shutdown Button */}
-          <div className="w-full flex p-5 justify-center">
+          <div className="w-full flex flex-wrap gap-4 p-5 justify-center">
             <button
-              className="text-center py-3 px-10 bg-btDanger rounded-full uppercase font-bold"
-              onClick={handleShutdown}
+              className="text-center py-3 px-8 bg-btPrimary hover:bg-btPrimary-hover active:bg-btPrimary-active rounded-full uppercase font-bold flex-1 min-w-[150px] sm:flex-none"
+              onClick={() => handleButtonClick("refresh")}
+            >
+              Refresh
+            </button>
+            <button
+              className="text-center py-3 px-8 bg-btSecondary hover:bg-btSecondary-hover active:bg-btSecondary-active rounded-full uppercase font-bold flex-1 min-w-[150px] sm:flex-none"
+              onClick={() => handleButtonClick("restart")}
+            >
+              Restart
+            </button>
+            <button
+              className="text-center py-3 px-8 bg-btDanger hover:bg-btDanger-hover active:bg-btDanger-active rounded-full uppercase font-bold flex-1 min-w-[150px] sm:flex-none"
+              onClick={() => handleButtonClick("shutdown")}
             >
               Shutdown
-            </button>
-          </div>
-        </div>
-
-        <div className="bg-white border border-black w-full md:w-2/3 lg:w-1/2 mx-auto">
-          <h2 className="w-full bg-cyanBlue p-3 font-bold text-center">
-            Individual Modules
-          </h2>
-          <div className="w-full flex p-5 justify-center">
-            <button className="text-center py-3 px-10 bg-cyanBlue rounded-full uppercase font-bold">
-              Control Options
             </button>
           </div>
         </div>
