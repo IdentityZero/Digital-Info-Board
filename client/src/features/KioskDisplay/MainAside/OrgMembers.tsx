@@ -5,15 +5,18 @@ import { chunkArray } from "../../../utils/utils";
 
 import { OrganizationMembersType } from "../../../types/FixedContentTypes";
 import LoadingMessage from "../../../components/LoadingMessage";
-import { useRealtimeUpdate } from "../../../context/RealtimeUpdate";
 
 type OrgMembersDisplayProps = {
+  orgMembers: OrganizationMembersType[];
+  isLoading: boolean;
   slideDuration?: number;
   showNavigation?: boolean;
   useChunking?: boolean; // Variable content size based on container size
 };
 
 const OrgMembers = ({
+  orgMembers,
+  isLoading,
   showNavigation = false,
   slideDuration = 5000,
   useChunking = false,
@@ -25,10 +28,6 @@ const OrgMembers = ({
   const [chunkSize, setChunkSize] = useState(4);
 
   const [hoverShowNavigation, setHoverShowNavigation] = useState(false);
-
-  const {
-    orgMembers: { orgMembers, isLoading },
-  } = useRealtimeUpdate();
 
   const chunkedItems = chunkArray(orgMembers, chunkSize);
   const totalItems = chunkedItems.length;

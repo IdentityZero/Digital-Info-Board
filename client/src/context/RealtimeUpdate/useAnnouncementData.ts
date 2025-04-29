@@ -63,16 +63,34 @@ const useAnnouncementData = () => {
     );
   };
 
-  const updateItem = (id: string, updatedData: AnnouncementRetrieveType) => {
-    const index = announcementList.findIndex((item) => item.id === id);
+  const _resortUpdatedItems = (
+    arr: AnnouncementListType,
+    newItem: AnnouncementRetrieveType
+  ) => {
+    const insertIndex = arr.findIndex(
+      (item) => item.position >= newItem.position
+    );
 
-    if (index === -1) {
-      insertItem(updatedData);
+    if (insertIndex !== -1) {
+      arr.splice(insertIndex, 0, newItem);
     } else {
-      setAnnouncementList((prev) => {
-        return prev.map((item) => (item.id == id ? updatedData : item));
-      });
+      arr.push(newItem);
     }
+
+    return arr;
+  };
+
+  const updateItem = (id: string, updatedData: AnnouncementRetrieveType) => {
+    setAnnouncementList((prev) => {
+      const index = prev.findIndex((item) => item.id === id);
+
+      if (index === -1) {
+        const updatedList = _resortUpdatedItems(prev, updatedData);
+        return [...updatedList];
+      } else {
+        return prev.map((item) => (item.id == id ? updatedData : item));
+      }
+    });
   };
 
   const fetchAndInsertItem = async (id: string) => {
@@ -85,17 +103,9 @@ const useAnnouncementData = () => {
 
   const insertItem = (newItem: AnnouncementRetrieveType) => {
     setAnnouncementList((prev) => {
-      const insertIndex = prev.findIndex(
-        (item) => item.position >= newItem.position
-      );
+      const updatedList = _resortUpdatedItems(prev, newItem);
 
-      if (insertIndex !== -1) {
-        prev.splice(insertIndex, 0, newItem);
-      } else {
-        prev.push(newItem);
-      }
-
-      return [...prev];
+      return [...updatedList];
     });
   };
 

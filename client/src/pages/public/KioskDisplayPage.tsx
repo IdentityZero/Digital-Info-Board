@@ -17,6 +17,11 @@ import { SettingsType } from "../../types/SettingTypes";
 const DELTA_FALLBACK_VALUE = JSON.stringify({ ops: [] });
 
 const KioskDisplayPage = () => {
+  /**
+   * Notice that we used prop drilling although we are using context.
+   * Since this page is expected to be utilized under low performance devices, we try to make rendering as few as possible.
+   */
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPortrait, setIsPortrait] = useState(true);
 
@@ -29,9 +34,14 @@ const KioskDisplayPage = () => {
       textAnnouncementsAsText,
       setIdOnLock: setAnnouncementIdOnLock,
     },
+    events: { events, isLoading: isEventsFetching },
+    mediaDisplays: { mediaDisplays, isLoading: isMediaDisplaysFetching },
+    orgMembers: { orgMembers, isLoading: isOrgMembersFetching },
     settings: { settings },
     isReady,
   } = useRealtimeUpdate();
+
+  console.log(mediaAnnouncements);
 
   const handleNext = () => {
     if (currentIndex >= mediaAnnouncements.length - 1) {
@@ -159,6 +169,10 @@ const KioskDisplayPage = () => {
           <MainAside
             isPortrait={isPortrait}
             settings={settings as SettingsType}
+            mediaDisplays={mediaDisplays}
+            isMediaDisplaysFetching={isMediaDisplaysFetching}
+            orgMembers={orgMembers}
+            isOrgMembersFetching={isOrgMembersFetching}
           />
         </div>
       </main>
@@ -173,6 +187,10 @@ const KioskDisplayPage = () => {
         <Footer
           headlines={textAnnouncementsAsText}
           settings={settings as SettingsType}
+          events={events}
+          isEventsFetching={isEventsFetching}
+          mediaDisplays={mediaDisplays}
+          isMediaDisplaysFetching={isMediaDisplaysFetching}
         />
       </footer>
     </div>
