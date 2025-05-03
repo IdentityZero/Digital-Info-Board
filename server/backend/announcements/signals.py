@@ -85,7 +85,7 @@ def send_update_on_created_announcements(
     Send update on updated announcements through channels
     """
 
-    if created:
+    if created and instance.author.profile.is_admin:
         channel_layer = get_channel_layer()
         async_to_sync(channel_layer.group_send)(
             "realtime_update",
