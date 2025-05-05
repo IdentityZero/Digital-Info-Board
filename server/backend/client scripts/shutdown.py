@@ -1,3 +1,7 @@
+"""
+Script to turn off RASPBERRY PI using websockets
+"""
+
 import json
 import os
 import asyncio
