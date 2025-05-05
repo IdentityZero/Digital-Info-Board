@@ -29,7 +29,7 @@ def set_date_time(date_time: str) -> None:
         pass
         # os.system("shutdown /s /t 1")
     elif os.name == "posix":
-        os.system(f"sudo date -s {date_time}")
+        os.system(f'sudo date -s "{date_time}"')
 
 
 if __name__ == "__main__":
