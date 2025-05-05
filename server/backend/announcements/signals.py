@@ -41,6 +41,35 @@ def send_notif_on_new_announcements(sender, instance: Announcements, created, **
     )
 
 
+@receiver(pre_save, sender=Announcements)
+def send_notif_on_updated_announcements(
+    sender, instance: Announcements, *args, **kwargs
+):
+    if instance.author.profile.is_admin:
+        return
+
+    if not instance.pk:
+        return
+
+    try:
+        old_instance: Announcements = sender.objects.get(pk=instance.pk)
+    except sender.DoesNotExist:
+        return
+
+    if old_instance.is_active:
+        return
+
+    now = timezone.now()
+
+    if not old_instance.is_active and instance.start_date <= now <= instance.end_date:
+        creator = instance.author
+        title = extract_react_quill_text(instance.title)
+        message = f"Updated a Content waiting for approval{f' entitled {title}' if title else ''}. Check it out."
+        create_notification_for_admins(
+            creator, message, "approve_announcement", instance.id
+        )
+
+
 @receiver(post_delete, sender=Announcements)
 def delete_notif_on_deleted_announcements(sender, instance, **kwargs):
     """
