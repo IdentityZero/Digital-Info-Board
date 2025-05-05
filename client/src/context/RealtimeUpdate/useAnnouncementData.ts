@@ -143,7 +143,8 @@ const useAnnouncementData = () => {
 
     const filteredList = announcementList.filter(
       (announcement) =>
-        new Date(announcement.end_date).getTime() > today.getTime()
+        new Date(announcement.end_date).getTime() > today.getTime() &&
+        new Date(announcement.start_date).getTime() < today.getTime()
     );
 
     setMediaAnnouncements(
