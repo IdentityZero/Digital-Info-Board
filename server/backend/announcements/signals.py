@@ -1,6 +1,7 @@
 import os
 
 from django.conf import settings
+from django.utils import timezone
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 from django.dispatch import receiver
@@ -15,7 +16,7 @@ from .serializers import RetrieveFullAnnouncementSerializer
 
 
 @receiver(post_save, sender=Announcements)
-def send_notif_on_new_announcements(sender, instance, created, **kwargs):
+def send_notif_on_new_announcements(sender, instance: Announcements, created, **kwargs):
     """
     Send and create notifications if new announcements are created by non-admins
     """
@@ -24,6 +25,11 @@ def send_notif_on_new_announcements(sender, instance, created, **kwargs):
         return
 
     if not created:
+        return
+
+    now = timezone.now()
+
+    if not (instance.start_date <= now <= instance.end_date):
         return
 
     creator = instance.author
