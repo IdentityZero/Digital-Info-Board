@@ -4,6 +4,8 @@ import PublicTopbar from "../components/nav/PublicTopbar";
 import MobileSidebar from "../components/nav/MobileSidebar";
 import { LINKS } from "../constants";
 import Footer from "../components/Footer";
+import { Suspense } from "react";
+import LoadingLazyComponent from "../components/LoadingLazyComponent";
 
 const PUBLIC_LINKS = LINKS.public;
 
@@ -19,7 +21,9 @@ const PublicLayout = () => {
         </div>
       </header>
       <main className="min-h-[calc(100vh-80px)]">
-        <Outlet />
+        <Suspense fallback={<LoadingLazyComponent />}>
+          <Outlet />
+        </Suspense>
       </main>
       <footer className="w-full">
         <Footer />

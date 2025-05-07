@@ -11,7 +11,7 @@ import KioskDisplayPage from "../pages/public/KioskDisplayPage";
 import ProtectedRouteGuard from "./ProtectedRouteGuard";
 import DashboardLayout from "../layouts/DashboardLayout";
 import protectedRoutes from "./ProtectedRoutes";
-import { NotFoundPage } from "../pages/public";
+import NotFoundPage from "../pages/public/NotFoundPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(

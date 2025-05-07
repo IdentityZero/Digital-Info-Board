@@ -1,11 +1,17 @@
+import { lazy } from "react";
 import { Route } from "react-router-dom";
-import HomePage from "../pages/public/HomePage";
-import LoginPage from "../pages/public/LoginPage";
-import SignUpPage from "../pages/public/SignUpPage";
-import AboutPage from "../pages/public/AboutPage";
-import ContactUsPage from "../pages/public/ContactUsPage";
-import ForgotPasswordPage from "../pages/public/ForgotPasswordPage";
-import ResetPasswordPage from "../pages/public/ResetPasswordPage";
+
+const HomePage = lazy(() => import("../pages/public/HomePage"));
+const LoginPage = lazy(() => import("../pages/public/LoginPage"));
+const SignUpPage = lazy(() => import("../pages/public/SignUpPage"));
+const AboutPage = lazy(() => import("../pages/public/AboutPage"));
+const ContactUsPage = lazy(() => import("../pages/public/ContactUsPage"));
+const ForgotPasswordPage = lazy(
+  () => import("../pages/public/ForgotPasswordPage")
+);
+const ResetPasswordPage = lazy(
+  () => import("../pages/public/ResetPasswordPage")
+);
 
 const publicRoutes = (
   <>
