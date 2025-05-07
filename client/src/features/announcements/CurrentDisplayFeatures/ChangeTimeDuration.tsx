@@ -23,24 +23,14 @@ const ChangeTimeDuration = ({ sliderItems }: ChangeTimeDurationProps) => {
   };
 
   return (
-    <div className="w-full h-[180px] bg-darkTeal border border-black rounded-lg overflow-hidden px-4 py-6 flex flex-col justify-between">
-      <div className="flex flex-row gap-2 justify-between h-[150px]">
-        <DragAndDrop
-          items={items}
-          setItems={setItems}
-          disabled
-          onThumbnailClick={handleThumbnailClick}
-        />
-      </div>
+    <div className="w-full bg-darkTeal border border-black rounded-lg overflow-hidden px-4 py-6 flex flex-col justify-between">
+      <DragAndDrop
+        items={items}
+        setItems={setItems}
+        disabled
+        onThumbnailClick={handleThumbnailClick}
+      />
 
-      <div className="flex flex-row justify-end px-6">
-        <button
-          className="px-8 rounded-full bg-cyanBlue hover:bg-cyanBlue-dark active:bg-cyanBlue-darker text-white border border-black font-semibold text-xs uppercase"
-          type="submit"
-        >
-          Save
-        </button>
-      </div>
       {targetData && (
         <ChangeDurationModal
           isOpen={!!targetData}
