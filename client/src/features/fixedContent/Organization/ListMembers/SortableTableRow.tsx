@@ -1,4 +1,4 @@
-import { FaTrash } from "react-icons/fa";
+import { FaEdit, FaTrash } from "react-icons/fa";
 import { CSS } from "@dnd-kit/utilities";
 
 import { useSortable } from "@dnd-kit/sortable";
@@ -37,7 +37,7 @@ const SortableTableRow = ({
       style={style}
       {...attributes}
       {...listeners}
-      className={`border cursor-grab transition-shadow duration-200 ${
+      className={`border cursor-grab transition-shadow duration-200 h-full ${
         isHighlighted
           ? "shadow-[0_0_10px_rgba(0,150,255,0.7)]"
           : "hover:bg-gray-100 dark:hover:bg-gray-800"
@@ -62,15 +62,28 @@ const SortableTableRow = ({
       </td>
       <td className="p-2 border whitespace-nowrap">{member.name}</td>
       <td className="p-2 border whitespace-nowrap">{member.position}</td>
-      <td className="p-2 text-center">
-        <button onClick={() => handleDelete(member.id)} data-no-dnd={true}>
-          <IconWithTooltip
-            icon={FaTrash}
-            label="Delete"
-            iconClassName="text-xl text-red-600 hover:text-red-700 active:text-red-800 cursor-pointer"
-            labelClassName="p-1 px-2 rounded-md shadow-md bg-red-600 text-white text-center"
-          />
-        </button>
+      <td className="p-2">
+        <div className="h-full flex justify-center items-center gap-4">
+          <button onClick={() => handleIDClick(member.id)} data-no-dnd={true}>
+            <IconWithTooltip
+              icon={FaEdit}
+              label="Edit"
+              iconClassName="text-xl text-btPrimary hover:text-btPrimary-hover active:text-btPrimary-active cursor-pointer"
+              labelClassName="p-1 px-2 rounded-md shadow-md bg-btPrimary-hover text-white text-center"
+            />
+          </button>
+          <button
+            className="w-fit h-fit"
+            onClick={() => handleDelete(member.id)}
+          >
+            <IconWithTooltip
+              icon={FaTrash}
+              label="Delete"
+              iconClassName="text-xl text-btDanger hover:text-btDanger-hover active: active:text-btDanger-active cursor-pointer"
+              labelClassName="p-1 px-2 rounded-md shadow-md bg-btDanger text-white text-center"
+            />
+          </button>
+        </div>
       </td>
     </tr>
   );

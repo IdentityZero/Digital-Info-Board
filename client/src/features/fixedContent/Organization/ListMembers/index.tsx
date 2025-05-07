@@ -123,7 +123,7 @@ const ListMembers = ({
                 <th className="p-2 border">Image</th>
                 <th className="p-2 border">Name</th>
                 <th className="p-2 border">Position</th>
-                <th className="p-2 border">Action</th>
+                <th className="p-2 border">Actions</th>
               </tr>
             </thead>
             <tbody>

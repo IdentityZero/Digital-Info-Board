@@ -1,4 +1,4 @@
-import { FaTrash } from "react-icons/fa";
+import { FaEdit, FaTrash } from "react-icons/fa";
 import IconWithTooltip from "../../../../components/IconWithTooltip";
 import { MediaDisplayType } from "../../../../types/FixedContentTypes";
 import { useSortable } from "@dnd-kit/sortable";
@@ -70,15 +70,28 @@ const SortableTableRow = ({
       </td>
       <td className="p-2 border whitespace-nowrap">{medium.name}</td>
 
-      <td className="p-2 text-center">
-        <button className="w-fit h-fit" onClick={() => handleDelete(medium.id)}>
-          <IconWithTooltip
-            icon={FaTrash}
-            label="Delete"
-            iconClassName="text-xl text-btDanger hover:text-btDanger-hover active: active:text-btDanger-active cursor-pointer"
-            labelClassName="p-1 px-2 rounded-md shadow-md bg-btDanger text-white text-center"
-          />
-        </button>
+      <td className="p-2">
+        <div className="h-full flex justify-center items-center gap-4">
+          <button onClick={() => handleIDClick(medium.id)} data-no-dnd={true}>
+            <IconWithTooltip
+              icon={FaEdit}
+              label="Edit"
+              iconClassName="text-xl text-btPrimary hover:text-btPrimary-hover active:text-btPrimary-active cursor-pointer"
+              labelClassName="p-1 px-2 rounded-md shadow-md bg-btPrimary-hover text-white text-center"
+            />
+          </button>
+          <button
+            className="w-fit h-fit"
+            onClick={() => handleDelete(medium.id)}
+          >
+            <IconWithTooltip
+              icon={FaTrash}
+              label="Delete"
+              iconClassName="text-xl text-btDanger hover:text-btDanger-hover active: active:text-btDanger-active cursor-pointer"
+              labelClassName="p-1 px-2 rounded-md shadow-md bg-btDanger text-white text-center"
+            />
+          </button>
+        </div>
       </td>
     </tr>
   );
