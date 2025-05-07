@@ -114,7 +114,9 @@ const TextContentListPage = () => {
               <th className="px-4 py-2 sm:px-6 sm:py-3">End Date</th>
               <th className="px-4 py-2 sm:px-6 sm:py-3">Duration</th>
               <th className="px-4 py-2 sm:px-6 sm:py-3">Approved</th>
-              <th className="px-4 py-2 sm:px-6 sm:py-3">Expired</th>
+              <th className="px-4 py-2 sm:px-6 sm:py-3 text-center">
+                Within Display Period
+              </th>
               <th className="px-4 py-2 sm:px-6 sm:py-3">Actions</th>
             </tr>
           </thead>
@@ -194,9 +196,9 @@ function TableRow({ announcement, handleDelete }: TableRowProps) {
       <td className="px-4 py-2 sm:px-6 sm:py-3">
         <span className="flex justify-center">
           {isNowWithinRange(announcement.start_date, announcement.end_date) ? (
-            <FaTimesCircle className="text-red-500" />
-          ) : (
             <FaCheckCircle className="text-green-500" />
+          ) : (
+            <FaTimesCircle className="text-red-500" />
           )}
         </span>
       </td>
