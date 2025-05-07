@@ -1,3 +1,4 @@
+import { lazy } from "react";
 import {
   createBrowserRouter,
   createRoutesFromElements,
@@ -7,11 +8,12 @@ import PublicRouteGuard from "./PublicRouteGuard";
 import PublicLayout from "../layouts/PublicLayout";
 import publicRoutes from "./PublicRoutes";
 import KioskLayout from "../layouts/KioskLayout";
-import KioskDisplayPage from "../pages/public/KioskDisplayPage";
 import ProtectedRouteGuard from "./ProtectedRouteGuard";
 import DashboardLayout from "../layouts/DashboardLayout";
 import protectedRoutes from "./ProtectedRoutes";
-import NotFoundPage from "../pages/public/NotFoundPage";
+
+const NotFoundPage = lazy(() => import("../pages/public/NotFoundPage"));
+const KioskDisplayPage = lazy(() => import("../pages/public/KioskDisplayPage"));
 
 const router = createBrowserRouter(
   createRoutesFromElements(
