@@ -6,23 +6,25 @@ import ReactQuill from "react-quill";
 import axios from "axios";
 import { FaPlusCircle, FaTrashAlt } from "react-icons/fa";
 
-import QuillEditor, { isQuillValueEmpty } from "../../components/QuillEditor";
-import { Input, Form, Errortext } from "../../components/ui";
+import QuillEditor, {
+  isQuillValueEmpty,
+} from "../../../components/QuillEditor";
+import { Input, Form, Errortext } from "../../../components/ui";
 
-import { convertSecondsToDuration } from "../../utils/utils";
-import { useAuth } from "../../context/AuthProvider";
-import useLoadingToast from "../../hooks/useLoadingToast";
+import { convertSecondsToDuration } from "../../../utils/utils";
+import { useAuth } from "../../../context/AuthProvider";
+import useLoadingToast from "../../../hooks/useLoadingToast";
 
 import {
   CreateVideoAnnouncementT,
   VideoAnnouncementCreateType,
-} from "../../types/AnnouncementTypes";
-import { listCreateAllTypeAnnouncementEndpoint } from "../../api/announcementRequest";
+} from "../../../types/AnnouncementTypes";
+import { listCreateAllTypeAnnouncementEndpoint } from "../../../api/announcementRequest";
 import {
   CreateVideoAnnouncementErrorState,
   VideoAnnouncementErrorT,
-} from "./helpers";
-import { MAX_VIDEO_SIZE } from "../../constants/api";
+} from "../helpers";
+import { MAX_VIDEO_SIZE } from "../../../constants/api";
 
 const CreateVideoAnnouncement = () => {
   const toastId = useRef<Id | null>(null);

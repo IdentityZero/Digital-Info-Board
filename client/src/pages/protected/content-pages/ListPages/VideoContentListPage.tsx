@@ -1,40 +1,41 @@
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
 import { Id } from "react-toastify";
+import { Link } from "react-router-dom";
 import { FaCheckCircle, FaEye, FaTimesCircle, FaTrash } from "react-icons/fa";
 
-import IconWithTooltip from "../../../components/IconWithTooltip";
-import LoadingMessage from "../../../components/LoadingMessage";
-import useLoadingToast from "../../../hooks/useLoadingToast";
-import ErrorMessage from "../../../components/ErrorMessage";
-import Pagination from "../../../components/Pagination";
+import ErrorMessage from "../../../../components/ErrorMessage";
+import IconWithTooltip from "../../../../components/IconWithTooltip";
+import LoadingMessage from "../../../../components/LoadingMessage";
+import Pagination from "../../../../components/Pagination";
 
 import {
   extractReactQuillText,
   formatTimestamp,
   truncateStringVariableLen,
-} from "../../../utils/formatters";
-import { addTotalDuration, isNowWithinRange } from "../../../utils/utils";
+} from "../../../../utils/formatters";
+import { addTotalDuration, isNowWithinRange } from "../../../../utils/utils";
 
-import { useAuth } from "../../../context/AuthProvider";
-import usePagination from "../../../hooks/usePagination";
-import {
-  listImageAnnouncementApi,
-  deleteImageAnnouncementApi,
-} from "../../../api/announcementRequest";
+import useLoadingToast from "../../../../hooks/useLoadingToast";
+import { useAuth } from "../../../../context/AuthProvider";
+
+import { getListTypeInitState } from "../../../../types/ListType";
+import usePagination from "../../../../hooks/usePagination";
 
 import {
   PaginatedAnnouncementListTypeV1,
   AnnouncementRetrieveType,
-} from "../../../types/AnnouncementTypes";
-import { getListTypeInitState } from "../../../types/ListType";
+} from "../../../../types/AnnouncementTypes";
+import {
+  deleteVideoAnnouncementApi,
+  listVideoAnnouncementApi,
+} from "../../../../api/announcementRequest";
 
-const ImageContentListPage = () => {
+const VideoContentListPage = () => {
   const { userApi } = useAuth();
   const toastId = useRef<Id | null>(null);
   const { loading, update } = useLoadingToast(toastId);
   const { page, setPage, pageSize, setPageSize } = usePagination(
-    "pageSize_imageList",
+    "pageSize_videoList",
     10
   );
 
@@ -43,49 +44,22 @@ const ImageContentListPage = () => {
   const totalPages = Math.max(1, Math.ceil(announcements.count / pageSize));
 
   const [hasLoadingError, setHasLoadingError] = useState(false);
-  const [isLoading, setisLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchAnnouncements = async (ppage: number, ppageSize: number) => {
     try {
-      const data = await listImageAnnouncementApi(userApi, ppage, ppageSize);
+      const data = await listVideoAnnouncementApi(userApi, ppage, ppageSize);
       setAnnouncements(data);
     } catch (error) {
       setHasLoadingError(true);
     } finally {
-      setisLoading(false);
+      setIsLoading(false);
     }
   };
+
   useEffect(() => {
     fetchAnnouncements(page, pageSize);
   }, [page, pageSize]);
-
-  const handleDelete = async (announcement_id: string) => {
-    const confirm_delete = confirm(
-      `Are you sure you want to delete this Announcement?`
-    );
-
-    if (!confirm_delete) return;
-    loading(`Deleting - ${announcement_id}. Please wait...`);
-
-    try {
-      await deleteImageAnnouncementApi(userApi, announcement_id);
-      update({ render: "Delete successful", type: "success" });
-      // Remove the data
-      const updated = announcements.results.filter(
-        (announcement) => announcement.id !== announcement_id
-      );
-      setAnnouncements((prev) => ({
-        ...prev,
-        results: updated,
-        count: prev.count - 1,
-      }));
-    } catch (error) {
-      update({
-        render: "Delete unsuccessful. Please try again.",
-        type: "error",
-      });
-    }
-  };
 
   if (hasLoadingError) {
     return (
@@ -99,10 +73,37 @@ const ImageContentListPage = () => {
     return <LoadingMessage message="Loading..." />;
   }
 
+  const handleDelete = async (announcement_id: string) => {
+    const delete_conf = window.confirm(
+      "Are you sure you want to delete this Video Content?"
+    );
+
+    if (!delete_conf) return;
+    loading(`Deleting - ${announcement_id}. Please wait...`);
+
+    try {
+      await deleteVideoAnnouncementApi(userApi, announcement_id);
+      const updatedAnnouncements = announcements.results.filter(
+        (announcement) => announcement.id !== announcement_id
+      );
+      update({ render: "Delete successful", type: "success" });
+      setAnnouncements((prev) => ({
+        ...prev,
+        results: updatedAnnouncements,
+        count: prev.count - 1,
+      }));
+    } catch (error) {
+      update({
+        render: "Delete unsuccessful. Please try again.",
+        type: "error",
+      });
+    }
+  };
+
   return (
     <div className="w-full mt-5">
       <div className="overflow-x-auto">
-        <table className="w-full border border-gray-200 shadow-md rounded-lg">
+        <table className="border w-full overflow-x-auto border-gray-200 shadow-md rounded-lg">
           <thead>
             <tr className="bg-gray-100 text-left text-sm sm:text-base">
               <th className="px-4 py-2 sm:px-6 sm:py-3">ID</th>
@@ -121,9 +122,9 @@ const ImageContentListPage = () => {
           <tbody className="overflow-x-scroll ">
             {announcements.results.map((announcement) => (
               <TableRow
-                key={announcement.id}
                 announcement={announcement}
                 handleDelete={handleDelete}
+                key={announcement.id}
               />
             ))}
           </tbody>
@@ -144,7 +145,7 @@ const ImageContentListPage = () => {
     </div>
   );
 };
-export default ImageContentListPage;
+export default VideoContentListPage;
 
 type TableRowProps = {
   announcement: AnnouncementRetrieveType;
@@ -158,7 +159,9 @@ function TableRow({ announcement, handleDelete }: TableRowProps) {
       key={announcement.id}
     >
       <td className="px-4 py-2 sm:px-6 sm:py-3 font-bold hover:underline">
-        <Link to={`${announcement.id}`}>{announcement.id} </Link>
+        <Link to={`/dashboard/contents/video/${announcement.id}`}>
+          {announcement.id}{" "}
+        </Link>
       </td>
       <td className="px-4 py-2 sm:px-6 sm:py-3">
         {truncateStringVariableLen(
@@ -173,8 +176,8 @@ function TableRow({ announcement, handleDelete }: TableRowProps) {
         {formatTimestamp(announcement.end_date)}
       </td>
       <td className="px-4 py-2 sm:px-6 sm:py-3">
-        {announcement.image_announcement &&
-          addTotalDuration(announcement.image_announcement)}
+        {announcement.video_announcement &&
+          addTotalDuration(announcement.video_announcement)}
       </td>
       <td className="px-4 py-2 sm:px-6 sm:py-3">
         <span className="flex justify-center">
@@ -194,10 +197,10 @@ function TableRow({ announcement, handleDelete }: TableRowProps) {
           )}
         </span>
       </td>
-      <td className="px-4 py-2 sm:px-6 sm:py-3 text-base">
-        <div className="flex flex-row gap-2">
+      <td className="px-4 py-2 sm:px-6 sm:py-3">
+        <div className="flex flex-row gap-2 text-base">
           <span>
-            <Link to={`${announcement.id}`}>
+            <Link to={`/dashboard/contents/video/${announcement.id}`}>
               <IconWithTooltip
                 icon={FaEye}
                 label="View"

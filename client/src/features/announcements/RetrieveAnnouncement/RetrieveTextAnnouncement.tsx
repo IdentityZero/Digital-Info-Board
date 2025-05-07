@@ -1,45 +1,37 @@
-import DisplayQuillEditor from "../../components/DisplayQuillEditor";
-import { FullImageAnnouncementType } from "../../types/AnnouncementTypes";
-import ImageSlider from "../../components/ImageSlider";
-import { formatTimestamp } from "../../utils/formatters";
-import { addTotalDuration, convertDurationToSeconds } from "../../utils/utils";
+import DisplayQuillEditor from "../../../components/DisplayQuillEditor";
+import { FullTextAnnouncementType } from "../../../types/AnnouncementTypes";
+import { formatTimestamp } from "../../../utils";
+import { getLaterDate } from "../../../utils/utils";
 
-type RetrieveImageAnnouncementProps = {
-  imageAnnouncement: FullImageAnnouncementType;
+type DisplayEditTextAnnouncementProps = {
+  data: FullTextAnnouncementType;
 };
 
-const RetrieveImageAnnouncement = ({
-  imageAnnouncement,
-}: RetrieveImageAnnouncementProps) => {
-  const imageUrls = imageAnnouncement.image_announcement.map((image) => {
-    return image.image;
-  });
-  const imageDurations: number[] = imageAnnouncement.image_announcement.map(
-    (image) => {
-      return convertDurationToSeconds(image.duration as string) * 1000;
-    }
-  );
-
+const RetrieveTextAnnouncement = ({
+  data,
+}: DisplayEditTextAnnouncementProps) => {
   return (
-    <div className="mt-2 flex flex-col gap-2">
-      <DisplayQuillEditor
-        isTitle
-        value={JSON.parse(imageAnnouncement?.title as string)}
-      />
-      <div>
-        <div className="w-1/2 h-[400px] mx-auto">
-          <ImageSlider
-            images={imageUrls as string[]}
-            durations={imageDurations}
+    <div>
+      <div className="mt-2 flex flex-col gap-2">
+        <div>
+          <DisplayQuillEditor
+            isTitle
+            value={JSON.parse(data?.title as string)}
+          />
+          <DisplayQuillEditor
+            value={JSON.parse(data?.text_announcement.details as string)}
           />
         </div>
-        <ContentInfoContainer data={imageAnnouncement} />
+
+        <div className="w-full">
+          <ContentInfoContainer data={data} />
+        </div>
       </div>
     </div>
   );
 };
 
-function ContentInfoContainer({ data }: { data: FullImageAnnouncementType }) {
+function ContentInfoContainer({ data }: { data: FullTextAnnouncementType }) {
   return (
     <div className="bg-white w-full shadow overflow-hidden sm:rounded-lg">
       <div className="px-4 py-5 sm:px-6">
@@ -89,21 +81,26 @@ function ContentInfoContainer({ data }: { data: FullImageAnnouncementType }) {
           <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
             <dt className="text-sm font-medium text-gray-500">Duration</dt>
             <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-              {/* {data.text_announcement.duration} */}
-              {data.image_announcement &&
-                addTotalDuration(data.image_announcement)}
+              {data.text_announcement.duration}
             </dd>
           </div>
           <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
             <dt className="text-sm font-medium text-gray-500">Last Modified</dt>
             <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-              {formatTimestamp(data.last_modified)}
+              {formatTimestamp(
+                getLaterDate(
+                  data.last_modified,
+                  data.text_announcement.last_modified
+                )
+              )}
             </dd>
           </div>
           <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
             <dt className="text-sm font-medium text-gray-500">Created at</dt>
             <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-              {formatTimestamp(data.created_at)}
+              {formatTimestamp(
+                getLaterDate(data.created_at, data.text_announcement.created_at)
+              )}
             </dd>
           </div>
         </dl>
@@ -112,4 +109,4 @@ function ContentInfoContainer({ data }: { data: FullImageAnnouncementType }) {
   );
 }
 
-export default RetrieveImageAnnouncement;
+export default RetrieveTextAnnouncement;

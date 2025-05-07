@@ -1,17 +1,17 @@
 import { forwardRef } from "react";
 import ReactQuill from "react-quill";
-import QuillEditor from "../../components/QuillEditor";
+import QuillEditor from "../../../components/QuillEditor";
 import { FaPlusCircle, FaTrashAlt } from "react-icons/fa";
 
-import { Input, Form, Errortext } from "../../components/ui";
+import { Input, Form, Errortext } from "../../../components/ui";
 import {
   FullImageAnnouncementType,
   ImageAnnouncementCreateType,
-} from "../../types/AnnouncementTypes";
-import { convertToDatetimeLocal } from "../../utils/formatters";
-import { UpdateImageAnnouncementErrorT } from "./helpers";
+} from "../../../types/AnnouncementTypes";
+import { convertToDatetimeLocal } from "../../../utils/formatters";
+import { UpdateImageAnnouncementErrorT } from "../helpers";
 import { toast } from "react-toastify";
-import { MAX_IMAGE_SIZE } from "../../constants/api";
+import { MAX_IMAGE_SIZE } from "../../../constants/api";
 
 type EditImageAnnouncementProps = {
   imageAnnouncement: FullImageAnnouncementType;

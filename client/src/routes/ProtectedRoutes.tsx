@@ -24,8 +24,8 @@ import {
   TextContentListPage,
   TextContentPage,
   VideoContentListPage,
+  VideoContentPage,
 } from "../pages/protected/content-pages";
-import VideoContentPage from "../pages/protected/content-pages/VideoContentPage";
 import AdminRouteGuard from "./AdminRouteGuard";
 import {
   ActiveListPage,

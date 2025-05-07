@@ -1,8 +1,9 @@
-import TextContentListPage from "./TextContentListPage";
-import ImageContentListPage from "./ImageContentListPage";
-import VideoContentListPage from "./VideoContentListPage";
 import TextContentPage from "./TextContentPage";
 import ImageContentPage from "./ImageContentPage";
+import VideoContentPage from "./VideoContentPage";
+import TextContentListPage from "./ListPages/TextContentListPage";
+import ImageContentListPage from "./ListPages/ImageContentListPage";
+import VideoContentListPage from "./ListPages/VideoContentListPage";
 
 export {
   TextContentListPage,
@@ -10,4 +11,5 @@ export {
   VideoContentListPage,
   TextContentPage,
   ImageContentPage,
+  VideoContentPage,
 };

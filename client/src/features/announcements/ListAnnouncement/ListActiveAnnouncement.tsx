@@ -1,17 +1,17 @@
 import { useRef, useState } from "react";
 import { Id } from "react-toastify";
 
-import { useAuth } from "../../context/AuthProvider";
-import useLoadingToast from "../../hooks/useLoadingToast";
+import { useAuth } from "../../../context/AuthProvider";
+import useLoadingToast from "../../../hooks/useLoadingToast";
 
-import { updateAnnouncementApi } from "../../api/announcementRequest";
+import { updateAnnouncementApi } from "../../../api/announcementRequest";
 import {
   AnnouncementListType,
   AnnouncementRetrieveType,
-} from "../../types/AnnouncementTypes";
+} from "../../../types/AnnouncementTypes";
 
-import PreviewAnnouncement from "./PreviewAnnouncement";
-import AnnouncementActivationCard from "./components/AnnouncementActivationCard";
+import PreviewAnnouncement from "../PreviewAnnouncement";
+import AnnouncementActivationCard from "../components/AnnouncementActivationCard";
 
 const ListActiveAnnouncement = ({
   activeAnnouncements,

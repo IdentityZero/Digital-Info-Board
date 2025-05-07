@@ -6,19 +6,21 @@ import ReactQuill from "react-quill";
 import { Delta } from "quill/core";
 import { FaPlusCircle, FaTrashAlt } from "react-icons/fa";
 
-import QuillEditor, { isQuillValueEmpty } from "../../components/QuillEditor";
-import { Input, Form, Errortext } from "../../components/ui";
+import QuillEditor, {
+  isQuillValueEmpty,
+} from "../../../components/QuillEditor";
+import { Input, Form, Errortext } from "../../../components/ui";
 
-import { useAuth } from "../../context/AuthProvider";
-import useLoadingToast from "../../hooks/useLoadingToast";
+import { useAuth } from "../../../context/AuthProvider";
+import useLoadingToast from "../../../hooks/useLoadingToast";
 
 import {
   type ImageAnnouncementCreateType,
   type CreateImageAnnouncementT,
-} from "../../types/AnnouncementTypes";
-import { createNewAllTypeAnnouncementApi } from "../../api/announcementRequest";
-import { CreateImageAnnouncementErrorState } from "./helpers";
-import { MAX_IMAGE_SIZE } from "../../constants/api";
+} from "../../../types/AnnouncementTypes";
+import { createNewAllTypeAnnouncementApi } from "../../../api/announcementRequest";
+import { CreateImageAnnouncementErrorState } from "../helpers";
+import { MAX_IMAGE_SIZE } from "../../../constants/api";
 
 const CreateImageAnnouncement = () => {
   const toastId = useRef<Id | null>(null);

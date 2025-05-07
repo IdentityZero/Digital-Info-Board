@@ -1,41 +1,40 @@
 import { useEffect, useRef, useState } from "react";
-import { Id } from "react-toastify";
+import { FaEye, FaTrash, FaTimesCircle, FaCheckCircle } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { FaCheckCircle, FaEye, FaTimesCircle, FaTrash } from "react-icons/fa";
+import { Id } from "react-toastify";
 
-import ErrorMessage from "../../../components/ErrorMessage";
-import IconWithTooltip from "../../../components/IconWithTooltip";
-import LoadingMessage from "../../../components/LoadingMessage";
-import Pagination from "../../../components/Pagination";
+import LoadingMessage from "../../../../components/LoadingMessage";
+import ErrorMessage from "../../../../components/ErrorMessage";
+import IconWithTooltip from "../../../../components/IconWithTooltip";
+import Pagination from "../../../../components/Pagination";
 
+import useLoadingToast from "../../../../hooks/useLoadingToast";
+import { useAuth } from "../../../../context/AuthProvider";
+import usePagination from "../../../../hooks/usePagination";
+
+import { isNowWithinRange } from "../../../../utils/utils";
 import {
   extractReactQuillText,
   formatTimestamp,
   truncateStringVariableLen,
-} from "../../../utils/formatters";
-import { addTotalDuration, isNowWithinRange } from "../../../utils/utils";
+} from "../../../../utils/formatters";
 
-import useLoadingToast from "../../../hooks/useLoadingToast";
-import { useAuth } from "../../../context/AuthProvider";
-
-import { getListTypeInitState } from "../../../types/ListType";
-import usePagination from "../../../hooks/usePagination";
-
+import {
+  listTextAnnouncementApi,
+  deleteTextAnnouncementApi,
+} from "../../../../api/announcementRequest";
 import {
   PaginatedAnnouncementListTypeV1,
   AnnouncementRetrieveType,
-} from "../../../types/AnnouncementTypes";
-import {
-  deleteVideoAnnouncementApi,
-  listVideoAnnouncementApi,
-} from "../../../api/announcementRequest";
+} from "../../../../types/AnnouncementTypes";
+import { getListTypeInitState } from "../../../../types/ListType";
 
-const VideoContentListPage = () => {
+const TextContentListPage = () => {
   const { userApi } = useAuth();
   const toastId = useRef<Id | null>(null);
   const { loading, update } = useLoadingToast(toastId);
   const { page, setPage, pageSize, setPageSize } = usePagination(
-    "pageSize_videoList",
+    "pageSize_textList",
     10
   );
 
@@ -44,11 +43,13 @@ const VideoContentListPage = () => {
   const totalPages = Math.max(1, Math.ceil(announcements.count / pageSize));
 
   const [hasLoadingError, setHasLoadingError] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchAnnouncements = async (ppage: number, ppageSize: number) => {
     try {
-      const data = await listVideoAnnouncementApi(userApi, ppage, ppageSize);
+      setIsLoading(true);
+      const data = await listTextAnnouncementApi(userApi, ppage, ppageSize);
+
       setAnnouncements(data);
     } catch (error) {
       setHasLoadingError(true);
@@ -56,10 +57,37 @@ const VideoContentListPage = () => {
       setIsLoading(false);
     }
   };
-
   useEffect(() => {
     fetchAnnouncements(page, pageSize);
   }, [page, pageSize]);
+
+  const handleDelete = async (announcement_id: string) => {
+    const confirm_delete = confirm(
+      `Are you sure you want to delete this Announcement?`
+    );
+
+    if (!confirm_delete) return;
+
+    loading(`Deleting - ${announcement_id}. Please wait...`);
+    try {
+      await deleteTextAnnouncementApi(userApi, announcement_id);
+      update({ render: "Delete successful", type: "success" });
+      // Remove the data
+      const updated = announcements.results.filter(
+        (announcement) => announcement.id !== announcement_id
+      );
+      setAnnouncements((prev) => ({
+        ...prev,
+        results: updated,
+        count: prev.count - 1,
+      }));
+    } catch (error) {
+      update({
+        render: "Delete unsuccessful. Please try again.",
+        type: "error",
+      });
+    }
+  };
 
   if (hasLoadingError) {
     return (
@@ -73,33 +101,6 @@ const VideoContentListPage = () => {
     return <LoadingMessage message="Loading..." />;
   }
 
-  const handleDelete = async (announcement_id: string) => {
-    const delete_conf = window.confirm(
-      "Are you sure you want to delete this Video Content?"
-    );
-
-    if (!delete_conf) return;
-    loading(`Deleting - ${announcement_id}. Please wait...`);
-
-    try {
-      await deleteVideoAnnouncementApi(userApi, announcement_id);
-      const updatedAnnouncements = announcements.results.filter(
-        (announcement) => announcement.id !== announcement_id
-      );
-      update({ render: "Delete successful", type: "success" });
-      setAnnouncements((prev) => ({
-        ...prev,
-        results: updatedAnnouncements,
-        count: prev.count - 1,
-      }));
-    } catch (error) {
-      update({
-        render: "Delete unsuccessful. Please try again.",
-        type: "error",
-      });
-    }
-  };
-
   return (
     <div className="w-full mt-5">
       <div className="overflow-x-auto">
@@ -108,6 +109,7 @@ const VideoContentListPage = () => {
             <tr className="bg-gray-100 text-left text-sm sm:text-base">
               <th className="px-4 py-2 sm:px-6 sm:py-3">ID</th>
               <th className="px-4 py-2 sm:px-6 sm:py-3">Title</th>
+              <th className="px-4 py-2 sm:px-6 sm:py-3">Details</th>
               <th className="px-4 py-2 sm:px-6 sm:py-3">Start Date</th>
               <th className="px-4 py-2 sm:px-6 sm:py-3">End Date</th>
               <th className="px-4 py-2 sm:px-6 sm:py-3">Duration</th>
@@ -118,13 +120,12 @@ const VideoContentListPage = () => {
               <th className="px-4 py-2 sm:px-6 sm:py-3">Actions</th>
             </tr>
           </thead>
-
-          <tbody className="overflow-x-scroll ">
+          <tbody className="overflow-x-scroll">
             {announcements.results.map((announcement) => (
               <TableRow
+                key={announcement.id}
                 announcement={announcement}
                 handleDelete={handleDelete}
-                key={announcement.id}
               />
             ))}
           </tbody>
@@ -145,7 +146,7 @@ const VideoContentListPage = () => {
     </div>
   );
 };
-export default VideoContentListPage;
+export default TextContentListPage;
 
 type TableRowProps = {
   announcement: AnnouncementRetrieveType;
@@ -159,13 +160,18 @@ function TableRow({ announcement, handleDelete }: TableRowProps) {
       key={announcement.id}
     >
       <td className="px-4 py-2 sm:px-6 sm:py-3 font-bold hover:underline">
-        <Link to={`/dashboard/contents/video/${announcement.id}`}>
-          {announcement.id}{" "}
-        </Link>
+        <Link to={`${announcement.id}`}>{announcement.id} </Link>
       </td>
       <td className="px-4 py-2 sm:px-6 sm:py-3">
         {truncateStringVariableLen(
           extractReactQuillText(announcement.title as string)
+        )}
+      </td>
+      <td className="px-4 py-2 sm:px-6 sm:py-3">
+        {truncateStringVariableLen(
+          extractReactQuillText(
+            announcement.text_announcement?.details as string
+          )
         )}
       </td>
 
@@ -176,8 +182,7 @@ function TableRow({ announcement, handleDelete }: TableRowProps) {
         {formatTimestamp(announcement.end_date)}
       </td>
       <td className="px-4 py-2 sm:px-6 sm:py-3">
-        {announcement.video_announcement &&
-          addTotalDuration(announcement.video_announcement)}
+        {announcement.text_announcement?.duration}
       </td>
       <td className="px-4 py-2 sm:px-6 sm:py-3">
         <span className="flex justify-center">
@@ -200,7 +205,7 @@ function TableRow({ announcement, handleDelete }: TableRowProps) {
       <td className="px-4 py-2 sm:px-6 sm:py-3">
         <div className="flex flex-row gap-2 text-base">
           <span>
-            <Link to={`/dashboard/contents/video/${announcement.id}`}>
+            <Link to={`${announcement.id}`}>
               <IconWithTooltip
                 icon={FaEye}
                 label="View"

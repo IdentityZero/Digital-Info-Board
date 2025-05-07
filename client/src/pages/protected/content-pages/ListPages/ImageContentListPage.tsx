@@ -1,40 +1,40 @@
 import { useEffect, useRef, useState } from "react";
-import { FaEye, FaTrash, FaTimesCircle, FaCheckCircle } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { Id } from "react-toastify";
+import { FaCheckCircle, FaEye, FaTimesCircle, FaTrash } from "react-icons/fa";
 
-import LoadingMessage from "../../../components/LoadingMessage";
-import ErrorMessage from "../../../components/ErrorMessage";
-import IconWithTooltip from "../../../components/IconWithTooltip";
-import Pagination from "../../../components/Pagination";
+import IconWithTooltip from "../../../../components/IconWithTooltip";
+import LoadingMessage from "../../../../components/LoadingMessage";
+import useLoadingToast from "../../../../hooks/useLoadingToast";
+import ErrorMessage from "../../../../components/ErrorMessage";
+import Pagination from "../../../../components/Pagination";
 
-import useLoadingToast from "../../../hooks/useLoadingToast";
-import { useAuth } from "../../../context/AuthProvider";
-import usePagination from "../../../hooks/usePagination";
-
-import { isNowWithinRange } from "../../../utils/utils";
 import {
   extractReactQuillText,
   formatTimestamp,
   truncateStringVariableLen,
-} from "../../../utils/formatters";
+} from "../../../../utils/formatters";
+import { addTotalDuration, isNowWithinRange } from "../../../../utils/utils";
 
+import { useAuth } from "../../../../context/AuthProvider";
+import usePagination from "../../../../hooks/usePagination";
 import {
-  listTextAnnouncementApi,
-  deleteTextAnnouncementApi,
-} from "../../../api/announcementRequest";
+  listImageAnnouncementApi,
+  deleteImageAnnouncementApi,
+} from "../../../../api/announcementRequest";
+
 import {
   PaginatedAnnouncementListTypeV1,
   AnnouncementRetrieveType,
-} from "../../../types/AnnouncementTypes";
-import { getListTypeInitState } from "../../../types/ListType";
+} from "../../../../types/AnnouncementTypes";
+import { getListTypeInitState } from "../../../../types/ListType";
 
-const TextContentListPage = () => {
+const ImageContentListPage = () => {
   const { userApi } = useAuth();
   const toastId = useRef<Id | null>(null);
   const { loading, update } = useLoadingToast(toastId);
   const { page, setPage, pageSize, setPageSize } = usePagination(
-    "pageSize_textList",
+    "pageSize_imageList",
     10
   );
 
@@ -43,18 +43,16 @@ const TextContentListPage = () => {
   const totalPages = Math.max(1, Math.ceil(announcements.count / pageSize));
 
   const [hasLoadingError, setHasLoadingError] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setisLoading] = useState(true);
 
   const fetchAnnouncements = async (ppage: number, ppageSize: number) => {
     try {
-      setIsLoading(true);
-      const data = await listTextAnnouncementApi(userApi, ppage, ppageSize);
-
+      const data = await listImageAnnouncementApi(userApi, ppage, ppageSize);
       setAnnouncements(data);
     } catch (error) {
       setHasLoadingError(true);
     } finally {
-      setIsLoading(false);
+      setisLoading(false);
     }
   };
   useEffect(() => {
@@ -67,10 +65,10 @@ const TextContentListPage = () => {
     );
 
     if (!confirm_delete) return;
-
     loading(`Deleting - ${announcement_id}. Please wait...`);
+
     try {
-      await deleteTextAnnouncementApi(userApi, announcement_id);
+      await deleteImageAnnouncementApi(userApi, announcement_id);
       update({ render: "Delete successful", type: "success" });
       // Remove the data
       const updated = announcements.results.filter(
@@ -104,12 +102,11 @@ const TextContentListPage = () => {
   return (
     <div className="w-full mt-5">
       <div className="overflow-x-auto">
-        <table className="border w-full overflow-x-auto border-gray-200 shadow-md rounded-lg">
+        <table className="w-full border border-gray-200 shadow-md rounded-lg">
           <thead>
             <tr className="bg-gray-100 text-left text-sm sm:text-base">
               <th className="px-4 py-2 sm:px-6 sm:py-3">ID</th>
               <th className="px-4 py-2 sm:px-6 sm:py-3">Title</th>
-              <th className="px-4 py-2 sm:px-6 sm:py-3">Details</th>
               <th className="px-4 py-2 sm:px-6 sm:py-3">Start Date</th>
               <th className="px-4 py-2 sm:px-6 sm:py-3">End Date</th>
               <th className="px-4 py-2 sm:px-6 sm:py-3">Duration</th>
@@ -120,7 +117,8 @@ const TextContentListPage = () => {
               <th className="px-4 py-2 sm:px-6 sm:py-3">Actions</th>
             </tr>
           </thead>
-          <tbody className="overflow-x-scroll">
+
+          <tbody className="overflow-x-scroll ">
             {announcements.results.map((announcement) => (
               <TableRow
                 key={announcement.id}
@@ -146,7 +144,7 @@ const TextContentListPage = () => {
     </div>
   );
 };
-export default TextContentListPage;
+export default ImageContentListPage;
 
 type TableRowProps = {
   announcement: AnnouncementRetrieveType;
@@ -167,13 +165,6 @@ function TableRow({ announcement, handleDelete }: TableRowProps) {
           extractReactQuillText(announcement.title as string)
         )}
       </td>
-      <td className="px-4 py-2 sm:px-6 sm:py-3">
-        {truncateStringVariableLen(
-          extractReactQuillText(
-            announcement.text_announcement?.details as string
-          )
-        )}
-      </td>
 
       <td className="px-4 py-2 sm:px-6 sm:py-3">
         {formatTimestamp(announcement.start_date)}
@@ -182,7 +173,8 @@ function TableRow({ announcement, handleDelete }: TableRowProps) {
         {formatTimestamp(announcement.end_date)}
       </td>
       <td className="px-4 py-2 sm:px-6 sm:py-3">
-        {announcement.text_announcement?.duration}
+        {announcement.image_announcement &&
+          addTotalDuration(announcement.image_announcement)}
       </td>
       <td className="px-4 py-2 sm:px-6 sm:py-3">
         <span className="flex justify-center">
@@ -202,8 +194,8 @@ function TableRow({ announcement, handleDelete }: TableRowProps) {
           )}
         </span>
       </td>
-      <td className="px-4 py-2 sm:px-6 sm:py-3">
-        <div className="flex flex-row gap-2 text-base">
+      <td className="px-4 py-2 sm:px-6 sm:py-3 text-base">
+        <div className="flex flex-row gap-2">
           <span>
             <Link to={`${announcement.id}`}>
               <IconWithTooltip

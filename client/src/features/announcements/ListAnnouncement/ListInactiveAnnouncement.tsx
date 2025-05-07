@@ -2,17 +2,17 @@ import { useRef, useState } from "react";
 import { Id } from "react-toastify";
 import { useLocation } from "react-router-dom";
 
-import { useAuth } from "../../context/AuthProvider";
-import useLoadingToast from "../../hooks/useLoadingToast";
+import { useAuth } from "../../../context/AuthProvider";
+import useLoadingToast from "../../../hooks/useLoadingToast";
 
 import {
   type AnnouncementListType,
   AnnouncementRetrieveType,
-} from "../../types/AnnouncementTypes";
-import { updateAnnouncementApi } from "../../api/announcementRequest";
+} from "../../../types/AnnouncementTypes";
+import { updateAnnouncementApi } from "../../../api/announcementRequest";
 
-import PreviewAnnouncement from "./PreviewAnnouncement";
-import AnnouncementActivationCard from "./components/AnnouncementActivationCard";
+import PreviewAnnouncement from "../PreviewAnnouncement";
+import AnnouncementActivationCard from "../components/AnnouncementActivationCard";
 
 type ListInactiveAnnouncementProps = {
   inactiveAnnouncements: AnnouncementListType;

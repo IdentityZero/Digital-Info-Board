@@ -1,37 +1,50 @@
-import DisplayQuillEditor from "../../components/DisplayQuillEditor";
-import { FullTextAnnouncementType } from "../../types/AnnouncementTypes";
-import { formatTimestamp } from "../../utils";
-import { getLaterDate } from "../../utils/utils";
+import DisplayQuillEditor from "../../../components/DisplayQuillEditor";
+import VideoSlider from "../../../components/VideoSlider";
+import { FullVideoAnnouncementType } from "../../../types/AnnouncementTypes";
+import { formatTimestamp } from "../../../utils";
+import {
+  addTotalDuration,
+  convertDurationToSeconds,
+} from "../../../utils/utils";
 
-type DisplayEditTextAnnouncementProps = {
-  data: FullTextAnnouncementType;
-};
+const RetrieveVideoAnnouncement = ({
+  videoAnnouncementData,
+  stopSlider,
+}: {
+  videoAnnouncementData: FullVideoAnnouncementType;
+  stopSlider: boolean;
+}) => {
+  const videoUrls = videoAnnouncementData.video_announcement.map((video) => {
+    return video.video;
+  });
 
-const RetrieveTextAnnouncement = ({
-  data,
-}: DisplayEditTextAnnouncementProps) => {
+  const videoDurations: number[] = videoAnnouncementData.video_announcement.map(
+    (video) => {
+      return convertDurationToSeconds(video.duration as string) * 1000;
+    }
+  );
+
   return (
-    <div>
-      <div className="mt-2 flex flex-col gap-2">
-        <div>
-          <DisplayQuillEditor
-            isTitle
-            value={JSON.parse(data?.title as string)}
-          />
-          <DisplayQuillEditor
-            value={JSON.parse(data?.text_announcement.details as string)}
+    <div className="mt-2 flex flex-col gap-2">
+      <DisplayQuillEditor
+        isTitle
+        value={JSON.parse(videoAnnouncementData?.title as string)}
+      />
+      <div>
+        <div className="w-1/2 h-[400px] mx-auto">
+          <VideoSlider
+            videos={videoUrls as string[]}
+            durations={videoDurations}
+            stop={stopSlider}
           />
         </div>
-
-        <div className="w-full">
-          <ContentInfoContainer data={data} />
-        </div>
+        <ContentInfoContainer data={videoAnnouncementData} />
       </div>
     </div>
   );
 };
 
-function ContentInfoContainer({ data }: { data: FullTextAnnouncementType }) {
+function ContentInfoContainer({ data }: { data: FullVideoAnnouncementType }) {
   return (
     <div className="bg-white w-full shadow overflow-hidden sm:rounded-lg">
       <div className="px-4 py-5 sm:px-6">
@@ -81,26 +94,21 @@ function ContentInfoContainer({ data }: { data: FullTextAnnouncementType }) {
           <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
             <dt className="text-sm font-medium text-gray-500">Duration</dt>
             <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-              {data.text_announcement.duration}
+              {/* {data.text_announcement.duration} */}
+              {data.video_announcement &&
+                addTotalDuration(data.video_announcement)}
             </dd>
           </div>
           <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
             <dt className="text-sm font-medium text-gray-500">Last Modified</dt>
             <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-              {formatTimestamp(
-                getLaterDate(
-                  data.last_modified,
-                  data.text_announcement.last_modified
-                )
-              )}
+              {formatTimestamp(data.last_modified)}
             </dd>
           </div>
           <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
             <dt className="text-sm font-medium text-gray-500">Created at</dt>
             <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-              {formatTimestamp(
-                getLaterDate(data.created_at, data.text_announcement.created_at)
-              )}
+              {formatTimestamp(data.created_at)}
             </dd>
           </div>
         </dl>
@@ -108,5 +116,4 @@ function ContentInfoContainer({ data }: { data: FullTextAnnouncementType }) {
     </div>
   );
 }
-
-export default RetrieveTextAnnouncement;
+export default RetrieveVideoAnnouncement;

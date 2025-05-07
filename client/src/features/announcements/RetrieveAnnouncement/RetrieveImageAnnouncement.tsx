@@ -1,23 +1,25 @@
-import DisplayQuillEditor from "../../components/DisplayQuillEditor";
-import VideoSlider from "../../components/VideoSlider";
-import { FullVideoAnnouncementType } from "../../types/AnnouncementTypes";
-import { formatTimestamp } from "../../utils";
-import { addTotalDuration, convertDurationToSeconds } from "../../utils/utils";
+import DisplayQuillEditor from "../../../components/DisplayQuillEditor";
+import { FullImageAnnouncementType } from "../../../types/AnnouncementTypes";
+import ImageSlider from "../../../components/ImageSlider";
+import { formatTimestamp } from "../../../utils/formatters";
+import {
+  addTotalDuration,
+  convertDurationToSeconds,
+} from "../../../utils/utils";
 
-const RetrieveVideoAnnouncement = ({
-  videoAnnouncementData,
-  stopSlider,
-}: {
-  videoAnnouncementData: FullVideoAnnouncementType;
-  stopSlider: boolean;
-}) => {
-  const videoUrls = videoAnnouncementData.video_announcement.map((video) => {
-    return video.video;
+type RetrieveImageAnnouncementProps = {
+  imageAnnouncement: FullImageAnnouncementType;
+};
+
+const RetrieveImageAnnouncement = ({
+  imageAnnouncement,
+}: RetrieveImageAnnouncementProps) => {
+  const imageUrls = imageAnnouncement.image_announcement.map((image) => {
+    return image.image;
   });
-
-  const videoDurations: number[] = videoAnnouncementData.video_announcement.map(
-    (video) => {
-      return convertDurationToSeconds(video.duration as string) * 1000;
+  const imageDurations: number[] = imageAnnouncement.image_announcement.map(
+    (image) => {
+      return convertDurationToSeconds(image.duration as string) * 1000;
     }
   );
 
@@ -25,23 +27,22 @@ const RetrieveVideoAnnouncement = ({
     <div className="mt-2 flex flex-col gap-2">
       <DisplayQuillEditor
         isTitle
-        value={JSON.parse(videoAnnouncementData?.title as string)}
+        value={JSON.parse(imageAnnouncement?.title as string)}
       />
       <div>
         <div className="w-1/2 h-[400px] mx-auto">
-          <VideoSlider
-            videos={videoUrls as string[]}
-            durations={videoDurations}
-            stop={stopSlider}
+          <ImageSlider
+            images={imageUrls as string[]}
+            durations={imageDurations}
           />
         </div>
-        <ContentInfoContainer data={videoAnnouncementData} />
+        <ContentInfoContainer data={imageAnnouncement} />
       </div>
     </div>
   );
 };
 
-function ContentInfoContainer({ data }: { data: FullVideoAnnouncementType }) {
+function ContentInfoContainer({ data }: { data: FullImageAnnouncementType }) {
   return (
     <div className="bg-white w-full shadow overflow-hidden sm:rounded-lg">
       <div className="px-4 py-5 sm:px-6">
@@ -92,8 +93,8 @@ function ContentInfoContainer({ data }: { data: FullVideoAnnouncementType }) {
             <dt className="text-sm font-medium text-gray-500">Duration</dt>
             <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
               {/* {data.text_announcement.duration} */}
-              {data.video_announcement &&
-                addTotalDuration(data.video_announcement)}
+              {data.image_announcement &&
+                addTotalDuration(data.image_announcement)}
             </dd>
           </div>
           <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -113,4 +114,5 @@ function ContentInfoContainer({ data }: { data: FullVideoAnnouncementType }) {
     </div>
   );
 }
-export default RetrieveVideoAnnouncement;
+
+export default RetrieveImageAnnouncement;

@@ -2,16 +2,16 @@ import ReactQuill from "react-quill";
 import { FaPlusCircle, FaTrashAlt } from "react-icons/fa";
 import { toast } from "react-toastify";
 
-import { Errortext, Form, Input } from "../../components/ui";
-import QuillEditor from "../../components/QuillEditor";
+import { Errortext, Form, Input } from "../../../components/ui";
+import QuillEditor from "../../../components/QuillEditor";
 import {
   FullVideoAnnouncementType,
   VideoAnnouncementCreateType,
-} from "../../types/AnnouncementTypes";
-import { convertToDatetimeLocal } from "../../utils/formatters";
+} from "../../../types/AnnouncementTypes";
+import { convertToDatetimeLocal } from "../../../utils/formatters";
 import { forwardRef, useEffect, useState } from "react";
-import { UpdateVideoAnnouncementErrorT } from "./helpers";
-import { MAX_VIDEO_SIZE } from "../../constants/api";
+import { UpdateVideoAnnouncementErrorT } from "../helpers";
+import { MAX_VIDEO_SIZE } from "../../../constants/api";
 
 type EditVideoAnnouncementProps = {
   videoAnnouncementData: FullVideoAnnouncementType;

@@ -1,11 +1,11 @@
 import { forwardRef } from "react";
 import ReactQuill from "react-quill";
-import { FullTextAnnouncementType } from "../../types/AnnouncementTypes";
-import QuillEditor from "../../components/QuillEditor";
-import { Input, Form } from "../../components/ui";
-import { convertToDatetimeLocal } from "../../utils/formatters";
+import { FullTextAnnouncementType } from "../../../types/AnnouncementTypes";
+import QuillEditor from "../../../components/QuillEditor";
+import { Input, Form } from "../../../components/ui";
+import { convertToDatetimeLocal } from "../../../utils/formatters";
 
-import { TextAnnouncementErrorT } from "./helpers";
+import { TextAnnouncementErrorT } from "../helpers";
 
 interface EditTextAnnouncementProps {
   data: FullTextAnnouncementType;

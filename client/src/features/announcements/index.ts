@@ -1,16 +1,15 @@
 import DetailAnnouncement from "./DetailAnnouncement";
-import { CreateAnnouncement } from "./CreateAnnouncement";
-import CreateTextAnnouncement from "./CreateTextAnnouncement";
-import RetrieveTextAnnouncement from "./RetrieveTextAnnouncement";
-import EditTextAnnouncement from "./EditTextAnnouncement";
-import CreateImageAnnouncement from "./CreateImageAnnouncement";
-import RetrieveImageAnnouncement from "./RetrieveImageAnnouncement";
-import EditImageAnnouncement from "./EditImageAnnouncement";
-import ListInactiveAnnouncement from "./ListInactiveAnnouncement";
-import ListActiveAnnouncement from "./ListActiveAnnouncement";
-import CreateVideoAnnouncement from "./CreateVideoAnnouncement";
-import RetrieveVideoAnnouncement from "./RetrieveVideoAnnouncement";
-import EditVideoAnnouncement from "./EditVideoAnnouncement";
+import CreateTextAnnouncement from "./CreateAnnouncement/CreateTextAnnouncement";
+import RetrieveTextAnnouncement from "./RetrieveAnnouncement/RetrieveTextAnnouncement";
+import EditTextAnnouncement from "./EditAnnouncement/EditTextAnnouncement";
+import CreateImageAnnouncement from "./CreateAnnouncement/CreateImageAnnouncement";
+import RetrieveImageAnnouncement from "./RetrieveAnnouncement/RetrieveImageAnnouncement";
+import EditImageAnnouncement from "./EditAnnouncement/EditImageAnnouncement";
+import ListInactiveAnnouncement from "./ListAnnouncement/ListInactiveAnnouncement";
+import ListActiveAnnouncement from "./ListAnnouncement/ListActiveAnnouncement";
+import CreateVideoAnnouncement from "./CreateAnnouncement/CreateVideoAnnouncement";
+import RetrieveVideoAnnouncement from "./RetrieveAnnouncement/RetrieveVideoAnnouncement";
+import EditVideoAnnouncement from "./EditAnnouncement/EditVideoAnnouncement";
 import PreviewAnnouncement from "./PreviewAnnouncement";
 import AnnouncementThumbnail from "./AnnouncementThumbnail";
 import LiveAnnouncement from "./LiveAnnouncement";
@@ -19,7 +18,6 @@ import NoAnnouncementCard from "./NoAnnouncementCard";
 
 export {
   DetailAnnouncement,
-  CreateAnnouncement,
   CreateTextAnnouncement,
   RetrieveTextAnnouncement,
   EditTextAnnouncement,
