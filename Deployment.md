@@ -386,11 +386,11 @@
 7. ### Shutdown RPI at 5pm
        sudo crontab -e
      #### Copy and Paste this to the bottom
-       0 17 * * * /sbin/shutdown -h now
+       50 16 * * * /sbin/shutdown -h now
      Then save.
 
 ## Others
 1. ### Increase GPU memory
        sudo nano /boot/firmware/config.txt
      #### Copy this to the bottom of the file
-       ppu_mem=512
+       gpu_mem=512
