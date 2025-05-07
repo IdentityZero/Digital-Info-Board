@@ -8,6 +8,7 @@ import researcher1 from "./researcher1.jpg";
 import researcher2 from "./researcher2.jpg";
 import researcher3 from "./researcher3.jpg";
 import researcher4 from "./researcher4.jpg";
+import adviser from "./adviser.jpg";
 
 export {
   logo,
@@ -20,4 +21,5 @@ export {
   researcher2,
   researcher3,
   researcher4,
+  adviser,
 };

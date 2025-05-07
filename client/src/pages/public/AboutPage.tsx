@@ -1,4 +1,5 @@
 import {
+  adviser,
   cpeBg,
   researcher1,
   researcher2,
@@ -69,7 +70,7 @@ const AboutPage = () => {
       {/* Research Adviser */}
       <div className="max-w-4xl mx-auto bg-white shadow-md rounded-lg overflow-hidden flex flex-col sm:flex-row items-center p-6 mb-12">
         <img
-          src="https://picsum.photos/200"
+          src={adviser}
           alt="Research Adviser"
           className="w-48 h-48 rounded-full object-cover mb-4 sm:mb-0 sm:mr-6"
         />
