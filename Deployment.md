@@ -383,12 +383,32 @@
        systemctl --user enable kiosk.service
        systemctl --user start kiosk.service
 
-7. ### Shutdown RPI at 5pm
+7. ### Shutdown RPI at 4:50pm
        sudo crontab -e
-     #### Copy and Paste this to the bottom
+   #### Copy and Paste this to the bottom
        50 16 * * * /sbin/shutdown -h now
      Then save.
-
+8. ### Set Time Service
+       sudo nano /etc/systemd/system/setTime.service
+   #### Copy this to the file
+       [Unit]
+       Description=Set time of the raspberry pi incase of NTP Failure
+       After=network.target
+        
+       [Service]
+       ExecStart=/usr/bin/python "/home/admin/Digital-Info-Board/server/backend/client scripts/set_rpi_time.py"
+       WorkingDirectory=/home/admin/Digital-Info-Board/server/backend/client scripts
+       User=admin
+       Restart=on-failure
+       RestartSec=5
+        
+       [Install]
+       WantedBy=multi-user.target
+     Then save.
+   #### Start and Enable Service
+       sudo systemctl start setTime.service
+       sudo systemctl enable setTime.service
+   
 ## Others
 1. ### Increase GPU memory
        sudo nano /boot/firmware/config.txt
