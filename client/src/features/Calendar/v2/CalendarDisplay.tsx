@@ -34,6 +34,12 @@ const CalendarDisplay = ({
   showEvents = false,
   showWeekends = true,
 }: CalendarDisplayProps) => {
+  /**
+   * Rerendering the Calendar and using a local grid view is used to completely rerender the Calendar, merely changing its gridView will not rerender it
+   */
+  const [rerenderCalendar, setRerenderCalendar] = useState(false);
+  const [gridView, setGridView] = useState(initialGridView);
+
   const [isLoading, setIsLoading] = useState(false);
   const [hasFetchingError, setHasFetchingError] = useState(false);
   const [events, setEvents] = useState<CalendarEventType[]>([]);
@@ -64,6 +70,15 @@ const CalendarDisplay = ({
     showEvents && fetchCalendarEvents();
   }, [showEvents]);
 
+  useEffect(() => {
+    setGridView(initialGridView);
+    if (initialGridView !== gridView) {
+      setRerenderCalendar(true);
+    } else {
+      setRerenderCalendar(false);
+    }
+  }, [initialGridView, rerenderCalendar]);
+
   const handleEventClick = (eventInfo: EventClickArg) => {
     const eventData = eventInfo.event;
     const eventTarget = eventInfo.view.calendar.getEventById(eventData.id);
@@ -78,26 +93,28 @@ const CalendarDisplay = ({
         <div>Unexpected error occured. Please try again.</div>
       ) : (
         <>
-          <FullCalendar
-            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-            headerToolbar={{
-              left: showNavigation ? "prev,next today" : "",
-              center: "title",
-              right: showGridControls
-                ? "dayGridMonth,timeGridWeek,timeGridDay"
-                : "",
-            }}
-            initialView={initialGridView}
-            editable={false}
-            selectable={true}
-            selectMirror={true}
-            dayMaxEvents={dayMaxEventRows}
-            weekends={showWeekends}
-            height="100%"
-            initialEvents={events as EventSourceInput}
-            eventContent={renderEventContent}
-            eventClick={handleEventClick}
-          />
+          {!rerenderCalendar && (
+            <FullCalendar
+              plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+              headerToolbar={{
+                left: showNavigation ? "prev,next today" : "",
+                center: "title",
+                right: showGridControls
+                  ? "dayGridMonth,timeGridWeek,timeGridDay"
+                  : "",
+              }}
+              initialView={gridView}
+              editable={false}
+              selectable={true}
+              selectMirror={true}
+              dayMaxEvents={dayMaxEventRows}
+              weekends={showWeekends}
+              height="100%"
+              initialEvents={events as EventSourceInput}
+              eventContent={renderEventContent}
+              eventClick={handleEventClick}
+            />
+          )}
           {targetEvent && (
             <DisplayEvent
               isOpen={!!targetEvent}
