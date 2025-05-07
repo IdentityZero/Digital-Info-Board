@@ -433,49 +433,50 @@ class RetrieveUpdateVideoAnnouncementAPIView(generics.RetrieveUpdateAPIView):
         return qs
 
 
-class ListTextAnnouncementAPIView(generics.ListAPIView):
+class BaseMediaAnnouncementListAPIView(generics.ListAPIView):
     """
-    List of Base Announcement with Text Announcement and is owned by User
+    Base view for listing announcements with a specific type of media.
+    Subclasses must define `media_field` (e.g., 'text_announcement').
     """
 
     serializer_class = CreateAnnouncementSerializer
     permission_classes = [IsAuthenticated]
     pagination_class = CustomPageNumberPagination
+    media_field = None  # Must be set by subclasses
 
     def get_queryset(self):
-        qs = Announcements.objects.filter(
-            author=self.request.user, text_announcement__isnull=False
+        if not self.media_field:
+            raise NotImplementedError("media_field must be defined.")
+        filter_kwargs = {
+            "author": self.request.user,
+            f"{self.media_field}__isnull": False,
+        }
+        return (
+            Announcements.objects.filter(**filter_kwargs)
+            .distinct()
+            .order_by("-end_date")
         )
-        return qs
 
 
-class ListImageAnnouncementAPIView(generics.ListAPIView):
+class ListTextAnnouncementAPIView(BaseMediaAnnouncementListAPIView):
     """
-    List of Base Announcement with Image Announcement and is owned by User
-    """
-
-    serializer_class = CreateAnnouncementSerializer
-    permission_classes = [IsAuthenticated]
-    pagination_class = CustomPageNumberPagination
-
-    def get_queryset(self):
-        qs = Announcements.objects.filter(
-            author=self.request.user, image_announcement__isnull=False
-        ).distinct()
-        return qs
-
-
-class ListVideoAnnouncementAPIView(generics.ListAPIView):
-    """
-    List of Base Announcement with Video Announcement and is owned by User
+    List announcements with text content owned by the authenticated user.
     """
 
-    serializer_class = CreateAnnouncementSerializer
-    permission_classes = [IsAuthenticated]
-    pagination_class = CustomPageNumberPagination
+    media_field = "text_announcement"
 
-    def get_queryset(self):
-        qs = Announcements.objects.filter(
-            author=self.request.user, video_announcement__isnull=False
-        ).distinct()
-        return qs
+
+class ListImageAnnouncementAPIView(BaseMediaAnnouncementListAPIView):
+    """
+    List announcements with image content owned by the authenticated user.
+    """
+
+    media_field = "image_announcement"
+
+
+class ListVideoAnnouncementAPIView(BaseMediaAnnouncementListAPIView):
+    """
+    List announcements with video content owned by the authenticated user.
+    """
+
+    media_field = "video_announcement"
