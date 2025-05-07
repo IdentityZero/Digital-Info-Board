@@ -1,21 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { Id } from "react-toastify";
-import { Link } from "react-router-dom";
-import { FaCheckCircle, FaEye, FaTimesCircle, FaTrash } from "react-icons/fa";
-
-import ErrorMessage from "../../../../components/ErrorMessage";
-import IconWithTooltip from "../../../../components/IconWithTooltip";
-import LoadingMessage from "../../../../components/LoadingMessage";
-import Pagination from "../../../../components/Pagination";
-import Table from "../../../../components/ui/Table/Table";
-import Thead from "../../../../components/ui/Table/Thead";
-
-import {
-  extractReactQuillText,
-  formatTimestamp,
-  truncateStringVariableLen,
-} from "../../../../utils/formatters";
-import { addTotalDuration, isNowWithinRange } from "../../../../utils/utils";
 
 import useLoadingToast from "../../../../hooks/useLoadingToast";
 import { useAuth } from "../../../../context/AuthProvider";
@@ -23,14 +7,14 @@ import { useAuth } from "../../../../context/AuthProvider";
 import { getListTypeInitState } from "../../../../types/ListType";
 import usePagination from "../../../../hooks/usePagination";
 
-import {
-  PaginatedAnnouncementListTypeV1,
-  AnnouncementRetrieveType,
-} from "../../../../types/AnnouncementTypes";
+import { PaginatedAnnouncementListTypeV1 } from "../../../../types/AnnouncementTypes";
 import {
   deleteVideoAnnouncementApi,
   listVideoAnnouncementApi,
 } from "../../../../api/announcementRequest";
+
+import AnnouncementTableList from "./component/AnnouncementTableList";
+import LoadingOrErrorWrapper from "../../../../components/LoadingOrErrorWrapper";
 
 const VideoContentListPage = () => {
   const { userApi } = useAuth();
@@ -63,18 +47,6 @@ const VideoContentListPage = () => {
     fetchAnnouncements(page, pageSize);
   }, [page, pageSize]);
 
-  if (hasLoadingError) {
-    return (
-      <div className="mt-4">
-        <ErrorMessage message="Something went wrong while fetching your contents. Please try again." />
-      </div>
-    );
-  }
-
-  if (isLoading) {
-    return <LoadingMessage message="Loading..." />;
-  }
-
   const handleDelete = async (announcement_id: string) => {
     const delete_conf = window.confirm(
       "Are you sure you want to delete this Video Content?"
@@ -103,119 +75,19 @@ const VideoContentListPage = () => {
   };
 
   return (
-    <div className="w-full mt-5">
-      <Table>
-        <Thead
-          headers={[
-            "ID",
-            "Title",
-            "Start Date",
-            "End Date",
-            "Duration",
-            "Approved",
-            "Within Display Period",
-            "Actions",
-          ]}
+    <LoadingOrErrorWrapper isLoading={isLoading} hasError={hasLoadingError}>
+      <div className="w-full mt-5">
+        <AnnouncementTableList
+          handleDelete={handleDelete}
+          announcements={announcements}
+          pageSize={pageSize}
+          totalPages={totalPages}
+          page={page}
+          setPageSize={setPageSize}
+          setPage={setPage}
         />
-        <tbody>
-          {announcements.results.map((announcement) => (
-            <TableRow
-              announcement={announcement}
-              handleDelete={handleDelete}
-              key={announcement.id}
-            />
-          ))}
-        </tbody>
-      </Table>
-      {announcements.results.length === 0 && (
-        <div className="w-full text-center mt-2">
-          <h2 className="font-semibold">No contents can be shown.</h2>
-        </div>
-      )}
-      <Pagination
-        pageSize={pageSize}
-        page={page}
-        totalPages={totalPages}
-        setPageSize={setPageSize}
-        setPage={setPage}
-      />
-    </div>
+      </div>
+    </LoadingOrErrorWrapper>
   );
 };
 export default VideoContentListPage;
-
-type TableRowProps = {
-  announcement: AnnouncementRetrieveType;
-  handleDelete: (announcement_id: string) => void;
-};
-
-function TableRow({ announcement, handleDelete }: TableRowProps) {
-  return (
-    <tr
-      className="border-t hover:bg-gray-50 text-sm sm:text-base"
-      key={announcement.id}
-    >
-      <td className="px-4 py-2 sm:px-6 sm:py-3 font-bold hover:underline">
-        <Link to={`/dashboard/contents/video/${announcement.id}`}>
-          {announcement.id}{" "}
-        </Link>
-      </td>
-      <td className="px-4 py-2 sm:px-6 sm:py-3">
-        {truncateStringVariableLen(
-          extractReactQuillText(announcement.title as string)
-        )}
-      </td>
-
-      <td className="px-4 py-2 sm:px-6 sm:py-3">
-        {formatTimestamp(announcement.start_date)}
-      </td>
-      <td className="px-4 py-2 sm:px-6 sm:py-3">
-        {formatTimestamp(announcement.end_date)}
-      </td>
-      <td className="px-4 py-2 sm:px-6 sm:py-3">
-        {announcement.video_announcement &&
-          addTotalDuration(announcement.video_announcement)}
-      </td>
-      <td className="px-4 py-2 sm:px-6 sm:py-3">
-        <span className="flex justify-center">
-          {announcement.is_active ? (
-            <FaCheckCircle className="text-green-500" />
-          ) : (
-            <FaTimesCircle className="text-red-500" />
-          )}
-        </span>
-      </td>
-      <td className="px-4 py-2 sm:px-6 sm:py-3">
-        <span className="flex justify-center">
-          {isNowWithinRange(announcement.start_date, announcement.end_date) ? (
-            <FaCheckCircle className="text-green-500" />
-          ) : (
-            <FaTimesCircle className="text-red-500" />
-          )}
-        </span>
-      </td>
-      <td className="px-4 py-2 sm:px-6 sm:py-3">
-        <div className="flex flex-row gap-2 text-base">
-          <span>
-            <Link to={`/dashboard/contents/video/${announcement.id}`}>
-              <IconWithTooltip
-                icon={FaEye}
-                label="View"
-                iconClassName="text-btSecondary hover:text-btSecondary-hover active: active:text-btSecondary-active cursor-pointer"
-                labelClassName="p-1 px-2 rounded-md shadow-md bg-btSecondary text-white"
-              />
-            </Link>
-          </span>
-          <span onClick={() => handleDelete(announcement.id)}>
-            <IconWithTooltip
-              icon={FaTrash}
-              label="Delete"
-              iconClassName="text-btDanger hover:text-btDanger-hover active: active:text-btDanger-active cursor-pointer"
-              labelClassName="p-1 px-2 rounded-md shadow-md bg-btDanger text-white"
-            />
-          </span>
-        </div>
-      </td>
-    </tr>
-  );
-}

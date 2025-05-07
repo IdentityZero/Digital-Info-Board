@@ -1,4 +1,4 @@
-type PaginationProps = {
+export type PaginationProps = {
   pageSize: number;
   totalPages: number;
   page: number;
