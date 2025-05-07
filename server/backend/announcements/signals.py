@@ -59,6 +59,9 @@ def send_notif_on_updated_announcements(
     if old_instance.is_active:
         return
 
+    if not old_instance.is_active and instance.is_active:
+        return
+
     now = timezone.now()
 
     if not old_instance.is_active and instance.start_date <= now <= instance.end_date:
