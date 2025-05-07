@@ -20,6 +20,8 @@ import { restrictToParentElement } from "@dnd-kit/modifiers";
 
 import ClosableMessage from "../../../../components/ClosableMessage";
 import { Button } from "../../../../components/ui";
+import Table from "../../../../components/ui/Table/Table";
+import Thead from "../../../../components/ui/Table/Thead";
 
 import { getChangedObj } from "../../../../utils/utils";
 import { MediaDisplayType } from "../../../../types/FixedContentTypes";
@@ -115,15 +117,8 @@ const ListMediaDisplays = ({
           items={items.map((item) => item.id)}
           strategy={verticalListSortingStrategy}
         >
-          <table className="min-w-full border rounded-lg text-sm sm:text-base">
-            <thead className="bg-gray-200 dark:bg-gray-700">
-              <tr>
-                <th className="p-2 border">ID</th>
-                <th className="p-2 border">File</th>
-                <th className="p-2 border">Name</th>
-                <th className="p-2 border">Action</th>
-              </tr>
-            </thead>
+          <Table>
+            <Thead headers={["ID", "File", "Name", "Action"]} />
             <tbody>
               {media.length === 0 ? (
                 <tr>
@@ -143,7 +138,7 @@ const ListMediaDisplays = ({
                 ))
               )}
             </tbody>
-          </table>
+          </Table>
         </SortableContext>
       </DndContext>
       {targetUpdateId && (

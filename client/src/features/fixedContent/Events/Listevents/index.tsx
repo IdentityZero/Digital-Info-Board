@@ -3,6 +3,8 @@ import { useLocation } from "react-router-dom";
 
 import ClosableMessage from "../../../../components/ClosableMessage";
 import IconWithTooltip from "../../../../components/IconWithTooltip";
+import Table from "../../../../components/ui/Table/Table";
+import Thead from "../../../../components/ui/Table/Thead";
 import { formatInputDate } from "../../../../utils/formatters";
 
 import { UpcomingEventType } from "../../../../types/FixedContentTypes";
@@ -45,15 +47,8 @@ const ListEvents = ({
           </ClosableMessage>
         </div>
       )}
-      <table className="min-w-full border rounded-lg text-sm sm:text-base">
-        <thead className="bg-gray-200 dark:bg-gray-700">
-          <tr>
-            <th className="p-2 border">ID</th>
-            <th className="p-2 border">Event Name</th>
-            <th className="p-2 border">Date</th>
-            <th className="p-2 border">Action</th>
-          </tr>
-        </thead>
+      <Table>
+        <Thead headers={["ID", "Event Name", "Date", "Action"]} />
         <tbody>
           {events.length === 0 ? (
             <tr>
@@ -115,7 +110,7 @@ const ListEvents = ({
             ))
           )}
         </tbody>
-      </table>
+      </Table>
       {targetUpdateId && (
         <UpdateModal
           id={targetUpdateId}

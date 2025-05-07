@@ -61,7 +61,7 @@ const SideDropdown = ({ buttonContent, children }: DropdownProps) => {
         {isExpanded && (
           <div
             style={{ left: `${buttonContentWidth + 20}px` }}
-            className={`absolute`}
+            className={`absolute z-50`}
           >
             {children}
           </div>

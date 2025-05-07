@@ -20,6 +20,8 @@ import { restrictToParentElement } from "@dnd-kit/modifiers";
 
 import ClosableMessage from "../../../../components/ClosableMessage";
 import { Button } from "../../../../components/ui";
+import Table from "../../../../components/ui/Table/Table";
+import Thead from "../../../../components/ui/Table/Thead";
 
 import { getChangedObj } from "../../../../utils/utils";
 
@@ -116,16 +118,8 @@ const ListMembers = ({
           items={items.map((item) => item.id)}
           strategy={verticalListSortingStrategy}
         >
-          <table className="w-full border-collapse border border-gray-300 text-sm sm:text-base">
-            <thead className="bg-gray-200">
-              <tr>
-                <th className="p-2 border">ID</th>
-                <th className="p-2 border">Image</th>
-                <th className="p-2 border">Name</th>
-                <th className="p-2 border">Position</th>
-                <th className="p-2 border">Actions</th>
-              </tr>
-            </thead>
+          <Table>
+            <Thead headers={["ID", "Image", "Name", "Position", "Actions"]} />
             <tbody>
               {items.length === 0 ? (
                 <tr>
@@ -145,7 +139,7 @@ const ListMembers = ({
                 ))
               )}
             </tbody>
-          </table>
+          </Table>
         </SortableContext>
       </DndContext>
       {targetUpdateId && (

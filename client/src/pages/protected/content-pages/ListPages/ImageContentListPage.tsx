@@ -8,6 +8,8 @@ import LoadingMessage from "../../../../components/LoadingMessage";
 import useLoadingToast from "../../../../hooks/useLoadingToast";
 import ErrorMessage from "../../../../components/ErrorMessage";
 import Pagination from "../../../../components/Pagination";
+import Table from "../../../../components/ui/Table/Table";
+import Thead from "../../../../components/ui/Table/Thead";
 
 import {
   extractReactQuillText,
@@ -101,39 +103,35 @@ const ImageContentListPage = () => {
 
   return (
     <div className="w-full mt-5">
-      <div className="overflow-x-auto">
-        <table className="w-full border border-gray-200 shadow-md rounded-lg">
-          <thead>
-            <tr className="bg-gray-100 text-left text-sm sm:text-base">
-              <th className="px-4 py-2 sm:px-6 sm:py-3">ID</th>
-              <th className="px-4 py-2 sm:px-6 sm:py-3">Title</th>
-              <th className="px-4 py-2 sm:px-6 sm:py-3">Start Date</th>
-              <th className="px-4 py-2 sm:px-6 sm:py-3">End Date</th>
-              <th className="px-4 py-2 sm:px-6 sm:py-3">Duration</th>
-              <th className="px-4 py-2 sm:px-6 sm:py-3">Approved</th>
-              <th className="px-4 py-2 sm:px-6 sm:py-3 text-center">
-                Within Display Period
-              </th>
-              <th className="px-4 py-2 sm:px-6 sm:py-3">Actions</th>
-            </tr>
-          </thead>
+      <Table>
+        <Thead
+          headers={[
+            "ID",
+            "Title",
+            "Start Date",
+            "End Date",
+            "Duration",
+            "Approved",
+            "Within Display Period",
+            "Actions",
+          ]}
+        />
 
-          <tbody className="overflow-x-scroll ">
-            {announcements.results.map((announcement) => (
-              <TableRow
-                key={announcement.id}
-                announcement={announcement}
-                handleDelete={handleDelete}
-              />
-            ))}
-          </tbody>
-        </table>
-        {announcements.results.length === 0 && (
-          <div className="w-full text-center mt-2">
-            <h2 className="font-semibold">No contents can be shown.</h2>
-          </div>
-        )}
-      </div>
+        <tbody className="overflow-x-scroll ">
+          {announcements.results.map((announcement) => (
+            <TableRow
+              key={announcement.id}
+              announcement={announcement}
+              handleDelete={handleDelete}
+            />
+          ))}
+        </tbody>
+      </Table>
+      {announcements.results.length === 0 && (
+        <div className="w-full text-center mt-2">
+          <h2 className="font-semibold">No contents can be shown.</h2>
+        </div>
+      )}
       <Pagination
         pageSize={pageSize}
         page={page}
