@@ -1,49 +1,120 @@
 import { Route } from "react-router-dom";
-import AccountSettingsPage from "../pages/protected/AccountSettingsPage";
-import CalendarPage from "../pages/protected/CalendarPage";
-import ContentsPage from "../pages/protected/ContentsPage";
-import CurrentDisplayPage from "../pages/protected/CurrentDisplayPage";
-import DashBoardPage from "../pages/protected/DashBoardPage";
-import DefaultDisplayPage from "../pages/protected/DefaultDisplayPage";
-import HelpPage from "../pages/protected/HelpPage";
-import LogoutPage from "../pages/protected/LogoutPage";
-import PermissionsPage from "../pages/protected/PermissionsPage";
-import SettingsPage from "../pages/protected/SettingsPage";
-import UploadContentPage from "../pages/protected/UploadContentPage";
+import { lazy } from "react";
 
-import NotificationsPage from "../pages/protected/NotificationsPage";
-import {
-  CreateImageContentPage,
-  CreateTextContentPage,
-  CreateVideoContentPage,
-} from "../pages/protected/upload-content-pages";
-import {
-  ImageContentListPage,
-  ImageContentPage,
-  TextContentListPage,
-  TextContentPage,
-  VideoContentListPage,
-  VideoContentPage,
-} from "../pages/protected/content-pages";
+// Protected pages
+const AccountSettingsPage = lazy(
+  () => import("../pages/protected/AccountSettingsPage")
+);
+const CalendarPage = lazy(() => import("../pages/protected/CalendarPage"));
+const ContentsPage = lazy(() => import("../pages/protected/ContentsPage"));
+const CurrentDisplayPage = lazy(
+  () => import("../pages/protected/CurrentDisplayPage")
+);
+const DashBoardPage = lazy(() => import("../pages/protected/DashBoardPage"));
+const DefaultDisplayPage = lazy(
+  () => import("../pages/protected/DefaultDisplayPage")
+);
+const HelpPage = lazy(() => import("../pages/protected/HelpPage"));
+const LogoutPage = lazy(() => import("../pages/protected/LogoutPage"));
+const PermissionsPage = lazy(
+  () => import("../pages/protected/PermissionsPage")
+);
+const SettingsPage = lazy(() => import("../pages/protected/SettingsPage"));
+const UploadContentPage = lazy(
+  () => import("../pages/protected/UploadContentPage")
+);
+const NotificationsPage = lazy(
+  () => import("../pages/protected/NotificationsPage")
+);
+
+// Upload content pages
+const CreateImageContentPage = lazy(
+  () => import("../pages/protected/upload-content-pages/CreateImageContentPage")
+);
+const CreateTextContentPage = lazy(
+  () => import("../pages/protected/upload-content-pages/CreateTextContentPage")
+);
+const CreateVideoContentPage = lazy(
+  () => import("../pages/protected/upload-content-pages/CreateVideoContentPage")
+);
+
+// Content pages
+const ImageContentListPage = lazy(
+  () =>
+    import("../pages/protected/content-pages/ListPages/ImageContentListPage")
+);
+const ImageContentPage = lazy(
+  () => import("../pages/protected/content-pages/ImageContentPage")
+);
+const TextContentListPage = lazy(
+  () => import("../pages/protected/content-pages/ListPages/TextContentListPage")
+);
+const TextContentPage = lazy(
+  () => import("../pages/protected/content-pages/TextContentPage")
+);
+const VideoContentListPage = lazy(
+  () =>
+    import("../pages/protected/content-pages/ListPages/VideoContentListPage")
+);
+const VideoContentPage = lazy(
+  () => import("../pages/protected/content-pages/VideoContentPage")
+);
+
+// Permission pages
+const ActiveListPage = lazy(
+  () => import("../pages/protected/permission-pages/ActiveListPage")
+);
+const InActiveListPage = lazy(
+  () => import("../pages/protected/permission-pages/InActiveListPage")
+);
+
+// Calendar pages
+const CalendarContentsPageV2 = lazy(
+  () => import("../pages/protected/calendar-pages/CalendarContentsPageV2")
+);
+const CalendarSettingsPage = lazy(
+  () => import("../pages/protected/calendar-pages/CalendarSettingsPage")
+);
+
+// Default display pages
+const DefaultDisplaySettingsPage = lazy(
+  () =>
+    import(
+      "../pages/protected/default-display-pages/DefaultDisplaySettingsPage"
+    )
+);
+const OrganizationPage = lazy(
+  () => import("../pages/protected/default-display-pages/OrganizationPage")
+);
+const UpcomingEventsPage = lazy(
+  () => import("../pages/protected/default-display-pages/UpcomingEventsPage")
+);
+const MediaDisplaysPage = lazy(
+  () => import("../pages/protected/default-display-pages/MediaDisplaysPage")
+);
+
+// Account pages
+const AddUpdateEmailPage = lazy(
+  () => import("../pages/protected/account-pages/AddUpdateEmailPage")
+);
+const ChangeMyPasswordPage = lazy(
+  () => import("../pages/protected/account-pages/ChangeMyPasswordPage")
+);
+const ListOfAccountsPage = lazy(
+  () => import("../pages/protected/account-pages/ListOfAccountsPage")
+);
+const MyProfilePage = lazy(
+  () => import("../pages/protected/account-pages/MyProfilePage")
+);
+const NewUsersPage = lazy(
+  () => import("../pages/protected/account-pages/NewUsersPage")
+);
+const ViewProfilePage = lazy(
+  () => import("../pages/protected/account-pages/ViewProfilePage")
+);
+
+// Admin route guard (keep direct import if it's small or essential)
 import AdminRouteGuard from "./AdminRouteGuard";
-import {
-  ActiveListPage,
-  InActiveListPage,
-} from "../pages/protected/permission-pages";
-import CalendarContentsPageV2 from "../pages/protected/calendar-pages/CalendarContentsPageV2";
-import CalendarSettingsPage from "../pages/protected/calendar-pages/CalendarSettingsPage";
-import DefaultDisplaySettingsPage from "../pages/protected/default-display-pages/DefaultDisplaySettingsPage";
-import OrganizationPage from "../pages/protected/default-display-pages/OrganizationPage";
-import UpcomingEventsPage from "../pages/protected/default-display-pages/UpcomingEventsPage";
-import MediaDisplaysPage from "../pages/protected/default-display-pages/MediaDisplaysPage";
-import {
-  AddUpdateEmailPage,
-  ChangeMyPasswordPage,
-  ListOfAccountsPage,
-  MyProfilePage,
-  NewUsersPage,
-  ViewProfilePage,
-} from "../pages/protected/account-pages";
 
 const ProtectedRoutes = (
   <>

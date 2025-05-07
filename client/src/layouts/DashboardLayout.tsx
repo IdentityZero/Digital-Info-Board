@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 
 import { LINKSV2 } from "../constants/linksv2";
 import { ToastContainer } from "react-toastify";
@@ -13,6 +13,7 @@ import DashboardSidebarv2 from "../components/nav/DashboardSidebarv2";
 import DashboardMobileSidebarv2 from "../components/nav/DashboardMobileSidebarv2";
 
 import NotificationProvider from "../context/Notification";
+import LoadingLazyComponent from "../components/LoadingLazyComponent";
 
 const DashboardLayout = () => {
   const [backgroundImage, setBackgroundImage] = useState<string | null>(null);
@@ -53,7 +54,9 @@ const DashboardLayout = () => {
                 backgroundImage: `url(${backgroundImage})`,
               }}
             />
-            <Outlet />
+            <Suspense fallback={<LoadingLazyComponent />}>
+              <Outlet />
+            </Suspense>
           </div>
         </main>
         <ToastContainer />
