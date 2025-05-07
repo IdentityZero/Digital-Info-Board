@@ -1,17 +1,16 @@
 import { Route } from "react-router-dom";
-import {
-  AccountSettingsPage,
-  CalendarPage,
-  ContentsPage,
-  CurrentDisplayPage,
-  DashBoardPage,
-  DefaultDisplayPage,
-  HelpPage,
-  LogoutPage,
-  PermissionsPage,
-  SettingsPage,
-  UploadContentPage,
-} from "../pages/protected";
+import AccountSettingsPage from "../pages/protected/AccountSettingsPage";
+import CalendarPage from "../pages/protected/CalendarPage";
+import ContentsPage from "../pages/protected/ContentsPage";
+import CurrentDisplayPage from "../pages/protected/CurrentDisplayPage";
+import DashBoardPage from "../pages/protected/DashBoardPage";
+import DefaultDisplayPage from "../pages/protected/DefaultDisplayPage";
+import HelpPage from "../pages/protected/HelpPage";
+import LogoutPage from "../pages/protected/LogoutPage";
+import PermissionsPage from "../pages/protected/PermissionsPage";
+import SettingsPage from "../pages/protected/SettingsPage";
+import UploadContentPage from "../pages/protected/UploadContentPage";
+
 import NotificationsPage from "../pages/protected/NotificationsPage";
 import {
   CreateImageContentPage,
