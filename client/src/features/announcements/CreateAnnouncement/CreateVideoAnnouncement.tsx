@@ -25,6 +25,7 @@ import {
   VideoAnnouncementErrorT,
 } from "../helpers";
 import { MAX_VIDEO_SIZE } from "../../../constants/api";
+import { isDuplicated } from "./helpers";
 
 const CreateVideoAnnouncement = () => {
   const toastId = useRef<Id | null>(null);
@@ -66,37 +67,27 @@ const CreateVideoAnnouncement = () => {
   };
 
   const handleUploadOnchange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (videos.length > MAX_UPLOAD - 1) {
+    const files = e.target.files;
+    if (!files) return;
+
+    if (videos.length + files.length > MAX_UPLOAD - 1) {
       toast.warning(`Maximum of ${MAX_UPLOAD} videos only`);
       return;
     }
 
-    const files = e.target.files;
-    if (!files) return;
-    const file = files[0];
+    for (const file of files) {
+      if (isDuplicated(videos, file)) {
+        toast.warning("A video was duplicated. Removing now.");
+        continue;
+      }
 
-    const isDuplicate = videos.some((existingImage) => {
-      if (!(existingImage.video instanceof File)) return false;
+      if (file.size > MAX_VIDEO_SIZE) {
+        toast.warning("An image size exceeds 10MB. Upload aborted.");
+        continue;
+      }
 
-      return (
-        existingImage.video.name === file.name &&
-        existingImage.video.size === file.size
-      );
-    });
-
-    if (isDuplicate) {
-      toast.warning("This video is already uploaded");
-      e.target.value = "";
-      return;
+      setVideos((prev) => [...prev, { video: file, duration: "00:00:40" }]);
     }
-
-    if (file.size > MAX_VIDEO_SIZE) {
-      toast.warning("File size exceeds 200MB. Upload aborted.");
-      e.target.value = "";
-      return;
-    }
-
-    setVideos((prev) => [...prev, { video: file, duration: "00:00:40" }]);
 
     e.target.value = "";
   };
@@ -263,6 +254,7 @@ const CreateVideoAnnouncement = () => {
             <span>Add Videos</span>
           </label>
           <input
+            multiple
             type="file"
             id="create-image-file-upload"
             className="hidden invisible"

@@ -12,7 +12,7 @@ def validate_image_or_video_file(value):
 
 
 def validate_image_file_with_gif(value):
-    allowed_extensions = ["jpg", "jpeg", "png", "jfif", "gif"]
+    allowed_extensions = ["jpg", "jpeg", "png", "jfif", "gif", "webp", "avif"]
     extension = os.path.splitext(value.name)[1][1:].lower()
     if extension not in allowed_extensions:
         raise ValidationError(

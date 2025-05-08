@@ -13,6 +13,12 @@ const CreateImageContentPage = () => {
         >
           Each image should not exceed 10MB.
         </ClosableMessage>
+        <ClosableMessage
+          className="w-full flex flex-row items-center justify-between pr-5 p-2 bg-[#6e8ea4] font-bold"
+          icon={FaExclamationCircle}
+        >
+          Supported file formats: .jpg, .jpeg, .png, .jfif, .gif, .webp, .avif
+        </ClosableMessage>
       </div>
       <div className="mt-2">
         <h3 className="bg-[#ececec] px-5 py-3 text-xl font-bold">

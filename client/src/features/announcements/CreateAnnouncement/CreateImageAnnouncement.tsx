@@ -21,6 +21,7 @@ import {
 import { createNewAllTypeAnnouncementApi } from "../../../api/announcementRequest";
 import { CreateImageAnnouncementErrorState } from "../helpers";
 import { MAX_IMAGE_SIZE } from "../../../constants/api";
+import { isDuplicated } from "./helpers";
 
 const CreateImageAnnouncement = () => {
   const toastId = useRef<Id | null>(null);
@@ -48,30 +49,21 @@ const CreateImageAnnouncement = () => {
   const handleUploadOnchange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files) return;
-    const file = files[0];
 
-    const isDuplicate = images.some((existingImage) => {
-      if (!(existingImage.image instanceof File)) return false;
+    for (const file of files) {
+      if (isDuplicated(images, file)) {
+        toast.warning("An image was duplicated. Removing now.");
+        continue;
+      }
 
-      return (
-        existingImage.image.name === file.name &&
-        existingImage.image.size === file.size
-      );
-    });
+      if (file.size > MAX_IMAGE_SIZE) {
+        toast.warning("An image size exceeds 10MB. Upload aborted.");
+        continue;
+      }
 
-    if (isDuplicate) {
-      toast.warning("This image is already uploaded");
-      e.target.value = "";
-      return;
+      setImages((prev) => [...prev, { image: file, duration: "00:00:40" }]);
     }
 
-    if (file.size > MAX_IMAGE_SIZE) {
-      toast.warning("File size exceeds 10MB. Upload aborted.");
-      e.target.value = "";
-      return;
-    }
-
-    setImages((prev) => [...prev, { image: file, duration: "00:00:40" }]);
     e.target.value = "";
   };
 
@@ -218,11 +210,13 @@ const CreateImageAnnouncement = () => {
               <span>Add Images</span>
             </label>
             <input
+              multiple
               type="file"
               id="create-image-file-upload"
               className="hidden invisible"
               onChange={handleUploadOnchange}
               disabled={loading}
+              accept=".jpg,.jpeg,.png,.jfif,.gif,.webp,.avif"
             />
           </div>
           <div>
