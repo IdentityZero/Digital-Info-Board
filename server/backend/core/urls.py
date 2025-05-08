@@ -29,6 +29,7 @@ urlpatterns = [
     path("api/settings/", include("settings.urls")),
     path("api/notifications/", include("notifications.urls")),
     path("api/calendar/", include("own_calendar.urls")),
+    path("api/realtime-update/", include("realtime_content_update.urls")),
 ]
 
 if settings.DEBUG:

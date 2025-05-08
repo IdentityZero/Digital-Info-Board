@@ -13,6 +13,7 @@ import { updateAnnouncementApi } from "../../../api/announcementRequest";
 
 import PreviewAnnouncement from "../PreviewAnnouncement";
 import AnnouncementActivationCard from "../components/AnnouncementActivationCard";
+import { handleDisplayPreviewClick } from "./helper";
 
 type ListInactiveAnnouncementProps = {
   inactiveAnnouncements: AnnouncementListType;
@@ -73,6 +74,10 @@ const ListInactiveAnnouncement = ({
     }
   };
 
+  const handleDisplayPreviewClickfnc = (id: string) => {
+    handleDisplayPreviewClick(id, loading, update, userApi);
+  };
+
   return (
     <div className="p-4 flex flex-col gap-2">
       {showPreview && (
@@ -90,6 +95,7 @@ const ListInactiveAnnouncement = ({
             setShowPreview={setShowPreview}
             setDataToPreview={setDataToPreview}
             isHighlighted={targetId == announcement.id}
+            handleDisplayPreviewClick={handleDisplayPreviewClickfnc}
           />
         );
       })}

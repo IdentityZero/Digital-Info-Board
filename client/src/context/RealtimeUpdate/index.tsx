@@ -6,7 +6,10 @@ import useAnnouncementData from "./useAnnouncementData";
 import useWebsocket from "../../hooks/useWebsocket";
 import useSiteSettingsUpdatable from "./useSiteSettingsUpdatable";
 
-import { AnnouncementListType } from "../../types/AnnouncementTypes";
+import {
+  AnnouncementListType,
+  AnnouncementRetrieveType,
+} from "../../types/AnnouncementTypes";
 import { SettingsType } from "../../types/SettingTypes";
 import useOrgMembersData from "./useOrgMembersData";
 import {
@@ -25,6 +28,7 @@ type RealtimeUpdateContextType = {
     mediaAnnouncements: AnnouncementListType;
     textAnnouncements: AnnouncementListType;
     textAnnouncementsAsText: string[];
+    preview: AnnouncementRetrieveType | null;
     mediaDurations: number[];
     isLoading: boolean;
     error: any;
@@ -57,7 +61,8 @@ type AnnouncementWsMessageTypes = {
     | "delete"
     | "activate"
     | "deactivate"
-    | "sequence_update";
+    | "sequence_update"
+    | "preview";
   content_id: string;
   data: any;
 };
@@ -197,6 +202,8 @@ export const RealtimeUpdateProvider = ({
       announcement.deleteItem(data.content_id);
     } else if (data.action === "sequence_update") {
       announcement.updateSequence(data.data);
+    } else if (data.action === "preview") {
+      announcement.setDisplayPreview(data.data);
     }
   };
 

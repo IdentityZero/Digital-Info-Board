@@ -33,6 +33,7 @@ const KioskDisplayPage = () => {
       error: hasAnnouncementFetchingError,
       textAnnouncementsAsText,
       setIdOnLock: setAnnouncementIdOnLock,
+      preview,
     },
     events: { events, isLoading: isEventsFetching },
     mediaDisplays: { mediaDisplays, isLoading: isMediaDisplaysFetching },
@@ -75,7 +76,9 @@ const KioskDisplayPage = () => {
         {mediaAnnouncements.length > 0 ? (
           <DisplayQuillEditor
             value={JSON.parse(
-              mediaAnnouncements[currentIndex]
+              preview
+                ? (preview.title as string)
+                : mediaAnnouncements[currentIndex]
                 ? (mediaAnnouncements[currentIndex].title as string)
                 : (DELTA_FALLBACK_VALUE as string)
             )}
@@ -108,7 +111,26 @@ const KioskDisplayPage = () => {
         >
           {mediaAnnouncements.length > 0 ? (
             <>
-              {mediaAnnouncements[currentIndex] ? (
+              {preview ? (
+                <>
+                  {preview.image_announcement &&
+                    preview.image_announcement.length > 0 && (
+                      <ImagePlayer
+                        key={preview.id}
+                        images={preview.image_announcement}
+                        setIsPortrait={setIsPortrait}
+                      />
+                    )}
+                  {preview.video_announcement &&
+                    preview.video_announcement.length > 0 && (
+                      <VideoPlayer
+                        key={preview.id}
+                        videos={preview.video_announcement}
+                        setIsPortrait={setIsPortrait}
+                      />
+                    )}
+                </>
+              ) : mediaAnnouncements[currentIndex] ? (
                 <>
                   {mediaAnnouncements[currentIndex].image_announcement &&
                     mediaAnnouncements[currentIndex].image_announcement.length >

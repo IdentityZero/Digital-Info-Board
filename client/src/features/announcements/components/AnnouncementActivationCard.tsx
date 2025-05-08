@@ -19,6 +19,7 @@ type Props = {
     React.SetStateAction<AnnouncementRetrieveType | undefined>
   >;
   isHighlighted?: boolean;
+  handleDisplayPreviewClick: (id: string) => void;
 };
 
 const AnnouncementActivationCard = ({
@@ -27,6 +28,7 @@ const AnnouncementActivationCard = ({
   setDataToPreview,
   handleActivationClick,
   isHighlighted = false,
+  handleDisplayPreviewClick,
 }: Props) => {
   const { user } = useAuth();
 
@@ -231,6 +233,14 @@ const AnnouncementActivationCard = ({
               onClick={() => {
                 setShowPreview(true);
                 setDataToPreview(announcement);
+              }}
+            />
+          </div>
+          <div className="w-full sm:w-auto">
+            <Button
+              text="Display Preview"
+              onClick={() => {
+                handleDisplayPreviewClick(announcement.id);
               }}
             />
           </div>

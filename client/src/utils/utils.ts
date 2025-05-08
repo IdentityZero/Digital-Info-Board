@@ -14,6 +14,7 @@ export function getLaterDate(timestamp1: string, timestamp2: string): string {
 
   return date1 > date2 ? timestamp1 : timestamp2;
 }
+
 export function getAnnouncementType(
   announcement: AnnouncementRetrieveType
 ): "text" | "image" | "video" {

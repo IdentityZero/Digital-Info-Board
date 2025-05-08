@@ -29,6 +29,10 @@ const useAnnouncementData = () => {
   >([]);
   const [idOnLock, setIdOnLock] = useState<string>("");
 
+  const [preview, _setPreview] = useState<AnnouncementRetrieveType | null>(
+    null
+  );
+
   const [isLoading, setIsLoading] = useState(true);
   const [isReady, setIsReady] = useState(false);
   const [error, setError] = useState<any>(null);
@@ -131,6 +135,39 @@ const useAnnouncementData = () => {
     }, 3000);
   };
 
+  useEffect(() => {
+    if (!preview) return;
+
+    if (preview.text_announcement) return;
+
+    let duration: number = 1000;
+
+    if (preview.image_announcement && preview.image_announcement.length > 0) {
+      duration =
+        convertDurationToSeconds(addTotalDuration(preview.image_announcement)) *
+        1000;
+    } else if (
+      preview.video_announcement &&
+      preview.video_announcement.length > 0
+    ) {
+      duration =
+        convertDurationToSeconds(addTotalDuration(preview.video_announcement)) *
+        1000;
+    }
+
+    const removePreview = setTimeout(() => {
+      _setPreview(null);
+    }, duration);
+
+    return () => {
+      clearTimeout(removePreview);
+    };
+  }, [preview]);
+
+  const setDisplayPreview = (data: AnnouncementRetrieveType) => {
+    _setPreview(data);
+  };
+
   // Fetch
   // useEffect(() => {
   //   fetchAnnouncements();
@@ -225,11 +262,13 @@ const useAnnouncementData = () => {
     textAnnouncements,
     textAnnouncementsAsText,
     mediaDurations,
+    preview,
     updateItem,
     insertItem,
     fetchAndInsertItem,
     deleteItem,
     updateSequence,
+    setDisplayPreview,
     error,
     isLoading,
     isReady,
