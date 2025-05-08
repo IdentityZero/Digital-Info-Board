@@ -11,13 +11,14 @@ const CreateVideoContentPage = () => {
           className="w-full flex flex-row items-center justify-between pr-5 p-2 bg-[#f0d68d] font-bold"
           icon={FaExclamationCircle}
         >
-          Max of 5 videos at a time.
+          Max of 5 videos at a time. Each video should not exceed 200MB.
         </ClosableMessage>
         <ClosableMessage
           className="w-full flex flex-row items-center justify-between pr-5 p-2 bg-[#f0d68d] font-bold"
           icon={FaExclamationCircle}
         >
-          Each video should not exceed 200MB.
+          Supported file formats: .mp4, .webm, .ogg, .m4v, .mov (Note that other
+          mp4 codecs may not work properly.)
         </ClosableMessage>
       </div>
       <div className="mt-2">

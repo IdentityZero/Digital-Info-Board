@@ -301,7 +301,7 @@ const EditVideoAnnouncement = forwardRef<
                 id="create-video-file-upload"
                 className="hidden invisible"
                 onChange={handleNewUploadOnChange}
-                accept="video/mp4, video/mov, video/avi"
+                accept=".mp4, .webm, .ogg, .m4v, .mov"
                 disabled={isLoading}
               />
 

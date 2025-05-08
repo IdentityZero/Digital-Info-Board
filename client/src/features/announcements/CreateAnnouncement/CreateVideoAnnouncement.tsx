@@ -70,7 +70,7 @@ const CreateVideoAnnouncement = () => {
     const files = e.target.files;
     if (!files) return;
 
-    if (videos.length + files.length > MAX_UPLOAD - 1) {
+    if (videos.length + files.length > MAX_UPLOAD) {
       toast.warning(`Maximum of ${MAX_UPLOAD} videos only`);
       return;
     }
@@ -259,7 +259,7 @@ const CreateVideoAnnouncement = () => {
             id="create-image-file-upload"
             className="hidden invisible"
             onChange={handleUploadOnchange}
-            accept="video/mp4, video/mov, video/avi"
+            accept=".mp4, .webm, .ogg, .m4v, .mov"
             disabled={loading}
           />
         </div>

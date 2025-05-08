@@ -21,7 +21,7 @@ def validate_image_file_with_gif(value):
 
 
 def validate_video_file(value):
-    allowed_extensions = ["mp4", "avi", "mov"]
+    allowed_extensions = ["mp4", "webm", "ogg", "m4v", "mov"]
     extension = os.path.splitext(value.name)[1][1:].lower()
     if extension not in allowed_extensions:
         raise ValidationError(

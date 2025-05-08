@@ -271,6 +271,7 @@ const EditImageAnnouncement = forwardRef<
               id="create-image-file-upload"
               className="hidden invisible"
               onChange={handleNewUploadOnChange}
+              accept=".jpg,.jpeg,.png,.jfif,.gif,.webp,.avif"
             />
             {newImages.map((image, index) => {
               const image_file = image.image as File;
