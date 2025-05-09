@@ -20,24 +20,32 @@ const links: ContentLinkT[] = [
 const ContentsPage = () => {
   const location = useLocation();
 
-  const get_type_location = () => {
+  const get_type_location = (): ContentType => {
     const lastPart: string = location.pathname.split("/").pop() || "";
 
-    if (["video", "image", "text"].includes(lastPart)) return lastPart;
+    if (["video", "image", "text"].includes(lastPart))
+      return lastPart as ContentType;
     if (lastPart === "contents") return "video";
 
     const pathParts = location.pathname.split("/");
     const secondToLastPart = pathParts[pathParts.length - 2] || "";
     if (["video", "image", "text"].includes(secondToLastPart))
-      return secondToLastPart;
+      return secondToLastPart as ContentType;
 
     return "video";
   };
+
   return (
     <div>
       <div className="px-2 pt-2 md:px-5 md:pt-5 w-full flex flex-col sm:flex-row items-start gap-y-2 justify-between">
         <SideDropdown
-          buttonContent={<DropdownContainer label={get_type_location()} />}
+          buttonContent={
+            <DropdownContainer
+              label={
+                get_type_location() === "text" ? "News" : get_type_location()
+              }
+            />
+          }
         >
           <div className="flex flex-col border-2 border-black bg-white">
             {links.map((link) => (
@@ -50,7 +58,7 @@ const ContentsPage = () => {
                 }`}
                 isActiveClassName="bg-cyanBlue"
               >
-                {link.label}
+                {link.label === "text" ? "News" : link.label}
               </SideDropdownItem>
             ))}
           </div>

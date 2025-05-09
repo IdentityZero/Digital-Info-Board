@@ -19,9 +19,10 @@ const links: UploadContentLinkT[] = [
 const UploadContentPage = () => {
   const location = useLocation();
 
-  const get_type_location = () => {
+  const get_type_location = (): UploadContentType => {
     const lastPart: string = location.pathname.split("/").pop() || "";
-    if (["video", "image", "text"].includes(lastPart)) return lastPart;
+    if (["video", "image", "text"].includes(lastPart))
+      return lastPart as UploadContentType;
 
     return "video";
   };
@@ -30,7 +31,13 @@ const UploadContentPage = () => {
     <>
       <div className="p-5">
         <SideDropdown
-          buttonContent={<DropdownContainer label={get_type_location()} />}
+          buttonContent={
+            <DropdownContainer
+              label={
+                get_type_location() === "text" ? "News" : get_type_location()
+              }
+            />
+          }
         >
           <div className="flex flex-col border-2 border-black bg-white">
             {links.map((link) => (
@@ -46,7 +53,7 @@ const UploadContentPage = () => {
                 }`}
                 isActiveClassName="bg-cyanBlue"
               >
-                {link.label}
+                {link.label === "text" ? "News" : link.label}
               </SideDropdownItem>
             ))}
           </div>

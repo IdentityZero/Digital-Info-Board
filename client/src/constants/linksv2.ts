@@ -45,7 +45,7 @@ export const LINKSV2: MenuType[] = [
       { label: "video", to: "/dashboard/upload-content/video", icon: FaVideo },
       { label: "image", to: "/dashboard/upload-content/image", icon: FaImage },
       {
-        label: "text",
+        label: "news",
         to: "/dashboard/upload-content/text",
         icon: FaEnvelopeOpenText,
       },
@@ -86,7 +86,7 @@ export const LINKSV2: MenuType[] = [
       { label: "video", to: "/dashboard/contents/video", icon: FaVideo },
       { label: "image", to: "/dashboard/contents/image", icon: FaImage },
       {
-        label: "text",
+        label: "news",
         to: "/dashboard/contents/text",
         icon: FaEnvelopeOpenText,
       },
