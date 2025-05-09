@@ -52,6 +52,33 @@ export const LINKSV2: MenuType[] = [
     ],
   },
   {
+    label: "default display",
+    to: "/dashboard/default-display",
+    icon: FaTv,
+    children: [
+      {
+        label: "settings",
+        to: "/dashboard/default-display/settings",
+        icon: FaCog,
+      },
+      {
+        label: "organization",
+        to: "/dashboard/default-display/organization",
+        icon: FaSitemap,
+      },
+      {
+        label: "events",
+        to: "/dashboard/default-display/events",
+        icon: FaCalendar,
+      },
+      {
+        label: "media",
+        to: "/dashboard/default-display/media",
+        icon: FaPlayCircle,
+      },
+    ],
+  },
+  {
     label: "contents",
     to: "/dashboard/contents",
     icon: FaScroll,
@@ -85,33 +112,7 @@ export const LINKSV2: MenuType[] = [
       },
     ],
   },
-  {
-    label: "default display",
-    to: "/dashboard/default-display",
-    icon: FaTv,
-    children: [
-      {
-        label: "settings",
-        to: "/dashboard/default-display/settings",
-        icon: FaCog,
-      },
-      {
-        label: "organization",
-        to: "/dashboard/default-display/organization",
-        icon: FaSitemap,
-      },
-      {
-        label: "events",
-        to: "/dashboard/default-display/events",
-        icon: FaCalendar,
-      },
-      {
-        label: "media",
-        to: "/dashboard/default-display/media",
-        icon: FaPlayCircle,
-      },
-    ],
-  },
+
   {
     label: "calendar",
     to: "/dashboard/calendar",
