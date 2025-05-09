@@ -2,6 +2,7 @@ import { FaExclamationCircle } from "react-icons/fa";
 
 import ClosableMessage from "../../../components/ClosableMessage";
 import { CreateTextAnnouncement } from "../../../features/announcements";
+import NewsTicker from "../../../components/NewsTicker";
 
 const CreateTextContentPage = () => {
   return (
@@ -13,6 +14,16 @@ const CreateTextContentPage = () => {
         >
           This is where you can manage the anouncement will be shown on the
           board.
+        </ClosableMessage>
+        <ClosableMessage className="w-full flex flex-row items-center justify-between">
+          <NewsTicker
+            headlines={[
+              "The kiosk display will show this announcement as a News Ticker.",
+              "Just like this.",
+              "The kiosk display will show this announcement as a News Ticker.",
+              "Just like this.",
+            ]}
+          />
         </ClosableMessage>
       </div>
       <div className="mt-2 flex flex-col gap-2">
