@@ -7,7 +7,7 @@ import { ChangePasswordErrorState } from "./helpers";
 import FormField from "./components/FormField";
 import { Id } from "react-toastify";
 import useLoadingToast from "../../hooks/useLoadingToast";
-import Button from "./components/Button";
+import Button from "../../components/ui/ButtonV2";
 
 const ChangePassword = () => {
   const toastId = useRef<Id | null>(null);

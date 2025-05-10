@@ -2,7 +2,8 @@ import { useRef, useState } from "react";
 import { FaUpload } from "react-icons/fa";
 import { Id, toast } from "react-toastify";
 
-import { Button, Input } from "../../../components/ui";
+import { Input } from "../../../components/ui";
+import ButtonV2 from "../../../components/ui/ButtonV2";
 import Accordion, { AccordionItem } from "../../../components/ui/Accordion";
 
 import useLoadingToast from "../../../hooks/useLoadingToast";
@@ -96,7 +97,7 @@ const CreateMediaDisplay = ({ onSuccess }: CreateMediaDisplayProps) => {
                 disabled={isLoading}
               />
               <div>
-                <Button type="submit">Submit</Button>
+                <ButtonV2 type="submit" disabled={isLoading} text="Submit" />
               </div>
             </div>
             <div className="w-full flex flex-col items-center justify-center bg-gray-200 h-[250px]">

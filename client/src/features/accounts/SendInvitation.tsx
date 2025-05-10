@@ -3,7 +3,7 @@ import { Id, toast } from "react-toastify";
 
 import FormField from "./components/FormField";
 import SelectField from "./components/SelectField";
-import Button from "./components/Button";
+import Button from "../../components/ui/ButtonV2";
 
 import useLoadingToast from "../../hooks/useLoadingToast";
 import { useAuth } from "../../context/AuthProvider";

@@ -188,7 +188,7 @@ const CurrentDisplayPage = () => {
         <div className="w-1/2 max-xl:w-full h-full">
           <div className="xl:px-5">
             <CustomTitleHolder text="Up next" />
-            <div className="w-full bg-darkTeal border border-black rounded-lg overflow-hidden px-4 py-6 flex flex-col justify-between">
+            <div className="w-full bg-cyanBlue border border-black rounded-lg overflow-hidden px-4 py-6 flex flex-col justify-between">
               {announcements && (
                 <>
                   <DragAndDrop

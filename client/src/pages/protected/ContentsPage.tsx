@@ -4,7 +4,7 @@ import SideDropdown, {
   DropdownContainer,
   SideDropdownItem,
 } from "../../components/ui/SideDropdown";
-import { Button } from "../../components/ui";
+import ButtonV2 from "../../components/ui/ButtonV2";
 
 type ContentType = "video" | "image" | "text";
 type ContentLinkT = {
@@ -64,7 +64,10 @@ const ContentsPage = () => {
           </div>
         </SideDropdown>
         <Link to={`/dashboard/upload-content/${get_type_location()}`}>
-          <Button>Upload {get_type_location()} content</Button>
+          <ButtonV2
+            text={`Upload ${get_type_location()} content`}
+            type="button"
+          />
         </Link>
       </div>
       <div className="px-5">

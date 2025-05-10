@@ -1,4 +1,4 @@
-import Button from "../../accounts/components/Button";
+import Button from "../../../components/ui/ButtonV2";
 import { useAuth } from "../../../context/AuthProvider";
 
 import {

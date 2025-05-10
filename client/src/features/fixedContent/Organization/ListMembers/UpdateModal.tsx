@@ -5,6 +5,7 @@ import { Id } from "react-toastify";
 import Modal from "../../../../components/ui/Modal";
 import LoadingMessage from "../../../../components/LoadingMessage";
 import { Button, Errortext, Input } from "../../../../components/ui";
+import ButtonV2 from "../../../../components/ui/ButtonV2";
 
 import { useAuth } from "../../../../context/AuthProvider";
 import useLoadingToast from "../../../../hooks/useLoadingToast";
@@ -190,9 +191,7 @@ const UpdateModal = ({
             name="last_modified"
             disabled
           />
-          <Button disabled={isSaving} type="submit">
-            Update
-          </Button>
+          <ButtonV2 disabled={isSaving} type="submit" text="Update" />
         </form>
       ) : (
         <NotFound refreshList={refreshList} />

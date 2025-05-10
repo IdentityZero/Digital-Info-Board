@@ -2,8 +2,9 @@ import { useRef, useState } from "react";
 import { Id } from "react-toastify";
 import { EventApi } from "@fullcalendar/core/index.js";
 
-import { Button, Input, TextArea } from "../../../components/ui";
+import { Input, TextArea } from "../../../components/ui";
 import Modal from "../../../components/ui/Modal";
+import ButtonV2 from "../../../components/ui/ButtonV2";
 
 import { formatDateTimeLocalPST } from "../../../utils/formatters";
 import { useAuth } from "../../../context/AuthProvider";
@@ -139,17 +140,14 @@ const UpdateEvent = ({
           disabled={isLoading}
         />
         <div className="flex justify-between mt-2">
-          <Button type="submit" disabled={isLoading}>
-            Update Event
-          </Button>
-          <Button
+          <ButtonV2 type="submit" disabled={isLoading} text="Update Event" />
+          <ButtonV2
             type="button"
             variant="danger"
             onClick={handleDelete}
             disabled={isLoading}
-          >
-            Delete
-          </Button>
+            text="Delete"
+          />
         </div>
       </form>
     </Modal>

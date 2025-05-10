@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { Id } from "react-toastify";
 import axios from "axios";
 
-import Button from "./components/Button";
+import Button from "../../components/ui/ButtonV2";
 import FormField from "./components/FormField";
 
 import { useAuth } from "../../context/AuthProvider";

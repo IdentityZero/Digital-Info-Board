@@ -46,7 +46,7 @@ const DashboardTopbar = () => {
           <p className="text-xl font-bold">Welcome back, {user?.username}!</p>
           <div className="flex gap-2 items-center">
             <Dropdown buttonContent={<Userbox user={fetchedUser} />}>
-              <ul className="bg-darkTeal px-1 py-2 flex flex-col gap-1">
+              <ul className="bg-cyanBlue px-1 py-2 flex flex-col gap-1">
                 <DropdownContentContainer
                   label="Update Profile"
                   icon={FaUser}
@@ -67,7 +67,7 @@ const DashboardTopbar = () => {
                 />
               }
             >
-              <ul className="bg-darkTeal p-2 flex flex-col gap-1 w-fit h-[70vh] overflow-auto mt-2 rounded-lg">
+              <ul className="bg-cyanBlue-darker p-2 flex flex-col gap-1 w-fit h-[70vh] overflow-auto mt-2 rounded-lg custom-scrollbar">
                 {notifications && notifications.results.length > 0 ? (
                   <>
                     {notifications.results.map((notification) => (
@@ -79,13 +79,13 @@ const DashboardTopbar = () => {
                     ))}
                     {notifications.next ? (
                       <button
-                        className="bg-gray-700 hover:bg-gray-600 py-2 text-white"
+                        className="bg-cyanBlue hover:bg-cyanBlue-dark py-2 text-white"
                         onClick={handleLoadMore}
                       >
                         Load more
                       </button>
                     ) : (
-                      <span className="bg-gray-700 hover:bg-gray-600 py-2 text-white text-center">
+                      <span className="bg-cyanBlue hover:bg-cyanBlue-dark py-2 text-white text-center">
                         You have reached the end.
                       </span>
                     )}
@@ -118,11 +118,11 @@ function Userbox({ user }: { user: FullUserType }) {
     <div
       className={`${
         isExpanded &&
-        "bg-[linear-gradient(rgba(0,0,0,0),rgba(0,0,0,0)_50%,#0f4143_50%)]"
+        "bg-[linear-gradient(rgba(0,0,0,0),rgba(0,0,0,0)_50%,#55a2d1_50%)]"
       }`}
       onClick={() => setIsExpanded(!isExpanded)}
     >
-      <div className="bg-darkTeal text-white h-12 py-1 pr-5 rounded-full flex flex-row gap-1.5">
+      <div className="bg-cyanBlue  h-12 py-1 pr-5 rounded-full flex flex-row gap-1.5">
         <div className="pl-2 py-1">
           <img
             src={user.profile.image as string}
@@ -187,7 +187,7 @@ function DropdownContentContainer({
 function NotificationIcon({ notificationCount = 0 }) {
   return (
     <div className="relative">
-      <div className="text-white bg-darkTeal p-3 rounded-full text-2xl transition-transform duration-300 hover:scale-110 relative">
+      <div className="text-white bg-cyanBlue p-3 rounded-full text-2xl transition-transform duration-300 hover:scale-110 relative">
         <FaBell />
         {notificationCount > 0 && (
           <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">

@@ -36,7 +36,7 @@ const Dropdown = ({
         >
           <div className="relative">{buttonContent}</div>
           {showArrow && (
-            <span className="absolute right-4 top-2 text-white">
+            <span className="absolute right-4 top-2">
               {isExpanded ? <FaChevronUp /> : <FaChevronDown />}
             </span>
           )}

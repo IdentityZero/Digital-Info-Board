@@ -1,8 +1,10 @@
 import { useRef, useState } from "react";
 import { Id } from "react-toastify";
 
-import { Button, Input, TextArea } from "../../../components/ui";
+import { Input, TextArea } from "../../../components/ui";
 import Modal from "../../../components/ui/Modal";
+import ButtonV2 from "../../../components/ui/ButtonV2";
+
 import { formatDateTimeLocalPST } from "../../../utils/formatters";
 
 import { useAuth } from "../../../context/AuthProvider";
@@ -98,9 +100,7 @@ const CreateEvent = ({
         />
         <Input name="location" labelText="Location" disabled={isLoading} />
         <div className="flex justify-between mt-2">
-          <Button type="submit" disabled={isLoading}>
-            Create Event
-          </Button>
+          <ButtonV2 type="submit" disabled={isLoading} text="Create Event" />
         </div>
       </form>
     </Modal>

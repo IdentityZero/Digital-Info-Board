@@ -1,16 +1,20 @@
+import { Id } from "react-toastify";
+import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
+
 import Modal from "../../../../components/ui/Modal";
+import ButtonV2 from "../../../../components/ui/ButtonV2";
+import { Button, Errortext, Input } from "../../../../components/ui";
+import LoadingMessage from "../../../../components/LoadingMessage";
+
+import { useAuth } from "../../../../context/AuthProvider";
+import useLoadingToast from "../../../../hooks/useLoadingToast";
+
 import { MediaDisplayType } from "../../../../types/FixedContentTypes";
 import {
   retrieveMediaDisplayApi,
   updateMediaDisplayApi,
 } from "../../../../api/fixedContentRquests";
-import { Button, Errortext, Input } from "../../../../components/ui";
-import LoadingMessage from "../../../../components/LoadingMessage";
-import { useAuth } from "../../../../context/AuthProvider";
-import useLoadingToast from "../../../../hooks/useLoadingToast";
-import { Id } from "react-toastify";
-import axios from "axios";
 import { mediaDisplayInitError } from "./helpers";
 
 type UpdateModalProps = {
@@ -207,9 +211,7 @@ const UpdateModal = ({
             disabled={isSaving}
             error={error.name}
           />
-          <Button disabled={isSaving} type="submit">
-            Update
-          </Button>
+          <ButtonV2 disabled={isSaving} type="submit" text="Update" />
         </form>
       ) : (
         <NotFound refreshList={refreshList} />

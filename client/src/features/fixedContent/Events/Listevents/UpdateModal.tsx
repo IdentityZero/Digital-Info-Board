@@ -4,6 +4,7 @@ import { Id } from "react-toastify";
 
 import Modal from "../../../../components/ui/Modal";
 import { Button, Input } from "../../../../components/ui";
+import ButtonV2 from "../../../../components/ui/ButtonV2";
 import LoadingMessage from "../../../../components/LoadingMessage";
 
 import { useAuth } from "../../../../context/AuthProvider";
@@ -135,9 +136,7 @@ const UpdateModal = ({
             disabled={isSaving}
             error={error.date}
           />
-          <Button disabled={isSaving} type="submit">
-            Update
-          </Button>
+          <ButtonV2 disabled={isSaving} type="submit" text="Update" />
         </form>
       ) : (
         <NotFound refreshList={refreshList} />

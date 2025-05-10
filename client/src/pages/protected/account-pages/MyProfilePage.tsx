@@ -24,7 +24,7 @@ import {
   updateUserInformationApi,
 } from "../../../api/userRequest";
 import { DisplayUserProfile } from "../../../features/accounts/";
-import Button from "../../../features/accounts/components/Button";
+import Button from "../../../components/ui/ButtonV2";
 
 type MyProfilePageContextProps = {
   userProfileForEdit: FullUserType;

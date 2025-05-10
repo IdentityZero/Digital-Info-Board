@@ -25,7 +25,7 @@ function NotificationContainer({
     <Link
       onClick={handleLinkClick}
       className={`w-[360px] p-4 text-left rounded-xl shadow-lg flex items-center space-x-3 transition-all duration-300 ease-in-out cursor-pointer 
-          bg-gray-700 hover:bg-gray-600
+          bg-cyanBlue hover:bg-cyanBlue-dark
           `}
       to={
         notification.action
@@ -39,7 +39,7 @@ function NotificationContainer({
         className="w-12 h-12 rounded-full object-cover border-2 border-white"
       />
 
-      <div className="flex flex-col flex-grow text-white">
+      <div className="flex flex-col flex-grow">
         <span className="mb-0.5">
           {creator_name.length > 25
             ? creator_name.substring(0, 25) + "..."
@@ -48,7 +48,7 @@ function NotificationContainer({
         <span className={`text-sm`}>
           {message.length > 50 ? message.substring(0, 50) + "..." : message}
         </span>
-        <span className="text-xs text-gray-300">
+        <span className="text-xs text-gray-800">
           {formatTimestamp(created_at)}
         </span>
       </div>

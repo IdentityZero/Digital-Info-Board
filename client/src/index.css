@@ -11,11 +11,11 @@
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  @apply bg-cyanBlue-dark rounded-md;
+  @apply bg-cyanBlue-light rounded-md;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  @apply bg-cyanBlue-darker;
+  @apply bg-cyanBlue-light;
 }
 
 .calendar-scrollbar::-webkit-scrollbar {

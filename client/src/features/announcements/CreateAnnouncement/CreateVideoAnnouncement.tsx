@@ -10,6 +10,7 @@ import QuillEditor, {
   isQuillValueEmpty,
 } from "../../../components/QuillEditor";
 import { Input, Form, Errortext } from "../../../components/ui";
+import ButtonV2 from "../../../components/ui/ButtonV2";
 
 import { convertSecondsToDuration } from "../../../utils/utils";
 import { useAuth } from "../../../context/AuthProvider";
@@ -379,16 +380,11 @@ const CreateVideoAnnouncement = () => {
             })}
         </div>
         <div className="w-full mt-2 flex justify-end">
-          <button
-            className={`px-10 py-2 rounded-full border border-black mr-2 ${
-              loading
-                ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                : "bg-lightBlue hover:bg-lightBlue-300 active:bg-lightBlue-500"
-            }`}
+          <ButtonV2
             type="submit"
-          >
-            {loading ? "Saving..." : "Save"}
-          </button>
+            text={loading ? "Saving..." : "Save"}
+            disabled={loading}
+          />
         </div>
       </Form>
     </div>

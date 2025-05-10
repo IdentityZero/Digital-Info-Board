@@ -2,10 +2,11 @@ import React, { useRef, useState } from "react";
 import { Id } from "react-toastify";
 
 import LoadingMessage from "../../../components/LoadingMessage";
-import { Button, Input } from "../../../components/ui";
+import { Input } from "../../../components/ui";
 import Accordion, { AccordionItem } from "../../../components/ui/Accordion";
 import ErrorMessage from "../../../components/ErrorMessage";
 import Checkbox from "../../../components/ui/Checkbox";
+import ButtonV2 from "../../../components/ui/ButtonV2";
 
 import useSiteSettings from "../../../hooks/useSiteSettings";
 import useLoadingToast from "../../../hooks/useLoadingToast";
@@ -149,9 +150,11 @@ const CalendarSettingsPage = () => {
             disabled={isSaving}
           />
           <div>
-            <Button type="submit" disabled={isSaving}>
-              {isSaving ? "Saving..." : "Submit"}
-            </Button>
+            <ButtonV2
+              type="submit"
+              disabled={isSaving}
+              text={isSaving ? "Saving..." : "Submit"}
+            />
           </div>
         </form>
       </AccordionItem>
@@ -221,9 +224,11 @@ const CalendarSettingsPage = () => {
             disabled={isSaving}
           />
           <div>
-            <Button type="submit" disabled={isSaving}>
-              {isSaving ? "Saving..." : "Submit"}
-            </Button>
+            <ButtonV2
+              type="submit"
+              disabled={isSaving}
+              text={isSaving ? "Saving..." : "Submit"}
+            />
           </div>
         </form>
       </AccordionItem>

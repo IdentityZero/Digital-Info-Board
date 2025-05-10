@@ -1,7 +1,8 @@
 import { useRef, useState } from "react";
 import { Id } from "react-toastify";
 
-import { Button, Input } from "../../../components/ui";
+import { Input } from "../../../components/ui";
+import ButtonV2 from "../../../components/ui/ButtonV2";
 import Accordion, { AccordionItem } from "../../../components/ui/Accordion";
 
 import useLoadingToast from "../../../hooks/useLoadingToast";
@@ -71,9 +72,7 @@ const CreateEvent = ({ onSuccess }: CreateEventProps) => {
               />
             </div>
             <div className="mt-2">
-              <Button type="submit" disabled={isLoading}>
-                Submit
-              </Button>
+              <ButtonV2 type="submit" disabled={isLoading} text="Submit" />
             </div>
           </div>
         </AccordionItem>

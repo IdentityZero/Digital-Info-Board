@@ -2,7 +2,7 @@ import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 import IconWithTooltip from "../../../components/IconWithTooltip";
-import Button from "./Button";
+import Button from "../../../components/ui/ButtonV2";
 
 import { formatStringUnderscores } from "../../../utils/formatters";
 import { FullUserType } from "../../../types/UserTypes";
