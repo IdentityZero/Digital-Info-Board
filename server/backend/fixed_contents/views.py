@@ -1,10 +1,10 @@
 from datetime import datetime
-import requests
 import httpx
 
 from django.db import transaction
 from django.http import JsonResponse
 from django.conf import settings
+from django.core.cache import cache
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 from rest_framework import generics, permissions, status
@@ -314,9 +314,19 @@ class DeleteUpdateMediaDisplayApiView(generics.RetrieveUpdateDestroyAPIView):
 
 
 async def get_weather_data(request):
+    cache_key = "weather_data_laoag"
+    cached_data = cache.get(cache_key)
+
+    if cached_data:
+        return JsonResponse(cached_data)
+
     key = settings.VITE_WEATHER_API_KEY
     URL = f"https://api.weatherapi.com/v1/forecast.json?key={key}&q=Laoag&days=5"
+
     async with httpx.AsyncClient() as client:
         response = await client.get(URL)
+        data = response.json()
 
-    return JsonResponse(response.json())
+    cache.set(cache_key, data, timeout=3600)
+
+    return JsonResponse(data)

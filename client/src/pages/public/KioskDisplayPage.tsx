@@ -39,6 +39,7 @@ const KioskDisplayPage = () => {
     mediaDisplays: { mediaDisplays, isLoading: isMediaDisplaysFetching },
     orgMembers: { orgMembers, isLoading: isOrgMembersFetching },
     settings: { settings },
+    sensorData: { sensorData },
     isReady,
   } = useRealtimeUpdate();
 
@@ -211,6 +212,7 @@ const KioskDisplayPage = () => {
           isEventsFetching={isEventsFetching}
           mediaDisplays={mediaDisplays}
           isMediaDisplaysFetching={isMediaDisplaysFetching}
+          sensorData={sensorData}
         />
       </footer>
     </div>

@@ -1,6 +1,8 @@
-import { memo } from "react";
+import { memo, useEffect, useState } from "react";
+
 import TextNewsTicker from "../TextNewsTicker";
 // import DateTimeCard from "./DateTimeCard";
+
 import WeatherForecast from "./WeatherForecast";
 import UpcomingEventsCard from "./UpcomingEventsCard";
 import MediaDisplay from "../MediaDisplay";
@@ -8,8 +10,10 @@ import { SettingsType } from "../../../types/SettingTypes";
 import { convertDurationToSeconds } from "../../../utils/utils";
 import {
   MediaDisplayType,
+  SensorDataType,
   UpcomingEventType,
 } from "../../../types/FixedContentTypes";
+import CoeConditions from "./CoeConditions";
 
 type FooterProps = {
   headlines: string[];
@@ -20,6 +24,8 @@ type FooterProps = {
 
   mediaDisplays: MediaDisplayType[];
   isMediaDisplaysFetching: boolean;
+
+  sensorData: SensorDataType;
 };
 
 const Footer = memo(
@@ -30,6 +36,7 @@ const Footer = memo(
     isEventsFetching,
     mediaDisplays,
     isMediaDisplaysFetching,
+    sensorData,
   }: FooterProps) => {
     const {
       show_weather_forecast,
@@ -37,6 +44,16 @@ const Footer = memo(
       show_media_displays,
       media_displays_slide_duration,
     } = settings;
+
+    const [showWeatherForecast, setShowWeatherForecast] = useState(false);
+
+    useEffect(() => {
+      const interval = setInterval(() => {
+        setShowWeatherForecast((prev) => !prev);
+      }, 10000);
+
+      return () => clearInterval(interval);
+    }, []);
 
     const headlinesEmptyContiner = [
       "Education is the most powerful weapon which you can use to change the world. - Nelson Mandela",
@@ -56,7 +73,11 @@ const Footer = memo(
          bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-xl 
          text-white text-center max-h-full overflow-hidden"
             >
-              <WeatherForecast />
+              {showWeatherForecast ? (
+                <WeatherForecast />
+              ) : (
+                <CoeConditions {...sensorData} />
+              )}
             </div>
           )}
 

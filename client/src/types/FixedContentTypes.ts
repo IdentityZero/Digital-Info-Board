@@ -56,3 +56,9 @@ export type HourlyForecastType = ForecastDayType["hour"][0];
 export type WeatherForecastType = {
   forecast: { forecastday: ForecastDayType[] };
 };
+
+export type SensorDataType = {
+  co2: number;
+  temperature: number;
+  humidity: number;
+};

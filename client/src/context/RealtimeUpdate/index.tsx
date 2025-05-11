@@ -6,97 +6,21 @@ import useAnnouncementData from "./useAnnouncementData";
 import useWebsocket from "../../hooks/useWebsocket";
 import useSiteSettingsUpdatable from "./useSiteSettingsUpdatable";
 
-import {
-  AnnouncementListType,
-  AnnouncementRetrieveType,
-} from "../../types/AnnouncementTypes";
-import { SettingsType } from "../../types/SettingTypes";
 import useOrgMembersData from "./useOrgMembersData";
-import {
-  MediaDisplayType,
-  OrganizationMembersType,
-  UpcomingEventType,
-} from "../../types/FixedContentTypes";
 import useUpcomingEventsData from "./useUpcomingEventsData";
 import useMediaDisplaysData from "./useMediaDisplaysData";
+import useSensorData from "./useSensorData";
 
-type RealtimeUpdateContextType = {
-  announcement: {
-    announcementList: AnnouncementListType;
-    idOnLock: string;
-    setIdOnLock: React.Dispatch<React.SetStateAction<string>>;
-    mediaAnnouncements: AnnouncementListType;
-    textAnnouncements: AnnouncementListType;
-    textAnnouncementsAsText: string[];
-    preview: AnnouncementRetrieveType | null;
-    mediaDurations: number[];
-    isLoading: boolean;
-    error: any;
-  };
-  settings: {
-    settings: SettingsType | undefined;
-    isLoading: boolean;
-    setSettings: React.Dispatch<React.SetStateAction<SettingsType | undefined>>;
-  };
-  orgMembers: {
-    orgMembers: OrganizationMembersType[];
-    isLoading: boolean;
-  };
-  events: {
-    events: UpcomingEventType[];
-    isLoading: boolean;
-  };
-  mediaDisplays: {
-    mediaDisplays: MediaDisplayType[];
-    isLoading: boolean;
-  };
-  isReady: boolean;
-};
-
-type AnnouncementWsMessageTypes = {
-  content: "announcement";
-  action:
-    | "update"
-    | "create"
-    | "delete"
-    | "activate"
-    | "deactivate"
-    | "sequence_update"
-    | "preview";
-  content_id: string;
-  data: any;
-};
-
-type SettingsWsMessageTypes = {
-  content: "settings";
-  action: "update";
-  data: SettingsType;
-};
-
-type OrganizationWsMessageTypes = {
-  content: "organization";
-  action: "create" | "update" | "delete" | "sequence_update";
-  content_id: number;
-  data: any;
-};
-
-type UpcomingEventsWsMessageTypes = {
-  content: "upcoming_events";
-  action: "create" | "update" | "delete";
-  content_id: number;
-  data: any;
-};
-
-type MediaDisplaysWsMessageTypes = {
-  content: "media_displays";
-  action: "create" | "update" | "delete" | "sequence_update";
-  content_id: number;
-  data: any;
-};
-
-type RefreshPageType = {
-  content: "refresh_page";
-};
+import {
+  AnnouncementWsMessageTypes,
+  MediaDisplaysWsMessageTypes,
+  OrganizationWsMessageTypes,
+  RealtimeUpdateContextType,
+  RefreshPageType,
+  SensorWsMessageTypes,
+  SettingsWsMessageTypes,
+  UpcomingEventsWsMessageTypes,
+} from "./types";
 
 const RealtimeUpdateContext = createContext<
   RealtimeUpdateContextType | undefined
@@ -112,6 +36,7 @@ export const RealtimeUpdateProvider = ({
   const orgMembers = useOrgMembersData();
   const events = useUpcomingEventsData();
   const mediaDisplays = useMediaDisplaysData();
+  const sensorData = useSensorData();
 
   const [isWsReady, setIsWsReady] = useState(false);
 
@@ -130,6 +55,7 @@ export const RealtimeUpdateProvider = ({
       | UpcomingEventsWsMessageTypes
       | MediaDisplaysWsMessageTypes
       | RefreshPageType
+      | SensorWsMessageTypes
   ) => {
     if (data.content === "announcement") {
       handleAnnouncementContent(data);
@@ -143,6 +69,8 @@ export const RealtimeUpdateProvider = ({
       handleMediaDisplaysContent(data);
     } else if (data.content === "refresh_page") {
       window.location.reload();
+    } else if (data.content === "sensor") {
+      sensorData.setSensorData(data.data);
     } else {
       // Connection established
       setIsWsReady(true);
@@ -224,6 +152,7 @@ export const RealtimeUpdateProvider = ({
   return (
     <RealtimeUpdateContext.Provider
       value={{
+        sensorData,
         announcement,
         settings,
         orgMembers,
