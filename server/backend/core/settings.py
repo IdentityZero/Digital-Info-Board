@@ -93,6 +93,7 @@ INSTALLED_APPS = [
     "custom_calendar",
     "own_calendar",
     "realtime_content_update",
+    "contact",
 ]
 
 MIDDLEWARE = [

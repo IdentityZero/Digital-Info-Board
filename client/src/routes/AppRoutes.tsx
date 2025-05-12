@@ -11,8 +11,8 @@ import KioskLayout from "../layouts/KioskLayout";
 import ProtectedRouteGuard from "./ProtectedRouteGuard";
 import DashboardLayout from "../layouts/DashboardLayout";
 import protectedRoutes from "./ProtectedRoutes";
+import NotFoundPage from "../pages/public/NotFoundPage";
 
-const NotFoundPage = lazy(() => import("../pages/public/NotFoundPage"));
 const KioskDisplayPage = lazy(() => import("../pages/public/KioskDisplayPage"));
 
 const router = createBrowserRouter(

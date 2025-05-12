@@ -113,6 +113,8 @@ const ViewProfilePage = lazy(
   () => import("../pages/protected/account-pages/ViewProfilePage")
 );
 
+const MessagesPage = lazy(() => import("../pages/protected/MessagesPage"));
+
 // Admin route guard (keep direct import if it's small or essential)
 import AdminRouteGuard from "./AdminRouteGuard";
 
@@ -160,6 +162,7 @@ const ProtectedRoutes = (
       <Route path="events" element={<UpcomingEventsPage />} />
       <Route path="media" element={<MediaDisplaysPage />} />
     </Route>
+    <Route path="contact-us-messages" element={<MessagesPage />} />
     <Route path="account" element={<AccountSettingsPage />}>
       <Route index element={<MyProfilePage />} />
       <Route path="my-profile" element={<MyProfilePage />} />

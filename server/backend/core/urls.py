@@ -31,6 +31,7 @@ urlpatterns = [
     path("api/calendar/", include("own_calendar.urls")),
     path("api/realtime-update/", include("realtime_content_update.urls")),
     path("api/field-devices/", include("field_devices.urls")),
+    path("api/contact-us/", include("contact.urls")),
 ]
 
 if settings.DEBUG:

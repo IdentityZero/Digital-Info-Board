@@ -119,6 +119,14 @@ export const LINKSV2: MenuType[] = [
       },
     ],
   },
+  //
+  // Contact Us Messages
+  {
+    label: "Messages",
+    to: "/dashboard/contact-us-messages",
+    icon: FaEnvelope,
+    adminOnly: true,
+  },
   // Calendar
   {
     label: "calendar",

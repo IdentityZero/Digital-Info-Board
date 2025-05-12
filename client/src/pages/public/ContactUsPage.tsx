@@ -1,6 +1,53 @@
+import { useState } from "react";
+
 import { cpeBg } from "../../assets";
 
+import { CreateContactUsMessageType } from "../../types/ContactUsTypes";
+
+import { createMessageApi } from "../../api/contactUsRequest";
+import axios from "axios";
+
 const ContactUsPage = () => {
+  const [contactMessageObj, setContactMessageObj] =
+    useState<CreateContactUsMessageType>({ message: "", email: "", name: "" });
+
+  const [isSaving, setIsSaving] = useState(false);
+  const [isSuccesful, setIsSuccesful] = useState<boolean | null>(null);
+  const [errorMessage, setErrorMessage] = useState(
+    "Oops! Something went wrong. Please try again."
+  );
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    setIsSuccesful(null);
+
+    try {
+      setIsSaving(true);
+      await createMessageApi(contactMessageObj);
+      setIsSuccesful(() => {
+        return true;
+      });
+      setContactMessageObj({ message: "", email: "", name: "" });
+    } catch (error) {
+      setIsSuccesful(() => {
+        return false;
+      });
+
+      if (!axios.isAxiosError(error)) {
+        return;
+      }
+
+      const err = error.response?.data["error"];
+      if (!err || typeof err !== "string") {
+        return;
+      }
+      setErrorMessage(err);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 text-gray-900">
       {/* Header Section */}
@@ -30,23 +77,67 @@ const ContactUsPage = () => {
             <p className="text-lg">
               <strong>📍 Address:</strong> Marcos Ave, Paoay, 2902 Ilocos Norte
             </p>
-            <p className="text-lg">
-              <strong>✉️ Email:</strong> boarddib@gmail.com
-            </p>
           </div>
         </div>
 
         {/* Contact Form */}
         <div className="bg-white shadow-lg rounded-lg p-6">
           <h2 className="text-3xl font-bold mb-4">Send a Message</h2>
-          <form className="space-y-4">
+          {isSuccesful === true && (
+            <div className="w-full bg-green-100 border border-green-300 text-green-800 px-6 py-4 rounded-xl shadow-md mb-4 flex items-center gap-3">
+              <svg
+                className="w-6 h-6 text-green-600"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
+              <span className="text-base font-medium">
+                Your message was sent successfully!
+              </span>
+            </div>
+          )}
+          {isSuccesful === false && (
+            <div className="w-full bg-red-100 border border-red-300 text-red-800 px-6 py-4 rounded-xl shadow-md mb-4 flex items-center gap-3">
+              <svg
+                className="w-6 h-6 text-red-600"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+              <span className="text-base font-medium">{errorMessage}</span>
+            </div>
+          )}
+          <form className="space-y-4" onSubmit={handleSubmit}>
             <div>
               <label className="block text-gray-700 font-bold mb-2">Name</label>
               <input
+                value={contactMessageObj.name}
+                onChange={(e) =>
+                  setContactMessageObj((prev) => ({
+                    ...prev,
+                    name: e.target.value,
+                  }))
+                }
+                name="name"
                 type="text"
                 className="w-full p-3 border rounded-lg"
                 placeholder="Your Name"
                 required
+                disabled={isSaving}
               />
             </div>
             <div>
@@ -54,10 +145,19 @@ const ContactUsPage = () => {
                 Email
               </label>
               <input
+                value={contactMessageObj.email}
+                onChange={(e) =>
+                  setContactMessageObj((prev) => ({
+                    ...prev,
+                    email: e.target.value,
+                  }))
+                }
+                name="email"
                 type="email"
                 className="w-full p-3 border rounded-lg"
                 placeholder="Your Email"
                 required
+                disabled={isSaving}
               />
             </div>
             <div>
@@ -65,14 +165,24 @@ const ContactUsPage = () => {
                 Message
               </label>
               <textarea
+                value={contactMessageObj.message}
+                onChange={(e) =>
+                  setContactMessageObj((prev) => ({
+                    ...prev,
+                    message: e.target.value,
+                  }))
+                }
+                name="message"
                 className="w-full p-3 border rounded-lg"
                 rows={4}
                 placeholder="Your Message"
                 required
+                disabled={isSaving}
               ></textarea>
             </div>
             <button
               type="submit"
+              disabled={isSaving}
               className="w-full bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700"
             >
               Send Message
