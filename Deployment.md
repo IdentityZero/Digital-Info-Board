@@ -408,9 +408,105 @@
    #### Start and Enable Service
        sudo systemctl start setTime.service
        sudo systemctl enable setTime.service
+9. ### Button Shutdown service
+       touch dib_scripts/button_shutdown.py
+       nano dib_scripts/button_shutdown.py
+   #### Copy this to the file
+       #!/usr/bin/env python3
+       from gpiozero import Button
+       from signal import pause
+       import os
+           
+       shutdown_button = Button(3, pull_up=True)
+           
+       def shutdown():
+           os.system("sudo shutdown -h now")
+        
+       shutdown_button.when_pressed = shutdown
+        
+       pause()
+   Then save.
+   #### Create Service
+       sudo nano /etc/systemd/system/buttonShutdown.service
+   #### Copy this to the file
+       [Unit]
+       Description=Shutdown Button Service
+       After=multi-user.target
+       
+       [Service]
+       ExecStart=/usr/bin/python3 /home/admin/dib_scripts/shutdown_button.py
+       WorkingDirectory=/home/admin/dib_scripts
+       StandardOutput=inherit
+       StandardError=inherit
+       Restart=always
+       User=admin
+        
+       [Install]
+       WantedBy=multi-user.target
+   Then save.
+   #### Start and enable service
+       sudo systemctl start buttonShutdown.service
+       sudo systemctl enable buttonShutdown.service
+
+10. ### SCD40 Sensor
+        touch dib_scripts/scd40Sensor.py
+        nano dib_scripts/scd40Sensor.py
+    #### Copy this to the file
+        import requests
+        import time
+        import board
+        import adafruit_scd4x
+        
+        URL = "http://localhost:8000/api/field-devices/scd40/"
+        
+        
+        def send_sensor_data(co2: int, temperature: int, humidity: int) -> None:
+            response = requests.post(
+                URL, {"co2": co2, "temperature": temperature, "humidity": humidity}
+            )
+            response.raise_for_status()
+        
+        
+        i2c = board.I2C()
+        scd4x = adafruit_scd4x.SCD4X(i2c)
+        scd4x.start_periodic_measurement()
+        
+        while True:
+        
+            if scd4x.data_ready:
+                send_sensor_data(
+                    scd4x.CO2, int(scd4x.temperature), int(scd4x.relative_humidity)
+                )
+            time.sleep(10)
+    Then save.
+    #### Create and install dependencies
+        cd dib_scripts/
+        python -m venv .venv
+        pip install adafruit-circuitpython-scd4x
+        pip install RPi.GPIO
+    #### Create service
+        sudo nano /etc/systemd/system/scd40Sensor.service
+    #### Copy this to the file
+        [Unit]
+        Description=Run scd40 sensor python script
+        After=multi-user.target
+       
+        [Service]
+        ExecStart=/home/admin/dib_scripts/.venv/bin/python /home/admin/dib_scripts/scd40Sensor.py
+        WorkingDirectory=/home/admin/dib_scripts
+        Restart=on-failure
+        RestartSec=5
+        User=admin
+        
+        [Install]
+        WantedBy=multi-user.target
+    Then save.
+    #### Start and Enable service
+        sudo systemctl start scd40Sensor.service
+        sudo systemctl enable scd40Sensor.service
    
 ## Others
 1. ### Increase GPU memory
        sudo nano /boot/firmware/config.txt
      #### Copy this to the bottom of the file
-       gpu_mem=512
+       gpu_mem=256
