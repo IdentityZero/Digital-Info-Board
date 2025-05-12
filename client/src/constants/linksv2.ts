@@ -25,20 +25,24 @@ import {
 import { MenuType } from "../types/Links";
 
 export const LINKSV2: MenuType[] = [
+  // Dashboard
   { label: "dashboard", to: "/dashboard", icon: FaThLarge },
+  // Notifications
   {
     label: "notifications",
     to: "/dashboard/notifications",
     icon: FaBell,
     mobileOnly: true,
   },
+  // Current Display
   {
     label: "current display",
     to: "/dashboard/current-display",
     icon: FaPlayCircle,
   },
+  // Add to main display
   {
-    label: "upload content",
+    label: "add to main display",
     to: "/dashboard/upload-content",
     icon: FaFolderPlus,
     children: [
@@ -51,8 +55,9 @@ export const LINKSV2: MenuType[] = [
       },
     ],
   },
+  // Standard Display
   {
-    label: "default display",
+    label: "standard display",
     to: "/dashboard/default-display",
     icon: FaTv,
     children: [
@@ -78,8 +83,9 @@ export const LINKSV2: MenuType[] = [
       },
     ],
   },
+  // Uploaded Contents
   {
-    label: "contents",
+    label: "Uploaded Displays",
     to: "/dashboard/contents",
     icon: FaScroll,
     children: [
@@ -92,6 +98,7 @@ export const LINKSV2: MenuType[] = [
       },
     ],
   },
+  // Permissions
   {
     label: "permissions",
     to: "/dashboard/permissions",
@@ -112,7 +119,7 @@ export const LINKSV2: MenuType[] = [
       },
     ],
   },
-
+  // Calendar
   {
     label: "calendar",
     to: "/dashboard/calendar",
@@ -126,6 +133,7 @@ export const LINKSV2: MenuType[] = [
       { label: "settings", to: "/dashboard/calendar/settings", icon: FaCog },
     ],
   },
+  // Profile
   {
     label: "profile",
     to: "/dashboard/account",
