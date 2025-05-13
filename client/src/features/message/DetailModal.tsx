@@ -81,12 +81,14 @@ const DetailModal = ({ id, onClose, onSuccess }: DetailModalProps) => {
       >
         <div className="mx-auto p-6 rounded-2xl shadow-md space-y-4">
           <h2 className="text-lg font-semibold">Contact Us Message</h2>
-          <ClosableMessage
-            className="w-full flex flex-row items-center justify-between pr-5 p-2 bg-btDanger font-bold"
-            icon={FaExclamationCircle}
-          >
-            Be careful to check the email you are using to reply.
-          </ClosableMessage>
+          {!message?.is_responded && (
+            <ClosableMessage
+              className="w-full flex flex-row items-center justify-between pr-5 p-2 bg-btDanger font-bold text-white"
+              icon={FaExclamationCircle}
+            >
+              Be careful to check the email you are using to reply.
+            </ClosableMessage>
+          )}
 
           <div className="space-y-2">
             <div>

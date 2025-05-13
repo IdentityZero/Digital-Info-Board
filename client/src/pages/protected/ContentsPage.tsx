@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 
 import SideDropdown, {
@@ -6,10 +7,12 @@ import SideDropdown, {
 } from "../../components/ui/SideDropdown";
 import ButtonV2 from "../../components/ui/ButtonV2";
 
-type ContentType = "video" | "image" | "text";
+import TrashbinModal from "../../features/announcements/DeletedAnnouncement/TrashbinModal";
+import { AnnouncementTypes } from "../../types/AnnouncementTypes";
+
 type ContentLinkT = {
-  label: ContentType;
-  to: ContentType;
+  label: AnnouncementTypes;
+  to: AnnouncementTypes;
 };
 const links: ContentLinkT[] = [
   { label: "video", to: "video" },
@@ -20,17 +23,19 @@ const links: ContentLinkT[] = [
 const ContentsPage = () => {
   const location = useLocation();
 
-  const get_type_location = (): ContentType => {
+  const [trashType, setTrashType] = useState<null | AnnouncementTypes>(null);
+
+  const get_type_location = (): AnnouncementTypes => {
     const lastPart: string = location.pathname.split("/").pop() || "";
 
     if (["video", "image", "text"].includes(lastPart))
-      return lastPart as ContentType;
+      return lastPart as AnnouncementTypes;
     if (lastPart === "contents") return "video";
 
     const pathParts = location.pathname.split("/");
     const secondToLastPart = pathParts[pathParts.length - 2] || "";
     if (["video", "image", "text"].includes(secondToLastPart))
-      return secondToLastPart as ContentType;
+      return secondToLastPart as AnnouncementTypes;
 
     return "video";
   };
@@ -63,16 +68,33 @@ const ContentsPage = () => {
             ))}
           </div>
         </SideDropdown>
-        <Link to={`/dashboard/upload-content/${get_type_location()}`}>
+        <div className="flex gap-2">
+          <Link
+            to={`/dashboard/upload-content/${get_type_location()}`}
+            className="w-full"
+          >
+            <ButtonV2
+              text={`Upload ${get_type_location()} content`}
+              type="button"
+            />
+          </Link>
           <ButtonV2
-            text={`Upload ${get_type_location()} content`}
+            text="Trashbin"
             type="button"
+            variant="danger"
+            onClick={() => setTrashType(get_type_location())}
           />
-        </Link>
+        </div>
       </div>
       <div className="px-5">
         <Outlet />
       </div>
+      {trashType && (
+        <TrashbinModal
+          onClose={() => setTrashType(null)}
+          type={get_type_location()}
+        />
+      )}
     </div>
   );
 };

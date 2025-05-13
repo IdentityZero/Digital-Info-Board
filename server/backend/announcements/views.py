@@ -236,10 +236,19 @@ class RetrieveUpdateDestroyAnnouncementAPIView(generics.RetrieveUpdateDestroyAPI
     """
     Can only retrieve, update, and delete own announcements
     We can only update text announcement here
+
+    Deleted here is a soft delete
     """
 
     serializer_class = RetrieveFullAnnouncementSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def delete(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.soft_delete()
+        instance.is_active = False
+        instance.save()
+        return response.Response(status=status.HTTP_204_NO_CONTENT)
 
     def get_queryset(self):
         if self.request.method in ["GET"]:
@@ -480,3 +489,53 @@ class ListVideoAnnouncementAPIView(BaseMediaAnnouncementListAPIView):
     """
 
     media_field = "video_announcement"
+
+
+class ListDeletedAnnouncementAPIView(generics.ListAPIView):
+    serializer_class = CreateAnnouncementSerializer
+    permission_classes = [IsAuthenticated]
+    pagination_class = CustomPageNumberPagination
+
+    def get_queryset(self):
+        type = self.kwargs.get("type")
+
+        filter_kwargs = {
+            "author": self.request.user,
+            f"{type}_announcement__isnull": False,
+        }
+        return (
+            Announcements.deleted_objects.filter(**filter_kwargs)
+            .distinct()
+            .order_by("-end_date")
+        )
+
+    def list(self, request, *args, **kwargs):
+        type = self.kwargs.get("type")
+
+        if type not in ["video", "text", "image"]:
+            return response.Response(
+                {"error": "Type not supported"}, status=status.HTTP_400_BAD_REQUEST
+            )
+
+        return super().list(request, *args, **kwargs)
+
+
+class PermanentlyDeleteAnnouncementAPIView(generics.DestroyAPIView):
+    serializer_class = RetrieveFullAnnouncementSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Announcements.deleted_objects.filter(author=self.request.user)
+
+
+class RestoreDeletedAnnouncementAPIView(generics.UpdateAPIView):
+    serializer_class = RetrieveFullAnnouncementSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Announcements.deleted_objects.filter(author=self.request.user)
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.restore()
+        return response.Response(status=status.HTTP_200_OK)

@@ -78,6 +78,13 @@ const MessagesPage = () => {
             headers={["ID", "Name", "Email", "Message", "Date Responded"]}
           />
           <tbody>
+            {messagesList.results.length === 0 && (
+              <tr>
+                <td colSpan={5} className="text-center p-4 text-gray-500">
+                  No data retrieved
+                </td>
+              </tr>
+            )}
             {messagesList.results.map((message) => (
               <tr
                 id={String(message.id)}

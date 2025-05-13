@@ -13,7 +13,7 @@ import {
 import { PaginatedAnnouncementListTypeV1 } from "../../../../types/AnnouncementTypes";
 import { getListTypeInitState } from "../../../../types/ListType";
 
-import AnnouncementTableList from "./component/AnnouncementTableList";
+import AnnouncementTableList from "../../../../features/announcements/ListAnnouncement/AnnouncementTableList";
 import LoadingOrErrorWrapper from "../../../../components/LoadingOrErrorWrapper";
 
 const ImageContentListPage = () => {

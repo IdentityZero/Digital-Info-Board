@@ -1,6 +1,8 @@
 import { Delta } from "quill/core";
 import { ListType } from "./ListType";
 
+export type AnnouncementTypes = "video" | "text" | "image";
+
 export type AuthorType = {
   id: string;
   first_name: string;

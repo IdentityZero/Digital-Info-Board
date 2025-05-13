@@ -13,7 +13,7 @@ import {
   listVideoAnnouncementApi,
 } from "../../../../api/announcementRequest";
 
-import AnnouncementTableList from "./component/AnnouncementTableList";
+import AnnouncementTableList from "../../../../features/announcements/ListAnnouncement/AnnouncementTableList";
 import LoadingOrErrorWrapper from "../../../../components/LoadingOrErrorWrapper";
 
 const VideoContentListPage = () => {

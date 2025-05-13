@@ -29,6 +29,7 @@ import {
 import { isQuillValueEmpty } from "../../../components/QuillEditor";
 
 import useLoadingToast from "../../../hooks/useLoadingToast";
+import ErrorMessage from "../../../components/ErrorMessage";
 
 const TextContentPage = () => {
   const toastId = useRef<Id | null>(null);
@@ -218,8 +219,8 @@ const TextContentPage = () => {
 
   if (!data?.text_announcement) {
     return (
-      <div className="mt-2 flex flex-col items-center justify-center">
-        <p>Data does not resemble as Text Content</p>
+      <div className="mt-2 flex flex-col items-center justify-center gap-2">
+        <ErrorMessage message="Error could be because data does not resemble as News Content or in trashbin or is permanently deleted" />
         <Link to="/dashboard/contents/text">
           <button
             className={`flex flex-row items-center gap-2 px-8 py-1 rounded-full border border-black bg-lightBlue hover:bg-lightBlue-300 active:bg-lightBlue-500 `}

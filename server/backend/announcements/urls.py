@@ -10,10 +10,14 @@ from .views import (
     ListVideoAnnouncementAPIView,
     RetrieveUpdateVideoAnnouncementAPIView,
     ListAnnouncementAPIViewStatusBased,
+    ListDeletedAnnouncementAPIView,
+    PermanentlyDeleteAnnouncementAPIView,
+    RestoreDeletedAnnouncementAPIView,
 )
 
 urlpatterns = [
     path("v1/", ListCreateAllAnnouncementAPIView.as_view()),
+    path("v1/deleted/<str:type>/", ListDeletedAnnouncementAPIView.as_view()),
     path("v1/status/<str:status>/", ListAnnouncementAPIViewStatusBased.as_view()),
     path(
         "v1/<int:pk>/",
@@ -32,4 +36,9 @@ urlpatterns = [
     ),
     path("v1/video/", ListVideoAnnouncementAPIView.as_view()),
     path("v1/<int:pk>/video/", RetrieveUpdateVideoAnnouncementAPIView.as_view()),
+    path(
+        "v1/permanently-delete/<int:pk>/",
+        PermanentlyDeleteAnnouncementAPIView.as_view(),
+    ),
+    path("v1/restore/<int:pk>/", RestoreDeletedAnnouncementAPIView.as_view()),
 ]

@@ -16,6 +16,16 @@ from .validators import (
 from .utils import check_valid_display_duration
 
 
+class ActiveManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(deleted_at__isnull=True)
+
+
+class DeletedManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(deleted_at__isnull=False)
+
+
 class Announcements(TimestampedModel):
     class Meta:
         verbose_name = "Announcement"
@@ -35,6 +45,19 @@ class Announcements(TimestampedModel):
     )
     is_active = models.BooleanField(default=False)
     position = models.PositiveIntegerField(blank=True, null=True)
+    deleted_at = models.DateTimeField(null=True, blank=True)
+
+    objects = ActiveManager()
+    all_objects = models.Manager()
+    deleted_objects = DeletedManager()
+
+    def soft_delete(self):
+        self.deleted_at = timezone.now()
+        self.save()
+
+    def restore(self):
+        self.deleted_at = None
+        self.save()
 
     def clean(self):
         errors = {}

@@ -1,29 +1,39 @@
 import { Link } from "react-router-dom";
-import { FaCheckCircle, FaEye, FaTimesCircle, FaTrash } from "react-icons/fa";
+import {
+  FaCheckCircle,
+  FaEye,
+  FaTimesCircle,
+  FaTrash,
+  FaTrashRestore,
+} from "react-icons/fa";
 
-import IconWithTooltip from "../../../../../components/IconWithTooltip";
+import IconWithTooltip from "../../../components/IconWithTooltip";
 
 import {
   extractReactQuillText,
   formatTimestamp,
   truncateStringVariableLen,
-} from "../../../../../utils/formatters";
+} from "../../../utils/formatters";
 import {
   addTotalDuration,
   getAnnouncementType,
   isNowWithinRange,
-} from "../../../../../utils/utils";
+} from "../../../utils/utils";
 
-import { AnnouncementRetrieveType } from "../../../../../types/AnnouncementTypes";
+import { AnnouncementRetrieveType } from "../../../types/AnnouncementTypes";
 
 type AnnouncementTableRowProps = {
   announcement: AnnouncementRetrieveType;
   handleDelete: (announcement_id: string) => void;
+  handleRestore?: (announcement_id: string) => void;
+  allowView: boolean;
 };
 
 const AnnouncementTableRow = ({
   announcement,
   handleDelete,
+  handleRestore,
+  allowView = true,
 }: AnnouncementTableRowProps) => {
   const type = getAnnouncementType(announcement);
 
@@ -33,9 +43,13 @@ const AnnouncementTableRow = ({
       key={announcement.id}
     >
       <td className="px-4 py-2 sm:px-6 sm:py-3 font-bold hover:underline">
-        <Link to={`/dashboard/contents/${type}/${announcement.id}`}>
-          {announcement.id}{" "}
-        </Link>
+        {allowView ? (
+          <Link to={`/dashboard/contents/${type}/${announcement.id}`}>
+            {announcement.id}{" "}
+          </Link>
+        ) : (
+          <span>{announcement.id}</span>
+        )}
       </td>
       <td className="px-4 py-2 sm:px-6 sm:py-3">
         {truncateStringVariableLen(
@@ -79,16 +93,18 @@ const AnnouncementTableRow = ({
       </td>
       <td className="px-4 py-2 sm:px-6 sm:py-3 text-base">
         <div className="flex flex-row gap-2">
-          <span>
-            <Link to={`/dashboard/contents/${type}/${announcement.id}`}>
-              <IconWithTooltip
-                icon={FaEye}
-                label="View"
-                iconClassName="text-btSecondary hover:text-btSecondary-hover active: active:text-btSecondary-active cursor-pointer"
-                labelClassName="p-1 px-2 rounded-md shadow-md bg-btSecondary text-white"
-              />
-            </Link>
-          </span>
+          {allowView && (
+            <span>
+              <Link to={`/dashboard/contents/${type}/${announcement.id}`}>
+                <IconWithTooltip
+                  icon={FaEye}
+                  label="View"
+                  iconClassName="text-btSecondary hover:text-btSecondary-hover active: active:text-btSecondary-active cursor-pointer"
+                  labelClassName="p-1 px-2 rounded-md shadow-md bg-btSecondary text-white"
+                />
+              </Link>
+            </span>
+          )}
           <span onClick={() => handleDelete(announcement.id)}>
             <IconWithTooltip
               icon={FaTrash}
@@ -97,6 +113,16 @@ const AnnouncementTableRow = ({
               labelClassName="p-1 px-2 rounded-md shadow-md bg-btDanger text-white"
             />
           </span>
+          {handleRestore && (
+            <span onClick={() => handleRestore(announcement.id)}>
+              <IconWithTooltip
+                icon={FaTrashRestore}
+                label="Restore"
+                iconClassName="text-btPrimary hover:text-btPrimary-hover active: active:text-btPrimary-active cursor-pointer"
+                labelClassName="p-1 px-2 rounded-md shadow-md bg-btPrimary text-white"
+              />
+            </span>
+          )}
         </div>
       </td>
     </tr>

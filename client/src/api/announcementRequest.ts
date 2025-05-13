@@ -5,6 +5,7 @@ import {
   type FullImageAnnouncementType,
   type FullVideoAnnouncementType,
   type PaginatedAnnouncementListTypeV1,
+  AnnouncementTypes,
 } from "../types/AnnouncementTypes";
 import { BASE_API_URL } from "../constants/urls";
 import { showApiError } from "../utils/utils";
@@ -22,6 +23,15 @@ const deleteRetrieveAnnouncementEndpoint = (announcement_id: string) => {
    */
   return `/announcements/v1/${announcement_id}/`;
 };
+
+const permanentlyDeleteAnnouncementEndpoint = (announcement_id: string) => {
+  return `/announcements/v1/permanently-delete/${announcement_id}/`;
+};
+
+const restoreDeletedAnnouncementEndpoint = (announcement_id: string) => {
+  return `/announcements/v1/restore/${announcement_id}/`;
+};
+
 const updateAnnouncementActiveStatusEndpoint = (id: string) => {
   return `/announcements/v1/${id}/active-status/`;
 };
@@ -56,6 +66,28 @@ export const listActiveAnnouncementApi =
       throw new Error("An unexpected error occurred");
     }
   };
+
+export const listPaginatedDeletedAnnouncementApi = async (
+  axiosInstance: AxiosInstance,
+  type: AnnouncementTypes,
+  page: number = 1,
+  page_size: number = 10
+): Promise<PaginatedAnnouncementListTypeV1> => {
+  try {
+    const response = await axiosInstance.get(
+      BASE_ENDPOINT +
+        listCreateAllTypeAnnouncementEndpoint +
+        `deleted/${type}/?page=${page}&page_size=${page_size}`
+    );
+    return response.data;
+  } catch (error) {
+    showApiError("List Deleted Announcement Error: ", error);
+    if (axios.isAxiosError(error)) {
+      throw error;
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
 
 export const listStatBasedAnnouncementApi = async (
   status: "active" | "inactive",
@@ -352,6 +384,42 @@ export const updateVideoAnnouncementApi = async (
     return response.data;
   } catch (error) {
     showApiError("Update Video Announcement Error: ", error);
+    if (axios.isAxiosError(error)) {
+      throw error;
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+export const permanentlyDeleteAnnouncementApi = async (
+  axiosInstance: AxiosInstance,
+  announcement_id: string
+) => {
+  try {
+    const response = await axiosInstance.delete(
+      permanentlyDeleteAnnouncementEndpoint(announcement_id)
+    );
+    return response.data;
+  } catch (error) {
+    showApiError("Delete Video Announcement Error: ", error);
+    if (axios.isAxiosError(error)) {
+      throw error;
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+export const restoreDeletedAnnouncementApi = async (
+  axiosInstance: AxiosInstance,
+  announcement_id: string
+) => {
+  try {
+    const response = await axiosInstance.put(
+      restoreDeletedAnnouncementEndpoint(announcement_id)
+    );
+    return response.data;
+  } catch (error) {
+    showApiError("Delete Video Announcement Error: ", error);
     if (axios.isAxiosError(error)) {
       throw error;
     }

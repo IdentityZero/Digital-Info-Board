@@ -10,6 +10,8 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 
+import ErrorMessage from "../../../components/ErrorMessage";
+
 import {
   FullVideoAnnouncementType,
   VideoAnnouncementCreateType,
@@ -210,8 +212,8 @@ const VideoContentPage = () => {
 
   if (videoAnnouncement?.video_announcement.length === 0) {
     return (
-      <div className="mt-2 flex flex-col items-center justify-center">
-        <p>Data does not resemble as Video Content</p>
+      <div className="mt-2 flex flex-col items-center justify-center gap-2">
+        <ErrorMessage message="Error could be because data does not resemble as Video Content" />
         <Link to="/dashboard/contents/video">
           <button
             className={`flex flex-row items-center gap-2 px-8 py-1 rounded-full border border-black bg-lightBlue hover:bg-lightBlue-300 active:bg-lightBlue-500 `}
@@ -237,50 +239,55 @@ const VideoContentPage = () => {
           </button>
         </Link>
         <div className="flex flex-row items-center gap-4">
-          {isEditMode ? (
-            <>
-              <button
-                className="flex flex-row items-center gap-2 px-6 py-1 rounded-full border border-black bg-blue-500 text-white hover:bg-blue-600 active:bg-blue-700"
-                onClick={handleSaveButton}
-                disabled={deleteLoading || saveLoading}
-              >
-                <FaSave />
-                {saveLoading ? "Saving..." : "Save"}
-              </button>
-              <button
-                className="flex flex-row items-center gap-2 px-6 py-1 rounded-full border border-black bg-gray-500 text-white hover:bg-gray-600 active:bg-gray-700"
-                onClick={handleCancel}
-                disabled={deleteLoading || saveLoading}
-              >
-                <FaTimes />
-                Cancel
-              </button>
-            </>
-          ) : (
-            <>
-              <button
-                className="flex flex-row items-center gap-2 px-6 py-1 rounded-full border border-black bg-green-500 text-white hover:bg-green-600 active:bg-green-700"
-                onClick={() => setIsEditMode(true)}
-                disabled={deleteLoading || saveLoading}
-              >
-                <FaEdit />
-                Edit
-              </button>
-              <button
-                className="flex flex-row items-center gap-2 px-6 py-1 rounded-full border border-black bg-red-500 text-white hover:bg-red-600 active:bg-red-700"
-                onClick={handleDelete}
-                disabled={deleteLoading || saveLoading}
-              >
-                <FaTrashAlt />
-                {deleteLoading ? "Deleting..." : "Delete"}
-              </button>
-            </>
-          )}
+          {!fetchError &&
+            (isEditMode ? (
+              <>
+                <button
+                  className="flex flex-row items-center gap-2 px-6 py-1 rounded-full border border-black bg-blue-500 text-white hover:bg-blue-600 active:bg-blue-700"
+                  onClick={handleSaveButton}
+                  disabled={deleteLoading || saveLoading}
+                >
+                  <FaSave />
+                  {saveLoading ? "Saving..." : "Save"}
+                </button>
+                <button
+                  className="flex flex-row items-center gap-2 px-6 py-1 rounded-full border border-black bg-gray-500 text-white hover:bg-gray-600 active:bg-gray-700"
+                  onClick={handleCancel}
+                  disabled={deleteLoading || saveLoading}
+                >
+                  <FaTimes />
+                  Cancel
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  className="flex flex-row items-center gap-2 px-6 py-1 rounded-full border border-black bg-green-500 text-white hover:bg-green-600 active:bg-green-700"
+                  onClick={() => setIsEditMode(true)}
+                  disabled={deleteLoading || saveLoading}
+                >
+                  <FaEdit />
+                  Edit
+                </button>
+                <button
+                  className="flex flex-row items-center gap-2 px-6 py-1 rounded-full border border-black bg-red-500 text-white hover:bg-red-600 active:bg-red-700"
+                  onClick={handleDelete}
+                  disabled={deleteLoading || saveLoading}
+                >
+                  <FaTrashAlt />
+                  {deleteLoading ? "Deleting..." : "Delete"}
+                </button>
+              </>
+            ))}
         </div>
       </div>
 
       {fetchLoading && <LoadingMessage message="Loading..." />}
-      {fetchError && <div>{fetchError}</div>}
+      {fetchError && (
+        <div className="mt-2">
+          <ErrorMessage message="Content Data not found. Either its in your trashbin or is permanently deleted." />
+        </div>
+      )}
 
       {/* Set up to avoid rerendering and refetching files */}
 
