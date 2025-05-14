@@ -99,6 +99,14 @@ const DefaultDisplaySettingsPage = () => {
     isActivated: boolean,
     componentKey: keyof SettingsType
   ) => {
+    const conf = confirm(
+      `Are you sure you want to ${isActivated ? "REMOVE" : "ADD"} this ${
+        isActivated ? "from" : "to"
+      } the display?`
+    );
+
+    if (!conf) return;
+
     loading("Saving updates. Please wait...");
     try {
       setIsSaving(true);
