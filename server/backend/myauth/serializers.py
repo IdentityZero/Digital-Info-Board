@@ -36,13 +36,14 @@ class TokenObtainPairWithRoleSerializer(TokenObtainPairSerializer):
             user = User.objects.get(username=username)
         except User.DoesNotExist:
             raise AuthenticationFailed(
-                "Incorrect credentials. Please try again.", code="account_not_found"
+                "User not found. Please try again.",
+                code="account_not_found",
             )
 
         # Check if passwords match
         if not user.check_password(password):
             raise AuthenticationFailed(
-                "Incorrect credentials. Please try again.", code="account_not_found"
+                "Incorrect password. Please try again.", code="account_not_found"
             )
 
         if not user.is_active:
