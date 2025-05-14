@@ -3,7 +3,11 @@ from django.db.models import Q
 
 from django.utils.timezone import now
 
-from rest_framework.generics import ListCreateAPIView, RetrieveAPIView, UpdateAPIView
+from rest_framework.generics import (
+    ListCreateAPIView,
+    RetrieveDestroyAPIView,
+    UpdateAPIView,
+)
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.status import HTTP_429_TOO_MANY_REQUESTS, HTTP_200_OK
@@ -48,7 +52,7 @@ class CreateContactUsMessageAPIView(ListCreateAPIView):
         return super().post(request, *args, **kwargs)
 
 
-class RetrieveContactUsMessageApiView(RetrieveAPIView):
+class RetrieveContactUsMessageApiView(RetrieveDestroyAPIView):
     queryset = ContactUsMessage.objects.all()
     serializer_class = ContactUsMessageWithUserNamesSerializer
     permission_classes = [IsAuthenticated, IsAdmin]

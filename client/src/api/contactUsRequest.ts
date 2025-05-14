@@ -53,6 +53,19 @@ export const retrieveMessageApi = async (axiosInstance: Axios, id: number) => {
   }
 };
 
+export const deleteMessageApi = async (axiosInstance: Axios, id: number) => {
+  try {
+    const response = await axiosInstance.delete(
+      CONTACT_US_BASE_ENDPOINT + `v1/${id}/`
+    );
+    return response.data;
+  } catch (error) {
+    showApiError("Delete Contact Us Message Error:", error);
+    if (axios.isAxiosError(error)) throw error;
+    throw new Error("An unexpected error occurred");
+  }
+};
+
 export const setRespondedMessageApi = async (
   axiosInstance: Axios,
   id: number

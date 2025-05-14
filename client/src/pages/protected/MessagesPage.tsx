@@ -1,26 +1,35 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { Id } from "react-toastify";
+import { FaTrash } from "react-icons/fa";
 
 import Table from "../../components/ui/Table/Table";
 import Thead from "../../components/ui/Table/Thead";
 import LoadingOrErrorWrapper from "../../components/LoadingOrErrorWrapper";
 import Pagination from "../../components/Pagination";
+import IconWithTooltip from "../../components/IconWithTooltip";
 
 import {
   formatTimestamp,
   truncateStringVariableLen,
 } from "../../utils/formatters";
 
+import useLoadingToast from "../../hooks/useLoadingToast";
 import usePagination from "../../hooks/usePagination";
 import { useAuth } from "../../context/AuthProvider";
 
 import { getListTypeInitState, ListType } from "../../types/ListType";
 import { ContactUsMessageType } from "../../types/ContactUsTypes";
 
-import { listPaginatedMessagesApi } from "../../api/contactUsRequest";
+import {
+  deleteMessageApi,
+  listPaginatedMessagesApi,
+} from "../../api/contactUsRequest";
 
 import DetailModal from "../../features/message/DetailModal";
 
 const MessagesPage = () => {
+  const toastId = useRef<Id | null>(null);
+  const { loading, update } = useLoadingToast(toastId);
   const { userApi } = useAuth();
 
   const { page, setPage, pageSize, setPageSize } = usePagination(
@@ -70,11 +79,38 @@ const MessagesPage = () => {
     setIdClicked(null);
   };
 
+  const handleDelete = async (id: number) => {
+    const conf = confirm("Are you sure you want to delete this message?");
+
+    if (!conf) return;
+
+    loading("Deleting message. Please wait...");
+    try {
+      await deleteMessageApi(userApi, id);
+      update({
+        render: "Message deleted successfully.",
+        type: "success",
+      });
+      setMessagesList((prev) => ({
+        ...prev,
+        results: prev.results.filter((item) => item.id !== id),
+        count: prev.count + 1,
+      }));
+    } catch (error) {
+      update({
+        render: "Delete failed. Please try again.",
+        type: "error",
+      });
+    }
+  };
+
   return (
     <LoadingOrErrorWrapper isLoading={isFetching} hasError={hasFetchingError}>
       <div className="p-4">
         <Table>
-          <Thead headers={["ID", "Name", "Email", "Message", "Date Read"]} />
+          <Thead
+            headers={["ID", "Name", "Email", "Message", "Date Read", "Actions"]}
+          />
           <tbody>
             {messagesList.results.length === 0 && (
               <tr>
@@ -106,6 +142,24 @@ const MessagesPage = () => {
                   {message.responded_at
                     ? formatTimestamp(message.responded_at)
                     : "Unread"}
+                </td>
+                <td className="p-2">
+                  <div className="h-full flex justify-center items-center gap-4">
+                    <button
+                      className="w-fit h-fit"
+                      onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                        e.stopPropagation();
+                        handleDelete(message.id);
+                      }}
+                    >
+                      <IconWithTooltip
+                        icon={FaTrash}
+                        label="Delete"
+                        iconClassName="text-xl text-btDanger hover:text-btDanger-hover active: active:text-btDanger-active cursor-pointer"
+                        labelClassName="p-1 px-2 rounded-md shadow-md bg-btDanger text-white text-center"
+                      />
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
