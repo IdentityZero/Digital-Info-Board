@@ -74,9 +74,7 @@ const MessagesPage = () => {
     <LoadingOrErrorWrapper isLoading={isFetching} hasError={hasFetchingError}>
       <div className="p-4">
         <Table>
-          <Thead
-            headers={["ID", "Name", "Email", "Message", "Date Responded"]}
-          />
+          <Thead headers={["ID", "Name", "Email", "Message", "Date Read"]} />
           <tbody>
             {messagesList.results.length === 0 && (
               <tr>
@@ -107,7 +105,7 @@ const MessagesPage = () => {
                 <td className="p-2 border whitespace-nowrap">
                   {message.responded_at
                     ? formatTimestamp(message.responded_at)
-                    : "No response yet."}
+                    : "Unread"}
                 </td>
               </tr>
             ))}

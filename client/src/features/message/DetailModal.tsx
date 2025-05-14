@@ -3,6 +3,8 @@ import { Id } from "react-toastify";
 
 import Modal from "../../components/ui/Modal";
 import LoadingOrErrorWrapper from "../../components/LoadingOrErrorWrapper";
+import ButtonV2 from "../../components/ui/ButtonV2";
+
 import { formatTimestamp } from "../../utils";
 
 import { useAuth } from "../../context/AuthProvider";
@@ -14,8 +16,6 @@ import {
   retrieveMessageApi,
   setRespondedMessageApi,
 } from "../../api/contactUsRequest";
-import ClosableMessage from "../../components/ClosableMessage";
-import { FaExclamationCircle } from "react-icons/fa";
 
 type DetailModalProps = {
   id: number;
@@ -79,16 +79,8 @@ const DetailModal = ({ id, onClose, onSuccess }: DetailModalProps) => {
         hasError={hasErrors}
         hasErrorMessage="Failed to load details. Please try refreshing the page"
       >
-        <div className="mx-auto p-6 rounded-2xl shadow-md space-y-4">
+        <div className="mx-auto p-4 rounded-2xl shadow-md space-y-4">
           <h2 className="text-lg font-semibold">Contact Us Message</h2>
-          {!message?.is_responded && (
-            <ClosableMessage
-              className="w-full flex flex-row items-center justify-between pr-5 p-2 bg-btDanger font-bold text-white"
-              icon={FaExclamationCircle}
-            >
-              Be careful to check the email you are using to reply.
-            </ClosableMessage>
-          )}
 
           <div className="space-y-2">
             <div>
@@ -112,7 +104,7 @@ const DetailModal = ({ id, onClose, onSuccess }: DetailModalProps) => {
                 {formatTimestamp(message?.created_at as string)}
               </div>
               <div>
-                <span className="font-medium">Date Responded:</span>
+                <span className="font-medium">Date Read:</span>
                 {message?.responded_at
                   ? formatTimestamp(message.responded_at)
                   : "Pending"}
@@ -120,31 +112,12 @@ const DetailModal = ({ id, onClose, onSuccess }: DetailModalProps) => {
             </div>
             {message?.responded_by && (
               <div className="text-sm">
-                <span className="font-medium">Responded By:</span>{" "}
+                <span className="font-medium">Read By:</span>{" "}
                 {`${message.responded_by.first_name} ${message.responded_by.last_name}`}
               </div>
             )}
             {!message?.is_responded && (
-              <div className="pt-4 flex flex-col sm:flex-row gap-3">
-                <a
-                  href={`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(
-                    message?.email as string
-                  )}&su=${encodeURIComponent(
-                    "Re: Your Contact Message to CPE DIB"
-                  )}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block bg-blue-600 text-white text-sm px-4 py-2 rounded-lg hover:bg-blue-700 active:bg-blue-800  transition-colors"
-                >
-                  Reply
-                </a>
-                <button
-                  className="inline-block bg-green-600 text-white text-sm px-4 py-2 rounded-lg hover:bg-green-700 active:bg-green-800 transition-colors"
-                  onClick={handleSetResponded}
-                >
-                  Mark as Replied
-                </button>
-              </div>
+              <ButtonV2 text="Mark as read" onClick={handleSetResponded} />
             )}
           </div>
         </div>
