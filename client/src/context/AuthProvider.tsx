@@ -9,6 +9,7 @@ import { BASE_API_URL } from "../constants/urls";
 type AuthContextType = {
   user: User | null;
   isLoading: boolean;
+  isLoggingIn: boolean;
   userApi: AxiosInstance;
   login: (username: string, password: string) => void;
   logout: () => void;
@@ -19,6 +20,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
 
@@ -74,7 +76,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   const login = async (username: string, password: string) => {
-    setIsLoading(true);
+    setIsLoggingIn(true);
     setError(null);
 
     try {
@@ -86,6 +88,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         },
         { withCredentials: true }
       );
+      setIsLoading(true);
 
       setUser(decodeUserJWT(response.data.access));
     } catch (error) {
@@ -104,7 +107,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setError("Unexpected problem occured. Please try again.");
       }
     } finally {
-      setIsLoading(false);
+      setIsLoggingIn(false);
+      setTimeout(() => setIsLoading(false), 1000);
     }
   };
 
@@ -129,7 +133,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, isLoading, error, login, userApi, logout }}
+      value={{ user, isLoading, isLoggingIn, error, login, userApi, logout }}
     >
       {isLoading ? (
         <div>
