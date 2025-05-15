@@ -84,12 +84,14 @@ const ContentsPage = () => {
               type="button"
             />
           </Link>
-          <ButtonV2
-            text="Trashbin"
-            type="button"
-            variant="danger"
-            onClick={() => setTrashType(get_type_location())}
-          />
+          {get_type_location() !== "urgent" && (
+            <ButtonV2
+              text="Trashbin"
+              type="button"
+              variant="danger"
+              onClick={() => setTrashType(get_type_location())}
+            />
+          )}
         </div>
       </div>
       <div className="px-5">
