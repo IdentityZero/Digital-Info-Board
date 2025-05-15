@@ -1,6 +1,7 @@
 import {
   AnnouncementListType,
   AnnouncementRetrieveType,
+  UrgentAnnouncementType,
 } from "../../types/AnnouncementTypes";
 
 import {
@@ -20,6 +21,7 @@ export type RealtimeUpdateContextType = {
     textAnnouncements: AnnouncementListType;
     textAnnouncementsAsText: string[];
     preview: AnnouncementRetrieveType | null;
+    urgentAnnouncement: UrgentAnnouncementType | null;
     mediaDurations: number[];
     isLoading: boolean;
     error: any;
@@ -56,7 +58,8 @@ export type AnnouncementWsMessageTypes = {
     | "activate"
     | "deactivate"
     | "sequence_update"
-    | "preview";
+    | "preview"
+    | "urgent";
   content_id: string;
   data: any;
 };

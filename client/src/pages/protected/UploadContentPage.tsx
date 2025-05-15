@@ -5,24 +5,27 @@ import SideDropdown, {
   SideDropdownItem,
 } from "../../components/ui/SideDropdown";
 
-type UploadContentType = "video" | "image" | "text";
+import { AnnouncementTypes } from "../../types/AnnouncementTypes";
+
 type UploadContentLinkT = {
-  label: UploadContentType;
-  to: UploadContentType;
+  label: AnnouncementTypes;
+  to: AnnouncementTypes;
 };
 const links: UploadContentLinkT[] = [
   { label: "video", to: "video" },
   { label: "image", to: "image" },
   { label: "text", to: "text" },
+  { label: "urgent", to: "urgent" },
 ];
 
 const UploadContentPage = () => {
   const location = useLocation();
 
-  const get_type_location = (): UploadContentType => {
+  const get_type_location = (): AnnouncementTypes => {
     const lastPart: string = location.pathname.split("/").pop() || "";
-    if (["video", "image", "text"].includes(lastPart))
-      return lastPart as UploadContentType;
+
+    if (["video", "image", "text", "urgent"].includes(lastPart))
+      return lastPart as AnnouncementTypes;
 
     return "video";
   };

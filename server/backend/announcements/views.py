@@ -2,9 +2,12 @@ import re
 from typing import Dict, Any, List
 import json
 
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
+
 from django.utils import timezone
 from django.db.models import OrderBy, F
-from rest_framework import generics, response, status, response, parsers
+from rest_framework import generics, response, status, response, parsers, decorators
 from rest_framework.permissions import (
     AllowAny,
     IsAuthenticated,
@@ -12,7 +15,6 @@ from rest_framework.permissions import (
 )
 
 from utils.pagination import CustomPageNumberPagination
-from utils.permissions import IsAdmin
 from notifications.models import Notifications
 
 from .serializers import (
@@ -21,8 +23,10 @@ from .serializers import (
     UpdateFullImageAnnouncementSerializer,
     UpdateFullVideoAnnouncementSerializer,
     ActivateAnnouncementSerializer,
+    PrimaryUrgentAnnouncementSerializer,
+    SecondaryUrgentAnnouncementSerializer,
 )
-from .models import Announcements
+from .models import Announcements, UrgentAnnouncements
 
 
 class ListCreateAllAnnouncementAPIView(generics.ListCreateAPIView):
@@ -539,3 +543,61 @@ class RestoreDeletedAnnouncementAPIView(generics.UpdateAPIView):
         instance = self.get_object()
         instance.restore()
         return response.Response(status=status.HTTP_200_OK)
+
+
+class ListCreateUrgentAnnouncementAPIView(generics.ListCreateAPIView):
+    serializer_class = PrimaryUrgentAnnouncementSerializer
+    permission_classes = [IsAuthenticated]
+    pagination_class = CustomPageNumberPagination
+
+    def get_queryset(self):
+        qs = UrgentAnnouncements.objects.filter(author=self.request.user)
+        return qs
+
+    def perform_create(self, serializer):
+        if serializer.is_valid(raise_exception=True):
+            serializer.save(author=self.request.user)
+
+
+class RetrieveDeleteUpdateUrgentAnnouncementAPIView(
+    generics.RetrieveUpdateDestroyAPIView
+):
+    serializer_class = SecondaryUrgentAnnouncementSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        qs = UrgentAnnouncements.objects.filter(author=self.request.user)
+        return qs
+
+
+@decorators.api_view(["POST"])
+@decorators.permission_classes([IsAuthenticated])
+def run_urgent(request, id):
+    if not id:
+        return response.Response(
+            {"error": "ID is required."}, status=status.HTTP_400_BAD_REQUEST
+        )
+
+    try:
+        inst = UrgentAnnouncements.objects.get(id=id)
+    except UrgentAnnouncements.DoesNotExist:
+        return response.Response(
+            {"error": "The content you are trying to preview cannot be found."},
+            status=status.HTTP_404_NOT_FOUND,
+        )
+
+    serializer = PrimaryUrgentAnnouncementSerializer(inst)
+
+    channel_layer = get_channel_layer()
+    async_to_sync(channel_layer.group_send)(
+        "realtime_update",
+        {
+            "type": "send.update",
+            "content": "announcement",
+            "action": "urgent",
+            "content_id": inst.pk,
+            "data": serializer.data,
+        },
+    )
+
+    return response.Response(status=status.HTTP_200_OK)

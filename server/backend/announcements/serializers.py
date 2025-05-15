@@ -10,6 +10,7 @@ from .models import (
     TextAnnouncements,
     ImageAnnouncements,
     VideoAnnouncements,
+    UrgentAnnouncements,
 )
 from users.serializers import UserSerializer
 
@@ -592,6 +593,24 @@ class CreateAnnouncementSerializer(
                 VideoAnnouncements.objects.create(announcement=ann, **video_ann_datum)
 
         return ann
+
+
+# endregion
+
+
+# region Topic: Urgent Announcement Serializers
+class PrimaryUrgentAnnouncementSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UrgentAnnouncements
+        fields = "__all__"
+        extra_kwargs = {"author": {"read_only": True}}
+
+
+class SecondaryUrgentAnnouncementSerializer(PrimaryUrgentAnnouncementSerializer):
+    author = UserSerializer(read_only=True)
+
+    class Meta(PrimaryUrgentAnnouncementSerializer.Meta):
+        fields = PrimaryUrgentAnnouncementSerializer.Meta.fields
 
 
 # endregion

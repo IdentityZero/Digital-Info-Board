@@ -5,6 +5,7 @@ import {
   FaCog,
   FaEnvelope,
   FaEnvelopeOpenText,
+  FaExclamationTriangle,
   FaFolderPlus,
   FaImage,
   FaKey,
@@ -53,6 +54,11 @@ export const LINKSV2: MenuType[] = [
         to: "/dashboard/upload-content/text",
         icon: FaEnvelopeOpenText,
       },
+      {
+        label: "urgent",
+        to: "/dashboard/upload-content/urgent",
+        icon: FaExclamationTriangle,
+      },
     ],
   },
   // Standard Display
@@ -95,6 +101,11 @@ export const LINKSV2: MenuType[] = [
         label: "news",
         to: "/dashboard/contents/text",
         icon: FaEnvelopeOpenText,
+      },
+      {
+        label: "urgent",
+        to: "/dashboard/contents/urgent",
+        icon: FaExclamationTriangle,
       },
     ],
   },

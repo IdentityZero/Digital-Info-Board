@@ -13,6 +13,7 @@ import Footer from "../../features/KioskDisplay/Footer";
 import MainAside from "../../features/KioskDisplay/MainAside";
 
 import { SettingsType } from "../../types/SettingTypes";
+import Modal from "../../components/ui/Modal";
 
 const DELTA_FALLBACK_VALUE = JSON.stringify({ ops: [] });
 
@@ -34,6 +35,7 @@ const KioskDisplayPage = () => {
       textAnnouncementsAsText,
       setIdOnLock: setAnnouncementIdOnLock,
       preview,
+      urgentAnnouncement,
     },
     events: { events, isLoading: isEventsFetching },
     mediaDisplays: { mediaDisplays, isLoading: isMediaDisplaysFetching },
@@ -215,6 +217,14 @@ const KioskDisplayPage = () => {
           sensorData={sensorData}
         />
       </footer>
+      {!!urgentAnnouncement && (
+        <Modal isOpen={!!urgentAnnouncement} onClose={() => {}} size="full">
+          <div className="w-full h-full flex flex-col gap-2 items-center justify-center">
+            <DisplayQuillEditor value={urgentAnnouncement.title} />
+            <DisplayQuillEditor value={urgentAnnouncement.description} />
+          </div>
+        </Modal>
+      )}
     </div>
   );
 };

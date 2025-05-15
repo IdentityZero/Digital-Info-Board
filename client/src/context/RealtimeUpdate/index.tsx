@@ -132,6 +132,8 @@ export const RealtimeUpdateProvider = ({
       announcement.updateSequence(data.data);
     } else if (data.action === "preview") {
       announcement.setDisplayPreview(data.data);
+    } else if (data.action === "urgent") {
+      announcement.runUrgentAnnouncement(data.data);
     }
   };
 

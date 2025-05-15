@@ -13,6 +13,9 @@ from .views import (
     ListDeletedAnnouncementAPIView,
     PermanentlyDeleteAnnouncementAPIView,
     RestoreDeletedAnnouncementAPIView,
+    ListCreateUrgentAnnouncementAPIView,
+    RetrieveDeleteUpdateUrgentAnnouncementAPIView,
+    run_urgent,
 )
 
 urlpatterns = [
@@ -29,11 +32,13 @@ urlpatterns = [
         UpdateAnnouncementActiveStatusAPIView.as_view(),
     ),
     path("v1/text/", ListTextAnnouncementAPIView.as_view()),
+    # image
     path("v1/image/", ListImageAnnouncementAPIView.as_view()),
     path(
         "v1/<int:pk>/image/",
         RetrieveUpdateImageAnnouncementAPIView.as_view(),
     ),
+    # video
     path("v1/video/", ListVideoAnnouncementAPIView.as_view()),
     path("v1/<int:pk>/video/", RetrieveUpdateVideoAnnouncementAPIView.as_view()),
     path(
@@ -41,4 +46,10 @@ urlpatterns = [
         PermanentlyDeleteAnnouncementAPIView.as_view(),
     ),
     path("v1/restore/<int:pk>/", RestoreDeletedAnnouncementAPIView.as_view()),
+    # urgent
+    path("v1/urgent/", ListCreateUrgentAnnouncementAPIView.as_view()),
+    path(
+        "v1/urgent/<int:pk>/", RetrieveDeleteUpdateUrgentAnnouncementAPIView.as_view()
+    ),
+    path("v1/urgent/<int:id>/run/", run_urgent),
 ]

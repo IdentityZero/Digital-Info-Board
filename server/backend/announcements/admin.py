@@ -5,6 +5,7 @@ from .models import (
     TextAnnouncements,
     ImageAnnouncements,
     VideoAnnouncements,
+    UrgentAnnouncements,
 )
 
 
@@ -65,3 +66,10 @@ class VideoAnnouncementAdmin(admin.ModelAdmin):
 
 
 admin.site.register(VideoAnnouncements, VideoAnnouncementAdmin)
+
+
+class UrgentAnnouncementAdmin(admin.ModelAdmin):
+    list_display = ["id", "author", "title", "duration"]
+
+
+admin.site.register(UrgentAnnouncements, UrgentAnnouncementAdmin)

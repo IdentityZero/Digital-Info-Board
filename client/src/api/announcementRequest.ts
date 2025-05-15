@@ -6,9 +6,12 @@ import {
   type FullVideoAnnouncementType,
   type PaginatedAnnouncementListTypeV1,
   AnnouncementTypes,
+  CreateUrgentAnnouncementType,
+  UrgentAnnouncementType,
 } from "../types/AnnouncementTypes";
 import { BASE_API_URL } from "../constants/urls";
 import { showApiError } from "../utils/utils";
+import { ListType } from "../types/ListType";
 
 /**
  * BASE_ENDPOINT is only used when not using the users api
@@ -37,6 +40,7 @@ const updateAnnouncementActiveStatusEndpoint = (id: string) => {
 };
 
 const listTextAnnouncementEndpoint = "/announcements/v1/text/";
+
 const retrieveUpdateTextAnnouncementEndpoint = (announcement_id: string) => {
   return `${BASE_ENDPOINT}announcements/v1/${announcement_id}/`;
 };
@@ -420,6 +424,119 @@ export const restoreDeletedAnnouncementApi = async (
     return response.data;
   } catch (error) {
     showApiError("Delete Video Announcement Error: ", error);
+    if (axios.isAxiosError(error)) {
+      throw error;
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+export const createUrgentAnnouncementApi = async (
+  axiosInstance: AxiosInstance,
+  data: CreateUrgentAnnouncementType
+) => {
+  try {
+    const response = await axiosInstance.post(
+      listCreateAllTypeAnnouncementEndpoint + "urgent/",
+      data
+    );
+    return response.data;
+  } catch (error) {
+    showApiError("Create Urgent Announcement Error: ", error);
+    if (axios.isAxiosError(error)) {
+      throw error;
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+export const listPaginatedUrgentAnnouncementApi = async (
+  axiosInstance: AxiosInstance,
+  page: number = 1,
+  page_size: number = 10
+): Promise<ListType<UrgentAnnouncementType>> => {
+  try {
+    const response = await axiosInstance.get(
+      listCreateAllTypeAnnouncementEndpoint +
+        `urgent/?page=${page}&page_size=${page_size}`
+    );
+    return response.data;
+  } catch (error) {
+    showApiError("List Paginated Urgent Announcement Error: ", error);
+    if (axios.isAxiosError(error)) {
+      throw error;
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+export const retrieveUrgentAnnouncementApi = async (
+  axiosInstance: AxiosInstance,
+  announcement_id: string
+): Promise<UrgentAnnouncementType> => {
+  try {
+    const response = await axiosInstance.get(
+      `/announcements/v1/urgent/${announcement_id}/`
+    );
+    return response.data;
+  } catch (error) {
+    showApiError("Retrieve Urgent Announcement Error: ", error);
+    if (axios.isAxiosError(error)) {
+      throw error;
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+export const updateUrgentAnnouncementApi = async (
+  axiosInstance: AxiosInstance,
+  announcement_id: string,
+  data: CreateUrgentAnnouncementType
+): Promise<UrgentAnnouncementType> => {
+  try {
+    const response = await axiosInstance.patch(
+      `/announcements/v1/urgent/${announcement_id}/`,
+      data
+    );
+    return response.data;
+  } catch (error) {
+    showApiError("Update Urgent Announcement Error: ", error);
+    if (axios.isAxiosError(error)) {
+      throw error;
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+export const deleteUrgentAnnouncementApi = async (
+  axiosInstance: AxiosInstance,
+  announcement_id: number
+) => {
+  try {
+    const response = await axiosInstance.delete(
+      `/announcements/v1/urgent/${announcement_id}/`
+    );
+    return response.data;
+  } catch (error) {
+    showApiError("Delete Urgent Announcement Error: ", error);
+    if (axios.isAxiosError(error)) {
+      throw error;
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+export const runUrgentAnnouncementApi = async (
+  axiosInstance: AxiosInstance,
+  announcement_id: number
+) => {
+  try {
+    const response = await axiosInstance.post(
+      `/announcements/v1/urgent/${announcement_id}/run/`
+    );
+    return response.data;
+  } catch (error) {
+    showApiError("Run Urgent Announcement Error: ", error);
     if (axios.isAxiosError(error)) {
       throw error;
     }

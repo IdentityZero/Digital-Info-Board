@@ -18,6 +18,7 @@ const links: ContentLinkT[] = [
   { label: "video", to: "video" },
   { label: "image", to: "image" },
   { label: "text", to: "text" },
+  { label: "urgent", to: "urgent" },
 ];
 
 const ContentsPage = () => {
@@ -28,13 +29,18 @@ const ContentsPage = () => {
   const get_type_location = (): AnnouncementTypes => {
     const lastPart: string = location.pathname.split("/").pop() || "";
 
-    if (["video", "image", "text"].includes(lastPart))
+    if (lastPart === "edit") {
+      // Since we are only supportint edit with urgent. Update when refactored
+      return "urgent";
+    }
+
+    if (["video", "image", "text", "urgent"].includes(lastPart))
       return lastPart as AnnouncementTypes;
     if (lastPart === "contents") return "video";
 
     const pathParts = location.pathname.split("/");
     const secondToLastPart = pathParts[pathParts.length - 2] || "";
-    if (["video", "image", "text"].includes(secondToLastPart))
+    if (["video", "image", "text", "urgent"].includes(secondToLastPart))
       return secondToLastPart as AnnouncementTypes;
 
     return "video";

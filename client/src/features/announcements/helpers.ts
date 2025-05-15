@@ -1,5 +1,17 @@
 // For Creating
 
+export type UrgentAnnouncementErrorT = {
+  title: string | string[];
+  description: string | string[];
+  duration: string | string[];
+};
+
+export const urgentAnnouncementErrorState: UrgentAnnouncementErrorT = {
+  title: "",
+  description: "",
+  duration: "",
+};
+
 export type TextAnnouncementErrorT = {
   title: string | string[];
   start_date: string | string[];

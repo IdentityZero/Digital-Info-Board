@@ -9,10 +9,18 @@ from django.db.models.signals import post_save, post_delete, pre_save
 
 from utils.utils import extract_react_quill_text, get_mock_request
 
-from .models import Announcements, ImageAnnouncements, VideoAnnouncements
+from .models import (
+    Announcements,
+    ImageAnnouncements,
+    VideoAnnouncements,
+    UrgentAnnouncements,
+)
 from notifications.models import Notifications
 from notifications.utils import create_notification_for_admins
-from .serializers import RetrieveFullAnnouncementSerializer
+from .serializers import (
+    RetrieveFullAnnouncementSerializer,
+    PrimaryUrgentAnnouncementSerializer,
+)
 
 
 @receiver(post_save, sender=Announcements)
@@ -220,3 +228,24 @@ def send_update_on_updated_announcements(
             },
         )
         return
+
+
+@receiver(post_save, sender=UrgentAnnouncements)
+def send_update_on_urgent_announcements(
+    sender, instance: UrgentAnnouncements, created, *args, **kwargs
+):
+    if not created:
+        return
+
+    channel_layer = get_channel_layer()
+    serializer = PrimaryUrgentAnnouncementSerializer(instance)
+    async_to_sync(channel_layer.group_send)(
+        "realtime_update",
+        {
+            "type": "send.update",
+            "content": "announcement",
+            "action": "urgent",
+            "content_id": instance.pk,
+            "data": serializer.data,
+        },
+    )

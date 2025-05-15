@@ -180,3 +180,20 @@ class VideoAnnouncements(TimestampedModel):
             raise ValidationError(errors)
 
         return super().clean()
+
+
+class UrgentAnnouncements(TimestampedModel):
+    class Meta:
+        verbose_name = "Urgent Announcement"
+        verbose_name_plural = "Urgent Announcements"
+
+    title = models.JSONField()
+    description = models.JSONField()
+    duration = models.DurationField(
+        verbose_name="Display duration",
+        help_text="Duration for which the urgent announcement will be displayed.",
+        default=timedelta(seconds=40),
+    )
+    author = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="urgent_announcements"
+    )

@@ -1,7 +1,7 @@
 import { Delta } from "quill/core";
 import { ListType } from "./ListType";
 
-export type AnnouncementTypes = "video" | "text" | "image";
+export type AnnouncementTypes = "video" | "text" | "image" | "urgent";
 
 export type AuthorType = {
   id: string;
@@ -123,3 +123,19 @@ export type AnnouncementRetrieveType = BaseAnnouncementType & {
 export type AnnouncementListType = AnnouncementRetrieveType[];
 export type PaginatedAnnouncementListTypeV1 =
   ListType<AnnouncementRetrieveType>;
+
+export type CreateUrgentAnnouncementType = {
+  title: Delta;
+  description: Delta;
+  duration: string;
+};
+
+export type UrgentAnnouncementType = {
+  id: number;
+  title: Delta;
+  description: Delta;
+  duration: string;
+  author: AuthorType;
+  last_modified: string;
+  created_at: string;
+};

@@ -37,6 +37,10 @@ const CreateTextContentPage = lazy(
 const CreateVideoContentPage = lazy(
   () => import("../pages/protected/upload-content-pages/CreateVideoContentPage")
 );
+const CreateUrgentContentPage = lazy(
+  () =>
+    import("../pages/protected/upload-content-pages/CreateUrgentContentPage")
+);
 
 // Content pages
 const ImageContentListPage = lazy(
@@ -58,6 +62,20 @@ const VideoContentListPage = lazy(
 );
 const VideoContentPage = lazy(
   () => import("../pages/protected/content-pages/VideoContentPage")
+);
+const UrgentContentListPage = lazy(
+  () =>
+    import("../pages/protected/content-pages/ListPages/UrgentContentListPage")
+);
+const RetrieveUrgentContentPage = lazy(
+  () =>
+    import(
+      "../pages/protected/content-pages/RetrievePages/RetrieveUrgentContentPage"
+    )
+);
+const EditUrgentContentPage = lazy(
+  () =>
+    import("../pages/protected/content-pages/EditPages/EditUrgentContentPage")
 );
 
 // Permission pages
@@ -127,6 +145,7 @@ const ProtectedRoutes = (
       <Route path="video" element={<CreateVideoContentPage />} />
       <Route path="text" element={<CreateTextContentPage />} />
       <Route path="image" element={<CreateImageContentPage />} />
+      <Route path="urgent" element={<CreateUrgentContentPage />} />
     </Route>
     <Route path="contents" element={<ContentsPage />}>
       <Route index element={<VideoContentListPage />} />
@@ -136,6 +155,9 @@ const ProtectedRoutes = (
       <Route path="text/:id" element={<TextContentPage />} />
       <Route path="image" element={<ImageContentListPage />} />
       <Route path="image/:id" element={<ImageContentPage />} />
+      <Route path="urgent" element={<UrgentContentListPage />} />
+      <Route path="urgent/:id" element={<RetrieveUrgentContentPage />} />
+      <Route path="urgent/:id/edit" element={<EditUrgentContentPage />} />
     </Route>
     <Route
       path="permissions"

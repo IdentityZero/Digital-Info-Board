@@ -11,6 +11,7 @@ import { extractReactQuillText } from "../../utils/formatters";
 import {
   AnnouncementListType,
   AnnouncementRetrieveType,
+  UrgentAnnouncementType,
 } from "../../types/AnnouncementTypes";
 import {
   listActiveAnnouncementApi,
@@ -28,6 +29,8 @@ const useAnnouncementData = () => {
     string[]
   >([]);
   const [idOnLock, setIdOnLock] = useState<string>("");
+  const [urgentAnnouncement, setUrgentAnnouncement] =
+    useState<UrgentAnnouncementType | null>(null);
 
   const [preview, _setPreview] = useState<AnnouncementRetrieveType | null>(
     null
@@ -36,6 +39,20 @@ const useAnnouncementData = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isReady, setIsReady] = useState(false);
   const [error, setError] = useState<any>(null);
+
+  const runUrgentAnnouncement = (data: UrgentAnnouncementType) => {
+    setUrgentAnnouncement(data);
+  };
+
+  useEffect(() => {
+    if (!urgentAnnouncement) return;
+
+    const timeout = setTimeout(() => {
+      setUrgentAnnouncement(null);
+    }, convertDurationToSeconds(urgentAnnouncement.duration) * 1000 || 10000);
+
+    return () => clearTimeout(timeout);
+  }, [urgentAnnouncement]);
 
   const fetchAnnouncements = () => {
     let delay = 1000;
@@ -262,6 +279,7 @@ const useAnnouncementData = () => {
     textAnnouncements,
     textAnnouncementsAsText,
     mediaDurations,
+    urgentAnnouncement,
     preview,
     updateItem,
     insertItem,
@@ -269,6 +287,7 @@ const useAnnouncementData = () => {
     deleteItem,
     updateSequence,
     setDisplayPreview,
+    runUrgentAnnouncement,
     error,
     isLoading,
     isReady,
