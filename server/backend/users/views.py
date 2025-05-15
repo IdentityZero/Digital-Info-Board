@@ -20,7 +20,7 @@ from email.utils import formataddr
 from rest_framework import generics, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.exceptions import PermissionDenied
+from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.decorators import api_view, permission_classes
 
 from notifications.models import Notifications
@@ -64,32 +64,33 @@ class CreateUserView(generics.CreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        invitation = NewUserInvitation.objects.filter(
+        invitation_qs = NewUserInvitation.objects.filter(
             code=invitation_code, is_used=False
         )
 
-        if not invitation.exists():
-            return Response(
-                {
-                    "invitation_code": [
-                        "This invitation code is invalid or has already been used. Please request a new one."
-                    ]
-                },
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        invitation = invitation.first()
         data = request.data.copy()
-        data["email"] = invitation.email
-        data["profile.position"] = invitation.position
-        data["profile.role"] = invitation.role
+        invitation_obj = None
+
+        if invitation_qs.exists():
+            invitation_obj = invitation_qs.first()
+            data["email"] = invitation_obj.email
+            data["profile.position"] = invitation_obj.position
+            data["profile.role"] = invitation_obj.role
 
         serializer = self.get_serializer(data=data)
-        serializer.is_valid(raise_exception=True)
+        try:
+            serializer.is_valid(raise_exception=True)
+        except ValidationError as e:
+            if invitation_obj is None:
+                e.detail["invitation_code"] = [
+                    "This invitation code is invalid or has already been used. Please request a new one."
+                ]
+            return Response(e.detail, status=status.HTTP_400_BAD_REQUEST)
+
         self.perform_create(serializer)
 
-        invitation.is_used = True
-        invitation.save()
+        invitation_obj.is_used = True
+        invitation_obj.save()
 
         headers = self.get_success_headers(serializer.data)
         return Response(
