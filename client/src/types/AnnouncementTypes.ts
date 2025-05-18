@@ -138,4 +138,17 @@ export type UrgentAnnouncementType = {
   author: AuthorType;
   last_modified: string;
   created_at: string;
+  is_approved: boolean;
 };
+
+export type NonUrgentAnnouncementType = AnnouncementRetrieveType & {
+  type: "non-urgent";
+};
+
+export type UrgentAnnouncementTypeWithType = UrgentAnnouncementType & {
+  type: "urgent";
+};
+
+export type AnnouncementTypeWithUrgency =
+  | NonUrgentAnnouncementType
+  | UrgentAnnouncementTypeWithType;

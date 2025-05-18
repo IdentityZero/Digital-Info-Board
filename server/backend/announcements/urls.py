@@ -15,6 +15,7 @@ from .views import (
     RestoreDeletedAnnouncementAPIView,
     ListCreateUrgentAnnouncementAPIView,
     RetrieveDeleteUpdateUrgentAnnouncementAPIView,
+    V2ListAnnouncementAPIViewStatusBased,
     run_urgent,
 )
 
@@ -22,6 +23,9 @@ urlpatterns = [
     path("v1/", ListCreateAllAnnouncementAPIView.as_view()),
     path("v1/deleted/<str:type>/", ListDeletedAnnouncementAPIView.as_view()),
     path("v1/status/<str:status>/", ListAnnouncementAPIViewStatusBased.as_view()),
+    path(
+        "v2/status/<str:status_type>/", V2ListAnnouncementAPIViewStatusBased.as_view()
+    ),
     path(
         "v1/<int:pk>/",
         RetrieveUpdateDestroyAnnouncementAPIView.as_view(),

@@ -8,11 +8,15 @@ import usePagination from "../../../hooks/usePagination";
 
 import {
   AnnouncementRetrieveType,
-  type PaginatedAnnouncementListTypeV1,
+  AnnouncementTypeWithUrgency,
+  NonUrgentAnnouncementType,
+  UrgentAnnouncementType,
+  UrgentAnnouncementTypeWithType,
 } from "../../../types/AnnouncementTypes";
 import { ListInactiveAnnouncement } from "../../../features/announcements";
-import { listStatBasedAnnouncementApi } from "../../../api/announcementRequest";
-import { getListTypeInitState } from "../../../types/ListType";
+import { listStatBasedAnnouncementApiV2 } from "../../../api/announcementRequest";
+import { getListTypeInitState, ListType } from "../../../types/ListType";
+import ListInactiveUrgentAnnouncement from "../../../features/announcements/ListAnnouncement/ListInactiveUrgentAnnouncement";
 
 const InActiveListPage = () => {
   const { page, setPage, pageSize, setPageSize } = usePagination(
@@ -20,8 +24,17 @@ const InActiveListPage = () => {
     10
   );
 
-  const [inActiveAnnouncements, setInActiveAnnouncements] =
-    useState<PaginatedAnnouncementListTypeV1>(getListTypeInitState());
+  const [inActiveAnnouncements, setInActiveAnnouncements] = useState<
+    ListType<AnnouncementTypeWithUrgency>
+  >(getListTypeInitState());
+
+  const [urgentAnnouncements, setUrgentAnnouncements] = useState<
+    UrgentAnnouncementTypeWithType[]
+  >([]);
+  const [nonUrgentAnnouncements, setNonUrgentAnnouncements] = useState<
+    NonUrgentAnnouncementType[]
+  >([]);
+
   const totalPages = Math.max(
     1,
     Math.ceil(inActiveAnnouncements.count / pageSize)
@@ -33,11 +46,21 @@ const InActiveListPage = () => {
   const fetchAnnouncements = async (ppage: number, ppageSize: number) => {
     try {
       setIsFetching(true);
-      const res_data = await listStatBasedAnnouncementApi(
+      const res_data = await listStatBasedAnnouncementApiV2(
         "inactive",
         ppage,
         ppageSize
       );
+      const urgent: UrgentAnnouncementTypeWithType[] = [];
+      const nonUrgent: NonUrgentAnnouncementType[] = [];
+
+      res_data.results.forEach((res) => {
+        if (res.type === "urgent") urgent.push(res);
+        else if (res.type === "non-urgent") nonUrgent.push(res);
+      });
+
+      setUrgentAnnouncements(urgent);
+      setNonUrgentAnnouncements(nonUrgent);
       setInActiveAnnouncements(res_data);
     } catch (error) {
       setHasError(true);
@@ -53,7 +76,23 @@ const InActiveListPage = () => {
   const handleSetInActiveAnnouncements = (
     updatedList: AnnouncementRetrieveType[]
   ) => {
-    setInActiveAnnouncements((prev) => ({ ...prev, results: updatedList }));
+    setNonUrgentAnnouncements(() => {
+      return updatedList.map((announcement) => ({
+        ...announcement,
+        type: "non-urgent",
+      }));
+    });
+  };
+
+  const handleSetActiveUrgentAnnouncements = (
+    updatedList: UrgentAnnouncementType[]
+  ) => {
+    setUrgentAnnouncements(() => {
+      return updatedList.map((announcement) => ({
+        ...announcement,
+        type: "urgent",
+      }));
+    });
   };
 
   if (isFetching)
@@ -82,8 +121,12 @@ const InActiveListPage = () => {
           setPage={setPage}
         />
       </div>
+      <ListInactiveUrgentAnnouncement
+        announcements={urgentAnnouncements}
+        setAnnouncements={handleSetActiveUrgentAnnouncements}
+      />
       <ListInactiveAnnouncement
-        inactiveAnnouncements={inActiveAnnouncements.results}
+        inactiveAnnouncements={nonUrgentAnnouncements}
         setInactiveAnnouncements={handleSetInActiveAnnouncements}
       />
     </>

@@ -8,6 +8,7 @@ import {
   AnnouncementTypes,
   CreateUrgentAnnouncementType,
   UrgentAnnouncementType,
+  AnnouncementTypeWithUrgency,
 } from "../types/AnnouncementTypes";
 import { BASE_API_URL } from "../constants/urls";
 import { showApiError } from "../utils/utils";
@@ -103,6 +104,26 @@ export const listStatBasedAnnouncementApi = async (
       BASE_ENDPOINT +
         listCreateAllTypeAnnouncementEndpoint +
         `status/${status}/?page=${page}&page_size=${page_size}`
+    );
+    return response.data;
+  } catch (error) {
+    showApiError("List Status-Based Announcement Error: ", error);
+    if (axios.isAxiosError(error)) {
+      throw error;
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
+export const listStatBasedAnnouncementApiV2 = async (
+  status: "active" | "inactive",
+  page: number = 1,
+  page_size: number = 10
+): Promise<ListType<AnnouncementTypeWithUrgency>> => {
+  try {
+    const response = await axios.get(
+      BASE_ENDPOINT +
+        `announcements/v2/status/${status}/?page=${page}&page_size=${page_size}`
     );
     return response.data;
   } catch (error) {
@@ -470,6 +491,27 @@ export const listPaginatedUrgentAnnouncementApi = async (
   }
 };
 
+export const listStatBasedUrgentAnnouncementAPI = async (
+  status: "active" | "inactive",
+  page: number = 1,
+  page_size: number = 10
+): Promise<ListType<UrgentAnnouncementType>> => {
+  try {
+    const response = await axios.get(
+      BASE_ENDPOINT +
+        listCreateAllTypeAnnouncementEndpoint +
+        `urgent/status/${status}/?page=${page}&page_size=${page_size}`
+    );
+    return response.data;
+  } catch (error) {
+    showApiError("List Status-Based Urgent Announcement Error: ", error);
+    if (axios.isAxiosError(error)) {
+      throw error;
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
+
 export const retrieveUrgentAnnouncementApi = async (
   axiosInstance: AxiosInstance,
   announcement_id: string
@@ -491,8 +533,9 @@ export const retrieveUrgentAnnouncementApi = async (
 export const updateUrgentAnnouncementApi = async (
   axiosInstance: AxiosInstance,
   announcement_id: string,
-  data: CreateUrgentAnnouncementType
+  data: any
 ): Promise<UrgentAnnouncementType> => {
+  // CreateUrgentAnnouncementType See this type for updating
   try {
     const response = await axiosInstance.patch(
       `/announcements/v1/urgent/${announcement_id}/`,

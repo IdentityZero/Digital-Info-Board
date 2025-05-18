@@ -19,6 +19,7 @@ import {
   retrieveUrgentAnnouncementApi,
   runUrgentAnnouncementApi,
 } from "../../../../api/announcementRequest";
+import axios from "axios";
 
 const RetrieveUrgentContentPage = () => {
   const toastId = useRef<Id | null>(null);
@@ -76,7 +77,11 @@ const RetrieveUrgentContentPage = () => {
       await runUrgentAnnouncementApi(userApi, Number(id));
       update({ render: "Command sent succesfully.", type: "success" });
     } catch (error) {
-      update({ render: "Command failed. Please try again.", type: "error" });
+      if (axios.isAxiosError(error) && error.response?.data) {
+        update({ render: error.response.data["error"], type: "error" });
+      } else {
+        update({ render: "Command failed. Please try again.", type: "error" });
+      }
     }
   };
 

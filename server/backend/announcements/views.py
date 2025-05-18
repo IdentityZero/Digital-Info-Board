@@ -5,9 +5,22 @@ import json
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 
+from django.template.loader import render_to_string
+from django.core.mail import EmailMessage
+from email.utils import formataddr
+from django.conf import settings
+from django.contrib.auth.models import User
 from django.utils import timezone
 from django.db.models import OrderBy, F
-from rest_framework import generics, response, status, response, parsers, decorators
+from rest_framework import (
+    generics,
+    response,
+    status,
+    response,
+    parsers,
+    decorators,
+    views,
+)
 from rest_framework.permissions import (
     AllowAny,
     IsAuthenticated,
@@ -15,6 +28,7 @@ from rest_framework.permissions import (
 )
 
 from utils.pagination import CustomPageNumberPagination
+from utils.utils import extract_react_quill_text
 from notifications.models import Notifications
 
 from .serializers import (
@@ -174,6 +188,53 @@ class ListAnnouncementAPIViewStatusBased(generics.ListAPIView):
             end_date__gte=now,
         ).order_by(OrderBy(F("position"), nulls_last=True))
         return qs
+
+
+class V2ListAnnouncementAPIViewStatusBased(views.APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, status_type="active"):
+
+        if status_type not in ["active", "inactive"]:
+            return response.Response(
+                {
+                    "error": "Invalid status type. Valid statuses are: 'active' and 'inactive'."
+                }
+            )
+
+        now = timezone.now()
+
+        ann_qs = Announcements.objects.none()
+        u_ann_qs = UrgentAnnouncements.objects.none()
+
+        is_active_type = status_type == "active"
+
+        ann_qs = Announcements.objects.filter(is_active=is_active_type)
+        u_ann_qs = UrgentAnnouncements.objects.filter(is_approved=is_active_type)
+
+        filtered_ann_qs = ann_qs.filter(
+            start_date__lte=now,
+            end_date__gte=now,
+        ).order_by(OrderBy(F("position"), nulls_last=True))
+
+        ann_data = CreateAnnouncementSerializer(
+            filtered_ann_qs, many=True, context={"request": request}
+        ).data
+        u_ann_data = SecondaryUrgentAnnouncementSerializer(
+            u_ann_qs, many=True, context={"request": request}
+        ).data
+
+        for item in ann_data:
+            item["type"] = "non-urgent"
+
+        for item in u_ann_data:
+            item["type"] = "urgent"
+
+        combined_data = u_ann_data + ann_data
+
+        paginator = CustomPageNumberPagination()
+        paginated_data = paginator.paginate_queryset(combined_data, request)
+        return paginator.get_paginated_response(paginated_data)
 
 
 class UpdateAnnouncementActiveStatusAPIView(generics.RetrieveUpdateAPIView):
@@ -555,8 +616,49 @@ class ListCreateUrgentAnnouncementAPIView(generics.ListCreateAPIView):
         return qs
 
     def perform_create(self, serializer):
+        author = self.request.user
+        inst = None
         if serializer.is_valid(raise_exception=True):
-            serializer.save(author=self.request.user)
+            inst = serializer.save(author=author, is_approved=author.profile.is_admin)
+
+        if not author.profile.is_admin and inst is not None:
+            self.send_approval_email(
+                inst.pk,
+                extract_react_quill_text(json.dumps(inst.title)),
+                extract_react_quill_text(json.dumps(inst.description)),
+            )
+
+    def send_approval_email(self, id, title: str, description: str) -> None:
+        frontend_domain = getattr(
+            settings, "FRONTEND_DOMAIN", "http://localhost:5173"
+        ).rstrip("/")
+        approval_url = f"{frontend_domain}/dashboard/permissions/inactive#u{id}"
+
+        admins = User.objects.filter(profile__is_admin=True)
+        admin_emails = list(admins.values_list("email", flat=True))
+
+        subject = "Requesting approval for an Urgent Announcement"
+        html_content = render_to_string(
+            "announcements/urgent_request_approval.html",
+            {
+                "announcement_title": title,
+                "announcement_description": description,
+                "approval_url": approval_url,
+            },
+        )
+
+        FORMATTED_EMAIL_ADDRESS = formataddr(
+            (
+                "CpE MMSU Digital Info Board",
+                getattr(settings, "EMAIL_HOST_USER", "mmsucpe@gmail.com"),
+            )
+        )
+
+        email = EmailMessage(
+            subject, html_content, FORMATTED_EMAIL_ADDRESS, admin_emails
+        )
+        email.content_subtype = "html"
+        email.send()
 
 
 class RetrieveDeleteUpdateUrgentAnnouncementAPIView(
@@ -566,6 +668,11 @@ class RetrieveDeleteUpdateUrgentAnnouncementAPIView(
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
+        user = self.request.user
+
+        if user.profile.is_admin:
+            return UrgentAnnouncements.objects.all()
+
         qs = UrgentAnnouncements.objects.filter(author=self.request.user)
         return qs
 
@@ -584,6 +691,12 @@ def run_urgent(request, id):
         return response.Response(
             {"error": "The content you are trying to preview cannot be found."},
             status=status.HTTP_404_NOT_FOUND,
+        )
+
+    if not inst.is_approved:
+        return response.Response(
+            {"error": "Content is not yet approved."},
+            status=status.HTTP_400_BAD_REQUEST,
         )
 
     serializer = PrimaryUrgentAnnouncementSerializer(inst)

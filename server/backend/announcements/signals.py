@@ -234,7 +234,7 @@ def send_update_on_updated_announcements(
 def send_update_on_urgent_announcements(
     sender, instance: UrgentAnnouncements, created, *args, **kwargs
 ):
-    if not created:
+    if not created or not instance.author.profile.is_admin:
         return
 
     channel_layer = get_channel_layer()

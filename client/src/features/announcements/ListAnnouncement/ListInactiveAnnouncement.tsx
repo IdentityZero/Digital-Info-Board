@@ -37,10 +37,6 @@ const ListInactiveAnnouncement = ({
     AnnouncementRetrieveType | undefined
   >(undefined);
 
-  if (inactiveAnnouncements.length === 0) {
-    return <div className="w-full p-4 text-center">List is empty...</div>;
-  }
-
   const handleApproveClick = async (id: string, data: any) => {
     const approve_confirm = window.confirm(
       "Are you sure you want to approve this Content?"

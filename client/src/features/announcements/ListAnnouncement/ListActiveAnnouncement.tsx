@@ -29,10 +29,6 @@ const ListActiveAnnouncement = ({
     AnnouncementRetrieveType | undefined
   >(undefined);
 
-  if (activeAnnouncements.length === 0) {
-    return <div className="w-full p-4 text-center">List is empty...</div>;
-  }
-
   const handleDeactivateClick = async (id: string, data: any) => {
     const deactivate_confirm = window.confirm(
       "Are you sure you want to deactivate this Content?"

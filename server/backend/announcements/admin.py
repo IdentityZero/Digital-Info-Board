@@ -69,7 +69,7 @@ admin.site.register(VideoAnnouncements, VideoAnnouncementAdmin)
 
 
 class UrgentAnnouncementAdmin(admin.ModelAdmin):
-    list_display = ["id", "author", "title", "duration"]
+    list_display = ["id", "author", "title", "duration", "is_approved"]
 
 
 admin.site.register(UrgentAnnouncements, UrgentAnnouncementAdmin)

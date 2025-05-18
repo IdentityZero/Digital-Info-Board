@@ -21,7 +21,7 @@ import {
   truncateStringVariableLen,
 } from "../../../../utils/formatters";
 import IconWithTooltip from "../../../../components/IconWithTooltip";
-import { FaEye, FaTrash } from "react-icons/fa";
+import { FaCheckCircle, FaEye, FaTimesCircle, FaTrash } from "react-icons/fa";
 import Pagination from "../../../../components/Pagination";
 import { Link } from "react-router-dom";
 
@@ -91,7 +91,14 @@ const UrgentContentListPage = () => {
       <div className="mt-5">
         <Table>
           <Thead
-            headers={["ID", "Title", "Description", "Duration", "Actions"]}
+            headers={[
+              "ID",
+              "Title",
+              "Description",
+              "Duration",
+              "Approved",
+              "Actions",
+            ]}
           />
           <tbody className="overflow-x-scroll ">
             {announcements.results.map((announcement) => (
@@ -119,6 +126,15 @@ const UrgentContentListPage = () => {
                 </td>
                 <td className="px-4 py-2 sm:px-6 sm:py-3">
                   {announcement.duration}
+                </td>
+                <td className="px-4 py-2 sm:px-6 sm:py-3">
+                  <span className="flex justify-center">
+                    {announcement.is_approved ? (
+                      <FaCheckCircle className="text-green-500" />
+                    ) : (
+                      <FaTimesCircle className="text-red-500" />
+                    )}
+                  </span>
                 </td>
                 <td className="px-4 py-2 sm:px-6 sm:py-3 text-base">
                   <div className="flex flex-row gap-2 items-center justify-center">

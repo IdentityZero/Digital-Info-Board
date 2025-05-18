@@ -197,3 +197,4 @@ class UrgentAnnouncements(TimestampedModel):
     author = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="urgent_announcements"
     )
+    is_approved = models.BooleanField(default=False)
