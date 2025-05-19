@@ -26,8 +26,12 @@ import {
 } from "../../api/contactUsRequest";
 
 import DetailModal from "../../features/message/DetailModal";
+import { useLocation } from "react-router-dom";
 
 const MessagesPage = () => {
+  const { hash } = useLocation();
+  const targetId = hash.substring(1);
+
   const toastId = useRef<Id | null>(null);
   const { loading, update } = useLoadingToast(toastId);
   const { userApi } = useAuth();
@@ -123,7 +127,11 @@ const MessagesPage = () => {
               <tr
                 id={String(message.id)}
                 key={message.id}
-                className="border transition-shadow duration-200 hover:bg-gray-100 cursor-pointer"
+                className={`border transition-shadow duration-200 hover:bg-gray-100 cursor-pointer ${
+                  String(message.id) == targetId
+                    ? "bg-yellow-100 border-yellow-400 shadow-md"
+                    : ""
+                }`}
                 onClick={() => {
                   setIdClicked(message.id);
                 }}

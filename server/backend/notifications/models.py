@@ -11,6 +11,7 @@ class Notifications(TimestampedModel):
         ordering = ["created_at"]  # from Timestamp Model
 
     NOTIFICATION_ACTIONS = [
+        # Announcement
         ("approve_announcement", "Approve Announcement"),  # To approve
         ("approve_urgent_announcement", "Approve Urgent Announcement"),
         ("announcement_approved", "Announcement Approved"),
@@ -18,9 +19,11 @@ class Notifications(TimestampedModel):
         ("video_announcement_deactivated", "Video Announcement Deactivated"),
         ("image_announcement_deactivated", "Text Announcement Deactivated"),
         ("announcement_sequence_update", "Announcement Sequence Update"),
+        # User
         ("welcome_new_user", "Welcome new user"),
         ("profile_update", "Profile Update"),
         ("settings_update", "settings Update"),
+        # Default Display
         ("organization_member_added", "Organization member added"),
         ("organization_member_deleted", "Organization member deleted"),
         ("organization_sequence_update", "Organization sequence update"),
@@ -33,6 +36,8 @@ class Notifications(TimestampedModel):
         ("calendar_event_deleted", "Calendar Event Deleted"),
         ("calendar_event_updated", "Calendar Event Updated"),
         ("calendar_settings_updated", "Calendar Settings Updated"),
+        # Message
+        ("message_created", "Contact Message Created"),
     ]
 
     user = models.ForeignKey(

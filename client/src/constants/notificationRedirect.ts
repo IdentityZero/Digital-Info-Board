@@ -33,6 +33,8 @@ export const NOTIFICATION_REDIRECT = {
   calendar_event_updated: (id: number) => `/dashboard/calendar#${id}`,
   calendar_event_deleted: "/dashboard/calendar",
   calendar_settings_updated: "/dashboard/calendar/settings",
+
+  message_created: (id: number) => `/dashboard/contact-us-messages#${id}`,
 } as const;
 
 export const getNotifRedirectPath = (

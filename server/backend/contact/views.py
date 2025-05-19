@@ -51,6 +51,18 @@ class CreateContactUsMessageAPIView(ListCreateAPIView):
 
         return super().post(request, *args, **kwargs)
 
+    def perform_create(self, serializer):
+        instance = serializer.save()
+
+        from notifications.utils import create_notification_for_admins
+
+        create_notification_for_admins(
+            None,
+            "New message was created. Check it out.",
+            "message_created",
+            instance.id,
+        )
+
 
 class RetrieveContactUsMessageApiView(RetrieveDestroyAPIView):
     queryset = ContactUsMessage.objects.all()
