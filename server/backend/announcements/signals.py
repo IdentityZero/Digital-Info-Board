@@ -1,4 +1,5 @@
 import os
+import json
 
 from django.conf import settings
 from django.utils import timezone
@@ -235,6 +236,11 @@ def send_update_on_urgent_announcements(
     sender, instance: UrgentAnnouncements, created, *args, **kwargs
 ):
     if not created or not instance.author.profile.is_admin:
+        title = extract_react_quill_text(json.dumps(instance.title))
+        message = f"Created an urgent Content waiting for approval{f' entitled {title}' if title else ''}. Check it out."
+        create_notification_for_admins(
+            instance.author, message, "approve_urgent_announcement", instance.pk
+        )
         return
 
     channel_layer = get_channel_layer()

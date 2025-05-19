@@ -1,14 +1,19 @@
+import { useRef } from "react";
 import { Id } from "react-toastify";
+import { useLocation } from "react-router-dom";
+
 import Button from "../../../components/ui/ButtonV2";
+
 import { useAuth } from "../../../context/AuthProvider";
 import useLoadingToast from "../../../hooks/useLoadingToast";
-import { UrgentAnnouncementType } from "../../../types/AnnouncementTypes";
+
 import {
   extractReactQuillText,
   formatStringUnderscores,
   truncateStringVariableLen,
 } from "../../../utils/formatters";
-import { useRef } from "react";
+
+import { UrgentAnnouncementType } from "../../../types/AnnouncementTypes";
 import { updateUrgentAnnouncementApi } from "../../../api/announcementRequest";
 
 type Props = {
@@ -20,6 +25,9 @@ const ListInactiveUrgentAnnouncement = ({
   announcements,
   setAnnouncements,
 }: Props) => {
+  const { hash } = useLocation();
+  const targetId = hash.substring(1);
+
   const toastId = useRef<Id | null>(null);
   const { loading, update } = useLoadingToast(toastId);
   const { userApi } = useAuth();
@@ -53,7 +61,7 @@ const ListInactiveUrgentAnnouncement = ({
       {announcements.map((announcement) => (
         <AnnouncementCard
           key={announcement.id}
-          isHighlighted={false}
+          isHighlighted={targetId == `u${announcement.id}`}
           announcement={announcement}
           handleActivationClick={handleActivationClick}
         />
@@ -80,7 +88,7 @@ function AnnouncementCard({
       className={`w-full bg-white border-2 border-black rounded-lg overflow-hidden ${
         isHighlighted && "shadow-[0_0_10px_rgba(255,255,0,0.8)]"
       }`}
-      id={String(announcement.id)}
+      id={`u${announcement.id}`}
     >
       {/* Author */}
       <p className="w-full bg-btDanger p-3 capitalize font-semibold text-sm sm:text-base md:text-lg rounded-none sm:rounded-t-lg">

@@ -12,6 +12,7 @@ class Notifications(TimestampedModel):
 
     NOTIFICATION_ACTIONS = [
         ("approve_announcement", "Approve Announcement"),  # To approve
+        ("approve_urgent_announcement", "Approve Urgent Announcement"),
         ("announcement_approved", "Announcement Approved"),
         ("text_announcement_deactivated", "Text Announcement Deactivated"),
         ("video_announcement_deactivated", "Video Announcement Deactivated"),

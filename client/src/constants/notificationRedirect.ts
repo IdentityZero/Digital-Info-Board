@@ -3,6 +3,8 @@ export const NOTIFICATION_REDIRECT = {
   profile_update: "/dashboard/account/my-profile",
 
   approve_announcement: (id: number) => `/dashboard/permissions/inactive#${id}`,
+  approve_urgent_announcement: (id: number) =>
+    `/dashboard/permissions/inactive#u${id}`,
   announcement_approved: "/dashboard/current-display",
   text_announcement_deactivated: (id: number) =>
     `/dashboard/contents/text/${id}`,
